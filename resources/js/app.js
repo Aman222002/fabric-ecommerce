@@ -6,6 +6,11 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -14,10 +19,22 @@ import { createApp } from 'vue';
  */
 
 const app = createApp({});
+const vuetify = createVuetify({
+    components,
+    directives
+  })
 
-import ExampleComponent from './components/ExampleComponent.vue';
-app.component('example-component', ExampleComponent);
-
+// import ExampleComponent from './components/ExampleComponent.vue';
+import HomeComponent from './components/HomeComponent.vue';
+import NavBarComponent from './components/NavBarComponent.vue';
+import FooterComponent from './components/FooterComponent.vue';
+import defaultLayout from './components/defaultLayout.vue';
+app.component('navbar-component',NavBarComponent);
+// app.component('example-component', ExampleComponent);
+app.component('home-component',HomeComponent);
+app.component('footer-component',FooterComponent);
+app.component('default-layout',defaultLayout);
+app.use(vuetify);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -36,4 +53,5 @@ app.component('example-component', ExampleComponent);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
+console.log("App started");
 app.mount('#app');
