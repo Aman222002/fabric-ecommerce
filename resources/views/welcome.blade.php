@@ -20,8 +20,7 @@
     </head>
     <body>
         <div id="app">
-            <default-layout>
-                
+            <default-layout>        
             </default-layout>
         </div>
     </body>
