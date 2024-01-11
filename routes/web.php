@@ -37,6 +37,22 @@ Route::get('/', function () {
 // });
 Auth::routes();
 
+Route::get('/Registration', function () {
+    return view('Registration');
+});
+
+Route::get('/Login', function () {
+    return view('Login');
+});
+
+Route::get('/Header', function () {
+    return view('Header');
+});
+
+Route::get('/Footer', function () {
+    return view('Footer');
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
