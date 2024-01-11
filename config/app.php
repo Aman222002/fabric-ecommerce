@@ -163,11 +163,6 @@ return [
         /*
          * Application Service Providers...
          */
-<<<<<<< HEAD
-
-        \Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-=======
->>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
@@ -187,12 +182,6 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-<<<<<<< HEAD
-
-        'JWTAuth' => \Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => \Tymon\JWTAuth\Facades\JWTFactory::class,
-=======
->>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

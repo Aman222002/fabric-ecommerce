@@ -15,18 +15,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 export default {
     mounted() {
         console.log('Component mounted.')
     }
 }
-</script> 
-=======
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
 </script>
->>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
