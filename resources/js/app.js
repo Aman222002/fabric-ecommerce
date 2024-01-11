@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+<<<<<<< HEAD
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
@@ -20,6 +21,11 @@ const vuetify = createVuetify({
     components,
     directives,
 });
+=======
+import './bootstrap';
+import { createApp } from 'vue';
+
+>>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -28,6 +34,7 @@ const vuetify = createVuetify({
 
 const app = createApp({});
 
+<<<<<<< HEAD
 import ExampleComponent from "./components/ExampleComponent.vue";
 app.component("example-component", ExampleComponent);
 
@@ -45,6 +52,10 @@ app.component("login-component", Login);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
+=======
+import ExampleComponent from './components/ExampleComponent.vue';
+app.component('example-component', ExampleComponent);
+>>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
 
 /**
  * The following block of code may be used to automatically register your
@@ -63,6 +74,11 @@ app.component("login-component", Login);
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
+<<<<<<< HEAD
 app.use(vuetify);
 app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");
+=======
+
+app.mount('#app');
+>>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7

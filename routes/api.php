@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 | Description:    Updates the authenticated user's profile
 */
 
+=======
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+>>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+<<<<<<< HEAD
 Route::put('/user', 'API\UsersController@putUpdateUser');
 // Route::apiResource('products', ProductController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -41,3 +48,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::middleware('auth:api')->get('/user', function(Request $request){
 //     return $request->user();
 // });
+=======
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+>>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
