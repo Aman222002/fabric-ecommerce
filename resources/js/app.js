@@ -10,7 +10,12 @@ import { createApp } from "vue";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-
+import VueTelInput from "vue3-tel-input";
+import "vue3-tel-input/dist/vue3-tel-input.css";
+const VueTelInputOptions = {
+    mode: "international",
+    onlyCountries: ["NG", "GH", "GB", "US", "CA"],
+};
 const vuetify = createVuetify({
     components,
     directives,
@@ -29,8 +34,14 @@ app.component("example-component", ExampleComponent);
 import Registration from "./components/Registration.vue";
 app.component("register-component", Registration);
 
-import LoginComponent from "./components/LoginComponent.vue";
-app.component("login-component", LoginComponent);
+import Header from "./components/Header.vue";
+app.component("header-component", Header);
+
+import Footer from "./components/Footer.vue";
+app.component("footer-component", Footer);
+
+import Login from "./components/Login.vue";
+app.component("login-component", Login);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
@@ -53,4 +64,5 @@ app.component("login-component", LoginComponent);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 app.use(vuetify);
+app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");

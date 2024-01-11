@@ -33,6 +33,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getJWTIdentifier()
+    {
+       return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
     /**
      * The attributes that should be cast.
      *

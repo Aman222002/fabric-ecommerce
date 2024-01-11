@@ -25,6 +25,13 @@ Route::get('/Login', function () {
     return view('Login');
 });
 
+Route::get('/Header', function () {
+    return view('Header');
+});
+
+Route::get('/Footer', function () {
+    return view('Footer');
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

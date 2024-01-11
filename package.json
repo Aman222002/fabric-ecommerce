@@ -20,6 +20,7 @@
         "esbuild": "^0.19.11",
         "vite-plugin-vuetify": "^2.0.1",
         "vue-tel-input": "^8.3.1",
+        "vue3-tel-input": "^1.0.4",
         "vuetify": "^3.4.9"
     }
 }
