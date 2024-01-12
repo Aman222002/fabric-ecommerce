@@ -4,14 +4,18 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import './bootstrap';
-import { createApp } from 'vue';
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
+import "./bootstrap";
+import "@mdi/font/css/materialdesignicons.css";
+import { createApp } from "vue";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import VueTelInput from "vue3-tel-input";
+import "vue3-tel-input/dist/vue3-tel-input.css";
+const VueTelInputOptions = {
+    mode: "international",
+    onlyCountries: ["NG", "GH", "GB", "US", "CA"],
+};
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -22,22 +26,26 @@ import * as directives from 'vuetify/directives'
 const app = createApp({});
 const vuetify = createVuetify({
     components,
-    directives
-  })
+    directives,
+});
 
-// import ExampleComponent from './components/ExampleComponent.vue';
-import HomeComponent from './components/HomeComponent.vue';
-import NavBarComponent from './components/NavBarComponent.vue';
-import FooterComponent from './components/FooterComponent.vue';
-import defaultLayout from './components/defaultLayout.vue';
+import Registration from "./components/Registration.vue";
+app.component("register-component", Registration);
 
-app.component('navbar-component',NavBarComponent);
+import Header from "./components/Header.vue";
+app.component("header-component", Header);
 
-// app.component('example-component', ExampleComponent);
-app.component('home-component',HomeComponent);
-app.component('footer-component',FooterComponent);
-app.component('default-layout',defaultLayout);
-app.use(vuetify);
+import Footer from "./components/Footer.vue";
+app.component("footer-component", Footer);
+
+import Login from "./components/Login.vue";
+app.component("login-component", Login);
+
+// import UserprofileComponent from "./components/UserprofileComponent.vue";
+// app.component("userprofile-component", UserprofileComponent);
+
+import DashboardComponent from "./components/DashboardComponent.vue";
+app.component("dashboard-component", DashboardComponent);
 
 /**
  * The following block of code may be used to automatically register your
@@ -57,8 +65,6 @@ app.use(vuetify);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-
-
-
-console.log("App started");
-app.mount('#app');
+app.use(vuetify);
+app.use(VueTelInput, VueTelInputOptions);
+app.mount("#app");
