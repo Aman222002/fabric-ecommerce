@@ -47,6 +47,18 @@ app.component("login-component", Login);
 import DashboardComponent from "./components/DashboardComponent.vue";
 app.component("dashboard-component", DashboardComponent);
 
+import Home from "./components/Home.vue";
+app.component("home-component",Home);
+
+import Job from "./components/Job.vue";
+app.component("job-component",Job);
+
+import CompanyRagister from "./components/CompanyRagister.vue";
+app.component("company-component",CompanyRagister)
+
+import Product from "./components/Product.vue";
+app.component("product-component",Product)
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

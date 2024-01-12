@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -37,6 +38,7 @@ Route::get('/', function () {
 // });
 Auth::routes();
 
+
 Route::get('/Registration', function () {
     return view('Registration');
 });
@@ -52,8 +54,20 @@ Route::get('/Header', function () {
 Route::get('/Footer', function () {
     return view('Footer');
 });
+Route::get('/Job', function () {
+    return view('Job');
+});
+Route::get('/companyregister', function () {
+    return view('companyregister');
+});
+Route::get('/product', function () {
+    return view('product');
+});
+// Route::get('/home', [function () {
+//     return view('home');
+// }]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
 });
