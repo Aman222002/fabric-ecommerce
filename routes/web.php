@@ -44,6 +44,5 @@ Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/users', [UserController::class, 'index']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::delete('/users/store', [UserController::class, 'store']);
 });
-//users
-//user/{id} function(Request $request, $id)
