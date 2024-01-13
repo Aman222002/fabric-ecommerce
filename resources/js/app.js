@@ -32,19 +32,17 @@ const vuetify = createVuetify({
 
 app.use(vuetify);
 app.use(VueTelInput, VueTelInputOptions);
-
 import Registration from "./components/Registration.vue";
-
 app.component("registration-component", Registration);
-
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
-
 import Footer from "./components/Footer.vue";
 app.component("footer-component", Footer);
-
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
+import Home from "./components/Home.vue";
+app.component("home-component", Home);
+// import Mncs from './views/Mncs.vue';
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
