@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
+use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -50,9 +52,9 @@ Route::get('/footer', function () {
 Route::get('/job', function () {
     return view('Job');
 });
-Route::get('/companyregister', function () {
-    return view('companyregister');
-});
+// Route::get('/companyregister', function () {
+//     return view('companyregister');
+// });
 Route::get('/product', function () {
     return view('product');
 });
@@ -65,6 +67,9 @@ Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
+
+Route::get('/companyregister', [CompanyController::class, 'index']);
+Route::post('/companyregister', [CompanyController::class, 'store'])->name('companyregister');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
