@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content')
-        <dashboard-component :users="{!! $users !!}"></dashboard-component>
+        <dashboard-component></dashboard-component>
 @endsection

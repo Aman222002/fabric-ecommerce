@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -47,7 +48,25 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        User::find($id)->delete();
-        return redirect()->route('user.index')->with('success', 'User DEleted Successfully');
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $user->delete();
+                $response = [
+                    'status' => true,
+                    'data' => 'User deleted Successsfully',
+                ];
+                return response()->json($response, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'no data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }
