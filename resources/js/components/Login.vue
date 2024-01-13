@@ -22,27 +22,37 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
   name: "Login",
-  data() {
-    return {
-      email: "",
-      password: "",
-      rememberMe: false,
-      rules: {
-        required: (value) => !!value || "This field is required",
-        email: (value) => /.+@.+\..+/.test(value) || "Enter a valid email address",
-        password: (value) => value.length >= 8 || "Password must be at least 8 characters",
-      },
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const rememberMe = ref(false);
+
+    const rules = {
+      required: (value) => !!value || "This field is required",
+      email: (value) => /.+@.+\..+/.test(value) || "Enter a valid email address",
+      password: (value) => value.length >= 8 || "Password must be at least 8 characters",
     };
-  },
-  methods: {
-    login() {
-      console.log('Logging in with:', this.email, this.password, 'Remember Me:', this.rememberMe);
-    },
-    forgotPassword() {
+
+    const login = () => {
+      console.log('Logging in with:', email.value, password.value, 'Remember Me:', rememberMe.value);
+    };
+
+    const forgotPassword = () => {
       console.log('Forgot Password clicked');
-    },
+    };
+
+    return {
+      email,
+      password,
+      rememberMe,
+      rules,
+      login,
+      forgotPassword,
+    };
   },
 };
 </script>

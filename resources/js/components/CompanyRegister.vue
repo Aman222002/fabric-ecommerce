@@ -35,6 +35,7 @@
 import { ref } from 'vue';
 
 export default {
+  name:"CompanyRegister",
   setup() {
     const company = ref({
       username: '',
@@ -53,19 +54,7 @@ export default {
     const submitForm = () => {
       console.log('Company Data:', company.value);
 
-      company.value = {
-        username: '',
-        useremail: '',
-        password: '',
-        confirmpassword: '',
-        name: '',
-        email: '',
-        phone_number: '',
-        address: '',
-        registration_number: '',
-        description: '',
-        status: 'active',
-      };
+     
     };
 
     return {

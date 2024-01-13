@@ -58,8 +58,8 @@ app.component("home-component",Home);
 import Job from "./components/Job.vue";
 app.component("job-component",Job);
 
-import CompanyRagister from "./components/CompanyRagister.vue";
-app.component("company-component",CompanyRagister)
+import CompanyRegister from "./components/CompanyRegister.vue";
+app.component("company-component",CompanyRegister)
 
 import Product from "./components/Product.vue";
 app.component("product-component",Product)
