@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\LoginController;
 use App\Models\User;
@@ -39,14 +40,27 @@ Route::get('/', function () {
 // });
 Auth::routes();
 
-Route::get('/Header', function () {
+Route::get('/header', function () {
     return view('Header');
 });
 
-Route::get('/Footer', function () {
+Route::get('/footer', function () {
     return view('Footer');
 });
+Route::get('/job', function () {
+    return view('Job');
+});
+Route::get('/companyregister', function () {
+    return view('companyregister');
+});
+Route::get('/product', function () {
+    return view('product');
+});
+// Route::get('/home', [function () {
+//     return view('home');
+// }]);
 
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
 Route::get('/registration', [RegistrationController::class, 'index']);

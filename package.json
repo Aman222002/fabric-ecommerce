@@ -9,7 +9,7 @@
         "@mdi/font": "^7.4.47",
         "@popperjs/core": "^2.11.6",
         "@vitejs/plugin-vue": "^4.5.0",
-        "axios": "^1.6.1",
+        "axios": "^1.6.5",
         "bootstrap": "^5.2.3",
         "laravel-vite-plugin": "^1.0.0",
         "sass": "^1.56.1",
