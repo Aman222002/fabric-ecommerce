@@ -94,12 +94,13 @@ export default {
                 });
         },
         addUser() {
-            axios
-                .post(`./users/${id}`, this.FormData)
-                .then(response => {
-                    let i = this.users.map(data => data.id).indexOf(id);
-                    this.users.splice(i, 1);
-                });
+            this.dialog = true,
+                axios
+                    .post(`./users/${id}`, this.FormData)
+                    .then(response => {
+                        let i = this.users.map(data => data.id).indexOf(id);
+                        this.users.splice(i, 1);
+                    });
         }
     }
 }

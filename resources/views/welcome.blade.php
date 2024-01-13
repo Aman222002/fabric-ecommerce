@@ -179,7 +179,3 @@
         </div>
     </body>
 </html>
-<<<<<<< HEAD
->>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
-=======
->>>>>>> bc51b2b6e2c8892c42905cabbfb7268f8012f6f7
