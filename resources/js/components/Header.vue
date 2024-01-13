@@ -13,12 +13,12 @@
 
                     <v-btn to="/" outlined class="btn-dashboard">
 
-                        <a href="/Login">Login</a>
+                        <a href="login">Login</a>
                     </v-btn>
                     <v-btn to="/" outlined class="btn-dashboard">
-                        <a href="/Registration"> Registration </a> </v-btn>
+                        <a href="/registration"> Registration </a> </v-btn>
                     <v-btn to="/" outlined class="btn-dashboard">
-                        <a href="/Registration"> For employers</a> </v-btn>
+                        <a href="/registration"> For employers</a> </v-btn>
 
                 </v-row>
             </v-container>
