@@ -10,11 +10,11 @@ import { createApp } from "vue";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import VueTelInput from "vue3-tel-input";
-import "vue3-tel-input/dist/vue3-tel-input.css";
+import VueTelInput from "vue-tel-input";
+import "vue-tel-input/vue-tel-input.css";
 const VueTelInputOptions = {
-    mode: "international",
-    onlyCountries: ["NG", "GH", "GB", "US", "CA"],
+    mode: "national",
+    onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
 };
 
 /**
@@ -24,13 +24,18 @@ const VueTelInputOptions = {
  */
 
 const app = createApp({});
+
 const vuetify = createVuetify({
     components,
     directives,
 });
 
+app.use(vuetify);
+app.use(VueTelInput, VueTelInputOptions);
+
 import Registration from "./components/Registration.vue";
-app.component("register-component", Registration);
+
+app.component("registration-component", Registration);
 
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
@@ -77,6 +82,4 @@ app.component("product-component",Product)
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-app.use(vuetify);
-app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");

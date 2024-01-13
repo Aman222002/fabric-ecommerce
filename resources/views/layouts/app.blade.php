@@ -38,15 +38,15 @@
                     <ul class="navbar-nav ms-auto">
                        
                         @guest
-                        @if (Route::has('login'))
+                        @if (Route::has('Login'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <a class="nav-link" href="{{ route('Login') }}">{{ __('Login') }}</a>
                         </li>
                         @endif
 
-                        @if (Route::has('register'))
+                        @if (Route::has('Registration'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            <a class="nav-link" href="{{ route('Registration') }}">{{ __('Registeration') }}</a>
                         </li>
                         @endif
                         @else
