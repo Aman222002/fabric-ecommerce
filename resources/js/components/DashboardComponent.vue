@@ -20,6 +20,7 @@
 import AllUser from './AllUser.vue';
 import { ref } from "vue";
 export default {
+    name: 'DashboardComponent',
     setup() {
         const drawer = ref(true);
         const show_user = ref(false);

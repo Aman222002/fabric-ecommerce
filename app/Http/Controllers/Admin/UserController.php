@@ -25,6 +25,33 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $input = $request->all();
+            if ($response = User::create()) {
+                ([
+
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => $input['password'],
+
+                ]);
+                return response()->json([
+                    'status' => true,
+                    'message' => "Registation Success"
+
+
+                ]);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'no data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -33,6 +60,8 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
+
+
     }
 
     /**
