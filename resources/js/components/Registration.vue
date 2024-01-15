@@ -58,7 +58,6 @@
         v => !!v || 'Phone number is required',
         v => (v && v.length >= 10) || 'Phone number must be a valid 10-digit number',
       ];
-  
       const submitForm = () => {
         if (this.$refs.form.validate()) {
           console.log(formData.value.phone);
@@ -69,7 +68,6 @@
             });
         }
       };
-  
       return {
         valid,
         response,

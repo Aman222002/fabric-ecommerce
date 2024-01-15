@@ -10,6 +10,9 @@ use App\Http\Controllers\LoginController;
 use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\JobsController;
+use App\Http\Controllers\JobTypesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +61,10 @@ Route::get('/job', function () {
 Route::get('/product', function () {
     return view('product');
 });
+
+Route::get('/postjob', function () {
+    return view('postjob');
+});
 // Route::get('/home', [function () {
 //     return view('home');
 // }]);
@@ -71,9 +78,20 @@ Route::post('/registration', [RegistrationController::class, 'store'])->name('re
 Route::get('/companyregister', [CompanyController::class, 'index']);
 Route::post('/companyregister', [CompanyController::class, 'store'])->name('companyregister');
 
+
+Route::get('/post', [JobsController::class, 'index']);
+Route::post('/post', [JobsController::class, 'store']);
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+
+   
 });
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/jobtypes', [JobTypesController::class, 'index']);
+
+
 //users
 //user/{id} function(Request $request, $id)

@@ -24,17 +24,19 @@
         <v-text-field v-model="company.company_address" label="Company Address" required class="custom-input"></v-text-field>
         <v-text-field v-model="company.phone_number" label="Phone Number" required class="custom-input"></v-text-field>
         <v-textarea v-model="company.description" label="Description" class="custom-input"></v-textarea>
-        <v-select v-model="company.status" :items="['active', 'inactive']" label="Status" class="custom-input"></v-select>
-        <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
+        <v-select v-model="company.status" :items="['0', '1']" label="Status" class="custom-input"></v-select>
+        <v-btn type="submit" color="primary" class="custom-button"><a href="/postjob">Register Company</a></v-btn>
       </v-form>
     </v-card>
   </v-container>
 </template>
 <script>
 import { ref } from 'vue';
+
 export default {
   name: "CompanyRegister",
   setup() {
+  
     const company = ref({
       username: '',
       useremail: '',
@@ -53,6 +55,7 @@ export default {
       axios.post('/companyregister', company.value)
                     .then((data) => {
                         console.log(data);
+                        
                     })
     };
     return {
