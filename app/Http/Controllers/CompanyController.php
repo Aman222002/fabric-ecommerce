@@ -31,9 +31,20 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $validationRules = [
+            'company_name' => 'required|string|max:255',
+            'company_email' => 'required|email|unique:companies|max:255',
+            'password' => 'required|string|min:8',
+            'username' => 'required|string|max:255|unique:companies',
+            'registration_number' => 'required|string|max:255|unique:companies',
+            'company_address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:20',
+            'description' => 'nullable|string',
+            'status' => 'required|in:0,1',
+        ];
+        $request->validate($validationRules);
         //
         try {
-
             $input = $request->all();
            
             Company::create([
@@ -51,12 +62,12 @@ class CompanyController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => "Registation Success"
-            ]);
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 

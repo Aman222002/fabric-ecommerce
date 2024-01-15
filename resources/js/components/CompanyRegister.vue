@@ -25,16 +25,13 @@
         <v-text-field v-model="company.phone_number" label="Phone Number" required class="custom-input"></v-text-field>
         <v-textarea v-model="company.description" label="Description" class="custom-input"></v-textarea>
         <v-select v-model="company.status" :items="['active', 'inactive']" label="Status" class="custom-input"></v-select>
-
         <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
       </v-form>
     </v-card>
   </v-container>
 </template>
-
 <script>
 import { ref } from 'vue';
-
 export default {
   name: "CompanyRegister",
   setup() {
@@ -51,13 +48,11 @@ export default {
       description: '',
       status: '1',
     });
-
     const submitForm = () => {
       console.log('Company Data:', company.value);
       axios.post('/companyregister', company.value)
                     .then((data) => {
                         console.log(data);
-                        
                     })
     };
     return {
@@ -72,17 +67,14 @@ export default {
   max-width: 600px;
   margin: auto;
 }
-
 .form-title {
   font-size: xx-large;
   margin-top: 20px;
 }
-
 .custom-form {
   display: flex;
   flex-direction: column;
 }
-
 .custom-input {
   margin-bottom: 20px;
 }

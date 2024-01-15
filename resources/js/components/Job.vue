@@ -64,7 +64,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import { ref } from "vue";
 export default {

@@ -1,23 +1,25 @@
 <template>
-    <v-app>
-      <v-container fluid>
-        <v-text-display-4
-          class="mb-4"
-          style="font-size: xx-large; margin-top: 20px;color: blue;"
-        >
-        Products for Employers
-        </v-text-display-4>
-      </v-container>
-    </v-app>
-  </template>
-  
-  <script>
-  export default {
-    name: "Product",
-  };
-  </script>
-  
-  <style scoped>
-  
-  </style>
-  
+    <v-container fluid>
+      <v-row>
+        <v-col>
+          <v-img
+            src="/storage/assest/4.jpg"
+            aspect-ratio="2.5" 
+            class="mx-auto"
+          >
+          </v-img>
+        </v-col>
+      </v-row>
+    </v-container>
+ 
+</template>
+
+<script>
+export default {
+  name: "Product",
+};
+</script>
+
+<style scoped>
+/* Add your scoped styles here */
+</style>
