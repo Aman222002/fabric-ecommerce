@@ -36,28 +36,28 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.name" label="Name"
+                                    <v-text-field v-model="formdata.name" id="name" label="Name"
                                         :rules="[v => !!v || 'Name is required']" maxlength="100"
                                         class="custom-text-field"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.email" label="Email"
+                                    <v-text-field v-model="formdata.email" id="email" label="Email"
                                         :rules="[v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Email must be valid']"
                                         maxlength="100" class="custom-text-field"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="12">
-                                    <vue-tel-input v-model="formdata.phone" mode="international"></vue-tel-input>
-                                    <br />
+                                    <v-text-field v-model="formdata.phone" id="phone" label="phone"
+                                        type="phone"></v-text-field><br />
                                 </v-col>
                                 <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.password" label="Password" type="password"
-                                        :rules="[v => !!v || 'Password is required']" maxlength="100"
+                                    <v-text-field v-model="formdata.password" id="passwoprd" label="Password"
+                                        type="password" :rules="[v => !!v || 'Password is required']" maxlength="100"
                                         class="custom-text-field"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.confirm_password" label="Confirm Password"
-                                        type="password"
-                                        :rules="[v => !!v || 'Confirm Password is required', v => v === password || 'Passwords must match']"
+                                    <v-text-field v-model="formdata.confirm_password" id="confirm-password"
+                                        label="Confirm Password" type="password"
+                                        :rules="[v => !!v || 'Confirm Password is required', v => v === formdata.password || 'Passwords must match']"
                                         maxlength="100" class="custom-text-field"></v-text-field>
                                     <div v-if="passwordMismatch" class="error">Passwords do not match.</div>
                                 </v-col>
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, reactive, computed } from 'vue';
 
 export default {
     name: 'AllUser',
@@ -121,7 +121,7 @@ export default {
         });
         const dialog = ref(false);
         const dialog_edit = ref(false);
-        const users = ref({});
+        const users = reactive({});
 
         const openDialog = () => {
             dialog.value = true;
@@ -143,6 +143,10 @@ export default {
         const editUser = (user) => {
             // Handle editing logic here
             dialog_edit.value = true;
+            axios.post(`./users/update`, formdata.value)
+                .then(response => {
+                    alert("success");
+                })
 
         };
 
@@ -152,12 +156,11 @@ export default {
                 return;
             }
             else {
-                axios.post(`./user/store`, formdata.value)
+                axios.post(`./users/store`, formdata.value)
                     .then(response => {
-                        console.log(data);
                         alert("success");
                     })
-            }
+            };
         };
 
         return {
@@ -178,7 +181,8 @@ export default {
             .then(response => {
                 users.value = response.data.users;
             });
-    },
+        console.log(users.value);
+    }
 };
 </script>
 <style>

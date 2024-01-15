@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -15,42 +16,39 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::All();
-        return (compact('users'));
+        try {
+            $users = User::All();
+            return response()->json($users, 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
         try {
+            $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required',
+                'password' => 'required ',
+                'phone' => 'required',
+            ]);
+
             $input = $request->all();
-            if ($response = User::create()) {
-                ([
-
-                    'name' => $input['name'],
-                    'email' => $input['email'],
-                    'password' => $input['password'],
-
-                ]);
-                return response()->json([
-                    'status' => true,
-                    'message' => "Registation Success"
-
-
-                ]);
-            } else {
-                $response = [
-                    'status' => false,
-                    'message' => 'no data found',
-                ];
-                return response()->json($response, 404);
-            }
+            $input['password'] = Hash::make($input['password']);
+            $user = User::create([
+                'name' =>  $input['name'],
+                'email' =>  $input['email'],
+                'password' =>  $input['password'],
+                'phone' =>  $input['phone'],
+            ]);
+            return response()->json(['status' => true, 'message' => 'User created successfully'], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
 

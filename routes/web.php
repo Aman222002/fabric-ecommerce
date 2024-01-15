@@ -43,6 +43,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users/store', [UserController::class, 'store']);
+    Route::post('/users/update', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 });
 //users
