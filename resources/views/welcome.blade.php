@@ -10,8 +10,8 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <div id="app">
-    <!-- <header-component></header-component> -->
-    <home-component></home-component>
+    <header-component></header-component>
+    <!-- <home-component></home-component> -->
 </div>
 
 <body>

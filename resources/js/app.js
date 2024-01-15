@@ -42,7 +42,8 @@ import Login from "./components/Login.vue";
 app.component("login-component", Login);
 import Home from "./components/Home.vue";
 app.component("home-component", Home);
-// import Mncs from './views/Mncs.vue';
+import CvComponent from "./components/CvComponent.vue";
+app.component("cv-component", CvComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);

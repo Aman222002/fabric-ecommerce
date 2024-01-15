@@ -41,39 +41,30 @@
         </v-row>
         <v-row class="mt-5">
             <v-col cols="12" md="4" v-for="company in companies" :key="company.id">
-                <v-card class="company-card">
-                    <v-card-title>{{ company.name }}</v-card-title>
-                    <v-card-subtitle>{{ company.industry }}</v-card-subtitle>
-                    <v-card-text>
-                        {{ company.description }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn color="primary">Explore Careers</v-btn>
-                    </v-card-actions>
-                </v-card>
+
             </v-col>
         </v-row>
     </v-container>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+
 export default {
     setup() {
-        const companies = ref([
-            {
-                id: 1,
-                name: 'Company A',
-                industry: 'Technology',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            },
-            {
-                id: 2,
-                name: 'Company B',
-                industry: 'Finance',
-                description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-            },
+        const companies = ref([]);
+        const fetchData = async () => {
+            try {
+                const response = await fetch('api/companies');
+                const data = await response.json();
+                companies.value = data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        onMounted(() => {
 
-        ]);
+            fetchData();
+        });
 
         return {
             companies,
@@ -86,7 +77,6 @@ export default {
 .company-card:hover {
     background-color: red;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
 }
 
 .image-with-transition {

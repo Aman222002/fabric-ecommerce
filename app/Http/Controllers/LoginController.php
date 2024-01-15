@@ -11,8 +11,8 @@ use Hash;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers;
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // use AuthenticatesUsers;
+    // protected $redirectTo = '/cv';
     public function index()
     {
         return view('login');
@@ -20,23 +20,20 @@ class LoginController extends Controller
 
     public function  check(Request $request)
     {
-
-        $credential = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credential)) {
-
-
+        try {
+            $credential = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ]);
             return response()->json([
                 'status' => true,
-                'message' => " Success"
+                'message' => "Login Success",
+
             ]);
-        } else {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => "fail"
+                'message' => $e->getMessage()
             ]);
         }
     }

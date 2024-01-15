@@ -1,93 +1,85 @@
 <template>
     <v-container>
-        <v-card class="job-search-card">
+        <div class="job-search-card">
             <v-card-title class="text-center">
                 <h1>Find your dream job</h1>
                 <h2>5 Lakh +jobs for you to explore</h2>
             </v-card-title>
-            <v-card-text>
-                <v-row>
-                    <v-col cols="12" md="6">
-                        <v-select v-model="skills" :items="skillsOptions" label="Select Skills" outlined
-                            clearable></v-select>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-select v-model="experience" :items="experienceOptions" label="Experience" outlined
-                            clearable></v-select>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-select v-model="location" :items="locationOptions" label="Location" outlined
-                            clearable></v-select>
-                    </v-col>
-                </v-row>
-                <v-row class="text-center">
-                    <v-col>
-                        <v-btn @click="searchJobs" color="primary" class="search-button">Search</v-btn>
-                        <v-row v-if="validationError">
-                            <p class="error-message">All fields are required.</p>
-                        </v-row>
-                    </v-col>
-                </v-row>
-            </v-card-text>
-        </v-card>
+            <SearchComponent />
+        </div>
         <v-card>
-            <v-btn @click="openComponent('Mncs')">MNCs</v-btn>
-            <!-- <v-btn @click="openComponent('Internship')">Internship</v-btn> -->
-            <component :is="activeComponent" />
+            <v-container>
+                <v-row align="center" justify="center">
+                    <v-btn @click="openComponent('Mncs')" class="custom-btn">
+                        <v-icon>mdi-domain</v-icon>
+                        MNCs
+                    </v-btn>
+                    <v-btn @click="openComponent('Internships')" class="custom-btn">
+                        <v-icon>mdi-briefcase-outline</v-icon>
+                        Internships
+                    </v-btn>
+
+                    <v-btn @click="openComponent('Hr')" class="custom-btn">
+                        <v-icon>mdi-account-tie</v-icon>
+                        HR
+                    </v-btn>
+
+                    <v-btn @click="openComponent('Data Science')" class="custom-btn">
+                        <v-icon>mdi-chart-bubble</v-icon>
+                        Data Science
+                    </v-btn>
+
+                    <v-btn @click="openComponent('Project Management')" class="custom-btn">
+                        <v-icon>mdi-view-dashboard</v-icon>
+                        Project Management
+                    </v-btn>
+
+                    <v-btn @click="openComponent('Engineering')" class="custom-btn">
+                        <v-icon>mdi-cogs</v-icon>
+                        Engineering
+                    </v-btn>
+                    <v-btn @click="openComponent('Marketing')" class="custom-btn">
+                        <v-icon>mdi-chart-line-variant</v-icon>
+                        Marketing
+                    </v-btn>
+
+                    <v-btn @click="openComponent('Banking')" class="custom-btn">
+                        <v-icon>mdi-bank</v-icon>
+                        Banking
+                    </v-btn>
+
+                    <v-btn @click="openComponent('Fresher')" class="custom-btn">
+                        <v-icon>mdi-school</v-icon>
+                        Fresher
+                    </v-btn>
+                </v-row>
+                <component :is="activeComponent" />
+            </v-container>
         </v-card>
+        <v-card-title class="text-center">
+            <h1>Top Companies Hiring now</h1>
+            <Hiring />
+        </v-card-title>
     </v-container>
 </template>
 <script>
 import { defineComponent } from 'vue';
 import Mncs from '@/components/Mncs.vue';
-// import Internship from '@/components/Internship.vue';
+import SearchComponent from '@/components/SearchComponent.vue';
+import Hiring from '@/components/Hiring.vue';
+// import Internships from '@/components/Internships.vue';
 import { ref } from 'vue';
+
 export default defineComponent({
+    name: 'Home',
     components: {
         Mncs,
-        // Internship,
+        Hiring,
+        // Internships,
+        SearchComponent
     },
-    name: 'Home',
     setup() {
-        const validationError = ref(false);
-        const skills = ref(null);
-        const experience = ref(null);
-        const location = ref(null);
-        const skillsOptions = [
-            'JavaScript',
-            'Python',
-            'Java',
-            'C++',
-            'React',
-            'Vue.js',
-            'Node.js',
-        ];
-        const experienceOptions = [
-            '0-1 years',
-            '1-3 years',
-            '3-5 years',
-            '5-10 years',
-            '10+ years',
-        ];
-        const locationOptions = [
-            'Delhi',
-            'Haryana',
-            'Banglore',
-            'Noida',
-        ];
-        const searchJobs = () => {
-            if (validateFields()) {
-                validationError.value = false;
-                console.log('Searching for:', skills.value, 'in', location.value, experience.value);
-            } else {
-                validationError.value = true;
-            }
-        };
-        const validateFields = () => {
-            return skills.value !== null && experience.value !== null && location.value !== null;
-        };
         const activeComponent = ref(null);
-
         const openComponent = (componentName) => {
             activeComponent.value = componentName;
         };
@@ -95,29 +87,29 @@ export default defineComponent({
         return {
             activeComponent,
             openComponent,
-            skills,
-            experience,
-            experienceOptions,
-            skillsOptions,
-            locationOptions,
-            location,
-            searchJobs,
-            validationError,
         };
     },
 });
 </script>
 <style scoped>
 .job-search-card {
-    margin: auto;
-    height: 10%;
-    padding: 70px;
+    /* margin: auto; */
+    /* height: 5%;
+    padding: 2px; */
+    border: 2px solid black;
+    border-radius: 25px;
     background-color: cadetblue;
 }
 
 .error-message {
     color: crimson;
     font-size: large;
+}
+
+.custom-btn {
+    background-color: burlywood;
+    margin: 20px;
+    /* Add margin for spacing between buttons */
 }
 
 .container {

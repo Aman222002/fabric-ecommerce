@@ -73,8 +73,18 @@ export default {
                 console.log(this.formData.phone);
                 window.axios.post('/registration', this.formData)
                     .then((data) => {
-                        console.log(data);
-                        alert("success");
+                        // console.log(data);
+                        // alert("success");
+                        if (data.status = true) {
+                            alert("Registration successful");
+                            window.location.href = './login';
+                        } else {
+                            alert("Registration failed");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        alert("An error occurred during registration");
                     })
 
             }
