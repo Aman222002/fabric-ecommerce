@@ -18,7 +18,7 @@ class UserController extends Controller
         //
         try {
             $users = User::All();
-            return response()->json($users, 200);
+            return response()->json([$users, 'status' => true], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -33,16 +33,15 @@ class UserController extends Controller
             $this->validate($request, [
                 'name' => 'required',
                 'email' => 'required',
-                'password' => 'required ',
+                'password' => 'required',
                 'phone' => 'required',
             ]);
 
             $input = $request->all();
-            $input['password'] = Hash::make($input['password']);
             $user = User::create([
                 'name' =>  $input['name'],
                 'email' =>  $input['email'],
-                'password' =>  $input['password'],
+                'password' =>  Hash::make($input['password']),
                 'phone' =>  $input['phone'],
             ]);
             return response()->json(['status' => true, 'message' => 'User created successfully'], 200);
@@ -63,13 +62,56 @@ class UserController extends Controller
     }
 
     /**
+     * Display the data to edit in form
+     */
+    public function edit(string $id)
+    {
+        //
+        try {
+            $user = User::find($id);
+            if ($user) {
+                return response()->json(['users' => $user, 'status' => true], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'data' => 'User not found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
         //
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $this->validate($request, [
+                    'name' => 'required',
+                    'email' => 'required',
+                    'phone' => 'required',
+                ]);
+                $input = $request->all();
+                $user->update($input);
+                return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'user not found'
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      */

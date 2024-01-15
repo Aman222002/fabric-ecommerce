@@ -8,6 +8,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -18,11 +19,45 @@
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone }}</td>
                     <td>
-                        <a href="/">
-                            <v-btn color="primary" @click="editUser(user)">Edit</v-btn>
-                        </a>
+                        <v-btn color="primary" @click="open_editDialog(user.id)">Edit</v-btn>
                         <v-btn color="error" @click="deleteUser(user.id)">Delete</v-btn>
                     </td>
+                    <v-row justify="center">
+                        <v-dialog v-model="dialog_edit" width="500">
+                            <v-card>
+                                <v-card-title>
+                                    <span class="text-h5">Edit User</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col cols="12" md="12">
+                                                <v-text-field v-model="editFormdata.name" label="Name"
+                                                    :rules="[v => !!v || 'Name is required']" maxlength="100"
+                                                    class="custom-text-field"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" md="12">
+                                                <v-text-field v-model="editFormdata.email" label="Email"
+                                                    :rules="[v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Email must be valid']"
+                                                    maxlength="100" class="custom-text-field"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" md="12">
+                                                <v-text-field v-model="editFormdata.phone" label="phone"
+                                                    type="phone"></v-text-field><br />
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                    <small>*indicates required field</small>
+                                    <v-card-actions>
+                                        <v-btn color="blue-darken-1" variant="text"
+                                            @click="close_editDialog()">Close</v-btn>
+                                        <v-btn color="blue-darken-1" variant="text"
+                                            @click="editUser(editFormdata.id)">Save</v-btn>
+                                    </v-card-actions>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
+                    </v-row>
                 </tr>
             </tbody>
         </table>
@@ -62,7 +97,6 @@
                                     <div v-if="passwordMismatch" class="error">Passwords do not match.</div>
                                 </v-col>
                             </v-row>
-                            <!-- Your form fields go here -->
                         </v-container>
                         <small>*indicates required field</small>
                     </v-card-text>
@@ -73,40 +107,11 @@
                 </v-card>
             </v-dialog>
         </v-row>
-        <v-row justify="center">
-            <v-dialog v-model="dialog_edit" width="500">
-                <v-card>
-                    <v-card-title>
-                        <span class="text-h5">Add User</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.name" label="Name"
-                                        :rules="[v => !!v || 'Name is required']" maxlength="100"
-                                        class="custom-text-field"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.email" label="Email"
-                                        :rules="[v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Email must be valid']"
-                                        maxlength="100" class="custom-text-field"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="12">
-                                    <vue-tel-input v-model="formdata.phone" mode="international"></vue-tel-input>
-                                    <br />
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card-text>
-                </v-card>
-            </v-dialog>
-        </v-row>
     </div>
 </template>
 
 <script>
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 
 export default {
     name: 'AllUser',
@@ -119,10 +124,25 @@ export default {
             password: '',
             confirm_password: '',
         });
+        const editFormdata = ref({
+            name: '',
+            email: '',
+            phone: '',
+        });
         const dialog = ref(false);
         const dialog_edit = ref(false);
-        const users = reactive({});
-
+        const users = ref({});
+        const open_editDialog = (id) => {
+            dialog_edit.value = true;
+            axios.get(`./user/edit/${id}`)
+                .then(response => {
+                    console.log(response);
+                    editFormdata.value = response.data.users;
+                })
+        };
+        const close_editDialog = () => {
+            dialog_edit.value = false;
+        };
         const openDialog = () => {
             dialog.value = true;
 
@@ -131,21 +151,24 @@ export default {
             dialog.value = false;
         };
 
+        const fetchUser = () => {
+            axios.get('./users/index')
+                .then(response => {
+                    users.value = response.data[0];
+                });
+        };
         const deleteUser = (id) => {
-            axios.delete(`./users/${id}`)
+            axios.delete(`./user/${id}`)
                 .then(response => {
                     users.value = users.value.filter(user => user.id !== id);
                     let i = this.users.map(data => data.id).indexOf(id);
                     users.value.splice(i, 1);
                 });
         };
-
-        const editUser = (user) => {
-            // Handle editing logic here
-            dialog_edit.value = true;
-            axios.post(`./users/update`, formdata.value)
+        const editUser = (id) => {
+            axios.post(`./user/update/${id}`, editFormdata.value)
                 .then(response => {
-                    alert("success");
+                    console.log(response);
                 })
 
         };
@@ -156,17 +179,23 @@ export default {
                 return;
             }
             else {
-                axios.post(`./users/store`, formdata.value)
+                axios.post(`./user/store`, formdata.value)
                     .then(response => {
                         alert("success");
                     })
+                dialog.value = false;
             };
         };
-
+        onMounted(() => {
+            fetchUser();
+        });
         return {
             formdata,
+            editFormdata,
             dialog,
             users,
+            close_editDialog,
+            open_editDialog,
             dialog_edit,
             openDialog,
             closeDialog,
@@ -175,15 +204,8 @@ export default {
             editUser,
             saveUser,
         };
-    },
-    onCreated() {
-        axios.get('./users')
-            .then(response => {
-                users.value = response.data.users;
-            });
-        console.log(users.value);
     }
-};
+}
 </script>
 <style>
 .error {

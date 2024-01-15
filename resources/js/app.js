@@ -43,9 +43,10 @@ app.component("login-component", Login);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
-
-import DashboardComponent from "./components/DashboardComponent.vue";
-app.component("dashboard-component", DashboardComponent);
+import NavbarComponent from "./components/NavbarComponent.vue";
+app.component("navbar-component", NavbarComponent);
+import SidebarComponent from "./components/SidebarComponent.vue";
+app.component("sidebar-component", SidebarComponent);
 
 /**
  * The following block of code may be used to automatically register your
