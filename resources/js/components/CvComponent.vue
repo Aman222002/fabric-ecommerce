@@ -1,191 +1,154 @@
-<template>
-    <v-container>
-        <form @submit.prevent="submitForm" class="cv-form">
-            <div v-if="currentStep === 1">
-                <label for="name">Name:</label>
-                <input v-model="form.name" type="text" id="name" required />
-            </div>
-            <div v-if="currentStep === 2">
-                <label for="email">Email:</label>
-                <input v-model="form.email" type="email" id="email" required />
-            </div>
-            <div v-if="currentStep === 3">
-                <label for="education">Highest Education:</label>
-                <select v-model="form.highest_education" id="education" required>
-                    <option value="">Select Education Level</option>
-                    <option value="High School">High School</option>
-                    <option value="Bachelor's Degree">Bachelor's Degree</option>
-                    <option value="Master's Degree">Master's Degree</option>
-                </select>
-            </div>
-            <div v-if="currentStep === 4">
-                <label for="university">University:</label>
-                <input v-model="form.university" type="text" id="university" required />
-            </div>
 
-            <div v-if="currentStep === 5">
-                <label for="startYear">Starting Year:</label>
-                <select v-model="form.starting_year" id="startYear" required>
-                    <option value="">Select Starting Year</option>
-                    <option v-for="year in getYearRange()" :key="year" :value="year">{{ year }}</option>
-                </select>
-            </div>
-            <div v-if="currentStep === 6">
-                <label for="passingYear">Passing Year:</label>
-                <select v-model="form.passing_year" id="passingYear" required>
-                    <option value="">Select Passing Year</option>
-                    <option v-for="year in getYearRange()" :key="year" :value="year">{{ year }}</option>
-                </select>
-            </div>
-            <div v-if="currentStep === 7">
-                <label for="skills">Skills:</label>
-                <select v-model="form.skills" id="skills" required>
-                    <option value="">Select Skills</option>
-                    <option value="JavaScript">JavaScript</option>
-                    <option value="Vue.js">Vue.js</option>
-                    <option value="HTML">HTML</option>
-                </select>
-            </div>
-            <div v-if="currentStep === 8">
-                <label for="address">Address:</label>
-                <textarea v-model="form.address" id="address" required></textarea>
-            </div>
-            <div v-if="currentStep === 9">
-                <label for="upload_image">Upload Image:</label>
-                <input type="file" id="image" accept="image/*" @change="handleImageUpload" />
-            </div>
-            <div>
-                <button v-if="currentStep > 1" @click.prevent="prevStep">Previous</button>
-                <button v-if="currentStep < totalSteps" @click.prevent="nextStep">Next</button>
-                <button type="submit" :disabled="isSubmitting">
-                    {{ isSubmitting ? 'Submitting...' : 'Submit' }}
-                </button>
-            </div>
-        </form>
-    </v-container>
+<template>
+    <div>
+        <v-card class="mb-4">
+            <v-card-text>
+                <v-select v-model="steps" :items="[2, 3, 4, 5, 6, 7]" label="steps"></v-select>
+            </v-card-text>
+        </v-card>
+        <v-stepper v-model="e1">
+            <template v-slot:default="{ prev, next }">
+                <v-stepper-header>
+                    <template v-for="n in steps" :key="`${n}-step`">
+                        <v-stepper-item :complete="e1 > n" :step="stepHeaders[n - 1]" :value="n" editable>
+                            <template v-slot:title>
+                                <v-row justify="center">
+                                    <v-col>
+                                        <span>{{ stepTitles[n - 1] }}</span>
+                                    </v-col>
+                                </v-row>
+                            </template>
+                        </v-stepper-item>
+                        <v-divider v-if="n !== steps" :key="n"></v-divider>
+                    </template>
+                </v-stepper-header>
+
+                <v-stepper-window>
+                    <v-stepper-window-item v-for="n in steps" :key="`${n}-content`" :value="n">
+                        <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '400px'">
+                            <v-container style="height: 300px; width: 80%;">
+                                <v-card style="height: 250px; width: 80%;">
+                                    <v-form @submit.prevent="next">
+                                        <v-row v-if="n === 1">
+                                            <v-card-title class="headline mb-2">General Information</v-card-title>
+                                            <v-col>
+                                                <v-label> <v-icon>mdi-account</v-icon>Name</v-label>
+                                                <v-text-field v-model="formData.name" label="Name"
+                                                    :rules="nameRules"></v-text-field>
+                                            </v-col>
+                                            <v-col>
+
+                                                <v-label><v-icon>mdi-email</v-icon>Email</v-label>
+                                                <v-text-field v-model="formData.email" label="Email"
+                                                    :rules="emailRules"></v-text-field>
+                                            </v-col>
+                                            <v-col>
+                                                <v-label><v-icon>mdi-phone</v-icon> Phone no</v-label>
+                                                <v-text-field v-model="formData.phone" label="Phone"
+                                                    :rules="phoneRules"></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row v-if="n === 2">
+                                            <v-card-title class="headline mb-2">Users Qualifications</v-card-title>
+                                            <!-- <v-col>
+                                                <v-label>
+                                                    <v-icon>mdi-school</v-icon> Education
+                                                </v-label>
+                                                <v-text-field v-model="formData.education"
+                                                    :rules="educationRules"></v-text-field>
+                                            </v-col> -->
+                                            <v-col>
+                                                <v-label><v-icon>mdi-school</v-icon>Degree</v-label>
+                                                <v-select v-model="formData.degree" :items="degreeOptions"
+                                                    label="Degree"></v-select>
+                                            </v-col>
+                                            <v-row v-if="formData.degree === 'Other'">
+                                                <v-col>
+                                                    <v-label>Specify Other Degree</v-label>
+                                                    <v-text-field v-model="formData.otherDegree"
+                                                        label="Other Degree"></v-text-field>
+                                                </v-col>
+                                            </v-row>
+                                        </v-row>
+                                    </v-form>
+                                </v-card>
+                            </v-container>
+                        </v-card>
+                    </v-stepper-window-item>
+                </v-stepper-window>
+                <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="next"
+                    color="success"></v-stepper-actions>
+            </template>
+        </v-stepper>
+    </div>
 </template>
+  
 <script>
-import { ref } from 'vue';
 export default {
-    name: 'CvComponent',
-    setup() {
-        const form = ref({
-            name: '',
-            email: '',
-            highest_education: '',
-            university: '',
-            starting_year: '',
-            passing_year: '',
-            skills: '',
-            address: '',
-            upload_image: null,
-        });
-        const isSubmitting = ref(false);
-        const currentStep = ref(1);
-        const totalSteps = 9;
-        const submitForm = () => {
-            isSubmitting.value = true;
-            // window.axios.post('/cv', form.value)
-            //     .then(response => {
-            //         console.log('Form submitted successfully:', response.data);
-            //         alert('CV submitted successfully!');
-            //         form.value = {
-            //             name: '',
-            //             email: '',
-            //             highest_education: '',
-            //             university: '',
-            //             starting_year: '',
-            //             passing_year: '',
-            //             skills: '',
-            //             address: '',
-            //             upload_image: null,
-            //         };
-            //         if (currentStep.value < totalSteps) {
-            //             currentStep.value += 1;
-            //         }
-            //     })
-            //      .catch(error => {
-            //          console.error('Error submitting CV:', error);
-            //      alert('An error occurred during CV submission. Please try again.');
-            //     })
-            //     .finally(() => {
-            //         isSubmitting.value = false;
-            //     });
-        };
-        const getYearRange = () => {
-            const currentYear = new Date().getFullYear();
-            return Array.from({ length: 10 }, (_, index) => currentYear + index);
-        };
-        const handleImageUpload = (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                form.value.image = file;
-            }
-        };
-        const nextStep = () => {
-            if (currentStep < totalSteps) {
-                currentStep.value += 1;
-            }
-        };
-        const prevStep = () => {
-            if (currentStep > 1) {
-                currentStep.value -= 1;
-            }
-        };
+    data() {
         return {
-            isSubmitting,
-            currentStep,
-            totalSteps,
-            nextStep,
-            prevStep,
-            form,
-            getYearRange,
-            submitForm,
-            getYearRange,
-            handleImageUpload,
+            e1: 1,
+            steps: 2,
+            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5"],
+            stepTitles: ["General Information", "Users Qualifications", "Skills", "Address", "Additional Information", "Experience"],
+            stepBackgrounds: ["#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF",],
+            formData: {
+                name: "",
+                email: "",
+                phone: "",
+                education: "",
+                degree: null,
+                otherDegree: "",
+                certifications: "",
+                workExperience: "",
+            },
+            degreeOptions: [
+                "Bachelor's Degree",
+                "Master's Degree",
+                "Ph.D.",
+                "Other",
+                // Add more degree options as needed
+            ],
+            educationRules: [(v) => !!v || "Education is required"],
+            certificationsRules: [(v) => !!v || "Certifications are required"],
+            workExperienceRules: [(v) => !!v || "Work Experience is required"],
+            nameRules: [
+                (v) => !!v || "Name is required",
+                (v) => (v && v.length >= 3) || "Name must be at least 3 characters",
+            ],
+            emailRules: [
+                (v) => !!v || "E-mail is required",
+                (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+            ],
+            phoneRules: [
+                (v) => !!v || "Phone is required",
+                (v) => (v && v.length >= 10) || "Phone must be at least 10 characters",
+            ],
         };
     },
+
+    computed: {
+        disabled() {
+            return this.e1 === 1 ? "prev" : this.e1 === this.steps ? "next" : undefined;
+        },
+        degreeOptionsWithAdditional() {
+            return [...this.degreeOptions, this.formData.degree === "Other" ? this.formData.otherDegree : ""];
+        },
+    },
+
+    methods: {
+        prev() {
+            if (this.e1 > 1) {
+                this.e1 -= 1;
+            }
+        },
+
+        next() {
+            if (this.e1 < this.steps) {
+                this.e1 += 1;
+            }
+        },
+    },
 };
-
 </script>
-
-<style scoped>
-.cv-form {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-}
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 12px;
-    box-sizing: border-box;
-}
-
-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-</style>
-
-
-
   

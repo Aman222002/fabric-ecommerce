@@ -9,7 +9,7 @@ class CvController extends Controller
 {
     public function index()
     {
-        return view('cv');
+        return view('generate_cv');
     }
 
     public function submitForm(Request $request)
@@ -18,16 +18,18 @@ class CvController extends Controller
             $validatedData = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email',
-                'education' => 'required|string',
+                'phone' => 'required|string|max:10',
+                'hobbies' => 'required|string',
+                'highest_education' => 'required|string',
                 'university' => 'required|string',
-                'startYear' => 'required|string',
-                'passingYear' => 'required|string',
+                'starting_year' => 'required|string',
+                'passing_year' => 'required|string',
                 'skills' => 'required|string',
                 'address' => 'required|string',
             ]);
 
-            $cv = new GenerateCV($validatedData);
-            $cv->save();
+            $validatedData['user_id'] = auth()->id();
+            $cv = GenerateCv::create($validatedData);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -36,7 +38,6 @@ class CvController extends Controller
                 $cv->image = $imageName;
                 $cv->save();
             }
-
             return response()->json(['message' => 'CV submitted successfully']);
         } catch (\Exception $e) {
             return response()->json(['message' => 'CV submission failed', 'error' => $e->getMessage()], 500);

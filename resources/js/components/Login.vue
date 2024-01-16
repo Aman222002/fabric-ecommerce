@@ -87,7 +87,7 @@ export default {
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
-                        <div class="text-hint">Already have an account? <a href="/registration">Login In</a></div>
+                        <div class="text-hint">Already have an account? <a href="/login">Login In</a></div>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -126,14 +126,13 @@ export default {
     methods: {
         submitForm() {
             if (this.$refs.form.validate()) {
-                console.log(this.formData.phone);
                 window.axios.post('/login', this.formData)
                     .then((data) => {
                         // console.log(data);
                         // alert("success");
                         if (data.status = true) {
                             alert("Login successful");
-                            window.location.href = './cv';
+                            window.location.href = './generate_cv';
                         } else {
                             alert("Login  failed");
                         }

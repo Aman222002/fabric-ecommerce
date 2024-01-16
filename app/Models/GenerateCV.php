@@ -5,7 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GenerateCV extends Model
+class GenerateCv extends Model
 {
-    use HasFactory;
+    protected $table = 'generate_cv';
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'hobbies',
+        'highest_education',
+        'university',
+        'starting_year',
+        'passing_year',
+        'skills',
+        'address',
+        'upload_image',
+    ];
 }

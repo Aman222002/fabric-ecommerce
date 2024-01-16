@@ -44,16 +44,16 @@ Auth::routes();
 Route::get('/Header', function () {
     return view('Header');
 });
-Route::get('/cv', function () {
-    return view('cv');
+Route::get('/generate_cv', function () {
+    return view('generate_cv');
 });
 Route::get('/Footer', function () {
     return view('Footer');
 });
 Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
-Route::get('/cv', [CvController::class, 'index']);
-Route::post('/cv', [CvController::class, 'submitForm'])->name('cv');
+Route::get('/generate_cv', [CvController::class, 'index']);
+Route::post('/generate_cv', [CvController::class, 'submitForm'])->name('generate_cv');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 Route::get('/home', [HomeController::class, 'index'])->name('home');

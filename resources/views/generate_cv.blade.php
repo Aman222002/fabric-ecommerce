@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content')
-<cv-component></cv-component>
+<generate_cv-component></generate_cv-component>
 @endsection

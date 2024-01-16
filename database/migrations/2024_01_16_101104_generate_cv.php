@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('generate_c_v_s', function (Blueprint $table) {
+        Schema::create('generate_cv', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email');
+            $table->string('phone');
+            $table->string('hobbies');
             $table->string('highest_education');
             $table->string('university');
             $table->string('starting_year');
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('generate_c_v_s');
+        Schema::dropIfExists('generate_cv');
     }
 };
