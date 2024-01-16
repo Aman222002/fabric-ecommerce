@@ -9,6 +9,7 @@ class Job extends Model
 {
     use HasFactory;
     protected $table ='jobs';
+    protected $primaryKey='id';
     protected $fillable = [
         'title',
         'category_id',

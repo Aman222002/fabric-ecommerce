@@ -46,6 +46,7 @@ class CompanyController extends Controller
         //
         try {
             $input = $request->all();
+          
            
             Company::create([
                 'company_name' => $input['company_name'],

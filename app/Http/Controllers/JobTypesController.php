@@ -14,8 +14,18 @@ class JobTypesController extends Controller
     public function index()
     {
         //
-        $jobTypes  = JobType::all();
-        return response()->json($jobTypes);
+        try {
+            $jobTypes = JobType::all();
+    
+            
+            if ($jobTypes->isEmpty()) {
+                return response()->json(['message' => 'No job types found'], 404);
+            }
+    
+            return response()->json($jobTypes);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error retrieving job types', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**

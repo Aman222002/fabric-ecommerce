@@ -12,19 +12,17 @@ User
               label="Title"
               placeholder="Job Title"
             ></v-text-field>
-            <v-select
-              v-model="job.category"
-              :items="categories.map((cat) => cat.name)"
-              label="Selected Category"
-              placeholder="Select a Category"
-            ></v-select>
-            <v-select
-              v-model="job.jobType"
-              :items="jobTypes.map((cat) => cat.name)"
-              label="Job Type"
-              placeholder="Select Job Type"
-            ></v-select>
+           
 
+            <v-select v-model="job.category"  :items="categories"
+                      item-title="name" item-value="id" label="Select Category" 
+                    ></v-select>
+
+                    <v-select v-model="job.jobType"  :items="jobTypes"
+                      item-title="name" item-value="id" label="Select JobType" 
+                    ></v-select>
+
+           
             <v-text-field
               v-model="job.vacancy"
               type="number"
@@ -58,21 +56,19 @@ User
               label="Experience"
               placeholder="Select Experience"
             ></v-select>
-
             <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Company Details</h3>
-
             <v-text-field
-              v-model="company.name"
+              v-model="job.companyname"
               label="Name"
               placeholder="Company Name"
             ></v-text-field>
             <v-text-field
-              v-model="company.location"
+              v-model="job.companylocation"
               label="Location"
               placeholder="Location"
             ></v-text-field>
             <v-text-field
-              v-model="company.website"
+              v-model="job.companywebsite"
               label="Website"
               placeholder="Website"
             ></v-text-field>
@@ -83,7 +79,6 @@ User
         </v-card>
       </v-container>
     </v-form>
- 
 </template>
   
   <script>
@@ -96,19 +91,18 @@ export default {
       title: "",
       category: "",
       jobType: "",
-      vacancy: 0,
+      vacancy: "",
       salary: "",
       location: "",
       description: "",
       qualifications: "",
       experience: "",
+      companyname: "",
+      companylocation: "",
+      companywebsite: "",
     });
 
-    const company = ref({
-      name: "",
-      location: "",
-      website: "",
-    });
+    
 
     const categories = ref([]);
 
@@ -160,23 +154,17 @@ export default {
     ]);
 
     const saveJob = () => {
-      const postData = {
-        job: job.value,
-        company: company.value,
-      };
-
-      axios
-        .post("/post", postData)
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+        try{
+          axios.post('/post',job.value).then((response)=>{
+            console.log(response.data);
+          })
+        }catch(err){
+          console.log(err);
+        }
     };
     return {
       job,
-      company,
+      // company,
       categories,
       jobTypes,
       experienceOptions,
@@ -188,5 +176,35 @@ export default {
 };
 </script>
   
-  <style scoped>
+<style scoped>
+#createJobForm {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.card-form {
+  padding: 20px;
+}
+.v-text-field,
+.v-select,
+.v-textarea {
+  margin-bottom: 20px;
+}
+
+.border-top {
+  border-top: 1px solid #ccc;
+}
+
+.fs-4 {
+  font-size: 1.5rem;
+}
+.mt-5 {
+  margin-top: 20px;
+}
+.pt-5 {
+  padding-top: 20px;
+}
+
+.v-card-actions {
+  text-align: right;
+}
 </style>

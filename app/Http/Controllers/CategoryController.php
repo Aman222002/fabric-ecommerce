@@ -14,8 +14,17 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        $categories = Category::all();
-        return response()->json($categories);
+        try {
+            $categories = Category::all();
+    
+            
+            if ($categories->isEmpty()) {
+                return response()->json(['message' => 'No categories found'], 404);
+            }
+            return response()->json($categories);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error retrieving categories', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
