@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class JobsController extends Controller
 {
@@ -16,8 +17,13 @@ class JobsController extends Controller
      */
     public function index()
     {
-        //
-        return view('postjob');
+        try {
+            $jobs = Job::all();
+            return response()->json($jobs, 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -30,7 +36,7 @@ class JobsController extends Controller
             $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
             $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
     
-            // Check if either categories or jobTypes is empty
+           
             if ($categories->isEmpty() || $jobTypes->isEmpty()) {
                 return response()->json(['message' => 'No categories or job types found', 'status' => 404], 404);
             }
@@ -94,17 +100,48 @@ class JobsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        try {
+            $job = Job::find($id);
+
+            if ($job) {
+                return response()->json($job, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'No data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
+ 
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, $id = 0)
     {
-        //
+        
+        try {
+            $job = Job::find($id);
+            if ($job) {
+                return response()->json($job, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'No data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -112,14 +149,60 @@ class JobsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try{
+            $job= Job::find($id);
+            if ($job){
+                $input = $request->all();
+                $job->update($input);
+                $response = [
+                    'status' => true,
+                    'data' => 'Job updated successfully',
+                ];
+                return response() -> json($job,200);
+            }else{
+                $response = [
+                    'status' => false,
+                    'message' => 'No data found',
+                ];
+                return response()->json($response, 404);
+
+            }
+
+        }catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+
+       
+ 
+   
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            $job = Job::find($id);
+
+            if ($job) {
+                $job->delete();
+                $response = [
+                    'status' => true,
+                    'data' => 'Job deleted successfully',
+                ];
+                return response()->json($response, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'No data found',
+                ];
+               return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

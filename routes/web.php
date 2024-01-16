@@ -65,6 +65,9 @@ Route::get('/product', function () {
 Route::get('/postjob', function () {
     return view('postjob');
 });
+Route::get('/crud', function () {
+    return view('jobcrud');
+});
 // Route::get('/home', [function () {
 //     return view('home');
 // }]);
@@ -79,8 +82,11 @@ Route::get('/companyregister', [CompanyController::class, 'index']);
 Route::post('/companyregister', [CompanyController::class, 'store'])->name('companyregister');
 
 
-Route::get('/post', [JobsController::class, 'index']);
+Route::get('/post/jobs', [JobsController::class, 'index']);
 Route::post('/post', [JobsController::class, 'store']);
+Route::get('/post/edit/{id}', [JobsController::class,'edit']);
+Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
