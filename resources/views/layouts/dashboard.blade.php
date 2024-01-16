@@ -22,9 +22,15 @@
         <v-app>
             <navbar-component></navbar-component>
             <sidebar-component></sidebar-component>
-              <main class="py-4">
+              <main class="main">
             @yield('content')
         </main>
         </v-app>
     </div>
 </body>
+<style>
+    .main {
+        margin-top: 57px;
+        margin-left: 180px;
+    }
+</style>

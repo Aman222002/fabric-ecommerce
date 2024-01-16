@@ -17,6 +17,12 @@ class DashboardController extends Controller
         $users = User::all();
         return view('admin.dashboard', compact('users'));
     }
+    public function getUsers()
+    {
+        //
+        $users = User::all();
+        return view('admin.user');
+    }
 
     /**
      * Store a newly created resource in storage.

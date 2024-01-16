@@ -18,7 +18,7 @@ class UserController extends Controller
         //
         try {
             $users = User::All();
-            return response()->json([$users, 'status' => true], 200);
+            return response()->json(['users' => $users, 'status' => true], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -32,9 +32,9 @@ class UserController extends Controller
         try {
             $this->validate($request, [
                 'name' => 'required',
-                'email' => 'required',
+                'email' => 'required|unique:users',
                 'password' => 'required',
-                'phone' => 'required',
+                'phone' => 'required|unique:users',
             ]);
 
             $input = $request->all();
@@ -97,8 +97,7 @@ class UserController extends Controller
                     'email' => 'required',
                     'phone' => 'required',
                 ]);
-                $input = $request->all();
-                $user->update($input);
+                $user->update($request->all());
                 return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
             } else {
                 $response = [

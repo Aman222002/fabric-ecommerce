@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-container class="custom-container">
         <v-btn @click="openDialog">Add User</v-btn>
         <h2 class="text-center">Users List</h2>
         <table class="table">
@@ -32,17 +32,16 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" md="12">
-                                                <v-text-field v-model="editFormdata.name" label="Name"
-                                                    :rules="[v => !!v || 'Name is required']" maxlength="100"
-                                                    class="custom-text-field"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" md="12">
-                                                <v-text-field v-model="editFormdata.email" label="Email"
-                                                    :rules="[v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Email must be valid']"
+                                                <v-text-field v-model="editFormdata.name" label="Name" :rules="nameRules"
                                                     maxlength="100" class="custom-text-field"></v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="12">
-                                                <v-text-field v-model="editFormdata.phone" label="phone"
+                                                <v-text-field v-model="editFormdata.email" label="Email"
+                                                    :rules="emailRulesRules" maxlength="100"
+                                                    class="custom-text-field"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" md="12">
+                                                <v-text-field v-model="editFormdata.phone" label="phone" :rules="phoneRules"
                                                     type="phone"></v-text-field><br />
                                             </v-col>
                                         </v-row>
@@ -71,22 +70,20 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.name" id="name" label="Name"
-                                        :rules="[v => !!v || 'Name is required']" maxlength="100"
-                                        class="custom-text-field"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.email" id="email" label="Email"
-                                        :rules="[v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Email must be valid']"
+                                    <v-text-field v-model="formdata.name" id="name" label="Name" :rules="nameRules"
                                         maxlength="100" class="custom-text-field"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="12">
-                                    <v-text-field v-model="formdata.phone" id="phone" label="phone"
-                                        type="phone"></v-text-field><br />
+                                    <v-text-field v-model="formdata.email" id="email" label="Email" :rules="emailRules"
+                                        maxlength="100" class="custom-text-field"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="12">
+                                    <v-text-field v-model="formdata.phone" id="phone" label="phone" type="phone"
+                                        :rules="phoneRules"></v-text-field><br />
                                 </v-col>
                                 <v-col cols="12" md="12">
                                     <v-text-field v-model="formdata.password" id="passwoprd" label="Password"
-                                        type="password" :rules="[v => !!v || 'Password is required']" maxlength="100"
+                                        type="password" :rules="passwordRules" maxlength="100"
                                         class="custom-text-field"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="12">
@@ -94,7 +91,7 @@
                                         label="Confirm Password" type="password"
                                         :rules="[v => !!v || 'Confirm Password is required', v => v === formdata.password || 'Passwords must match']"
                                         maxlength="100" class="custom-text-field"></v-text-field>
-                                    <div v-if="passwordMismatch" class="error">Passwords do not match.</div>
+                                    <div v-if="passwordMismatch" class="error">Password should match.</div>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -107,7 +104,7 @@
                 </v-card>
             </v-dialog>
         </v-row>
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -150,15 +147,31 @@ export default {
         const closeDialog = () => {
             dialog.value = false;
         };
+        const nameRules = ref([
+            v => !!v || 'Full Name is required',
+            v => (v && v.length >= 3) || 'Full Name must be at least 3 characters',
+        ]);
+        const emailRules = ref([
+            v => !!v || 'E-mail is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ]);
+        const passwordRules = ref([
+            v => !!v || 'Password is required',
+            v => (v && v.length >= 6) || 'Password must be at least 6 characters',
+        ]);
+        const phoneRules = ref([
+            v => !!v || 'Phone number is required',
+            v => (v && v.length >= 10) || 'Phone number must be a valid 10-digit number',
+        ]);
 
         const fetchUser = () => {
-            axios.get('./users/index')
+            axios.get('./user/index')
                 .then(response => {
-                    users.value = response.data[0];
+                    users.value = response.data.users;
                 });
         };
         const deleteUser = (id) => {
-            axios.delete(`./user/${id}`)
+            axios.delete(`./user/destroy/${id}`)
                 .then(response => {
                     users.value = users.value.filter(user => user.id !== id);
                     let i = this.users.map(data => data.id).indexOf(id);
@@ -203,6 +216,10 @@ export default {
             deleteUser,
             editUser,
             saveUser,
+            nameRules,
+            emailRules,
+            passwordRules,
+            phoneRules,
         };
     }
 }
