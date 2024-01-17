@@ -56,7 +56,7 @@
             </v-card-actions>
             <h4>Are you a new client?</h4>
             <v-btn color="secondary">
-              <a href="./companyregister">Register Now</a>
+              <a href="./company/register">Register Now</a>
             </v-btn>
           </v-card>
         </v-dialog>

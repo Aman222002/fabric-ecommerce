@@ -68,7 +68,7 @@ import { onMounted, ref } from 'vue';
        const fetchJobs= () =>{
         try{
             axios.get('/post/jobs').then((response)=>{
-                jobs.value= response.data;
+                jobs.value= response.data.data;
             })
         }catch(err){
             console.log(err);
@@ -76,20 +76,24 @@ import { onMounted, ref } from 'vue';
        }
       const openEditDialog = (id) => {
         console.log(id)
-        try{
-         axios.get(`/post/edit/${id}`).then((response)=>{
-            editedJob.value=response.data;
-            console.log(response.data)
-         })
-      }catch(err){
-            console.log(err);
-      }
-      editDialog.value = true;
-    };
+        try {
+        axios.get(`/post/edit/${id}`).then((response) => {
+            if (response.data.status) {
+                editedJob.value = response.data.data;
+                console.log(response.data);
+            } else {
+                console.log(' request was not successful:', response.data.message);  
+            }
+        });
+    } catch (err) {
+        console.log(err);
+    }
+    editDialog.value = true;
+};
     const saveEditedJob = (id) => {
       try{
          axios.post(`/post/jobs/${id}`, editedJob.value).then((response)=>{
-            alert("updated successfully");
+          window.location.reload();
          })
       }catch(err){
         console.log(err);
@@ -102,6 +106,13 @@ import { onMounted, ref } from 'vue';
     };
 
     const deleteItem = (id) => {
+      try{
+         axios.post(`/post/delete/${id}`).then((response)=>{
+          window.location.reload();
+         })
+      }catch(err){
+        console.log(err);
+      }
     };
       onMounted(() => {
       fetchJobs();

@@ -52,7 +52,7 @@ export default {
     });
     const submitForm = () => {
       console.log('Company Data:', company.value);
-      axios.post('/companyregister', company.value)
+      axios.post('/company/post', company.value)
                     .then((data) => {
                         console.log(data);
                         
