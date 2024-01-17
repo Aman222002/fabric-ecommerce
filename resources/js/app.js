@@ -12,7 +12,7 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import VueTelInput from "vue3-tel-input";
 import "vue3-tel-input/dist/vue3-tel-input.css";
-import eventBus from "./event-bus";
+// import eventBus from "./event-bus";
 const VueTelInputOptions = {
     mode: "international",
     onlyCountries: ["NG", "GH", "GB", "US", "CA"],
@@ -71,6 +71,6 @@ app.component("sidebar-component", SidebarComponent);
  */
 
 app.use(vuetify);
-app.config.globalProperties.eventBus = eventBus;
+// app.config.globalProperties.eventBus = eventBus;
 app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");

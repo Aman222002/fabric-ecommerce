@@ -36,9 +36,8 @@
                                                     maxlength="100" class="custom-text-field"></v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="12">
-                                                <v-text-field v-model="editFormdata.email" label="Email"
-                                                    :rules="emailRulesRules" maxlength="100"
-                                                    class="custom-text-field"></v-text-field>
+                                                <v-text-field v-model="editFormdata.email" label="Email" :rules="emailRules"
+                                                    maxlength="100" class="custom-text-field"></v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="12">
                                                 <v-text-field v-model="editFormdata.phone" label="phone" :rules="phoneRules"

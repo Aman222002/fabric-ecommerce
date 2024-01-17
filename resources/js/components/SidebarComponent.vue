@@ -30,7 +30,6 @@
     </v-navigation-drawer>
 </template>
 <script>
-import EventBus from '../event-bus';
 import { ref, onMounted } from "vue";
 export default {
     name: 'SidebarComponent',
@@ -68,16 +67,9 @@ export default {
                 icon: 'mdi-table-column-width',
             },
         ]);
-        onMounted(() => {
-            EventBus.value.$on("toggle-sidebar", () => {
-                Sidebar_drawer.value = !Sidebar_drawer.value;
-            });
-        });
         return {
             drawer, show_user, Sidebar_drawer, items
         }
     },
-
-    components: { AllUser }
 }
 </script>

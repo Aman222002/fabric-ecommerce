@@ -28,7 +28,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { EventBus } from '../event-bus';
+// import { EventBus } from '../event-bus';
 const toggleSidebar = () => {
     EventBus.value.$emit('toggle-sidebar');
 };
