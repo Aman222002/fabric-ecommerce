@@ -1,32 +1,32 @@
 <template>
-    <v-layout>
-        <v-card>
-            <v-navigation-drawer v-model="drawer">
-                <v-list-item nav prepend-icon="mdi-home" title="Home"></v-list-item>
-                <v-divider></v-divider>
-                <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-account" title="User" value="User" @click.stop="show_user = !show_user"
-                        :disabled="show_user"></v-list-item>
-                    <v-list-item prepend-icon="mdi-domain" title="Companies" value="about" color="blue"></v-list-item>
-                </v-list>
-            </v-navigation-drawer>
-        </v-card>
+    <v-app>
+        <Navbar :sidebarVisible="sidebarVisible" :onToggleSidebar="toggleSidebar" />
+        <Sidebar :sidebarVisible="sidebarVisible" />
         <v-main>
-            <AllUser v-if="show_user"></AllUser>
+            <!-- Your main content goes here -->
         </v-main>
-    </v-layout>
+    </v-app>
 </template>
+  
 <script>
-import AllUser from './AllUser.vue';
-import { ref } from "vue";
+import { ref } from 'vue';
+import Navbar from './components/Navbar.vue';
+import Sidebar from './components/Sidebar.vue';
+
 export default {
-    setup() {
-        const drawer = ref(true);
-        const show_user = ref(false);
-        return {
-            drawer, show_user
-        }
+    name: 'DashboardComponent',
+    components: {
+        Navbar,
+        Sidebar,
     },
-    components: { AllUser }
-}
+    setup() {
+        const sidebarVisible = ref(false);
+
+        const toggleSidebar = () => {
+            sidebarVisible.value = !sidebarVisible.value;
+        };
+
+        return { sidebarVisible, toggleSidebar };
+    },
+};
 </script>

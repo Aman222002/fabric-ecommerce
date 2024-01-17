@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -15,16 +16,39 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::All();
-        return (compact('users'));
+        try {
+            $users = User::All();
+            return response()->json(['users' => $users, 'status' => true], 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required|unique:users',
+                'password' => 'required',
+                'phone' => 'required|unique:users',
+            ]);
+
+            $input = $request->all();
+            $user = User::create([
+                'name' =>  $input['name'],
+                'email' =>  $input['email'],
+                'password' =>  Hash::make($input['password']),
+                'phone' =>  $input['phone'],
+            ]);
+            return response()->json(['status' => true, 'message' => 'User created successfully'], 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -33,16 +57,60 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
+
+
     }
 
+    /**
+     * Display the data to edit in form
+     */
+    public function edit(string $id)
+    {
+        //
+        try {
+            $user = User::find($id);
+            if ($user) {
+                return response()->json(['users' => $user, 'status' => true], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'data' => 'User not found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
         //
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $this->validate($request, [
+                    'name' => 'required',
+                    'email' => 'required',
+                    'phone' => 'required',
+                ]);
+                $user->update($request->all());
+                return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'user not found'
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      */

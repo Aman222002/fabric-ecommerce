@@ -12,6 +12,7 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import VueTelInput from "vue3-tel-input";
 import "vue3-tel-input/dist/vue3-tel-input.css";
+// import eventBus from "./event-bus";
 const VueTelInputOptions = {
     mode: "international",
     onlyCountries: ["NG", "GH", "GB", "US", "CA"],
@@ -24,6 +25,7 @@ const VueTelInputOptions = {
  */
 
 const app = createApp({});
+
 const vuetify = createVuetify({
     components,
     directives,
@@ -43,9 +45,12 @@ app.component("login-component", Login);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
-
-import DashboardComponent from "./components/DashboardComponent.vue";
-app.component("dashboard-component", DashboardComponent);
+import NavbarComponent from "./components/NavbarComponent.vue";
+app.component("navbar-component", NavbarComponent);
+import AllUser from "./components/AllUser.vue";
+app.component("alluser-component", AllUser);
+import SidebarComponent from "./components/SidebarComponent.vue";
+app.component("sidebar-component", SidebarComponent);
 
 /**
  * The following block of code may be used to automatically register your
@@ -66,5 +71,6 @@ app.component("dashboard-component", DashboardComponent);
  */
 
 app.use(vuetify);
+// app.config.globalProperties.eventBus = eventBus;
 app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");

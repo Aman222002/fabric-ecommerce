@@ -42,8 +42,12 @@ Route::get('/Footer', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/users', [UserController::class, 'index']);
-    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/users', [DashboardController::class, 'getUsers']);
+    Route::group(["prefix" => "/user"], function () {
+        Route::get('/index', [UserController::class, 'index']);
+        Route::get('/edit/{id}', [UserController::class, 'edit']);
+        Route::post('/store', [UserController::class, 'store']);
+        Route::post('/update/{id}', [UserController::class, 'update']);
+        Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
+    });
 });
-//users
-//user/{id} function(Request $request, $id)
