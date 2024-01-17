@@ -131,10 +131,12 @@ export default {
         const open_editDialog = (id) => {
             dialog_edit.value = true;
             axios.get(`./user/edit/${id}`)
-                .then(response => {
-                    console.log(response);
+                .then((response) => {
+                    // console.log(response);
                     editFormdata.value = response.data.users;
-                })
+                }, (error) => {
+                    console.log(error);
+                });
         };
         const close_editDialog = () => {
             dialog_edit.value = false;
@@ -170,11 +172,14 @@ export default {
                 });
         };
         const deleteUser = (id) => {
+            window.Swal({
+                icon: "success",
+                title: "Login Successful!",
+                text: "You have successfully logged in.",
+            });
             axios.delete(`./user/destroy/${id}`)
                 .then(response => {
                     users.value = users.value.filter(user => user.id !== id);
-                    let i = this.users.map(data => data.id).indexOf(id);
-                    users.value.splice(i, 1);
                 });
         };
         const editUser = (id) => {

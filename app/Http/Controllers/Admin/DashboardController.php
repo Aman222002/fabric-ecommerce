@@ -23,6 +23,11 @@ class DashboardController extends Controller
         $users = User::all();
         return view('admin.user');
     }
+    public function getProfile()
+    {
+        //
+        return view('admin.profile');
+    }
 
     /**
      * Store a newly created resource in storage.

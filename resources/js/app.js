@@ -12,7 +12,10 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import VueTelInput from "vue3-tel-input";
 import "vue3-tel-input/dist/vue3-tel-input.css";
-// import eventBus from "./event-bus";
+import mitt from "mitt";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+const emitter = mitt();
 const VueTelInputOptions = {
     mode: "international",
     onlyCountries: ["NG", "GH", "GB", "US", "CA"],
@@ -25,7 +28,7 @@ const VueTelInputOptions = {
  */
 
 const app = createApp({});
-
+app.use(VueSweetalert2);
 const vuetify = createVuetify({
     components,
     directives,
@@ -49,9 +52,11 @@ import NavbarComponent from "./components/NavbarComponent.vue";
 app.component("navbar-component", NavbarComponent);
 import AllUser from "./components/AllUser.vue";
 app.component("alluser-component", AllUser);
+import ProfileComponent from "./components/ProfileComponent.vue";
+app.component("profile-component", ProfileComponent);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
-
+app.config.globalProperties.emitter = emitter;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -71,6 +76,5 @@ app.component("sidebar-component", SidebarComponent);
  */
 
 app.use(vuetify);
-// app.config.globalProperties.eventBus = eventBus;
 app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");

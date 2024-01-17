@@ -42,6 +42,7 @@ Route::get('/Footer', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/profile', [DashboardController::class, 'getProfile']);
     Route::get('/users', [DashboardController::class, 'getUsers']);
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
