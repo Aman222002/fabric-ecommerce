@@ -28,31 +28,24 @@
             <v-card-text>
               <v-text-field
                 label="Company Name"
-                v-model="companyName"
+                v-model="formData.company_name"
+                :rules="companyNameRules"
                 outlined
                 required
                 style="font-size: 20px; font-weight: bold"
               ></v-text-field>
               <v-text-field
                 label="Email"
-                v-model="email"
+                v-model="formData.company_email"
                 outlined
                 required
+                :rules="emailRules"
                 type="email"
                 style="font-size: 20px; font-weight: bold"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
-              <v-btn
-                color="primary"
-                @click="
-                  () => {
-                    jobDialog = false;
-                    login();
-                  }
-                "
-                >Login</v-btn
-              >
+              <v-btn  @click="handleLogin">Login</v-btn>
             </v-card-actions>
             <h4>Are you a new client?</h4>
             <v-btn color="secondary">
@@ -65,18 +58,50 @@
   </v-container>
 </template>
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 export default {
   name: "Job",
   setup() {
     const jobDialog = ref(false);
-    const companyName = ref("");
-    const email = ref("");
+    const company_name = ref("");
+    const company_email = ref("");
+    const formData = ref({
+      company_name: "",
+      company_email: "",
+    });
+    
+    const companyNameRules = [
+      (v) => !!v || "Company Name is required",
+      (v) => (v && v.length <= 50) || "Company Name must be less than 50 characters",
+    ];
 
+    const emailRules = [
+      (v) => !!v || "Email is required",
+      (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",
+    ];
+    const handleLogin = async () => {
+      try {
+        const response = await axios.post("/company/login", formData.value);
+        if (response.data.status == true) {
+          Swal.fire({
+            icon: "success",
+            title: "Login Successful!",
+            text: "You have successfully logged in.",
+          });
+          window.location.href = "/postjob";
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
     return {
       jobDialog,
-      companyName,
-      email,
+      company_name,
+      company_email,
+      handleLogin,
+      companyNameRules,
+      emailRules,
+      formData,
     };
   },
 };

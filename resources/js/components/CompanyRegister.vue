@@ -5,13 +5,12 @@
         Company Registration Form:
       </h1>
 
-      <v-form @submit.prevent="submitForm" class="custom-form">
+      <v-form  ref="form" @submit.prevent="submitForm"  class="custom-form">
 
-        <v-text-field v-model="company.username" label="User Name" required class="custom-input"></v-text-field>
-        <v-text-field v-model="company.useremail" label="User Email" required class="custom-input"></v-text-field>
-        <v-text-field v-model="company.password" label="User Password" type="password" required class="custom-input"></v-text-field>
-        <v-text-field v-model="company.confirmpassword" label="Confirm Password" type="password" required class="custom-input"></v-text-field>
-
+        <v-text-field v-model="company.username" label="User Name" :rules="nameRules" required class="custom-input"></v-text-field>
+        <v-text-field v-model="company.useremail" label="User Email" :rules="emailRules" required class="custom-input"></v-text-field>
+        <v-text-field v-model="company.password" label="User Password" :rules="passwordRules" type="password" required class="custom-input"></v-text-field>
+        <v-text-field v-model="company.confirmpassword" label="Confirm Password" :rules="confirmPasswordRules" type="password" required class="custom-input"></v-text-field>
     
         <v-divider class="mt-6"></v-divider>
         <h1 class="mb-4 form-title">
@@ -25,7 +24,7 @@
         <v-text-field v-model="company.phone_number" label="Phone Number" required class="custom-input"></v-text-field>
         <v-textarea v-model="company.description" label="Description" class="custom-input"></v-textarea>
         <v-select v-model="company.status" :items="['0', '1']" label="Status" class="custom-input"></v-select>
-        <v-btn type="submit" color="primary" class="custom-button"><a href="/postjob">Register Company</a></v-btn>
+        <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
       </v-form>
     </v-card>
   </v-container>
@@ -50,17 +49,39 @@ export default {
       description: '',
       status: '1',
     });
+    const nameRules = [v => !!v || 'Name is required'];
+    const emailRules = [
+      v => !!v || 'Email is required',
+      v => /.+@.+\..+/.test(v) || 'Enter a valid email',
+    ];
+    const passwordRules = [v => !!v || 'Password is required'];
+    const confirmPasswordRules = [
+      v => !!v || 'Confirm Password is required',
+      v => v === company.password || 'Passwords do not match',
+    ];
     const submitForm = () => {
-      console.log('Company Data:', company.value);
-      axios.post('/company/post', company.value)
-                    .then((data) => {
-                        console.log(data);
-                        
-                    })
+    
+      if (this.$refs.form.validate()) {
+        console.log('Company Data:', company.value);
+        axios.post('/company/post', company.value)
+          .then((response) => {
+            console.log(response);
+            if (response.data.status == true) {
+              window.location.href = '/postjob';
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
     };
     return {
       company,
       submitForm,
+      nameRules,
+      emailRules,
+      passwordRules,
+      confirmPasswordRules,
     };
   },
 };

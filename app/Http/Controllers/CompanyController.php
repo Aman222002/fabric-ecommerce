@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -102,5 +104,35 @@ class CompanyController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function check(Request $request)
+    {
+        try {
+            $credentials = $request->validate([
+                'company_name' => 'required',
+                'company_email' => 'required|email',
+            ]);
+            $user = DB::table('companies')
+                ->where('company_name', $credentials['company_name'])
+                ->where('company_email', $credentials['company_email'])
+                ->first();
+            if ($user) {
+                return response()->json([
+                    'status' => true,
+                    'message' => "Logged in Successfully!",
+                    'data' => $user,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => "Fail",
+                ], 401);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => "An error occurred: " . $e->getMessage(),
+            ], 500);
+        }
     }
 }

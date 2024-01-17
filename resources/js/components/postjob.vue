@@ -45,11 +45,11 @@ User
               label="Description"
               placeholder="Description"
             ></v-textarea>
-            <v-textarea
+            <v-text-field
               v-model="job.qualifications"
               label="Qualifications"
               placeholder="Qualifications"
-            ></v-textarea>
+            ></v-text-field>
             <v-select
               v-model="job.experience"
               :items="experienceOptions"
@@ -101,9 +101,6 @@ export default {
       companylocation: "",
       companywebsite: "",
     });
-
-    
-
     const categories = ref([]);
 
     const fetchCategories = async () => {
@@ -157,6 +154,9 @@ export default {
         try{
           axios.post('/post',job.value).then((response)=>{
             console.log(response.data);
+            if (response.data.status === true) {
+              window.location.href = '/crud';
+            }
           })
         }catch(err){
           console.log(err);
@@ -164,7 +164,6 @@ export default {
     };
     return {
       job,
-      // company,
       categories,
       jobTypes,
       experienceOptions,

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CompanyLoginController;
 use App\Http\Controllers\LoginController;
 use App\Models\Company;
 use App\Models\User;
@@ -80,6 +81,8 @@ Route::post('/registration', [RegistrationController::class, 'store'])->name('re
 
 Route::get('/company/register', [CompanyController::class, 'index']);
 Route::post('/company/post', [CompanyController::class, 'store'])->name('companyregister');
+
+Route::post('/company/login', [CompanyController::class, 'check']);
 
 
 Route::get('/post/jobs', [JobsController::class, 'index']);
