@@ -9,7 +9,7 @@ class CvController extends Controller
 {
     public function index()
     {
-        return view('generate_cv');
+        return view('resume');
     }
 
     public function submitForm(Request $request)

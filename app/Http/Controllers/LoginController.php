@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\log;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -25,16 +26,40 @@ class LoginController extends Controller
                 'email' => ['required', 'email'],
                 'password' => ['required'],
             ]);
-            return response()->json([
-                'status' => true,
-                'message' => "Login Success",
+            if (Auth::attempt($credential)) {
 
-            ]);
+                return response()->json([
+                    'status' => true,
+                    'message' => "Login Success",
+
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => " Invalid Credentials !",
+
+                ]);
+            }
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    public function getUser()
+    {
+        try {
+            $user = Auth::user();
+            if ($user) {
+                return response()->json(['status' => true, 'data' => $user]);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'No data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

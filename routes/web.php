@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\UsersController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
@@ -41,25 +42,21 @@ Route::get('/', function () {
 //     Route::resource('products', ProductController::class);
 // });
 Auth::routes();
-Route::get('/Header', function () {
-    return view('Header');
+Route::get('/header', function () {
+    return view('header');
 });
-Route::get('/generate_cv', function () {
-    return view('generate_cv');
+Route::get('/resume', function () {
+    return view('resume');
 });
-Route::get('/Footer', function () {
-    return view('Footer');
-});
+Route::get('/getuser', [LoginController::class, 'getUser']);
 Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
-Route::get('/generate_cv', [CvController::class, 'index']);
-Route::post('/generate_cv', [CvController::class, 'submitForm'])->name('generate_cv');
+Route::get('/resume', [CvController::class, 'index']);
+Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/search', [SearchController::class, 'index']);
 });
-//users
-//user/{id} function(Request $request, $id)

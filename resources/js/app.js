@@ -36,14 +36,12 @@ import Registration from "./components/Registration.vue";
 app.component("registration-component", Registration);
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
-import Footer from "./components/Footer.vue";
-app.component("footer-component", Footer);
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
 import Home from "./components/Home.vue";
 app.component("home-component", Home);
-import CvComponent from "./components/CvComponent.vue";
-app.component("generate_cv-component", CvComponent);
+import ResumeComponent from "./components/ResumeComponent.vue";
+app.component("resume-component", ResumeComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);

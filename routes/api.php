@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\UsersController;
+
 // use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/users/{id}', [UsersController::class, 'show']);
 
 Route::put('/user', 'API\UsersController@putUpdateUser');
 // Route::apiResource('products', ProductController::class);
