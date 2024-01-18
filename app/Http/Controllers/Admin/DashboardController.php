@@ -14,16 +14,14 @@ class DashboardController extends Controller
     public function index()
     {
         //
-        $users = User::all();
-        return view('admin.dashboard', compact('users'));
+        return view('admin.dashboard');
     }
-    public function getUsers()
+    public function viewUsers()
     {
         //
-        $users = User::all();
         return view('admin.user');
     }
-    public function getProfile()
+    public function viewProfile()
     {
         //
         return view('admin.profile');

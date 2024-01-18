@@ -66,7 +66,7 @@ export default {
     },
 };
 </script>
-<style>
+<style scoped>
 .profile {
     margin-right: 5px;
 }

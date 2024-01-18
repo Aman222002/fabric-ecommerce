@@ -132,8 +132,10 @@ export default {
             dialog_edit.value = true;
             axios.get(`./user/edit/${id}`)
                 .then((response) => {
-                    // console.log(response);
-                    editFormdata.value = response.data.users;
+                    if (response.data.status) {
+                        console.log(response.data.status)
+                        editFormdata.value = response.data.users;
+                    }
                 }, (error) => {
                     console.log(error);
                 });
