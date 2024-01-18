@@ -11,25 +11,63 @@
         </v-toolbar-title>
         <v-spacer />
         <!---right part -->
-        <v-menu bottom left transition="scale-transition">
-            <template>
-                <v-btn light icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
+        <v-menu class="profile">
+            <template v-slot:activator="{ props }">
+                <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
             </template>
 
             <v-list>
-                <v-list-item v-for="(item, i) in userprofile" :key="i" @click="handleItemClick(item)">
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item v-for="(item, i) in items" :key="i">
+                    <v-btn>
+                        <a :href="item.href" style="text-decoration: none;"><span>
+                                <v-list-item>
+                                    <v-icon>{{ item.icon }}</v-icon>
+                                    {{ item.title }}
+                                </v-list-item>
+                            </span></a>
+                    </v-btn>
                 </v-list-item>
             </v-list>
         </v-menu>
+
+        <!-- <v-list>
+            <v-list-item v-for="(item, i) in userprofile" :key="i" @click="handleItemClick(item)">
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+        </v-list>
+        </v-menu> -->
     </v-app-bar>
 </template>
-<script setup>
+<script >
 import { ref } from 'vue';
-// import { EventBus } from '../event-bus';
-const toggleSidebar = () => {
-    EventBus.value.$emit('toggle-sidebar');
+import eventBus from '../eventBus.js';
+export default {
+    name: 'NavbarComponent',
+    setup() {
+        const items = ref([
+            {
+                title: 'Profile',
+                icon: 'mdi-account',
+                href: '/admin/profile',
+            },
+            {
+                title: 'Logout',
+                icon: 'mdi-logout'
+            },
+        ]);
+        const Sidebar = ref(false);
+        const toggleSidebar = () => {
+            Sidebar.value = !Sidebar.value;
+            eventBus.emit('sidebar-event', Sidebar.value);
+        };
+        return {
+            Sidebar, toggleSidebar, items
+        };
+    },
 };
 </script>
+<style scoped>
+.profile {
+    margin-right: 5px;
+}
+</style>
