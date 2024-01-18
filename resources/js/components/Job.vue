@@ -8,12 +8,12 @@
           class="mb-4"
           style="max-width: 100%; height: 300px; margin-left: 400px"
         ></v-img>
-        <v-text-display-4
+        <h3
           class="mb-4"
           style="font-size: xx-large; margin-top: 20px"
         >
           Let's hire your next great candidate Fast.
-        </v-text-display-4>
+        </h3>
         <br />
         <v-btn large color="primary" @click="jobDialog = true">
           Post a Job
@@ -56,7 +56,7 @@
             </v-card-actions>
             <h4>Are you a new client?</h4>
             <v-btn color="secondary">
-              <a href="./companyregister">Register Now</a>
+              <a href="./company/register">Register Now</a>
             </v-btn>
           </v-card>
         </v-dialog>
@@ -64,7 +64,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import { ref } from "vue";
 export default {

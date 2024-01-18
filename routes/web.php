@@ -5,9 +5,14 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
+use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\JobsController;
+use App\Http\Controllers\JobTypesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,11 +55,18 @@ Route::get('/footer', function () {
 Route::get('/job', function () {
     return view('Job');
 });
-Route::get('/companyregister', function () {
-    return view('companyregister');
-});
+// Route::get('/companyregister', function () {
+//     return view('companyregister');
+// });
 Route::get('/product', function () {
     return view('product');
+});
+
+Route::get('/postjob', function () {
+    return view('postjob');
+});
+Route::get('/crud', function () {
+    return view('jobcrud');
 });
 // Route::get('/home', [function () {
 //     return view('home');
@@ -66,9 +78,27 @@ Route::post('/login', [LoginController::class, 'check'])->name('login');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 
+Route::get('/company/register', [CompanyController::class, 'index']);
+Route::post('/company/post', [CompanyController::class, 'store'])->name('companyregister');
+
+
+Route::get('/post/jobs', [JobsController::class, 'index']);
+Route::post('/post', [JobsController::class, 'store']);
+Route::get('/post/edit/{id}', [JobsController::class,'edit']);
+Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+
+   
 });
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/jobtypes', [JobTypesController::class, 'index']);
+
+
 //users
 //user/{id} function(Request $request, $id)

@@ -64,6 +64,13 @@ app.component("company-component",CompanyRegister)
 import Product from "./components/Product.vue";
 app.component("product-component",Product)
 
+import postjob from "./components/postjob.vue";
+app.component("postjob-component",postjob);
+
+import JobCrud from "./components/Jobcrud.vue";
+app.component("jobcrud-component",JobCrud);
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
