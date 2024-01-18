@@ -26,6 +26,11 @@ class DashboardController extends Controller
         //
         return view('admin.profile');
     }
+    public function viewCompanies()
+    {
+        //
+        return view('admin.companies');
+    }
 
     /**
      * Store a newly created resource in storage.

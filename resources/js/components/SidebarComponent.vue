@@ -58,13 +58,12 @@ export default {
                 href: '/admin/profile'
             },
             {
-                title: 'Alerts',
-                icon: 'mdi-alert',
+                title: 'Companies',
+                icon: 'mdi-office-building',
+                to: '/admin/profile',
+                href: '/admin/companies'
             },
-            {
-                title: 'Icons',
-                icon: 'mdi-emoticon',
-            },
+
             {
                 title: 'Basic Table',
                 icon: 'mdi-table-column-width',

@@ -44,6 +44,7 @@ Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
+    Route::get('/companies', [DashboardController::class, 'viewCompanies']);
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
         Route::get('/edit/{id}', [UserController::class, 'edit']);

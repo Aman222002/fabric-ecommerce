@@ -15,6 +15,8 @@ import "vue3-tel-input/dist/vue3-tel-input.css";
 import mitt from "mitt";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import "devextreme/dist/css/dx.common.css";
+import "devextreme/dist/css/dx.light.css";
 const emitter = mitt();
 const VueTelInputOptions = {
     mode: "international",
@@ -33,7 +35,40 @@ const vuetify = createVuetify({
     components,
     directives,
 });
-
+import {
+    DxDataGrid,
+    DxPager,
+    DxPaging,
+    DxFilterRow,
+    DxColumn,
+    DxButton,
+    DxSearchPanel,
+    DxSummary,
+    DxTotalItem,
+    DxFormat,
+    DxHeaderFilter,
+    DxScrolling,
+    DxMasterDetail,
+    DxSorting,
+    DxLoadPanel,
+    DxItem as DxGridItem,
+    DxToolbar,
+    DxSelection,
+    DxColumnChooser,
+    DxEditing,
+    DxLookup,
+    DxPatternRule,
+    DxRequiredRule,
+    DxEmailRule,
+    DxExport,
+} from "devextreme-vue/data-grid";
+import {
+    DxForm,
+    DxItem as DxFormItem,
+    DxLabel,
+    DxGroupItem,
+} from "devextreme-vue/form";
+import { DxTooltip } from "devextreme-vue/tooltip";
 import Registration from "./components/Registration.vue";
 app.component("register-component", Registration);
 
@@ -54,9 +89,48 @@ import AllUser from "./components/AllUser.vue";
 app.component("alluser-component", AllUser);
 import ProfileComponent from "./components/ProfileComponent.vue";
 app.component("profile-component", ProfileComponent);
+import CompaniesComponent from "./components/CompaniesComponent.vue";
+app.component("companies-component", CompaniesComponent);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
 app.config.globalProperties.emitter = emitter;
+const component = {
+    DxDataGrid,
+    DxPager,
+    DxPaging,
+    DxFilterRow,
+    DxColumn,
+    DxButton,
+    DxSearchPanel,
+    DxSummary,
+    DxTotalItem,
+    DxFormat,
+    DxHeaderFilter,
+    DxScrolling,
+    DxToolbar,
+    DxGridItem,
+    DxSorting,
+    DxLoadPanel,
+    DxMasterDetail,
+    DxSelection,
+    DxColumnChooser,
+    DxForm,
+    DxLabel,
+    DxGroupItem,
+    DxTooltip,
+    DxEditing,
+    DxFormItem,
+    DxLookup,
+    DxPatternRule,
+    DxRequiredRule,
+    DxEmailRule,
+    DxExport,
+};
+
+Object.entries(component).forEach(([name, component]) => {
+    app.component(name, component);
+});
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
