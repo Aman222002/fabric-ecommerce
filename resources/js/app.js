@@ -73,6 +73,12 @@ app.component("postjob-component",postjob);
 import JobCrud from "./components/Jobcrud.vue";
 app.component("jobcrud-component",JobCrud);
 
+import CompanyNav from "./components/CompanyNav.vue";
+app.component("companynav-component",CompanyNav);
+
+import CompanyFotter from "./components/CompanyFotter.vue";
+app.component("companyfotter-component",CompanyFotter);
+
 
 /**
  * The following block of code may be used to automatically register your

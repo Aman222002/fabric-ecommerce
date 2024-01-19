@@ -26,8 +26,10 @@ use App\Http\Controllers\JobTypesController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', function()
+{
+   return view('layouts.default');
 });
 // Route::get('{any}', function () {
 //     return view('app');
@@ -49,6 +51,7 @@ Auth::routes();
 Route::get('/header', function () {
     return view('Header');
 });
+
 
 Route::get('/footer', function () {
     return view('Footer');
@@ -79,10 +82,16 @@ Route::post('/login', [LoginController::class, 'check'])->name('login');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 
-Route::get('/company/register', [CompanyController::class, 'index']);
-Route::post('/company/post', [CompanyController::class, 'store'])->name('companyregister');
+// Route::get('/company/register', [CompanyController::class, 'index']);
+// Route::post('/company/post', [CompanyController::class, 'store'])->name('companyregister');
 
-Route::post('/company/login', [CompanyController::class, 'check']);
+// Route::post('/company/login', [CompanyController::class, 'check']);
+Route::prefix('company')->group(function () {
+    Route::get('/register', [CompanyController::class, 'index']);
+    Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
+    Route::post('/login', [CompanyController::class, 'check']);
+});
+
 
 
 Route::get('/post/jobs', [JobsController::class, 'index']);
@@ -94,10 +103,7 @@ Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
-
-   
+    Route::get('/dashboard', [DashboardController::class, 'index']); 
 });
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);

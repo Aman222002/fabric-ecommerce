@@ -20,11 +20,11 @@
 <body>
     <div id="app">
     <v-app>
-        <header-component></header-component>
+       <companynav-component></companynav-component>
         <v-main>
             @yield('content')
         </v-main>
-       <footer-component></footer-component>
+        <companyfotter-component></companyfotter-component>
        </v-app>
     </div> 
 </body>

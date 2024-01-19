@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class CompanyController extends Controller
 {
@@ -36,8 +37,6 @@ class CompanyController extends Controller
         $validationRules = [
             'company_name' => 'required|string|max:255',
             'company_email' => 'required|email|unique:companies|max:255',
-            'password' => 'required|string|min:8',
-            'username' => 'required|string|max:255|unique:companies',
             'registration_number' => 'required|string|max:255|unique:companies',
             'company_address' => 'required|string|max:255',
             'phone_number' => 'required|string|max:20',
@@ -48,23 +47,26 @@ class CompanyController extends Controller
         //
         try {
             $input = $request->all();
-          
-           
+           $user = User::create([
+            'name'=>$input['name'],
+            'email'=>$input['email'],
+            'password'=>$input['password'],
+            'phone'=>$input['phone'],
+           ]);
+           $user->assignRole('Company Admin');
             Company::create([
+                 'user_id'=>  $user->id,
                 'company_name' => $input['company_name'],
                 'company_email' => $input['company_email'],
-                'password' => Hash::make($input['password']),
-                'username' => $input['username'],
                 'registration_number' => $input['registration_number'],
                 'company_address' => $input['company_address'],
                 'phone_number' => $input['phone_number'],
                 'description' => $input['description'],
                 'status' => $input['status'],
             ]);
-
             return response()->json([
                 'status' => true,
-                'message' => "Registation Success"
+                'message' => "Registation Successfully"
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -109,29 +111,38 @@ class CompanyController extends Controller
     {
         try {
             $credentials = $request->validate([
-                'company_name' => 'required',
-                'company_email' => 'required|email',
+                'email' => 'required',
+                'password' => 'required|email',
             ]);
-            $user = DB::table('companies')
-                ->where('company_name', $credentials['company_name'])
-                ->where('company_email', $credentials['company_email'])
-                ->first();
-            if ($user) {
-                return response()->json([
-                    'status' => true,
-                    'message' => "Logged in Successfully!",
-                    'data' => $user,
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => "Fail",
-                ], 401);
+          
+            if (Auth::attempt([
+                'email' => $credentials['email'],
+                'password' => $credentials['password'],
+            ])) 
+            $user = Auth::user();
+            $roleName = $user->getRoleNames();
+            {
+                if (Auth::user()->hasRole('Company Admin')) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Logged in Successfully!',
+                        'data' => [
+                            'user' => $user,
+                            'role' => $roleName,
+                        ],
+                    ], 200);
+                } else {
+                    Auth::logout(); 
+                }
             }
+            return response()->json([
+                'status' => false,
+                'message' => 'Fail',
+            ], 401);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => "An error occurred: " . $e->getMessage(),
+                'message' => 'An error occurred: ' . $e->getMessage(),
             ], 500);
         }
     }

@@ -11,6 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use HasRoles;
     use HasApiTokens, HasFactory, Notifiable;
     const USER_CV = "cv";
 
@@ -22,7 +23,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password', 'phone'
+        'password', 
+        'phone',
+       
     ];
 
     /**
@@ -44,4 +47,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
+   
+
 }

@@ -16,7 +16,8 @@
             </v-card-text>
   
             <v-card-actions>
-              <div class="text-hint">Already have an account? <router-link to="/login">Login In</router-link></div>
+              <div class="text-hint">Login As Company ? <a href="/job">Login here</a><br></div>
+              
             </v-card-actions>
           </v-card>
         </v-col>
