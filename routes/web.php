@@ -4,8 +4,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CompanyLoginController;
+use App\Http\Controllers\LoginController;
+use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\JobsController;
+use App\Http\Controllers\JobTypesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,26 +27,61 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 |
 */
 
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.default');
 });
 Auth::routes();
 
-Route::get('/Registration', function () {
-    return view('Registration');
-});
-
-Route::get('/Login', function () {
-    return view('Login');
-});
-
-Route::get('/Header', function () {
+Route::get('/header', function () {
     return view('Header');
 });
 
-Route::get('/Footer', function () {
+
+Route::get('/footer', function () {
     return view('Footer');
 });
+Route::get('/job', function () {
+    return view('Job');
+});
+// Route::get('/companyregister', function () {
+//     return view('companyregister');
+// });
+Route::get('/product', function () {
+    return view('product');
+});
+
+Route::get('/postjob', function () {
+    return view('postjob');
+});
+Route::get('/crud', function () {
+    return view('jobcrud');
+});
+// Route::get('/home', [function () {
+//     return view('home');
+// }]);
+
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/login', [LoginController::class, 'index']);
+Route::post('/login', [LoginController::class, 'check'])->name('login');
+Route::get('/registration', [RegistrationController::class, 'index']);
+Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
+
+
+Route::prefix('company')->group(function () {
+    Route::get('/register', [CompanyController::class, 'index']);
+    Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
+    Route::post('/login', [CompanyController::class, 'check']);
+});
+
+
+
+Route::get('/post/jobs', [JobsController::class, 'index']);
+Route::post('/post', [JobsController::class, 'store']);
+Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
+Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin"], function () {
@@ -53,3 +97,9 @@ Route::group(["prefix" => "/admin"], function () {
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
     });
 });
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/jobtypes', [JobTypesController::class, 'index']);
+
+
+//users
+//user/{id} function(Request $request, $id)

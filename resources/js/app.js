@@ -19,8 +19,8 @@ import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.light.css";
 const emitter = mitt();
 const VueTelInputOptions = {
-    mode: "international",
-    onlyCountries: ["NG", "GH", "GB", "US", "CA"],
+    mode: "national",
+    onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
 };
 
 /**
@@ -35,6 +35,7 @@ const vuetify = createVuetify({
     components,
     directives,
 });
+<<<<<<< HEAD
 import {
     DxDataGrid,
     DxPager,
@@ -69,8 +70,16 @@ import {
     DxGroupItem,
 } from "devextreme-vue/form";
 import { DxTooltip } from "devextreme-vue/tooltip";
+=======
+
+app.use(vuetify);
+app.use(VueSweetalert2);
+app.use(VueTelInput, VueTelInputOptions);
+
+>>>>>>> 204b1a734190dfc84e5687b8ec171616af6d7e77
 import Registration from "./components/Registration.vue";
-app.component("register-component", Registration);
+
+app.component("registration-component", Registration);
 
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
@@ -94,6 +103,7 @@ app.component("companies-component", CompaniesComponent);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
 app.config.globalProperties.emitter = emitter;
+<<<<<<< HEAD
 const component = {
     DxDataGrid,
     DxPager,
@@ -130,6 +140,31 @@ const component = {
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
+=======
+import Home from "./components/Home.vue";
+app.component("home-component", Home);
+
+import Job from "./components/Job.vue";
+app.component("job-component", Job);
+
+import CompanyRegister from "./components/CompanyRegister.vue";
+app.component("company-component", CompanyRegister);
+
+import Product from "./components/Product.vue";
+app.component("product-component", Product);
+
+import postjob from "./components/postjob.vue";
+app.component("postjob-component", postjob);
+
+import JobCrud from "./components/Jobcrud.vue";
+app.component("jobcrud-component", JobCrud);
+
+import CompanyNav from "./components/CompanyNav.vue";
+app.component("companynav-component", CompanyNav);
+
+import CompanyFotter from "./components/CompanyFotter.vue";
+app.component("companyfotter-component", CompanyFotter);
+>>>>>>> 204b1a734190dfc84e5687b8ec171616af6d7e77
 
 /**
  * The following block of code may be used to automatically register your
@@ -149,6 +184,4 @@ Object.entries(component).forEach(([name, component]) => {
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-app.use(vuetify);
-app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");

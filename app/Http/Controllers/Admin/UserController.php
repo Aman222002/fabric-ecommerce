@@ -93,13 +93,6 @@ class UserController extends Controller
         try {
             $user = User::find($id);
             if ($user) {
-                $input = $request->all();
-                if ($input['email']) {
-                    $this->validate($request, ['email' => 'unique:User']);
-                };
-                if ($input['phone']) {
-                    $this->validate($request, ['phone' => 'unique:User']);
-                };
                 $user->update($request->all());
                 return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
             } else {
