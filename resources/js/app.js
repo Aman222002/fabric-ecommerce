@@ -16,10 +16,6 @@ import mitt from "mitt";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 const emitter = mitt();
-import VueTelInput from "vue-tel-input";
-import "vue-tel-input/vue-tel-input.css";
-import VueSweetalert2 from "vue-sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
 const VueTelInputOptions = {
     mode: "national",
     onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
@@ -66,10 +62,6 @@ app.component("profile-component", ProfileComponent);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
 app.config.globalProperties.emitter = emitter;
-
-import DashboardComponent from "./components/DashboardComponent.vue";
-app.component("dashboard-component", DashboardComponent);
-
 import Home from "./components/Home.vue";
 app.component("home-component", Home);
 
