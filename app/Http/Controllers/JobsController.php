@@ -189,7 +189,6 @@ class JobsController extends Controller
                 $job->delete();
                 $response = [
                     'status' => true,
-                    'data' => $job, 
                     'message' => 'Job deleted successfully',
                 ];
                 return response()->json($response, 200);

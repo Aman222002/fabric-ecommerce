@@ -12,6 +12,8 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 const VueTelInputOptions = {
     mode: "national",
     onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
@@ -31,6 +33,7 @@ const vuetify = createVuetify({
 });
 
 app.use(vuetify);
+app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
@@ -69,6 +72,12 @@ app.component("postjob-component",postjob);
 
 import JobCrud from "./components/Jobcrud.vue";
 app.component("jobcrud-component",JobCrud);
+
+import CompanyNav from "./components/CompanyNav.vue";
+app.component("companynav-component",CompanyNav);
+
+import CompanyFotter from "./components/CompanyFotter.vue";
+app.component("companyfotter-component",CompanyFotter);
 
 
 /**

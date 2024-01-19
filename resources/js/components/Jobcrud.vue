@@ -1,4 +1,5 @@
 <template>
+  <v-btn color="success"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
     <v-table>
       <thead>
         <tr>
@@ -93,7 +94,11 @@ import { onMounted, ref } from 'vue';
     const saveEditedJob = (id) => {
       try{
          axios.post(`/post/jobs/${id}`, editedJob.value).then((response)=>{
-          window.location.reload();
+          if (response.data.status ===true) {
+        window.location.reload();
+      } else {
+        console.log('Request was not successful:', response.data.message);
+      }
          })
       }catch(err){
         console.log(err);
@@ -108,7 +113,11 @@ import { onMounted, ref } from 'vue';
     const deleteItem = (id) => {
       try{
          axios.post(`/post/delete/${id}`).then((response)=>{
-          window.location.reload();
+          if (response.data.status ===true) {
+        window.location.reload();
+      } else {
+        console.log('Request was not successful:', response.data.message);
+      }
          })
       }catch(err){
         console.log(err);
