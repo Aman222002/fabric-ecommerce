@@ -1,73 +1,6 @@
-// import CustomStore from "devextreme/data/custom_store";
-// export default {
-//     setup() {
-//         return {
-//             displayMode: "standard",
-//             pageSizes: window.isMobile ? [25, 35, 50] : [15, 25, 50],
-//             pageSize: window.isMobile ? 25 : 15,
-//             childPageSizes: window.isMobile ? [10, 15, 20] : [7, 10, 15],
-//             childPageSize: window.isMobile ? 10 : 7,
-//             showPageSizeSelector: true,
-//             showNavButtons: true,
-//             showInfo: true,
-//             skipLoader: true,
-//             dataGridRefName: "dataGrid",
-//             showColumnLines: false,
-//             showRowLines: false,
-//             refKey: "dataGrid",
-//         };
-//     },
-//     methods: {
-//         dataSource(
-//             url,
-//             params,
-//             insertURL = null,
-//             updateURL = null,
-//             deleteURL = null
-//         ) {
-//             return new CustomStore({
-//                 byKey: (key) => {
-//                     return fetch(url + "?id=" + key);
-//                 },
-//                 load: (loadOptions) => {
-//                     const dxKeys = [
-//                         "skip",
-//                         "take",
-//                         "requireTotalCount",
-//                         "requireGroupCount",
-//                         "sort",
-//                         "filter",
-//                     ];
-
-//                     return window.axios
-//                         .get(url, { params })
-//                         .then(({ data }) => {
-//                             if (this.skipLoader) {
-//                                 this.skipLoader = false;
-//                             }
-//                             console.log(data);
-//                             return {
-//                                 data: data.users || [],
-//                                 summary: data.summary || [],
-//                                 totalCount: data.totalCount ?? 10,
-//                             };
-//                         })
-//                         .catch(() => {
-//                             if (this.skipLoader) {
-//                                 this.skipLoader = false;
-//                             }
-//                             throw new Error("Data Loading Error");
-//                         });
-//                 },
-//             });
-//         },
-//     },
-// };
-
-// useDataSource.js
 import { ref } from "vue";
 import CustomStore from "devextreme/data/custom_store";
-
+name: "dxGridStore";
 export default function useDataSource(
     url,
     insertURL = null,
@@ -96,6 +29,7 @@ export default function useDataSource(
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
+                    console.log(data);
                     return {
                         data: data.users || [],
                         summary: data.summary || [],
@@ -107,6 +41,40 @@ export default function useDataSource(
                         skipLoader.value = false;
                     }
                     throw new Error("Data Loading Error");
+                });
+        },
+        insert: (values) => {
+            return window.axios
+                .post(insertURL, values)
+                .then(() => {
+                    return true;
+                })
+                .catch((error) => {
+                    console.log("err", error);
+                    throw new Error("Error while adding record");
+                });
+        },
+        update: (key, values) => {
+            console.log(values);
+            return window.axios
+                .post(updateURL + "/" + key.id, values)
+                .then(() => {
+                    return true;
+                })
+                .catch((error) => {
+                    console.log("err 1", error);
+                    throw new Error("Error while updating record.");
+                });
+        },
+        remove: (key) => {
+            return window.axios
+                .delete(deleteURL + "/" + key.id)
+                .then(() => {
+                    return true;
+                })
+                .catch((error) => {
+                    console.log("err 2", error);
+                    throw new Error("Error while deleting record.");
                 });
         },
     });

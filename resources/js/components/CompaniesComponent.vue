@@ -1,13 +1,14 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
-            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
+            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="popup" />
             <DxColumn data-field="id" caption="UserID">
                 <DxLookup :data-source="dataSource" value-expr="Value" display-expr="Text" />
             </DxColumn>
             <DxColumn data-field="name" data-type="string" />
             <DxColumn data-field="email" data-type="string" />
             <DxColumn data-field="phone" data-type="string" />
+            <DxColumn :visible="showPasswordColumn" data-field="password" data-type="password" />
             <DxScrolling mode="virtual" />
             <DxSummary>
                 <DxTotalItem column="id" summary-type="count" />
@@ -16,7 +17,6 @@
     </div>
 </template>
 <script>
-import { ref, onMounted } from 'vue';
 import {
     DxDataGrid,
     DxColumn,
@@ -27,22 +27,24 @@ import {
     DxTotalItem,
 } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
-// import dxGridStore from "../mixins/dxGridStore";
+import { ref } from "vue";
 export default {
     name: 'CompaniesComponent',
-    // mixins: [dxGridStore],
     setup() {
-        const { dataSource } = dxGridStore('/admin/user/index');
+        const showPasswordColumn = ref(false);
+        const loadURL = `/admin/user/index`;
+        const insertURL = `/admin/user/store`;
+        const updateURL = `/admin/user/update`;
+        const deleteUrl = `/admin/user/destroy`;
+        const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         return {
-            dataSource,
+            dataSource, showPasswordColumn
         };
-        // methods: {
-        //     loadData() {
-        //         return this.dataSource(
-        //             `/admin/user/index`,
-        //         );
-        //     },
-        // }
+    },
+    watch: {
+        'DxEditing.allowAdding': function () {
+            showPasswordColumn.value = true;
+        },
     }
 }
 </script>

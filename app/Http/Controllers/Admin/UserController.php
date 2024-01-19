@@ -17,7 +17,8 @@ class UserController extends Controller
     {
         //
         try {
-            $users = User::All();
+            $users = User::select('id as userid', 'name', 'email', 'phone')->get();
+            // return $users;
             return response()->json(['users' => $users, 'status' => true], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -92,11 +93,16 @@ class UserController extends Controller
         try {
             $user = User::find($id);
             if ($user) {
-                $this->validate($request, [
-                    'name' => 'required',
-                    'email' => 'required',
-                    'phone' => 'required',
-                ]);
+                $fields = $request->all();
+                foreach ($fields as $field) {
+                    if ($field === ['email']) {
+                        $this->validate($request, ['email' => 'required|unique:User']);
+                    } else if ($field == ['phone']) {
+                        $this->validate($request, ['phone' => 'required|unique:User']);
+                    } else if ($field === ['name']) {
+                        $this->validate($request, ['name' => 'required']);
+                    }
+                }
                 $user->update($request->all());
                 return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
             } else {
