@@ -55,8 +55,8 @@ app.component("login-component", Login);
 import DashboardComponent from "./components/DashboardComponent.vue";
 app.component("dashboard-component", DashboardComponent);
 
-import Home from "./components/Home.vue";
-app.component("home-component",Home);
+import FindCv from "./components/FindCv.vue";
+app.component("findcv-component",FindCv);
 
 import Job from "./components/Job.vue";
 app.component("job-component",Job);
@@ -78,6 +78,9 @@ app.component("companynav-component",CompanyNav);
 
 import CompanyFotter from "./components/CompanyFotter.vue";
 app.component("companyfotter-component",CompanyFotter);
+
+import CompanyPage from "./components/CompanyPage.vue";
+app.component("company-page",CompanyPage)
 
 
 /**

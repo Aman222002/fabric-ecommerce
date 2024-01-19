@@ -1,13 +1,16 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12" md="8" text-xs-center class="job-container">
-        <v-img
-          src="/storage/assest/1.jpg"
-          contain
-          class="mb-4"
-          style="max-width: 100%; height: 300px; margin-left: 400px"
-        ></v-img>
+  
+    
+  <div class="full-screen-image-container">
+    
+    <v-img
+      src="/storage/assest/1.png"
+      contain
+      class="mb-4 full-screen-image"
+    ></v-img>
+   
+  </div>
+  <div style="text-align: center;">
         <h3 class="mb-4 title-text">
           Let's hire your next great candidate Fast.
         </h3>
@@ -15,6 +18,7 @@
         <v-btn large color="primary" @click="jobDialog = true">
           Post a Job
         </v-btn>
+      </div>
         <v-dialog
           v-model="jobDialog"
           max-width="600px"
@@ -51,9 +55,41 @@
           </v-btn>
           </v-card>
         </v-dialog>
-      </v-col>
-    </v-row>
-  </v-container>
+      
+  <div class="aa">
+  <v-row justify="center" align="center" class="mt-5">
+    <v-col cols="12" md="4" class="card-col">
+      <v-card>
+        <v-img src="/storage/assest/23.png" alt="Cinque Terre" style="height: 140px;"></v-img>
+        <v-card-title style="font-size: 30px;">Create your free account</v-card-title>
+        <v-card-text style="font-style: 20px; margin-top: 10px;">
+          All you need is your email address to create an account<br> and start building your job post.
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" md="4" class="card-col">
+      <v-card>
+        <v-img src="/storage/assest/24.png" alt="Cinque Terre" style="height: 140px;"></v-img>
+        <v-card-title style="font-size: 30px;">Build your job post</v-card-title>
+        <v-card-text style="font-style: 20px; margin-top: 10px;">
+          Then just add a title, description and location to your job post,<br> and you're ready to go.
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" md="4" class="card-col">
+      <v-card>
+        <v-img src="/storage/assest/25.png" alt="Cinque Terre" style="height: 140px;"></v-img>
+        <v-card-title style="font-size: 30px;">Post your job</v-card-title> 
+        <v-card-text style="font-style: 20px; margin-top: 10px;">
+          After you post your job, use our state-of-the-art <br>tools to help you find dream talent.
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
+</div>
+
 </template>
 <script>
 import { onMounted, ref } from "vue";
@@ -127,4 +163,29 @@ export default {
   text-decoration: none;
   color: #ffffff; 
 }
+.aa{ 
+    margin-top: 30px;
+    border-style: solid;
+  border-color: rgb(12, 11, 11);
+  width: 100%;
+  }
+  .card-col {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc; 
+}
+.full-screen-image-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .full-screen-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    opacity: 0.8;
+  }
+ 
 </style>

@@ -5,7 +5,7 @@
           <v-col class="nav-links">
            
             <a href="/job" class="nav-link">Post a Job</a>
-            <a href="/" class="nav-link">Find CVs</a>
+            <a href="/findcv" class="nav-link">Find CVs</a>
             <a href="/product" class="nav-link">Products</a>
             <a href="/" class="nav-link">Resources</a>
           </v-col>

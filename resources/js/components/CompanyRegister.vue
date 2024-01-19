@@ -1,4 +1,5 @@
 <template>
+  
   <v-container class="my-8">
     <v-card class="pa-6 registration-form">
       <v-form ref="form" @submit.prevent="submitForm" class="custom-form">
@@ -95,7 +96,7 @@ export default {
 .left-side {
   border-right: 2px solid #ec9898;
   padding-right: 20px;
-  max-height: 600px; /* Increased max-height for better readability */
+  max-height: 600px; /* Increased max-height for better readability */ 
   overflow-y: auto;
 }
 
