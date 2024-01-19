@@ -3,7 +3,7 @@
     <v-form @submit.prevent="submitForm">
         <v-row>
             <v-col>
-                <v-select v-model="formData.education" :items="educationLevels" label="Highest Education" chips multiple
+                <v-select v-model="formData.education" label="Highest Education" :items="educationLevels" chips multiple
                     :rules="[v => !!v || 'Education is required']"></v-select>
             </v-col>
         </v-row>
@@ -33,7 +33,7 @@
             </v-col>
         </v-row>
         <div>
-            <v-btn @click="addAnotherCourse" color="primary">Add Another Course</v-btn>
+            <v-btn @click="addAnotherCourse" color="success">Add Another Course</v-btn>
             <v-col v-for="(course, index) in formData.additionalCourses" :key="index">
                 <v-select v-model="course.education" :items="educationCourse" label="Course" chips multiple
                     :rules="[v => !!v || 'Course is required']"></v-select>

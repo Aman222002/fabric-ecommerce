@@ -30,7 +30,7 @@ class LoginController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'message' => "Login Success",
+                    'message' => "Login Successfully",
 
                 ]);
             } else {

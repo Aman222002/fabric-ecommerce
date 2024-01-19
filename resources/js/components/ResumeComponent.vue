@@ -1,19 +1,14 @@
 
 <template>
-    <div>
-        <v-card class="mb-4">
-        </v-card>
+    <h1 style="text-align: center;">Fill your Personal Details</h1>
+    <v-container>
         <v-stepper v-model="e1">
             <template v-slot:default="{ prev, next }">
                 <v-stepper-header>
                     <template v-for="n in steps" :key="`${n}-step`">
                         <v-stepper-item :complete="e1 > n" :step="stepHeaders[n - 1]" :value="n" editable>
                             <template v-slot:title>
-                                <v-row justify="center">
-                                    <v-col>
-                                        <span>{{ stepTitles[n - 1] }}</span>
-                                    </v-col>
-                                </v-row>
+                                {{ stepTitles[n - 1] }}
                             </template>
                         </v-stepper-item>
                         <v-divider v-if="n !== steps" :key="n"></v-divider>
@@ -21,16 +16,45 @@
                 </v-stepper-header>
                 <v-stepper-window>
                     <v-stepper-window-item v-for="n in steps" :key="`${n}-content`" :value="n">
-                        <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '400px'">
-                            <v-form @submit.prevent="next">
-                                <v-row v-if="n === 1">
-
-                                    <users-details :form-data="formData" :name-rules="nameRules"></users-details>
+                        <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '500px'">
+                            <template v-slot:title>
+                                <v-row justify="center">
+                                    <v-col>
+                                        <span>{{ stepTitles[n - 1] }}</span>
+                                    </v-col>
                                 </v-row>
+                            </template>
+                            <v-form @submit.prevent="next">
+                                <v-container style="height:5%;width:80%">
+                                    <v-card>
+                                        <v-row v-if="n === 1">
+                                            <users-details :form-data="formData" :name-rules="nameRules"></users-details>
+                                        </v-row>
+                                    </v-card>
+                                </v-container>
                                 <v-row v-if="n === 2">
-                                    <v-card-title class="headline mb-2">Users Qualifications</v-card-title>
-                                    <users-qualifications :form-data="formData"
-                                        :name-rules="nameRules"></users-qualifications>
+                                    <v-container style="height:5%;width:80%">
+                                        <v-card>
+                                            <users-qualifications :form-data="formData"
+                                                :name-rules="nameRules"></users-qualifications>
+                                        </v-card>
+                                    </v-container>
+                                </v-row>
+                                <v-row v-if="n === 3">
+                                    <v-container style="height:10%;width:70%">
+                                        <v-card>
+                                            <Work-experience :form-data="formData"
+                                                :name-rules="nameRules"></Work-experience>
+                                        </v-card>
+                                    </v-container>
+                                </v-row>
+                                <v-row v-if="n === 4">
+                                    <v-container style="height:10%;width:80%">
+                                        <v-card>
+                                            <additional-informations :form-data="formData"
+                                                :name-rules="nameRules"></additional-informations>
+                                        </v-card>
+                                    </v-container>
                                 </v-row>
                             </v-form>
                         </v-card>
@@ -40,27 +64,30 @@
                     color="#006400"></v-stepper-actions>
             </template>
         </v-stepper>
-    </div>
+
+    </v-container>
 </template>
-  
 <script>
-import UsersDetails from './UsersDetails.vue';
-import UsersQualifications from './UsersQualifications.vue';
+import UsersDetails from './UserInformations/UsersDetails.vue';
+import WorkExperience from './UserInformations/WorkExperience.vue';
+import AdditionalInformations from './UserInformations/AdditionalInformations.vue';
+import UsersQualifications from './UserInformations/UsersQualifications.vue';
 export default {
     name: 'ResumeComponent',
     components: {
         UsersDetails,
-        UsersQualifications
+        UsersQualifications,
+        AdditionalInformations,
+        WorkExperience,
     },
     data() {
         return {
-            steps: [1],
-            maxSteps: 7,
+            maxSteps: 4,
             e1: 1,
             steps: 4,
-            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4", "Step 5"],
-            stepTitles: ["General Information", "Users Qualifications", "Skills", "Address", "Additional Information", "Experience"],
-            stepBackgrounds: ["#add8e6", "#add8e6", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF",],
+            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4",],
+            stepTitles: ["General Information", "Users Qualifications", "WorkExperience", "Additional Informations"],
+            stepBackgrounds: ["#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF",],
             formData: {
                 name: "",
                 email: "",
@@ -76,7 +103,6 @@ export default {
                 "Master's Degree",
                 "Ph.D.",
                 "Other",
-                // Add more degree options as needed
             ],
             educationRules: [(v) => !!v || "Education is required"],
             certificationsRules: [(v) => !!v || "Certifications are required"],
@@ -95,7 +121,6 @@ export default {
             ],
         };
     },
-
     computed: {
         circularSteps() {
             const circularSteps = [];
@@ -111,10 +136,9 @@ export default {
             return [...this.degreeOptions, this.formData.degree === "Other" ? this.formData.otherDegree : ""];
         },
     },
-
     methods: {
         updateSteps() {
-            // Ensure that the steps array only contains values within the range [2, 7]
+
             this.steps = this.steps.map((step) => ((step - 2 + this.maxSteps - 1) % (this.maxSteps - 1)) + 2);
         },
 
@@ -130,22 +154,3 @@ export default {
 
 };
 </script>
-
-<style scoped>
-/* Add your custom styles here */
-.v-card {
-    max-width: 1500px;
-    /* Adjust the width as needed */
-    margin: auto;
-    padding: 30px;
-}
-
-.v-label {
-    font-weight: bold;
-}
-
-.v-row {
-    margin-bottom: 20px;
-}
-</style>
-  

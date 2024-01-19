@@ -48,8 +48,8 @@
 </template>
 <script>
 import { ref, onMounted } from 'vue';
-
 export default {
+    name: 'MncCompany',
     setup() {
         const companies = ref([]);
         const fetchData = async () => {
@@ -88,11 +88,10 @@ export default {
     /* Adjust the scale factor as needed */
 }
 
-.vertical-line {
+/* .vertical-line {
     border-left: 2px solid #fff;
     height: 200px;
-    /* Adjust the height according to your needs */
     margin: 0 auto;
-}
+} */
 </style>
   

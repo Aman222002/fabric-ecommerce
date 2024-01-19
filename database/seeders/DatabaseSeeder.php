@@ -24,8 +24,14 @@ class DatabaseSeeder extends Seeder
         'product-edit',
         'product-delete'
     ];
+
     public function run(): void
     {
+        $permissionName = 'role-list';
+        $guardName = 'web';
+        if (!Permission::where('name', 'role-list')->where('guard_name', 'web')->exists()) {
+            Permission::create(['name' => 'role-list', 'guard_name' => 'web']);
+        }
         foreach ($this->permissions as $permission) {
             Permission::create(['name' => $permission]);
         }

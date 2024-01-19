@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone')->after('email');
+        Schema::create('skills', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('skill_name');
+            $table->timestamps();
         });
     }
-    // Schema::table('users', function (Blueprint $table) {
-    //     $table->string('phone')->after('email');
-    // });
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('phone')->after('email');
-        });
+        Schema::dropIfExists('skills');
     }
 };

@@ -71,17 +71,18 @@ export default {
 
 <template>
     <v-container fluid class="div1">
-        <v-row class="center-form">
-            <v-col cols="12" sm="8" md="4">
-                <v-card class="mt-5"
-                    style="background-color:#ADD8E6; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+        <div class="register-form">
+            <v-col cols="12" sm="6" md="6">
+                <v-col class="mt-5"
+                    style="background-color:#9a6a4f; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <v-card-title class="text-center">Login</v-card-title>
                     <v-card-text>
                         <v-form ref="form" @submit.prevent="submitForm">
                             <v-text-field v-model="formData.email" id="email" label="Email" type="email" :rules="emailRules"
-                                required></v-text-field>
+                                required variant="outlined"></v-text-field>
                             <v-text-field v-model="formData.password" id="password" label="Password" type="password"
-                                :rules="passwordRules" required></v-text-field>
+                                :rules="passwordRules" required variant="outlined"></v-text-field>
                             <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
                         </v-form>
                     </v-card-text>
@@ -89,9 +90,10 @@ export default {
                         <div class="text-hint">Don't have an account? <a href="/registration">Register</a>
                         </div>
                     </v-card-actions>
-                </v-card>
+
+                </v-col>
             </v-col>
-        </v-row>
+        </div>
     </v-container>
 </template>
   
@@ -136,23 +138,18 @@ export default {
 </script>
   
 <style scoped>
-.div1 {
-    text-align: center;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.center-form {
+.register-form {
+    background-image: url('/storage/assets/p.jpg');
+    background-size: cover;
+    padding: 5vh;
+    height: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-}
+    background-repeat: no-repeat;
+    background-position: center;
+    color: "#006400";
 
-.text-hint {
-    text-align: center;
-    color: #757575;
 }
 </style>
   

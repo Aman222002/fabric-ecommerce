@@ -64,7 +64,7 @@
 </template>
 <script>
 import { defineComponent } from 'vue';
-import Mncs from '@/components/Mncs.vue';
+import MncCompany from '@/components/MncCompany.vue';
 import SearchComponent from '@/components/SearchComponent.vue';
 import Hiring from '@/components/Hiring.vue';
 // import Internships from '@/components/Internships.vue';
@@ -73,7 +73,7 @@ import { ref } from 'vue';
 export default defineComponent({
     name: 'Home',
     components: {
-        Mncs,
+        MncCompany,
         Hiring,
         // Internships,
         SearchComponent
@@ -110,25 +110,6 @@ export default defineComponent({
     background-color: burlywood;
     margin: 20px;
     /* Add margin for spacing between buttons */
-}
-
-.container {
-    text-align: center;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 50px;
-    margin-bottom: 10px;
-}
-
-h2 {
-    font-size: 18px;
-    margin-bottom: 20px;
 }
 
 .search-button {

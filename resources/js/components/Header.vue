@@ -46,10 +46,8 @@ export default {
 }
 
 /* Adjust background color and border for the navigation bar */
-.v-app-bar {
-    background-color: #ADD8E6;
-    /* Set your desired background color */
+/* .v-app-bar {
+    background-color: #ADD8E6;  
     border-bottom: 1px solid #ccc;
-    /* Set your desired border style */
-}
+} */
 </style>
