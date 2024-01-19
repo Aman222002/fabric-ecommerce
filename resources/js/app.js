@@ -10,11 +10,13 @@ import { createApp } from "vue";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import VueTelInput from "vue3-tel-input";
-import "vue3-tel-input/dist/vue3-tel-input.css";
+import VueTelInput from "vue-tel-input";
+import "vue-tel-input/vue-tel-input.css";
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 const VueTelInputOptions = {
-    mode: "international",
-    onlyCountries: ["NG", "GH", "GB", "US", "CA"],
+    mode: "national",
+    onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
 };
 
 /**
@@ -24,13 +26,19 @@ const VueTelInputOptions = {
  */
 
 const app = createApp({});
+
 const vuetify = createVuetify({
     components,
     directives,
 });
 
+app.use(vuetify);
+app.use(VueSweetalert2);
+app.use(VueTelInput, VueTelInputOptions);
+
 import Registration from "./components/Registration.vue";
-app.component("register-component", Registration);
+
+app.component("registration-component", Registration);
 
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
@@ -46,6 +54,31 @@ app.component("login-component", Login);
 
 import DashboardComponent from "./components/DashboardComponent.vue";
 app.component("dashboard-component", DashboardComponent);
+
+import Home from "./components/Home.vue";
+app.component("home-component",Home);
+
+import Job from "./components/Job.vue";
+app.component("job-component",Job);
+
+import CompanyRegister from "./components/CompanyRegister.vue";
+app.component("company-component",CompanyRegister)
+
+import Product from "./components/Product.vue";
+app.component("product-component",Product)
+
+import postjob from "./components/postjob.vue";
+app.component("postjob-component",postjob);
+
+import JobCrud from "./components/Jobcrud.vue";
+app.component("jobcrud-component",JobCrud);
+
+import CompanyNav from "./components/CompanyNav.vue";
+app.component("companynav-component",CompanyNav);
+
+import CompanyFotter from "./components/CompanyFotter.vue";
+app.component("companyfotter-component",CompanyFotter);
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -65,6 +98,4 @@ app.component("dashboard-component", DashboardComponent);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-app.use(vuetify);
-app.use(VueTelInput, VueTelInputOptions);
 app.mount("#app");
