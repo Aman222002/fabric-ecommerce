@@ -6,8 +6,11 @@
                 <DxLookup :data-source="dataSource" value-expr="Value" display-expr="Text" />
             </DxColumn>
             <DxColumn data-field="name" data-type="string" />
+            <DxPatternRule :pattern="namePattern" message="Should be numeric value only" />
             <DxColumn data-field="email" data-type="string" />
+            <DxPatternRule :pattern="emailPattern" message="Should be numeric value only" />
             <DxColumn data-field="phone" data-type="string" />
+            <DxPatternRule :pattern="phonePattern" message="Should be numeric value only" />
             <DxColumn :visible="showPasswordColumn" data-field="password" data-type="password" />
             <DxScrolling mode="virtual" />
             <DxSummary>

@@ -4,9 +4,16 @@
             <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="popup" />
             <!-- <DxLookup :data-source="dataSource" value-expr="Value" display-expr="Text" /> -->
             <DxColumn data-field="userid" caption="UserID" data-type="int" />
-            <DxColumn data-field="name" data-type="string" />
-            <DxColumn data-field="email" data-type="string" />
-            <DxColumn data-field="phone" data-type="string" />
+            <DxColumn data-field="name" data-type="string">
+                <DxRequiredRule />
+            </DxColumn>
+            <DxColumn data-field="email" data-type="string">
+                <DxRequiredRule />
+                <DxEmailRule message="Email is invalid" />
+            </DxColumn>
+            <DxColumn data-field="phone" data-type="string">
+                <DxPatternRule :pattern="phonePattern" message="Should be numeric value only" />
+            </DxColumn>
             <DxColumn data-field="password" data-type="password" :visible="showPasswordColumn" />
             <DxScrolling mode="virtual" />
             <DxSummary>
@@ -30,6 +37,7 @@ import { ref } from "vue";
 export default {
     name: 'CompaniesComponent',
     setup() {
+        const phonePattern = ref("^[0-9]{9,13}$");
         const showPasswordColumn = ref(false);
         const loadURL = `/admin/user/index`;
         const insertURL = `/admin/user/store`;
@@ -37,7 +45,7 @@ export default {
         const deleteUrl = `/admin/user/destroy`;
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         return {
-            dataSource, showPasswordColumn
+            dataSource, showPasswordColumn, phonePattern
         };
     },
     watch: {

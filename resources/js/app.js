@@ -35,7 +35,6 @@ const vuetify = createVuetify({
     components,
     directives,
 });
-<<<<<<< HEAD
 import {
     DxDataGrid,
     DxPager,
@@ -70,13 +69,11 @@ import {
     DxGroupItem,
 } from "devextreme-vue/form";
 import { DxTooltip } from "devextreme-vue/tooltip";
-=======
 
 app.use(vuetify);
 app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
 
->>>>>>> 204b1a734190dfc84e5687b8ec171616af6d7e77
 import Registration from "./components/Registration.vue";
 
 app.component("registration-component", Registration);
@@ -103,7 +100,6 @@ app.component("companies-component", CompaniesComponent);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
 app.config.globalProperties.emitter = emitter;
-<<<<<<< HEAD
 const component = {
     DxDataGrid,
     DxPager,
@@ -140,7 +136,6 @@ const component = {
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
-=======
 import Home from "./components/Home.vue";
 app.component("home-component", Home);
 
@@ -164,7 +159,6 @@ app.component("companynav-component", CompanyNav);
 
 import CompanyFotter from "./components/CompanyFotter.vue";
 app.component("companyfotter-component", CompanyFotter);
->>>>>>> 204b1a734190dfc84e5687b8ec171616af6d7e77
 
 /**
  * The following block of code may be used to automatically register your
