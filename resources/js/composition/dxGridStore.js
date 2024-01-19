@@ -1,6 +1,5 @@
 import { ref } from "vue";
 import CustomStore from "devextreme/data/custom_store";
-name: "dxGridStore";
 export default function useDataSource(
     url,
     insertURL = null,
@@ -57,7 +56,7 @@ export default function useDataSource(
         update: (key, values) => {
             console.log(values);
             return window.axios
-                .post(updateURL + "/" + key.id, values)
+                .post(updateURL + "/" + key.userid, values)
                 .then(() => {
                     return true;
                 })
