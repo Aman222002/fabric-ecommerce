@@ -1,55 +1,64 @@
 <template>
-    <v-app>
-        <v-app-bar app>
-            <v-container>
-                <v-row align="center" justify="space-between">
-                    <v-col>
-                        <v-btn text to="/">Jobs</v-btn>
-                        <v-btn text to="/">Companies</v-btn>
-                        <v-btn text to="/">Services</v-btn>
-                        <v-btn text to="/">Companies</v-btn>
+  <v-app-bar app>
+    <v-container>
+      <v-row align="center" justify="space-between">
+        <v-col class="nav-links">
+          <a href="/home" class="nav-link">Home</a>
+          <a href="/job" class="nav-link">Post a Job</a>
+          <a href="/" class="nav-link">Find CVs</a>
+          <a href="/product" class="nav-link">Products</a>
+          <a href="/" class="nav-link">Resources</a>
+        </v-col>
 
-                    </v-col>
-
-                    <v-btn to="/" outlined class="btn-dashboard">
-
-                        <a href="/Login">Login</a>
-                    </v-btn>
-                    <v-btn to="/" outlined class="btn-dashboard">
-                        <a href="/Registration"> Registration </a> </v-btn>
-                    <v-btn to="/" outlined class="btn-dashboard">
-                        <a href="/Registration"> For employers</a> </v-btn>
-
-                </v-row>
-            </v-container>
-        </v-app-bar>
-
-        <!-- Your main content goes here -->
-
-    </v-app>
+        <v-col class="nav-links">
+          <a href="/login" class="btn-dashboard outlined">
+            Login
+          </a>
+          <a href="/registration" class="btn-dashboard outlined">
+            Registration
+          </a>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app-bar>
 </template>
-  
+
 <script>
 export default {
-
+  name: "Header"
 };
 </script>
 
 <style scoped>
+.nav-links {
+  display: flex;
+  align-items: center; 
+}
+
+.nav-link,
 .btn-dashboard {
-    border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  margin-right: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-dashboard {
+  border-radius: 4px;
+  margin-left: 10px;
+}
+
+.outlined {
+  border: 1px solid transparent;
 }
 
 .btn-dashboard:hover {
-    background: linear-gradient(45deg, #e7cff1, #f14cad);
-    color: #fff;
+  background: linear-gradient(45deg, #ca82e9, #8b8488);
 }
 
-/* Adjust background color and border for the navigation bar */
 .v-app-bar {
-    background-color: #ADD8E6;
-    /* Set your desired background color */
-    border-bottom: 1px solid #ccc;
-    /* Set your desired border style */
+  background-color: #add8e6;
+  border-bottom: 1px solid #161414;
 }
 </style>
