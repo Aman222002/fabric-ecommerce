@@ -121,15 +121,13 @@ class CompanyController extends Controller
             ])) 
             $user = Auth::user();
             $roleName = $user->getRoleNames();
+            $user->role = $roleName;
             {
                 if (Auth::user()->hasRole('Company Admin')) {
                     return response()->json([
                         'status' => true,
                         'message' => 'Logged in Successfully!',
-                        'data' => [
-                            'user' => $user,
-                            'role' => $roleName,
-                        ],
+                        'data' => $user,  
                     ], 200);
                 } else {
                     Auth::logout(); 

@@ -82,10 +82,7 @@ Route::post('/login', [LoginController::class, 'check'])->name('login');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 
-// Route::get('/company/register', [CompanyController::class, 'index']);
-// Route::post('/company/post', [CompanyController::class, 'store'])->name('companyregister');
 
-// Route::post('/company/login', [CompanyController::class, 'check']);
 Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');

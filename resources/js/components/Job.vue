@@ -80,9 +80,9 @@ export default {
     const handleLogin = async () => {
       try {
         const response = await axios.post("/company/login", formData.value);
-        // if (response.data.status == true) {
-        //   window.location.href = "/postjob";
-        // }
+        if (response.data.status == true) {
+          window.location.href = "/postjob";
+        }
       } catch (err) {
         console.error(err);
       }
