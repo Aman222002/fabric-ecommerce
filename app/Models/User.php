@@ -49,7 +49,7 @@ class User extends Authenticatable
     }
     public function address()
     {
-        return $this->hasOne(UserAddress::class);
+        return $this->hasMany(UserAddress::class);
     }
     public function experience()
     {
@@ -67,6 +67,10 @@ class User extends Authenticatable
     public function userAchievements()
     {
         return $this->hasMany(UserAchievement::class);
+    }
+    public function userProfile()
+    {
+        return $this->hasMany(UserProfile::class);
     }
     // public function profile()
     // {

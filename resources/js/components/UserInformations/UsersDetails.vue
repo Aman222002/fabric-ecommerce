@@ -18,24 +18,6 @@
                 </v-col>
             </v-col>
         </v-row>
-        <v-card-title class="headline mb-2">Fill up your proper address</v-card-title>
-        <v-row>
-            <v-col cols="12" sm="3">
-                <v-text-field label="Address" v-model="users.address" variant="outlined"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="3">
-                <v-text-field label="City" v-model="users.city" variant="outlined"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="3">
-                <v-text-field label="State" v-model="users.state" variant="outlined"></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="3">
-                <v-text-field label="Pin Code" v-model="users.zipCode" variant="outlined"></v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field label="Professional Link" v-model="users.professionalLink" variant="outlined"></v-text-field>
-            </v-col>
-        </v-row>
     </v-container>
 </template>
 <script>
@@ -48,11 +30,7 @@ export default {
             name: "",
             email: "",
             phone: "",
-            address: "",
-            city: "",
-            state: "",
-            zipCode: "",
-            professionalLink: "",
+
         });
 
         const fetchUsers = () => {

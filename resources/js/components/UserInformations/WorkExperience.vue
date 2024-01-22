@@ -1,96 +1,99 @@
 <template>
-    <v-container>
-        <v-card>
-            <v-card-title class="headline mb-2">Fill your Skills and Work Experience</v-card-title>
-            <v-card-text>
-                <v-form @submit.prevent="submitSkillsForm">
-                    <v-row>
-                        <v-col cols="12" sm="10">
-                            <v-text-field v-model="skill" label="Skill" variant="outlined"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="10">
-                            <v-btn @click="addSkill" color="#006400">Add Skills</v-btn>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col v-for="(s, index) in skills" :key="index" cols="12">
-                            {{ s }}
-                        </v-col>
-                    </v-row>
-                </v-form>
-
+    <v-container class="container-center">
+        <v-card style="width:60%;height:10%">
+            <v-form @submit.prevent="submitForm">
                 <v-row>
-                    <v-col cols="12" sm="10">
-                        <v-text-field v-model="workExperience" label="Work Experience" variant="outlined"></v-text-field>
+                    <v-col cols="12" md="10">
+                        <v-text-field v-model="company_name" label="Company Name" required></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6">
-                        <v-btn @click="addWorkExperience" color="#006400">Add Work</v-btn>
-                    </v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col v-for="(exp, index) in workExperiences" :key="index" cols="12">
-                        {{ exp }}
+                    <v-col cols="12" md="10">
+                        <v-text-field v-model="position" label="Position" required></v-text-field>
                     </v-col>
                 </v-row>
                 <v-row>
-
+                    <v-col cols="10">
+                        <v-textarea v-model="description" label="Description"></v-textarea>
+                    </v-col>
                 </v-row>
+                <v-row>
+                    <v-col cols="12" md="10">
+                        <v-date-picker v-model="start_date" label="Start Date" required></v-date-picker>
+                    </v-col>
+                    <v-col cols="12" md="10">
+                        <v-date-picker v-model="expiry_date" label="End Date"></v-date-picker>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-btn type="submit" color="primary">Save Experience</v-btn>
+                    </v-col>
+                </v-row>
+            </v-form>
 
-            </v-card-text>
         </v-card>
     </v-container>
 </template>
+ 
 <script>
 import { ref } from 'vue';
 export default {
     name: 'WorkExperience',
     setup() {
-        const skill = ref('');
-        const skills = ref([]);
+        const company_name = ref('');
+        const position = ref('');
+        const description = ref('');
+        const start_date = ref(null);
+        const expiry_date = ref(null);
 
-        const workExperience = ref('');
-        const workExperiences = ref([]);
+        const submitForm = () => {
 
-        const addSkill = () => {
-            if (skill.value.trim() !== '') {
-                skills.value.push(skill.value.trim());
-                skill.value = '';
-            }
-        };
+            const formData = {
+                company_name: company_name.value,
+                position: position.value,
+                description: description.value,
+                start_date: start_date.value,
+                expiry_date: expiry_date.value,
+            };
+            axios.post('/work_experience', formData)
+                .then(response => {
 
-        const submitSkillsForm = () => {
-            // Handle submission logic for skills form
-            console.log('Skills submitted:', skills.value);
-        };
+                })
+                .catch(error => {
 
-        const addWorkExperience = () => {
-            if (workExperience.value.trim() !== '') {
-                workExperiences.value.push(workExperience.value.trim());
-                workExperience.value = '';
-            }
-        };
+                    if (error.response && error.response.status === 422) {
 
-        const submitWorkExperienceForm = () => {
-            // Handle submission logic for work experience form
-            console.log('Work Experience submitted:', workExperiences.value);
+                        console.log(error.response.data);
+                    } else {
+
+                        console.error(error.message);
+                    }
+                });
+
+            console.log(formData);
+
+            company_name.value = '';
+            position.value = '';
+            description.value = '';
+            start_date.value = null;
+            expiry_date.value = null;
         };
 
         return {
-            skill,
-            skills,
-            addSkill,
-            submitSkillsForm,
-            workExperience,
-            workExperiences,
-            addWorkExperience,
-            submitWorkExperienceForm,
+            company_name,
+            position,
+            description,
+            start_date,
+            expiry_date,
+            submitForm,
         };
     },
 };
 </script>
-  
 <style scoped>
-/* Add styles if needed */
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
 </style>
-  

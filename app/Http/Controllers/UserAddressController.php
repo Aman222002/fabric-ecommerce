@@ -33,37 +33,31 @@ class UserAddressController extends Controller
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',
                 'city' => 'required|string|max:255',
                 'state' => 'required|string|max:255',
                 'zip_code' => 'required|string|max:15',
                 'country' => 'required|string|max:22',
-                'latitude' => 'nullable|string|max:255',
-                'longitude' => 'nullable|string|max:255',
                 'address1' => 'required|string|max:255',
-                'address2' => 'nullable|string|max:255',
-                'county' => 'nullable|string|max:255',
             ]);
-
-            UserAddress::upsert(
-                ['user_id' => auth()->id()],
+            // return $request->all();
+            UserAddress::insert(
+                // ['user_id' => auth()->id()],
                 [
-                    'user_id' => $request->input('user_id'),
-                    'city' => $request->input('city'),
-                    'state' => $request->input('state'),
-                    'zip_code' => $request->input('zip_code'),
-                    'country' => $request->input('country'),
-                    'latitude' => $request->input('latitude'),
-                    'longitude' => $request->input('longitude'),
-                    'address1' => $request->input('address1'),
-                    'address2' => $request->input('address2'),
-                    'county' => $request->input('county'),
-
+                    'user_id' => auth()->id(),
+                    'address1' => $request->address1,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'zip_code' => $request->zip_code,
+                    'country' => $request->country,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
+                    'address2' => $request->address2,
+                    'county' => $request->county,
                 ]
             );
 
             // Retrieve the updated or inserted record
-            $userAddress = UserAddress::where('user_id', $request->user_id)->first();
+            $userAddress = UserAddress::where('user_id', auth()->id())->first();
 
             return response()->json($userAddress, 201);
         } catch (\Exception $e) {

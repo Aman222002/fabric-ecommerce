@@ -26,34 +26,55 @@
                             </template>
                             <v-form @submit.prevent="next">
                                 <v-container style="height:5%;width:80%">
-                                    <v-card>
-                                        <v-row v-if="n === 1">
-                                            <users-details :form-data="formData" :name-rules="nameRules"></users-details>
-                                        </v-row>
-                                    </v-card>
+                                    <v-row v-if="n === 1">
+                                        <users-details :form-data="formData" :name-rules="nameRules"></users-details>
+                                    </v-row>
                                 </v-container>
                                 <v-row v-if="n === 2">
-                                    <v-container style="height:5%;width:80%">
-                                        <v-card>
-                                            <users-qualifications :form-data="formData"
-                                                :name-rules="nameRules"></users-qualifications>
-                                        </v-card>
-                                    </v-container>
+
+                                    <user-address :form-data="formData" :name-rules="nameRules"></user-address>
+
                                 </v-row>
                                 <v-row v-if="n === 3">
-                                    <v-container style="height:10%;width:70%">
-                                        <v-card>
-                                            <Work-experience :form-data="formData"
-                                                :name-rules="nameRules"></Work-experience>
-                                        </v-card>
+                                    <v-stepper-item :rules="[() => false]" value="3">
+                                        <template v-slot:title>
+                                            Custom channels
+                                        </template>
+
+                                        <template v-slot:subtitle>
+                                            Alert message
+                                        </template>
+                                    </v-stepper-item>
+                                    <v-container style="height:5%;width:80%">
+                                        <users-qualifications :form-data="formData"
+                                            :name-rules="nameRules"></users-qualifications>
                                     </v-container>
                                 </v-row>
                                 <v-row v-if="n === 4">
                                     <v-container style="height:10%;width:80%">
-                                        <v-card>
-                                            <additional-informations :form-data="formData"
-                                                :name-rules="nameRules"></additional-informations>
-                                        </v-card>
+                                        <user-skills :form-data="formData" :name-rules="nameRules"></user-skills>
+                                    </v-container>
+                                </v-row>
+                                <v-row v-if="n === 5">
+                                    <v-container style="height:10%;width:80%">
+
+                                        <user-profile :form-data="formData" :name-rules="nameRules"></user-profile>
+
+                                    </v-container>
+                                </v-row>
+                                <v-row v-if="n === 6">
+                                    <v-container style="height:10%;width:80%">
+
+                                        <users-achievments :form-data="formData"
+                                            :name-rules="nameRules"></users-achievments>
+
+                                    </v-container>
+                                </v-row>
+                                <v-row v-if="n === 7">
+                                    <v-container style="height:10%;width:80%">
+
+                                        <work-experience :form-data="formData" :name-rules="nameRules"></work-experience>
+
                                     </v-container>
                                 </v-row>
                             </v-form>
@@ -69,25 +90,32 @@
 </template>
 <script>
 import UsersDetails from './UserInformations/UsersDetails.vue';
+import UsersAchievments from './UserInformations/UsersAchievments.vue';
+import UserAddress from './UserInformations/UserAddress.vue';
+import UserSkills from './UserInformations/UserSkills.vue';
 import WorkExperience from './UserInformations/WorkExperience.vue';
-import AdditionalInformations from './UserInformations/AdditionalInformations.vue';
+import UserProfile from './UserInformations/UserProfile.vue';
 import UsersQualifications from './UserInformations/UsersQualifications.vue';
 export default {
     name: 'ResumeComponent',
     components: {
         UsersDetails,
+        UserSkills,
         UsersQualifications,
-        AdditionalInformations,
+        UserProfile,
         WorkExperience,
+        UserAddress,
+        UsersAchievments
+
     },
     data() {
         return {
-            maxSteps: 4,
+            maxSteps: 7,
             e1: 1,
-            steps: 4,
-            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4",],
-            stepTitles: ["General Information", "Users Qualifications", "WorkExperience", "Additional Informations"],
-            stepBackgrounds: ["#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF", "#1E90FF",],
+            steps: 7,
+            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4", "step 5", , "step 7"],
+            stepTitles: ["Personal Details", "Address Details", "Education Details", " Add Skills", "Users Profile", "Achievments", "Work Experience"],
+            stepBackgrounds: [],
             formData: {
                 name: "",
                 email: "",

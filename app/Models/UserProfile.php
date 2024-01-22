@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserAddress extends Model
+class UserProfile extends Model
 {
-    protected $fillable = ['user_id', 'address1', 'address2', 'latitude', 'longitude', 'city', 'state', 'zip_code', 'country'];
+    use HasFactory;
+
+    protected $fillable = ['user_id', 'hobbies', 'strengths'];
 
     public function user()
     {

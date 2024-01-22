@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Qualification extends Model
 {
+    protected $table = 'user_qualifications';
+
     protected $fillable = [
         'user_id',
         'education_type',

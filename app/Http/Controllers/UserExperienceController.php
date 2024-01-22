@@ -10,25 +10,23 @@ class UserExperienceController extends Controller
 {
     public function store(Request $request)
     {
+
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',
                 'company_name' => 'required|string|max:255',
                 'position' => 'required|string|max:255',
                 'description' => 'required|string',
                 'start_date' => 'required|date',
                 'end_date' => 'nullable|date',
             ]);
-
-            UserExperience::updateOrCreate(
-                ['user_id' => auth()->id()],
+            UserExperience::insert(
                 [
-                    'user_id' => $request->input('user_id'),
-                    'company_name' => $request->input('company_name'),
-                    'position' => $request->input('position'),
-                    'description' => $request->input('description'),
-                    'start_date' => $request->input('start_date'),
-                    'end_date' => $request->input('end_date'),
+                    'user_id' => auth()->id(),
+                    'company_name' => $request->company_name,
+                    'position' => $request->position,
+                    'description' => $request->description,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date
                 ]
             );
 
