@@ -9,6 +9,9 @@ use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class JobsController extends Controller
 {
@@ -25,7 +28,6 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -86,6 +88,7 @@ class JobsController extends Controller
                 'company_location' => $input['companylocation'],
                 'company_website' => $input['companywebsite'],
             ]);  
+           
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',

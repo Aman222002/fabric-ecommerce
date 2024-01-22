@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="success"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
+  <v-btn color="success" style="margin-top: 40px;"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
     <v-table>
       <thead>
         <tr>

@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Http\Requests\CompanyRagistrationRequest;
+use App\Jobs\SendEmailJob;
+use App\Jobs\VerificationMail;
 
 class CompanyController extends Controller
 {
@@ -32,19 +35,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyRagistrationRequest $request)
     {
-        $validationRules = [
-            'company_name' => 'required|string|max:255',
-            'company_email' => 'required|email|unique:companies|max:255',
-            'registration_number' => 'required|string|max:255|unique:companies',
-            'company_address' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
-            'description' => 'nullable|string',
-            'status' => 'required|in:0,1',
-        ];
-        $request->validate($validationRules);
-        //
+       $request->validated();
         try {
             $input = $request->all();
            $user = User::create([
@@ -64,6 +57,7 @@ class CompanyController extends Controller
                 'description' => $input['description'],
                 'status' => $input['status'],
             ]);
+            dispatch(new VerificationMail($user->email));
             return response()->json([
                 'status' => true,
                 'message' => "Registation Successfully"
