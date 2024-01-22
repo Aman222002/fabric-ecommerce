@@ -17,9 +17,9 @@ class UserController extends Controller
     {
         //
         try {
-            $users = User::select('id as userid', 'name', 'email', 'phone')->get();
+            $users = User::select('id', 'name', 'email', 'phone')->get();
             // return $users;
-            return response()->json(['users' => $users, 'status' => true], 200);
+            return response()->json(['data' => $users, 'status' => true], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);

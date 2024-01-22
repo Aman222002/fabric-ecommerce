@@ -1,18 +1,33 @@
 <template>
     <div class="container">
-        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
-            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="popup" />
-            <DxColumn data-field="id" caption="UserID">
-                <DxLookup :data-source="dataSource" value-expr="Value" display-expr="Text" />
+        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+            :onEditingStart="EditStart" @init-new-row="initNewRow" @row-inserted="rowInserted">
+            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
+            <DxSearchPanel :visible="true" />
+            <DxColumn data-field="company_name" data-type="string">
+                <DxRequiredRule />
             </DxColumn>
-            <DxColumn data-field="name" data-type="string" />
-            <DxPatternRule :pattern="namePattern" message="Should be numeric value only" />
-            <DxColumn data-field="email" data-type="string" />
-            <DxPatternRule :pattern="emailPattern" message="Should be numeric value only" />
-            <DxColumn data-field="phone" data-type="string" />
-            <DxPatternRule :pattern="phonePattern" message="Should be numeric value only" />
-            <DxColumn :visible="showPasswordColumn" data-field="password" data-type="password" />
-            <DxScrolling mode="virtual" />
+            <DxColumn data-field="company_email" data-type="string">
+                <DxRequiredRule />
+            </DxColumn>
+            <DxColumn data-field="registration_number" data-type="string">
+            </DxColumn>
+            <DxColumn data-field="company_address" data-type="string" />
+            <DxColumn data-field="description" data-type="string" />
+            <DxColumn data-field="phone_number" data-type="number" />
+            <DxColumn data-field="name" data-type="string" caption="User Name" :visible="showColumn">
+                <DxPatternRule :pattern="namePattern" message="Name should of min 3 and max 10 word" />
+            </DxColumn>
+            <DxColumn data-field="email" data-type="string" caption="User Email" :visible="showColumn">
+                <DxPatternRule :pattern="emailPattern" message="Email should be in email format" />
+            </DxColumn>
+            <DxColumn data-field="password" data-type="string" caption="User Password" :visible="showColumn">
+                <DxPatternRule :pattern="paswordPattern"
+                    message="Pasword should be of min. 8 words and contain one uppercase and one lowercase alphabet with a specila character" />
+            </DxColumn>
+            <DxColumn data-field="phone" data-type="string" caption="User Phone" :visible="showColumn">
+                <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
+            </DxColumn>
             <DxSummary>
                 <DxTotalItem column="id" summary-type="count" />
             </DxSummary>
@@ -27,28 +42,43 @@ import {
     DxScrolling,
     DxSummary,
     DxLookup,
+    DxSearchPanel,
     DxTotalItem,
+    DxRequiredRule,
 } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
 export default {
     name: 'CompaniesComponent',
     setup() {
-        const showPasswordColumn = ref(false);
-        const loadURL = `/admin/user/index`;
-        const insertURL = `/admin/user/store`;
-        const updateURL = `/admin/user/update`;
-        const deleteUrl = `/admin/user/destroy`;
+        const showColumn = ref(false);
+        const namePattern = ref(/^[a-zA-Z][a-zA-Z0-9_]{2,9}$/);
+        const emailPattern = ref(/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/);
+        const phonePattern = ref("^[0-9]{9,13}$");
+        const paswordPattern = ref(/^.{8,}$/);
+        const loadURL = `/admin/company/getCompanies`;
+        const insertURL = `/admin/company/store`;
+        const updateURL = `/admin/company/update`;
+        const deleteUrl = `/admin/company/destroy`;
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
+        const initNewRow = (e) => {
+            console.log(showColumn.value);
+            e.data.status = '1';
+            showColumn.value = true;
+        };
+        const EditStart = (e) => {
+            showColumn.value = false;
+            console.log('started Editting', e.data);
+        };
+        const rowInserted = (e) => {
+            showColumn.value = false;
+        };
         return {
-            dataSource, showPasswordColumn
+            dataSource, showColumn, EditStart, initNewRow, rowInserted, namePattern, emailPattern, phonePattern, paswordPattern,
         };
     },
-    watch: {
-        'DxEditing.allowAdding': function () {
-            showPasswordColumn.value = true;
-        },
-    }
+
+    components: { DxRequiredRule }
 }
 </script>
 <style scoped>
@@ -57,7 +87,7 @@ export default {
 }
 
 .container {
-    margin-top: 5px;
+    margin-top: 15px;
     margin-left: 90px;
     width: fit-content;
 }

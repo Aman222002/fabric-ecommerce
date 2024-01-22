@@ -62,8 +62,8 @@ Route::get('/crud', function () {
 // }]);
 
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/login', [LoginController::class, 'index']);
-Route::post('/login', [LoginController::class, 'check'])->name('login');
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login/check', [LoginController::class, 'check']);
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 
@@ -84,8 +84,9 @@ Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::group(["prefix" => "/admin"], function () {
+Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
@@ -95,6 +96,12 @@ Route::group(["prefix" => "/admin"], function () {
         Route::post('/store', [UserController::class, 'store']);
         Route::post('/update/{id}', [UserController::class, 'update']);
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
+    });
+    Route::group(["prefix" => "/company"], function () {
+        Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
+        Route::post('/store', [CompanyController::class, 'store']);
+        Route::post('/update/{id}', [CompanyController::class, 'update']);
+        Route::delete('/destroy/{id}', [CompanyController::class, 'destroy']);
     });
 });
 Route::get('/categories', [CategoryController::class, 'index']);

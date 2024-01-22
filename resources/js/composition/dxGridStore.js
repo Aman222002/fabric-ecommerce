@@ -27,10 +27,10 @@ export default function useDataSource(
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
+                        console.log(data.data);
                     }
-                    console.log(data);
                     return {
-                        data: data.users || [],
+                        data: data.data || [],
                         summary: data.summary || [],
                         totalCount: data.totalCount ?? 10,
                     };
@@ -56,7 +56,7 @@ export default function useDataSource(
         update: (key, values) => {
             console.log(values);
             return window.axios
-                .post(updateURL + "/" + key.userid, values)
+                .post(updateURL + "/" + key.id, values)
                 .then(() => {
                     return true;
                 })

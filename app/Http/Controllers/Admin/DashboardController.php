@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -31,7 +32,14 @@ class DashboardController extends Controller
         //
         return view('admin.companies');
     }
-
+    /**
+     * funtion for admin logout
+     */
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
+    }
     /**
      * Store a newly created resource in storage.
      */

@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
-            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="popup" />
-            <!-- <DxLookup :data-source="dataSource" value-expr="Value" display-expr="Text" /> -->
-            <DxColumn data-field="userid" caption="UserID" data-type="int" />
+            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
+            <DxSearchPanel :visible="true" />
+            <DxColumn data-field="id" caption="ID" data-type="int" />
             <DxColumn data-field="name" data-type="string">
                 <DxRequiredRule />
             </DxColumn>
@@ -14,7 +14,10 @@
             <DxColumn data-field="phone" data-type="string">
                 <DxPatternRule :pattern="phonePattern" message="Should be numeric value only" />
             </DxColumn>
-            <DxColumn data-field="password" data-type="password" :visible="showPasswordColumn" />
+            <DxColumn data-field="password" data-type="password" :visible="showPasswordColumn">
+                <DxPatternRule :pattern="passwordPattern"
+                    message="Should be of seven charcter and must contains a special character only" />
+            </DxColumn>
             <DxScrolling mode="virtual" />
             <DxSummary>
                 <DxTotalItem column="id" summary-type="count" />
@@ -38,6 +41,7 @@ export default {
     name: 'CompaniesComponent',
     setup() {
         const phonePattern = ref("^[0-9]{9,13}$");
+        const passwordPattern = ref(/^.{8,}$/);
         const showPasswordColumn = ref(false);
         const loadURL = `/admin/user/index`;
         const insertURL = `/admin/user/store`;
@@ -45,7 +49,7 @@ export default {
         const deleteUrl = `/admin/user/destroy`;
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         return {
-            dataSource, showPasswordColumn, phonePattern
+            dataSource, showPasswordColumn, phonePattern, passwordPattern
         };
     },
     watch: {
@@ -61,7 +65,7 @@ export default {
 }
 
 .container {
-    margin-top: 5px;
+    margin-top: 15px;
     margin-left: 90px;
     width: fit-content;
 }

@@ -1,86 +1,88 @@
+
 <template>
-  <v-container fluid>
-    <v-card class="mt-5 mx-auto" max-width="400">
-      <v-card-title class="text-center">Log in</v-card-title>
+  <v-container fluid class="div1">
 
-      <v-card-text>
-        <v-form @submit.prevent="login">
-          <v-text-field v-model="email" label="Email" type="email" :rules="[rules.required, rules.email]"></v-text-field>
-          <v-text-field v-model="password" label="Password" type="password" :rules="[rules.required, rules.password]"></v-text-field>
-
-          <v-checkbox v-model="rememberMe" label="Remember Me"></v-checkbox>
-
-          <v-btn type="submit" color="primary" class="mt-3">Login</v-btn>
-        </v-form>
-
-        <v-card-actions>
-          <div class="text-hint">Already have an account? <router-link to="/Registration">Sign up</router-link></div>
-        </v-card-actions>
-      </v-card-text>
-    </v-card>
+    <div class="register-form">
+      <v-col cols="12" sm="6" md="6">
+        <v-col class="mt-5"
+          style="background-color:#9a6a4f; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+          <v-card-title class="text-center">Login</v-card-title>
+          <v-card-text>
+            <v-form ref="form" @submit.prevent="submitForm">
+              <v-text-field v-model="formData.email" id="email" label="Email" type="email" :rules="emailRules" required
+                variant="outlined"></v-text-field>
+              <v-text-field v-model="formData.password" id="password" label="Password" type="password"
+                :rules="passwordRules" required variant="outlined"></v-text-field>
+              <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <div class="text-hint">Don't have an account? <a href="/registration">Register</a>
+            </div>
+          </v-card-actions>
+        </v-col>
+      </v-col>
+    </div>
   </v-container>
 </template>
 
 <script>
-import { ref } from 'vue';
-
 export default {
-  name: "Login",
-  setup() {
-    const email = ref("");
-    const password = ref("");
-    const rememberMe = ref(false);
-
-    const rules = {
-      required: (value) => !!value || "This field is required",
-      email: (value) => /.+@.+\..+/.test(value) || "Enter a valid email address",
-      password: (value) => value.length >= 8 || "Password must be at least 8 characters",
-    };
-
-    const login = () => {
-      console.log('Logging in with:', email.value, password.value, 'Remember Me:', rememberMe.value);
-    };
-
-    const forgotPassword = () => {
-      console.log('Forgot Password clicked');
-    };
-
+  name: 'Login',
+  data() {
     return {
-      email,
-      password,
-      rememberMe,
-      rules,
-      login,
-      forgotPassword,
+      formData: {
+        email: '',
+        password: '',
+      },
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
+      ],
     };
+  },
+  methods: {
+    async submitForm() {
+      try {
+        const response = await window.axios.post('/login/check', this.formData);
+        const data = response.data;
+        if (data.status === true) {
+          console.log(response.data.role);
+          alert('Login successful');
+          if (response.data.role == 'Admin') {
+            window.location.href = './admin/dashboard';
+          }
+          else {
+            window.location.href = './resume';
+          }
+        } else {
+          alert('Login failed');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred during login');
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-.center-form {
+.register-form {
+  /* background-image: url('/storage/assets/p.jpg'); */
+  background-size: cover;
+  padding: 5vh;
+  height: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-}
+  background-repeat: no-repeat;
+  background-position: center;
+  color: "#006400";
 
-.v-card {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.v-text-field,
-.v-checkbox,
-.v-btn {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.text-hint {
-  text-align: center;
 }
 </style>
