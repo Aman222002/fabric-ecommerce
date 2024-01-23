@@ -50,10 +50,11 @@ export default {
       try {
         const response = await window.axios.post('/login/check', this.formData);
         const data = response.data;
+        console.log(data.data);
         if (data.status === true) {
-          console.log(response.data.role);
+          console.log(data.data.roles[0].name);
           alert('Login successful');
-          if (response.data.role == 'Admin') {
+          if (data.data.roles[0].name == 'Admin') {
             window.location.href = './admin/dashboard';
           }
           else {

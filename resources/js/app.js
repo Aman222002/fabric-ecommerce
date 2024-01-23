@@ -71,7 +71,6 @@ import {
 import { DxTooltip } from "devextreme-vue/tooltip";
 
 app.use(vuetify);
-app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";

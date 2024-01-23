@@ -88,6 +88,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
+    Route::get('/profile/getProfile', [UserController::class, 'getProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
     Route::group(["prefix" => "/user"], function () {
@@ -95,6 +96,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [UserController::class, 'edit']);
         Route::post('/store', [UserController::class, 'store']);
         Route::post('/update/{id}', [UserController::class, 'update']);
+        Route::post('/updateProfile/{id}', [UserController::class, 'updateProfile']);
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
     });
     Route::group(["prefix" => "/company"], function () {

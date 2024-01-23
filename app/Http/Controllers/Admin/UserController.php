@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -57,11 +59,72 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
-
-
+        // 
     }
+    /**
+     * function to get logged in user
+     */
+    public function getProfile()
+    {
+        try {
+            $user = Auth::user();
+            if ($user) {
+                if ($user->user_image) {
+                    $imageUrl = Storage::disk('public')->url('/assets/' . $user->user_image);
+                }
+                return response()->json(['user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'image_url' => $imageUrl,
+                ], 'status' => true], 200);
+            } else {
+                // Storage::url('assets') . $user->img;
+                $response = [
+                    'status' => false,
+                    'data' => 'User not found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * function to update profile
+     */
+    public function updateProfile(Request $request, string $id)
+    {
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $request->validate([
+                    'name' => 'required',
+                    'email' => 'required',
+                    'phone' => 'required',
+                    'user_image' => 'image|mimes:jpeg,png,jpg,gif',
+                ]);
 
+                if ($request->hasFile('user_image')) {
+                    $image = $request->file('user_image');
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('public/assets', $imageName);
+                    $user->update(['user_image' => $imageName]);
+                }
+                $user->update([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email'),
+                    'phone' => $request->input('phone'),
+                ]);
+                return response()->json(['message' => 'User updated successfully', 'status' => true], 200);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
     /**
      * Display the data to edit in form
      */
