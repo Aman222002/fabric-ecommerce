@@ -10,7 +10,7 @@
      
     </div>
     <div style="text-align: center; font-size: xx-large; font-weight:50px; margin-top:0; font-weight: bolder;">
-    <p class="centered-heading" style="font-family: sans-serif; font-size: 60px;">Our  <span style="color: red;">Services</span></p>
+    <p class="centered-heading" style="font-family: sans-serif; font-size: 40px;">Our  <span style="color: red;">Services</span></p>
     <p style="margin-top: 10px;">How Indeed helps you hire
 Indeed helps you connect with talent, on desktop and mobile, <br>so you can make more quality hires faster.</p>
     </div> 
@@ -50,7 +50,7 @@ your job</v-card-title>
     </v-row>
 </div>
 <div style="text-align: center; font-size: xx-large; font-weight:50px; margin-top:0; font-weight: bolder;">
-    <p class="centered-heading" style="font-family: sans-serif; font-size: 60px;">Save time<span style="color: red;"> and effort</span></p>
+    <p class="centered-heading" style="font-family: sans-serif; font-size: 40px;">Save time<span style="color: red;"> and effort</span></p>
 
     <p style="font-size: 20px;">Finding the best fit for the job shouldn’t be a full-time job. Indeed’s simple and powerful tools let you source, screen and hire faster.</p>
 </div>
@@ -69,6 +69,7 @@ your job</v-card-title>
     You control your posts 24/7 – edit, add, pause, or close them whenever you want. Learn more about posting.
   </p>
 </div>
+
   </template>
   
   <script>

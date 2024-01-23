@@ -49,13 +49,12 @@
             <v-card-actions class="login-dialog-actions">
             <v-btn @click="handleLogin" class="login-btn">Login</v-btn>
           </v-card-actions>
-          <h4 class="new-client-text">Are you a new client?</h4>
+          <h5 class="new-client-text" style="text-align: center;">Are you a new client?</h5>
           <v-btn color="secondary" class="register-btn">
             <a href="./company/register" class="register-link">Register Now</a>
           </v-btn>
           </v-card>
         </v-dialog>
-      
   <div class="aa">
   <v-row justify="center" align="center" class="mt-5">
     <v-col cols="12" md="4" class="card-col">
@@ -73,7 +72,7 @@
         <v-img src="/storage/assest/24.png" alt="Cinque Terre" style="height: 140px;"></v-img>
         <v-card-title style="font-size: 30px;">Build your job post</v-card-title>
         <v-card-text style="font-style: 20px; margin-top: 10px;">
-          Then just add a title, description and location to your job post,<br> and you're ready to go.
+          Then just add a title, description and location to your job post,and you're ready to go.
         </v-card-text>
       </v-card>
     </v-col>
@@ -119,6 +118,7 @@ export default {
         if (response.data.status == true) {
           window.location.href = "/postjob";
         }
+        
       } catch (err) {
         console.error(err);
       }

@@ -1,7 +1,8 @@
-User
+
 <template>
+  <div>
     <v-form @submit.prevent="saveJob" id="createJobForm" name="createJobForm">
-      <v-container>
+      
         <v-card class="border-0 shadow mb-4">
           <v-card-title>
             <h3 class="fs-4 mb-1">Job Details</h3>
@@ -74,11 +75,12 @@ User
             ></v-text-field>
           </v-card-text>
           <v-card-actions class="p-4">
-            <v-btn type="submit" color="primary">Save Job</v-btn>
+            <v-btn type="submit" >Save Job</v-btn>
           </v-card-actions>
         </v-card>
-      </v-container>
+     
     </v-form>
+  </div>
 </template>
   
   <script>

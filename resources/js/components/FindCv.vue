@@ -15,23 +15,17 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import { ref } from 'vue';
 
 export default {
   name: "FindCv",
   setup() {
-    // Using ref to create reactive variables
     const jobTitle = ref('');
     const location = ref('');
-
-    // Function to search jobs
     const searchJobs = () => {
       console.log('Searching for:', jobTitle.value, 'in', location.value);
     };
-
-    // Return the variables and functions for template use
     return {
       jobTitle,
       location,

@@ -6,8 +6,11 @@
           <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
           <a href="/findcv" class="nav-link" :class="{ 'active': isActive('/findcv') }">Find CVs</a>
           <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Products</a>
+          
           <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
+          
         </v-col>
+        <!-- <a href="/logout" class="nav-link" style="float: right; margin-top: 15px;">Logout</a> -->
       </v-row>
     </v-container>
   </v-app-bar>

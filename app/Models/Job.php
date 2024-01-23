@@ -32,5 +32,9 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class);
     }
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_name', 'company_name');
+    }
     
 }

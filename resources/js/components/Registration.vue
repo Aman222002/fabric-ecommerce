@@ -16,7 +16,7 @@
             </v-card-text>
   
             <v-card-actions>
-              <div class="text-hint">Login As Company ? <a href="/job">Login here</a><br></div>
+              <div class="text-hint">Login As Company ? <a href="/">Login here</a><br></div>
               
             </v-card-actions>
           </v-card>

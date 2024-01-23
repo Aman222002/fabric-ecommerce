@@ -7,10 +7,11 @@
       </div>
   
       <v-divider></v-divider>
-  
-      <div>
-        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
-      </div>
+      <div class="social-icons">
+      <v-icon class="mr-2">mdi-facebook</v-icon>
+      <v-icon class="mr-2">mdi-youtube</v-icon>
+      <v-icon>mdi-twitter</v-icon>
+    </div>
     </v-footer>
   </template>
   

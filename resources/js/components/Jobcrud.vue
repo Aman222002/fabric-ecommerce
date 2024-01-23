@@ -3,7 +3,6 @@
     <v-table>
       <thead>
         <tr>
-          <th class="text-left">Id</th>
           <th class="text-left">Company Name</th>
           <th class="text-left">Job Title</th>
           <th class="text-left">Vacancy</th>
@@ -14,7 +13,6 @@
       </thead>
       <tbody>
         <tr v-for="job in jobs" :key="job.id">
-          <td>{{ job.id }}</td>
           <td>{{ job.company_name }}</td>
           <td>{{ job.title }}</td>
           <td>{{ job.vacancy }}</td>

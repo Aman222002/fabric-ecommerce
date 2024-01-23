@@ -14,6 +14,7 @@ import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+
 const VueTelInputOptions = {
     mode: "national",
     onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
@@ -100,5 +101,5 @@ app.component("company-page",CompanyPage)
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
-
+window.Swal = app.config.globalProperties.$swal;
 app.mount("#app");

@@ -21,7 +21,11 @@ class JobsController extends Controller
     public function index()
     {
         try {
-            $jobs = Job::all();
+            // $jobs = Job::all();
+            $jobs = Job::join('companies', 'post_jobs.id', '=', 'companies.id')
+            ->whereColumn('post_jobs.company_name', '=', 'companies.company_name')
+            ->select('post_jobs.*')
+            ->get();
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
