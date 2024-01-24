@@ -70,14 +70,14 @@ class UserController extends Controller
             $user = Auth::user();
             if ($user) {
                 if ($user->user_image) {
-                    $imageUrl = Storage::disk('public')->url('/assets/' . $user->user_image);
+                    $user->user_image = Storage::disk('public')->url('/assets/' . $user->user_image);
                 }
                 return response()->json(['user' => [
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
                     'phone' => $user->phone,
-                    'image_url' => $imageUrl,
+                    'user_image' => $user->user_image,
                 ], 'status' => true], 200);
             } else {
                 // Storage::url('assets') . $user->img;
@@ -106,19 +106,56 @@ class UserController extends Controller
                     'phone' => 'required',
                     'user_image' => 'image|mimes:jpeg,png,jpg,gif',
                 ]);
-
                 if ($request->hasFile('user_image')) {
                     $image = $request->file('user_image');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assets', $imageName);
-                    $user->update(['user_image' => $imageName]);
+                } else {
+                    $imageName = 'null';
                 }
                 $user->update([
+                    'user_image' => $imageName,
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'phone' => $request->input('phone'),
                 ]);
+                // $user->update([
+                //     'name' => $request->input('name'),
+                //     'email' => $request->input('email'),
+                //     'phone' => $request->input('phone'),
+                // ]);
                 return response()->json(['message' => 'User updated successfully', 'status' => true], 200);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * update user password 
+     */
+    public function updatePassword(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if ($user) {
+                $request->validate([
+                    'current' => 'required',
+                    'new' => 'required|min:8',
+                ]);
+                if (Hash::check($request->input('current'), $user->password)) {
+                    $password = $user->password = Hash::make($request->input('new'));
+                    $user->update([
+                        'password' => $password,
+                    ]);
+                    return response()->json(['status' => true, 'message' => 'Password Updated Successfully'], 200);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Invalid Current Password',
+                    ];
+                    return response()->json($response, 404);
+                }
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());

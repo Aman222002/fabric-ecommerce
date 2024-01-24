@@ -7,6 +7,7 @@
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
+import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
@@ -22,7 +23,6 @@ const VueTelInputOptions = {
     mode: "national",
     onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
 };
-
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready

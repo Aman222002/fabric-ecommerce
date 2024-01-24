@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="12">
                 <v-card class="card">
-                    <v-card-title class="headline">Personal Information</v-card-title>
+                    <v-card-title class="bg-primary text-center">Personal Information</v-card-title>
                     <v-form @submit.prevent="updateProfile(formData.id)">
                         <v-row>
                             <v-col cols="12">
@@ -12,36 +12,31 @@
                                         <v-row>
                                             <v-col cols="2">
                                                 <v-avatar size="130px" class="avatar">
-                                                    <div id="inspire">
-                                                        <label for="fileInput" @click="openFileInput">
-                                                            <span class="mdi mdi-pencil" id="icon"></span>
-                                                        </label>
-                                                        <input type="file" id="fileInput" ref="fileInput"
-                                                            style="display: none" @change="handleImageChange" />
-                                                        <img v-if="imageUrl" :src="imageUrl" alt="Selected Image"
-                                                            width="130px" height="130px" />
-                                                    </div>
+                                                    <label for="fileInput" @click="openFileInput">
+                                                        <span class="mdi mdi-pencil" id="icon"></span>
+                                                    </label>
+                                                    <input type="file" id="fileInput" ref="fileInput" style="display: none"
+                                                        @change="handleImageChange" />
+                                                    <img v-if="imageUrl" :src="imageUrl" alt="Selected Image" width="150px"
+                                                        height="150px" />
                                                 </v-avatar>
                                             </v-col>
                                             <v-col cols="3">
                                                 <label for="name" class="custom-text-field">Name</label>
-                                                <v-text-field v-model="formData.name" :rules="nameRules"
-                                                    label="Name"></v-text-field>
+                                                <v-text-field v-model="formData.name" :rules="nameRules"></v-text-field>
                                             </v-col>
                                             <v-col cols="3">
                                                 <label for="email" class="custom-text-field">Email</label>
-                                                <v-text-field v-model="formData.email" :rules="emailRules"
-                                                    label="Email"></v-text-field>
+                                                <v-text-field v-model="formData.email" :rules="emailRules"></v-text-field>
                                             </v-col>
                                             <v-col cols="3">
                                                 <label for="phone" class="custom-text-field">Contact No.</label>
-                                                <v-text-field v-model="formData.phone" :rules="phoneRules"
-                                                    label="Contact No."></v-text-field>
+                                                <v-text-field v-model="formData.phone" :rules="phoneRules"></v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
                                     <v-card-actions>
-                                        <v-btn type="submit" color="primary">Update</v-btn>
+                                        <v-btn class="bg-primary mx-auto" color="white" type="submit">Update</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-col>
@@ -53,8 +48,8 @@
         <v-row>
             <v-col cols="12">
                 <v-card class="card">
-                    <v-card-title class="headline">Password and Security</v-card-title>
-                    <v-form @submit.prevent="updatePassword(formData.id)">
+                    <v-card-title class="bg-primary text-center">Password and Security</v-card-title>
+                    <v-form @submit.prevent="updatePassword()">
                         <v-row>
                             <v-col cols="12">
                                 <v-card>
@@ -63,24 +58,30 @@
                                             <v-col cols="4">
                                                 <label for="Current Password" class="custom-text-field">Current
                                                     Password</label>
-                                                <v-text-field v-model="formDetail.current" :rules="currentRules"
-                                                    type="password" label="Current Password"></v-text-field>
+                                                <v-text-field v-model="formDetail.current"
+                                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="show1 ? 'text' : 'password'" :rules="currentRules"
+                                                    @click:append="show1 = !show1"></v-text-field>
                                             </v-col>
                                             <v-col cols="4">
                                                 <label for="New Password" class="custom-text-field">New Password</label>
-                                                <v-text-field v-model="formDetail.new" :rules="newRules" type="password"
-                                                    label="New Password"></v-text-field>
+                                                <v-text-field v-model="formDetail.new" :rules="newRules"
+                                                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="show2 ? 'text' : 'password'"
+                                                    @click:append="show2 = !show2"></v-text-field>
                                             </v-col>
                                             <v-col cols="4">
                                                 <label for="Confirm Passwprd" class="custom-text-field">Confirm
                                                     Password</label>
-                                                <v-text-field v-model="formDetail.confirm" :rules="confirmRules"
-                                                    type="password" label="Confirm Password"></v-text-field>
+                                                <v-text-field :rules="confirmRules"
+                                                    :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="show3 ? 'text' : 'password'"
+                                                    @click:append="show3 = !show3"></v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
                                     <v-card-actions>
-                                        <v-btn type="submit" color="primary">Save</v-btn>
+                                        <v-btn class="bg-primary mx-auto" type="submit" color="white">Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-col>
@@ -93,11 +94,15 @@
 </template>
   
 <script>
+import axios from 'axios';
 import { ref, nextTick, onMounted } from 'vue';
 
 export default {
     name: 'ProfileComponent',
     setup() {
+        const show1 = ref(false);
+        const show2 = ref(false);
+        const show3 = ref(false);
         const imageUrl = ref();
         const fileInputRef = ref();
         const formData = ref({
@@ -109,7 +114,6 @@ export default {
         const formDetail = ref({
             current: '',
             new: '',
-            confirm: '',
         });
         const nameRules = ref([
             v => !!v || 'Full Name is required',
@@ -124,26 +128,27 @@ export default {
             v => (v && v.length >= 10) || 'Phone number must be a valid 10-digit number',
         ]);
         const currentRules = ref([
-
+            value => !!value || 'Password is required',
         ]);
         const newRules = ref([
+            value => !!value || 'Password is required',
+            value => (value && value.length >= 8) || 'Password must be at least 8 characters',
         ]);
         const confirmRules = ref([
+            value => !!value || 'Confirm Password is required',
+            value => (value === formDetail.value.new) || 'Passwords do not match',
         ]);
         const openFileInput = () => {
             fileInputRef.value.click();
         };
         const handleImageChange = () => {
             const file = fileInputRef.value.files[0];
-
             if (file) {
-                // Validate if the selected file is an image
                 if (!file.type.startsWith('image/')) {
                     alert('Please select a valid image file.');
                     fileInputRef.value.value = null;
                     return;
                 }
-                // Read and display the selected image
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     imageUrl.value = e.target.result;
@@ -153,10 +158,10 @@ export default {
             }
         };
         const fetchProfile = () => {
-            window.axios.get('./profile/getProfile').then((response) => {
-                console.log(response.data.user);
+            axios.get('./profile/getProfile').then((response) => {
                 formData.value = response.data.user;
-                imageUrl.value = response.data.user.image_url;
+                console.log(response.data.user);
+                imageUrl.value = response.data.user.user_image;
             })
         };
         onMounted(async () => {
@@ -173,10 +178,7 @@ export default {
             if (formData.value.image) {
                 formDataUpload.append('user_image', formData.value.image);
             }
-            formDataUpload.forEach((value, key) => {
-                console.log(`Appended ${key}: ${value}`);
-            });
-            window.axios.post(`./user/updateProfile/${id}`, formDataUpload, {
+            axios.post(`./user/updateProfile/${id}`, formDataUpload, {
                 header: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -184,10 +186,20 @@ export default {
                 console.log(response.status);
             })
         };
+        const updatePassword = () => {
+            console.log(formDetail.value);
+            axios.post(`./user/updatePassword`, formDetail.value).then((response) => {
+                console.log(response);
+            })
+        }
         return {
+            show1,
+            show2,
+            show3,
             formData,
             formDetail,
             updateProfile,
+            updatePassword,
             nameRules,
             emailRules,
             phoneRules,
@@ -203,24 +215,21 @@ export default {
 }
 </script>
   
-<style scoped>
-.headline {
-    background-color: #5d5f61;
-}
-
-.card {
-    background-color: rgb(235, 235, 198);
-}
-
-.hidden-input {
-    display: none;
+<style>
+.v-card-text {
+    flex: 1 1 auto;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.0178571429em;
+    padding: 3rem;
+    text-transform: none;
 }
 
 .custom-text-field {
     margin-top: 30px;
     margin-bottom: 10px;
     font-size: 20px;
-    color: black
+    /* color: black */
 }
 
 .avatar {
@@ -235,11 +244,16 @@ export default {
 
 #icon {
     position: absolute;
-    top: 90%;
+    top: 89%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 24px;
     color: white;
+    cursor: pointer;
+}
+
+.v-input--horizontal .v-input__append {
+    margin-inline-start: -28px;
 }
 </style>
   

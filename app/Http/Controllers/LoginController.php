@@ -30,7 +30,7 @@ class LoginController extends Controller
             if (Auth::attempt($credential)) {
                 $user = Auth::user();
                 if ($user) {
-                    $role = $user->getRoleNames();
+                    $user->getRoleNames();
                     return response()->json(['status' => true, 'data' => $user]);
                 } else {
                     $response = [

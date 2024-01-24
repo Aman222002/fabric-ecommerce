@@ -97,6 +97,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::post('/store', [UserController::class, 'store']);
         Route::post('/update/{id}', [UserController::class, 'update']);
         Route::post('/updateProfile/{id}', [UserController::class, 'updateProfile']);
+        Route::post('/updatePassword', [UserController::class, 'updatePassword']);
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
     });
     Route::group(["prefix" => "/company"], function () {
