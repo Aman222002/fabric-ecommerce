@@ -24,7 +24,8 @@ return new class extends Migration
     {
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->dropColumn('company_id');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 };
