@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 class CompanyController extends Controller
@@ -47,15 +48,15 @@ class CompanyController extends Controller
         //
         try {
             $input = $request->all();
-           $user = User::create([
-            'name'=>$input['name'],
-            'email'=>$input['email'],
-            'password'=>$input['password'],
-            'phone'=>$input['phone'],
-           ]);
-           $user->assignRole('Company Admin');
+            $user = User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => $input['password'],
+                'phone' => $input['phone'],
+            ]);
+            $user->assignRole('Company Admin');
             Company::create([
-                 'user_id'=>  $user->id,
+                'user_id' =>  $user->id,
                 'company_name' => $input['company_name'],
                 'company_email' => $input['company_email'],
                 'registration_number' => $input['registration_number'],
@@ -75,7 +76,19 @@ class CompanyController extends Controller
             ], 500);
         }
     }
-
+    /**
+     * to fetch all companies
+     */
+    public function getCompanies()
+    {
+        try {
+            $companies = Company::all();
+            return response()->json(['data' => $companies, 'status' => true], 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
     /**
      * Display the specified resource.
      */
@@ -98,6 +111,22 @@ class CompanyController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try {
+            $company = Company::find($id);
+            if ($company) {
+                $company->update($request->all());
+                return response()->json(['status' => true, 'message' => 'Company data updated successfully'], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'Company not found'
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -106,6 +135,26 @@ class CompanyController extends Controller
     public function destroy(string $id)
     {
         //
+        try {
+            $company = Company::find($id);
+            if ($company) {
+                $company->delete();
+                $response = [
+                    'status' => true,
+                    'data' => 'Company deleted Successsfully',
+                ];
+                return response()->json($response, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'no data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
     public function check(Request $request)
     {
@@ -114,23 +163,22 @@ class CompanyController extends Controller
                 'email' => 'required',
                 'password' => 'required|email',
             ]);
-          
+
             if (Auth::attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password'],
-            ])) 
-            $user = Auth::user();
+            ]))
+                $user = Auth::user();
             $roleName = $user->getRoleNames();
-            $user->role = $roleName;
-            {
+            $user->role = $roleName; {
                 if (Auth::user()->hasRole('Company Admin')) {
                     return response()->json([
                         'status' => true,
                         'message' => 'Logged in Successfully!',
-                        'data' => $user,  
+                        'data' => $user,
                     ], 200);
                 } else {
-                    Auth::logout(); 
+                    Auth::logout();
                 }
             }
             return response()->json([

@@ -18,7 +18,7 @@
 
             <v-list>
                 <v-list-item v-for="(item, i) in items" :key="i">
-                    <v-btn>
+                    <v-btn @click="logout(item.title)">
                         <a :href="item.href" style="text-decoration: none;"><span>
                                 <v-list-item>
                                     <v-icon>{{ item.icon }}</v-icon>
@@ -29,13 +29,6 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-
-        <!-- <v-list>
-            <v-list-item v-for="(item, i) in userprofile" :key="i" @click="handleItemClick(item)">
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-        </v-list>
-        </v-menu> -->
     </v-app-bar>
 </template>
 <script >
@@ -52,16 +45,30 @@ export default {
             },
             {
                 title: 'Logout',
-                icon: 'mdi-logout'
+                icon: 'mdi-logout',
             },
         ]);
         const Sidebar = ref(false);
+        const logout = (item) => {
+            if (item === 'Logout') {
+                window.axios.get('/admin/logout').then((response) => {
+                    console.log(response.data);
+                    if (response.data.status === true) {
+                        console.log('changed');
+                        window.location.href = '/login';
+                    }
+                })
+
+            } else {
+                console.log('not found');
+            }
+        }
         const toggleSidebar = () => {
             Sidebar.value = !Sidebar.value;
             eventBus.emit('sidebar-event', Sidebar.value);
         };
         return {
-            Sidebar, toggleSidebar, items
+            Sidebar, toggleSidebar, items, logout
         };
     },
 };

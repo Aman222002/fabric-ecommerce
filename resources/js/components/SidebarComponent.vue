@@ -13,15 +13,17 @@
             </v-list-item>
             <!---USer Area -->
             <!---Sidebar Items -->
-            <v-list-item v-for="item in items" :key="item.title" :to="item.to">
-                <a :href="item.href" style="text-decoration: none;"><span>
-                        <v-list-item>
+            <v-list-item v-for="item in items" :key="item.title">
+                <a :href="item.href" style="text-decoration: none; color: black;">
+                    <span>
+                        <v-list-item :class="{ 'v-list-item--active': isActiveItem(item) }" @mouseover="setHoverItem(item)"
+                            @mouseleave="clearHoverItem()">
                             <v-icon>{{ item.icon }}</v-icon>
                             {{ item.title }}
                         </v-list-item>
-                    </span></a>
+                    </span>
+                </a>
             </v-list-item>
-            <!---Sidebar Items -->
         </v-list>
     </v-navigation-drawer>
 </template>
@@ -32,6 +34,9 @@ export default {
     name: 'SidebarComponent',
     setup() {
         const Sidebar_drawer = ref();
+        const hoveredItem = ref({
+            item: null,
+        });
         const sidebar_event = (payload) => {
             Sidebar_drawer.value = payload;
         };
@@ -42,44 +47,63 @@ export default {
             {
                 title: 'Dashboard',
                 icon: 'mdi-view-dashboard',
-                to: '/dashboard/basic-dashboard',
+                href: '/admin/dashboard',
 
             },
             {
                 title: 'Users',
                 icon: 'mdi-account',
-                to: '/admin/user/index',
                 href: '/admin/users'
             },
             {
+                title: 'Companies',
+                icon: 'mdi-office-building',
+                href: '/admin/companies',
+            },
+            {
+                title: 'Company Representative',
+                icon: 'mdi-office-building',
+                href: '/admin/companies/',
+            },
+            {
+                title: 'All Companies',
+                icon: 'mdi-office-building',
+                href: '/admin/companies/',
+            },
+
+            {
                 title: 'Profile',
                 icon: 'mdi-account-circle',
-                to: '/admin/profile',
                 href: '/admin/profile'
             },
-            {
-                title: 'Alerts',
-                icon: 'mdi-alert',
-            },
-            {
-                title: 'Icons',
-                icon: 'mdi-emoticon',
-            },
-            {
-                title: 'Basic Table',
-                icon: 'mdi-table-column-width',
-            },
         ]);
+        const toggleMenu = (item) => {
+            item.menuVisible = !item.menuVisible;
+        }
+        const isActiveItem = (item) => {
+            return window.location.pathname === item.href;
+        };
+
+        const navigateTo = (url) => {
+            window.location.href = url;
+        };
+        const setHoverItem = (item) => {
+            hoveredItem.item = item;
+        };
+
+        const clearHoverItem = () => {
+            hoveredItem.item = null;
+        };
         return {
-            Sidebar_drawer, items
+            Sidebar_drawer, items, isActiveItem, hoveredItem, navigateTo, setHoverItem, clearHoverItem, toggleMenu
         }
     },
 }
 </script>
-<style lang="scss">
+<style>
 #main-sidebar {
-    box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
-    -webkit-box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 1px 0 20px rgba(101, 117, 163, 0.08);
+    -webkit-box-shadow: 1px 0 20px rgba(106, 159, 228, 0.08);
 
     .v-navigation-drawer__border {
         display: none;
@@ -87,17 +111,6 @@ export default {
 
     .v-list {
         padding: 8px 15px;
-    }
-
-    .v-list-item {
-        min-height: 35px;
-
-        &__icon--text,
-        &__icon:first-child {
-            justify-content: center;
-            text-align: center;
-            width: 20px;
-        }
     }
 
     .v-list-item__icon i {
@@ -108,31 +121,11 @@ export default {
         width: 16px;
         font-size: 16px;
     }
-
-    .profile-bg {
-        &.theme--dark.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-            opacity: 1;
-        }
-
-        .v-avatar {
-            padding: 15px 0;
-        }
-    }
-
-    .theme--dark.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-        opacity: 0.5;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
 }
 
+.v-list-item:hover,
 .v-list-item--active {
-    background-color: red;
-}
-
-.theme--dark.v-navigation-drawer {
-    background-color: #242a33 !important;
+    background-color: #1976D2;
+    color: white;
 }
 </style>
