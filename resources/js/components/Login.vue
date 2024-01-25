@@ -98,6 +98,7 @@ export default {
 </template>
   
 <script>
+
 export default {
     name: 'Login',
     data() {
@@ -106,6 +107,7 @@ export default {
                 email: '',
                 password: '',
             },
+
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -124,6 +126,7 @@ export default {
 
                 if (data.status === true) {
                     alert('Login successful');
+
                     window.location.href = './resume';
                 } else {
                     alert('Login failed');

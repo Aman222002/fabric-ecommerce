@@ -4,16 +4,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <!-- <title>{{ config('app.name', 'Laravel') }}</title> -->
-
 
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+
+
+    @section('scripts')
+    @parent
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+        async defer></script>
+    <script src="/js/mapInput.js"></script>
+    @stop
+    <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key={AIzaSyB6E8Zp9ZTTovGtmiumT9KWneM13zxNjAw}">
+    </script> -->
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
@@ -23,18 +30,16 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto">
-
                     </ul>
-
-
                     <ul class="navbar-nav ms-auto">
 
                         @guest
@@ -51,7 +56,8 @@
                         @endif
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
                             </a>
 
@@ -71,10 +77,12 @@
                 </div>
             </div>
         </nav>
+        <v-container>
+            <main class="">
+                @yield('content')
+            </main>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        </v-container>
     </div>
 </body>
 

@@ -7,9 +7,18 @@
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
+import DropZone from "dropzone-vue";
+
+import "dropzone-vue/dist/dropzone-vue.common.css";
+
+import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import { createPinia } from "pinia";
+
+const pinia = createPinia();
+
 import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
 const VueTelInputOptions = {
@@ -29,9 +38,10 @@ const vuetify = createVuetify({
     components,
     directives,
 });
-
+app.use(DropZone);
 app.use(vuetify);
 app.use(VueTelInput, VueTelInputOptions);
+
 import Registration from "./components/Registration.vue";
 app.component("registration-component", Registration);
 import Header from "./components/Header.vue";
@@ -66,5 +76,5 @@ app.component("dashboard-component", DashboardComponent);
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
-
+app.use(pinia);
 app.mount("#app");

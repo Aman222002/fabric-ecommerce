@@ -1,32 +1,28 @@
 <template>
-    <v-app>
-        <v-app-bar app>
-            <v-container>
-                <v-row align="center" justify="space-between">
-                    <v-col>
-                        <v-btn text to="/">Jobs</v-btn>
-                        <v-btn text to="/">Companies</v-btn>
-                        <v-btn text to="/">Services</v-btn>
-                        <v-btn text to="/">Companies</v-btn>
+    <v-container>
+        <v-row align="center" justify="space-between">
+            <v-col>
+                <v-btn text to="/">Jobs</v-btn>
+                <v-btn text to="/">Companies</v-btn>
+                <v-btn text to="/">Services</v-btn>
+                <v-btn text to="/">Companies</v-btn>
 
-                    </v-col>
+            </v-col>
 
-                    <v-btn to="/" outlined class="btn-dashboard">
+            <v-btn to="/" outlined class="btn-dashboard">
 
-                        <a href="login">Login</a>
-                    </v-btn>
-                    <v-btn to="/" outlined class="btn-dashboard">
-                        <a href="/registration"> Registration </a> </v-btn>
-                    <v-btn to="/" outlined class="btn-dashboard">
-                        <a href="/registration"> For employers</a> </v-btn>
+                <a href="login">Login</a>
+            </v-btn>
+            <v-btn to="/" outlined class="btn-dashboard">
+                <a href="/registration"> Registration </a> </v-btn>
+            <v-btn to="/" outlined class="btn-dashboard">
+                <a href="/registration"> For employers</a> </v-btn>
 
-                </v-row>
-            </v-container>
-        </v-app-bar>
+        </v-row>
+    </v-container>
 
-        <!-- Your main content goes here -->
 
-    </v-app>
+    <!-- Your main content goes here -->
 </template>
   
 <script>

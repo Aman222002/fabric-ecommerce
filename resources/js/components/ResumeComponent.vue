@@ -1,94 +1,73 @@
 
 <template>
-    <h1 style="text-align: center;">Fill your Personal Details</h1>
-    <v-container>
-        <v-stepper v-model="e1">
-            <template v-slot:default="{ prev, next }">
-                <v-stepper-header>
-                    <template v-for="n in steps" :key="`${n}-step`">
-                        <v-stepper-item :complete="e1 > n" :step="stepHeaders[n - 1]" :value="n" editable>
-                            <template v-slot:title>
-                                {{ stepTitles[n - 1] }}
+    <div>
+        <div>
+            <div style="text-align: center;">
+                <h1>Fill your Personal Details</h1>
+            </div>
+            <div>
+                <v-stepper v-model="e1">
+                    <template v-slot:default="{ prev }">
+                        <v-stepper-header>
+                            <template v-for="n in steps" :key="`${n}-step`">
+                                <v-stepper-item :complete="e1 > n" :step="stepHeaders[n - 1]" :value="n" editable>
+                                    <template v-slot:title>
+                                        {{ stepTitles[n - 1] }}
+                                    </template>
+                                </v-stepper-item>
+                                <v-divider v-if="n !== steps" :key="n"></v-divider>
                             </template>
-                        </v-stepper-item>
-                        <v-divider v-if="n !== steps" :key="n"></v-divider>
+                        </v-stepper-header>
+                        <v-stepper-window>
+                            <v-stepper-window-item v-for="n in steps" :key="`${n}-content`" :value="n">
+                                <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '100px'">
+                                    <v-form @submit.prevent="goToNext()" ref="myForm">
+
+                                        <template v-if="n === 1">
+                                            <div class="flex-container">
+                                                <div style="flex-grow: 1"> <users-details :form-data="formData"
+                                                        :name-rules="nameRules"></users-details></div>
+                                                <div style="flex-grow: 1"> <user-address :form-data="formData"
+                                                        :name-rules="nameRules"></user-address></div>
+                                            </div>
+                                        </template>
+                                        <template v-if="n === 2">
+                                            <div>
+                                                <users-qualifications :form-data="formData"
+                                                    :name-rules="nameRules"></users-qualifications>
+                                                <user-skills :form-data="formData" :name-rules="nameRules"></user-skills>
+
+                                            </div>
+                                        </template>
+                                        <template v-if="n === 3">
+                                            <div>
+                                                <work-experience :form-data="formData"
+                                                    :name-rules="nameRules"></work-experience>
+                                                <users-achievments :form-data="formData"
+                                                    :name-rules="nameRules"></users-achievments>
+                                            </div>
+                                        </template>
+                                        <template v-if="n === 4">
+                                            <div>
+
+                                                <user-profile :form-data="formData" :name-rules="nameRules"></user-profile>
+
+                                            </div>
+                                        </template>
+                                        <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="goToNext()"
+                                            color="#006400" style="font-size: 20%;"></v-stepper-actions>
+                                    </v-form>
+                                </v-card>
+                            </v-stepper-window-item>
+                        </v-stepper-window>
                     </template>
-                </v-stepper-header>
-                <v-stepper-window>
-                    <v-stepper-window-item v-for="n in steps" :key="`${n}-content`" :value="n">
-                        <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '500px'">
-                            <template v-slot:title>
-                                <v-row justify="center">
-                                    <v-col>
-                                        <span>{{ stepTitles[n - 1] }}</span>
-                                    </v-col>
-                                </v-row>
-                            </template>
-                            <v-form @submit.prevent="next">
-                                <v-container style="height:5%;width:80%">
-                                    <v-row v-if="n === 1">
-                                        <users-details :form-data="formData" :name-rules="nameRules"></users-details>
-                                    </v-row>
-                                </v-container>
-                                <v-row v-if="n === 2">
-
-                                    <user-address :form-data="formData" :name-rules="nameRules"></user-address>
-
-                                </v-row>
-                                <v-row v-if="n === 3">
-                                    <v-stepper-item :rules="[() => false]" value="3">
-                                        <template v-slot:title>
-                                            Custom channels
-                                        </template>
-
-                                        <template v-slot:subtitle>
-                                            Alert message
-                                        </template>
-                                    </v-stepper-item>
-                                    <v-container style="height:5%;width:80%">
-                                        <users-qualifications :form-data="formData"
-                                            :name-rules="nameRules"></users-qualifications>
-                                    </v-container>
-                                </v-row>
-                                <v-row v-if="n === 4">
-                                    <v-container style="height:10%;width:80%">
-                                        <user-skills :form-data="formData" :name-rules="nameRules"></user-skills>
-                                    </v-container>
-                                </v-row>
-                                <v-row v-if="n === 5">
-                                    <v-container style="height:10%;width:80%">
-
-                                        <user-profile :form-data="formData" :name-rules="nameRules"></user-profile>
-
-                                    </v-container>
-                                </v-row>
-                                <v-row v-if="n === 6">
-                                    <v-container style="height:10%;width:80%">
-
-                                        <users-achievments :form-data="formData"
-                                            :name-rules="nameRules"></users-achievments>
-
-                                    </v-container>
-                                </v-row>
-                                <v-row v-if="n === 7">
-                                    <v-container style="height:10%;width:80%">
-
-                                        <work-experience :form-data="formData" :name-rules="nameRules"></work-experience>
-
-                                    </v-container>
-                                </v-row>
-                            </v-form>
-                        </v-card>
-                    </v-stepper-window-item>
-                </v-stepper-window>
-                <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="next"
-                    color="#006400"></v-stepper-actions>
-            </template>
-        </v-stepper>
-
-    </v-container>
+                </v-stepper>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
+// import { defineStore } from 'pinia';
 import UsersDetails from './UserInformations/UsersDetails.vue';
 import UsersAchievments from './UserInformations/UsersAchievments.vue';
 import UserAddress from './UserInformations/UserAddress.vue';
@@ -110,43 +89,17 @@ export default {
     },
     data() {
         return {
-            maxSteps: 7,
+
+            // myStore: useMyStore(),
+
+            maxSteps: 4,
             e1: 1,
-            steps: 7,
-            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4", "step 5", , "step 7"],
-            stepTitles: ["Personal Details", "Address Details", "Education Details", " Add Skills", "Users Profile", "Achievments", "Work Experience"],
+            steps: 4,
+            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4"],
+            stepTitles: ["Personal Details", "Education Details", "Work Experience", "Hobbies"],
             stepBackgrounds: [],
-            formData: {
-                name: "",
-                email: "",
-                phone: "",
-                education: "",
-                degree: null,
-                otherDegree: "",
-                startingYear: null,
-                passingYear: null,
-            },
-            degreeOptions: [
-                "Bachelor's Degree",
-                "Master's Degree",
-                "Ph.D.",
-                "Other",
-            ],
-            educationRules: [(v) => !!v || "Education is required"],
-            certificationsRules: [(v) => !!v || "Certifications are required"],
-            workExperienceRules: [(v) => !!v || "Work Experience is required"],
-            nameRules: [
-                (v) => !!v || "Name is required",
-                (v) => (v && v.length >= 3) || "Name must be at least 3 characters",
-            ],
-            emailRules: [
-                (v) => !!v || "E-mail is required",
-                (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-            ],
-            phoneRules: [
-                (v) => !!v || "Phone is required",
-                (v) => (v && v.length >= 10) || "Phone must be at least 10 characters",
-            ],
+            formData: {},
+            nameRules: []
         };
     },
     computed: {
@@ -165,20 +118,67 @@ export default {
         },
     },
     methods: {
-        updateSteps() {
 
+        updateSteps() {
             this.steps = this.steps.map((step) => ((step - 2 + this.maxSteps - 1) % (this.maxSteps - 1)) + 2);
+
         },
+
 
         prev() {
             this.e1 = this.e1 > 1 ? this.e1 - 1 : this.steps;
         },
-
         next() {
             this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
         },
+        async goToNext() {
+            const { valid } = await this.$refs['myForm'][0].validate();
+
+            if (!valid) {
+                return false;
+            } else {
+                if (this.le == this.steps) {
+                    // const submittedData = {
+                    //     users: this.myStore.userDetails,
+                    //     educationDetails: this.myStore.educationDetails,
+                    //     fields: this.myStore.fields,
+                    //     address: this.myStore.address,
+                    //     achievments: this.myStore.achievments,
+                    //     workExperiences: this.myStore.experiences
+                    // };
+                    // this.myStore.submitForm(submittedData);
+
+                }
+                else {
+                    this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
+                }
+            }
+
+        },
+
 
     },
-
 };
+
+
 </script>
+<style scoped>
+.flex-container {
+    display: flex;
+    align-items: stretch;
+
+}
+
+.flex-container>div {
+
+    text-align: center;
+    line-height: 75px;
+    font-size: 30px;
+}
+
+.custom-stepper {
+    font-size: 40%;
+
+}
+</style>
+

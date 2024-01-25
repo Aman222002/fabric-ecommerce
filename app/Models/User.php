@@ -80,4 +80,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Skill::class);
     }
+    public function country()
+    {
+        return $this->hasOne(Country::class);
+    }
 }

@@ -1,135 +1,87 @@
 <template>
-    <v-container class="container-center">
+    <v-card-title>
+        Address Information
+        <div>
+            <v-row>
+                <v-col md="6">
+                    <v-text-field class="map-input" v-model="address.address1" :rules="[v => !!v || 'Address is required']"
+                        label="Street address line1" id="address1" required variant="outlined"
+                        prepend-inner-icon="mdi-map-marker"></v-text-field>
+                </v-col>
+                <v-col md="6">
+                    <v-text-field class="map-input" v-model="address.address2" label="Street address line2" id="address2"
+                        variant="outlined" prepend-inner-icon="mdi-map-marker"></v-text-field>
+                </v-col>
+            </v-row>
+            <input type="hidden" v-model="address.latitude" id="latitude" />
+            <input type="hidden" v-model="address.longitude" id="longitude" />
+            <v-row>
+                <v-col cols="12" md="4">
+                    <v-text-field v-model="address.city" :rules="[v => !!v || 'City is required']" label="City" required
+                        variant="outlined"></v-text-field>
+                </v-col>
+                <v-col cols="12" md="4">
+                    <v-text-field v-model="address.state" :rules="[v => !!v || 'State is required']" label="State" required
+                        variant="outlined"></v-text-field>
+                </v-col>
+                <v-col cols="12" md="4">
+                    <v-text-field v-model="address.zip_code"
+                        :rules="[v => !!v || 'Zip Code is required', v => /^\d{5}$/.test(v) || 'Invalid Zip Code']"
+                        label="Zip Code" variant="outlined"></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12" md="6">
+                    <v-text-field v-model="address.country" :rules="[v => !!v || 'Country is required']" label="Country"
+                        required variant="outlined"></v-text-field>
+                </v-col>
+                <v-col cols="12" md="6">
+                    <v-text-field v-model="address.county" label="County" variant="outlined"></v-text-field>
+                </v-col>
+            </v-row>
 
-        <v-card-text>
-            <v-form ref="form" @submit.prevent="submitForm">
-                <v-row align="center" justify="center">
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="address1" :rules="[v => !!v || 'Address is required']"
-                            label="Permanent address" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="address2" label="Correspondence Address"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-btn @click="getGeolocation">Get Geolocation</v-btn>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="latitude" label="Latitude"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="longitude" label="Longitude"></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="12" md="4">
-                        <v-text-field v-model="city" :rules="[v => !!v || 'City is required']" label="City"
-                            required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-text-field v-model="state" :rules="[v => !!v || 'State is required']" label="State"
-                            required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                        <v-text-field v-model="zip_code"
-                            :rules="[v => !!v || 'Zip Code is required', v => /^\d{5}$/.test(v) || 'Invalid Zip Code']"
-                            label="Zip Code"></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="country" :rules="[v => !!v || 'Country is required']" label="Country"
-                            required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                        <v-text-field v-model="county" label="County"></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-btn type="submit">Save Address</v-btn>
-            </v-form>
-        </v-card-text>
-
-    </v-container>
+        </div>
+    </v-card-title>
 </template>
   
 <script>
 import { ref } from 'vue';
+import { useMyStore } from '@/store';
 export default {
     name: "UserAddress",
     setup() {
-        const address1 = ref("");
-        const address2 = ref("");
-        const latitude = ref("");
-        const longitude = ref("");
-        const city = ref("");
-        const state = ref("");
-        const zip_code = ref("");
-        const country = ref("");
-        const county = ref("");
-
-        const getGeolocation = () => {
-            navigator.geolocation.getCurrentPosition((position) => {
-                latitude.value = position.coords.latitude;
-                longitude.value = position.coords.longitude;
-            });
+        const myStore = useMyStore();
+        const address = ref(myStore.address)
+        const userDetails = ref(myStore.userDetails);
+        return {
+            address,
+            userDetails
         };
-
-        const submitForm = () => {
+    },
+    methods: {
+        submitForm() {
             const formData = {
-                address1: address1.value,
-                address2: address2.value,
-                latitude: latitude.value,
-                longitude: longitude.value,
-                city: city.value,
-                state: state.value,
-                zip_code: zip_code.value,
-                country: country.value,
-                county: county.value,
+                address: myStore.address,
+                name: myStore.name,
+                email: myStore.email,
+                phone: myStore.phone,
             };
             axios.post('/user-address', formData)
                 .then(response => {
-                    // Handle successful response
+
                 })
                 .catch(error => {
-                    // Handle validation errors or other errors
+
                     if (error.response && error.response.status === 422) {
-                        // Handle validation errors, e.g., display them to the user
-                        console.log(error.response.data); // Log validation errors
+
+                        console.log(error.response.data);
                     } else {
-                        // Handle other errors
+
                         console.error(error.message);
                     }
                 });
         }
-        //     axios.post('/user-address', formData)
-        //         .then(response => {
-        //             console.log(formData);
-        //             // Handle success, e.g., show a success message
-        //             console.log('Form submitted successfully', response.data);
-        //         })
-        //         .catch(error => {
-        //             // Handle error, e.g., show an error message
-        //             console.error('Error submitting form', error);
-        //         });
-        // };
-
-
-        return {
-            address1,
-            address2,
-            latitude,
-            longitude,
-            city,
-            state,
-            zip_code,
-            country,
-            county,
-            getGeolocation,
-            submitForm,
-        };
-    },
+    }
 };
 </script>
   

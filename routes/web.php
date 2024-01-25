@@ -62,6 +62,7 @@ Route::post('/users-achievments', [UserAchievementController::class, 'store']);
 Route::post('/user-profile', [UserProfileController::class, 'store']);
 Route::post('/work_experience', [UserExperienceController::class, 'store']);
 Route::post('/user-address', [UserAddressController::class, 'store']);
+Route::post('/address', [UserAddressController::class, 'index']);
 Route::post('/users-qualifications', [QualificationsController::class, 'store']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/getuser', [LoginController::class, 'getUser']);

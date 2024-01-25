@@ -72,7 +72,7 @@ export default {
     },
 };
 </script>
-
+<!-- 
 <style scoped>
 .company-card:hover {
     background-color: red;
@@ -85,13 +85,6 @@ export default {
 
 .image-with-transition:hover {
     transform: scale(1.1);
-    /* Adjust the scale factor as needed */
 }
-
-/* .vertical-line {
-    border-left: 2px solid #fff;
-    height: 200px;
-    margin: 0 auto;
-} */
 </style>
-  
+   -->
