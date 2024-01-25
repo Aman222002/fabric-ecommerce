@@ -1,37 +1,28 @@
 <template>
     <v-navigation-drawer v-model="Sidebar_drawer">
         <v-list dense nav>
+            <!---USer Area -->
+            <v-list-item two-line class="px-0">
+                <v-avatar>
+                    <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+                </v-avatar>
+                <v-list-item>
+                    <v-list-item-title>Dohn Deo</v-list-item-title>
+                    <v-list-item-subtitle class="caption">Webdesigner</v-list-item-subtitle>
+                </v-list-item>
+            </v-list-item>
+            <!---USer Area -->
+            <!---Sidebar Items -->
             <v-list-item v-for="item in items" :key="item.title">
-                <template v-if="item.children">
-                    <v-list-item :class="{ 'v-list-item--active': isActiveItem(item) }" @mouseover="setHoverItem(item)"
-                        @mouseleave="clearHoverItem()">
-                        <v-icon>{{ item.icon }}</v-icon>
-                        {{ item.title }}
-                        <v-list v-if="item.menuVisible">
-                            <v-list-item v-for="child in item.children" :key="child.title">
-                                <a :href="child.href" style="text-decoration: none; color: black;">
-                                    <v-list-item :class="{ 'v-list-item--active': isActiveItem(child) }"
-                                        @onclick="toggleMenu">
-                                        <v-icon>{{ child.icon }}</v-icon>
-                                        {{ child.title }}
-                                    </v-list-item>
-                                </a>
-                            </v-list-item>
-                        </v-list>
-                    </v-list-item>
-                </template>
-
-                <template v-else>
-                    <a :href="item.href" style="text-decoration: none; color: black;">
-                        <span>
-                            <v-list-item :class="{ 'v-list-item--active': isActiveItem(item) }"
-                                @mouseover="setHoverItem(item)" @mouseleave="clearHoverItem()">
-                                <v-icon>{{ item.icon }}</v-icon>
-                                {{ item.title }}
-                            </v-list-item>
-                        </span>
-                    </a>
-                </template>
+                <a :href="item.href" style="text-decoration: none; color: black;">
+                    <span>
+                        <v-list-item :class="{ 'v-list-item--active': isActiveItem(item) }" @mouseover="setHoverItem(item)"
+                            @mouseleave="clearHoverItem()">
+                            <v-icon>{{ item.icon }}</v-icon>
+                            {{ item.title }}
+                        </v-list-item>
+                    </span>
+                </a>
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
@@ -67,20 +58,19 @@ export default {
             {
                 title: 'Companies',
                 icon: 'mdi-office-building',
-                children: [
-                    {
-                        title: 'Company Representative',
-                        icon: 'mdi-office-building',
-                        href: '/admin/companies',
-                    },
-                    {
-                        title: 'All Companies',
-                        icon: 'mdi-office-building',
-                        href: '/admin/companies',
-                    },
-                ],
-                menuVisible: false,
+                href: '/admin/companies',
             },
+            {
+                title: 'Company Representative',
+                icon: 'mdi-office-building',
+                href: '/admin/companies/',
+            },
+            {
+                title: 'All Companies',
+                icon: 'mdi-office-building',
+                href: '/admin/companies/',
+            },
+
             {
                 title: 'Profile',
                 icon: 'mdi-account-circle',

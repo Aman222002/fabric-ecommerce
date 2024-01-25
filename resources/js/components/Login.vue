@@ -1,7 +1,5 @@
-
 <template>
   <v-container fluid class="div1">
-
     <div class="register-form">
       <v-col cols="12" sm="6" md="6">
         <v-col class="mt-5"
@@ -17,7 +15,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <div class="text-hint">Don't have an account? <a href="/registration">Register</a>
+            <div class="text-hint">Don't have an account? <router-link to="/registration">Register</router-link>
             </div>
           </v-card-actions>
         </v-col>
@@ -27,37 +25,39 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
   name: 'Login',
-  data() {
-    return {
-      formData: {
-        email: '',
-        password: '',
-      },
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
-      ],
-    };
-  },
-  methods: {
-    async submitForm() {
+  setup() {
+    const formData = ref({
+      email: '',
+      password: '',
+    });
+
+    const emailRules = [
+      v => !!v || 'E-mail is required',
+      v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+    ];
+
+    const passwordRules = [
+      v => !!v || 'Password is required',
+      v => (v && v.length >= 6) || 'Password must be at least 6 characters',
+    ];
+
+    const submitForm = async () => {
       try {
-        const response = await window.axios.post('/login/check', this.formData);
+        const response = await window.axios.post('/login/check', formData.value);
         const data = response.data;
         console.log(data.data);
+
         if (data.status === true) {
           console.log(data.data.roles[0].name);
           alert('Login successful');
+
           if (data.data.roles[0].name == 'Admin') {
             window.location.href = './admin/dashboard';
-          }
-          else {
+          } else {
             window.location.href = './resume';
           }
         } else {
@@ -67,14 +67,20 @@ export default {
         console.error(error);
         alert('An error occurred during login');
       }
-    },
+    };
+
+    return {
+      formData,
+      emailRules,
+      passwordRules,
+      submitForm,
+    };
   },
 };
 </script>
 
 <style scoped>
 .register-form {
-  /* background-image: url('/storage/assets/p.jpg'); */
   background-size: cover;
   padding: 5vh;
   height: 100%;
@@ -84,6 +90,5 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   color: "#006400";
-
 }
 </style>

@@ -119,7 +119,7 @@ class CompanyController extends Controller
             } else {
                 $response = [
                     'status' => false,
-                    'message' => 'user not found'
+                    'message' => 'Company not found'
                 ];
                 return response()->json($response, 404);
             }

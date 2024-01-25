@@ -119,11 +119,6 @@ class UserController extends Controller
                     'email' => $request->input('email'),
                     'phone' => $request->input('phone'),
                 ]);
-                // $user->update([
-                //     'name' => $request->input('name'),
-                //     'email' => $request->input('email'),
-                //     'phone' => $request->input('phone'),
-                // ]);
                 return response()->json(['message' => 'User updated successfully', 'status' => true], 200);
             }
         } catch (\Exception $e) {
@@ -144,7 +139,7 @@ class UserController extends Controller
                     'new' => 'required|min:8',
                 ]);
                 if (Hash::check($request->input('current'), $user->password)) {
-                    $password = $user->password = Hash::make($request->input('new'));
+                    $password = Hash::make($request->input('new'));
                     $user->update([
                         'password' => $password,
                     ]);

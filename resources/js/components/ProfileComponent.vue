@@ -178,7 +178,7 @@ export default {
             if (formData.value.image) {
                 formDataUpload.append('user_image', formData.value.image);
             }
-            axios.post(`./user/updateProfile/${id}`, formDataUpload, {
+            axios.post(`./user/update-profile/${id}`, formDataUpload, {
                 header: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -188,7 +188,7 @@ export default {
         };
         const updatePassword = () => {
             console.log(formDetail.value);
-            axios.post(`./user/updatePassword`, formDetail.value).then((response) => {
+            axios.post(`./user/update-password`, formDetail.value).then((response) => {
                 console.log(response);
             })
         }
