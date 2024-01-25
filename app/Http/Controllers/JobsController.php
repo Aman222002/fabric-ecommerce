@@ -75,6 +75,7 @@ class JobsController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
+
             'title' => 'required',
             'category' => 'required|exists:categories,id',
             'jobType' => 'required|exists:job_types,id',
@@ -91,6 +92,7 @@ class JobsController extends Controller
             if (!$user->company) {
                 return response()->json(['status' => false, 'message' => 'User does not have a company'], 422);
             }
+           
             $company = $user->company;
             $input = $request->all();
             $job = Job::create([

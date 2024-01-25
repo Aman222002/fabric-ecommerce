@@ -24,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('post_jobs', function (Blueprint $table) {
             //
+            $table->dropColumn('company_id');
         });
     }
 };

@@ -97,8 +97,8 @@ app.component("jobcrud-component",JobCrud);
 import CompanyNav from "./components/CompanyNav.vue";
 app.component("companynav-component",CompanyNav);
 
-import CompanyFotter from "./components/CompanyFotter.vue";
-app.component("companyfotter-component",CompanyFotter);
+import CompanyFooter from "./components/CompanyFooter.vue";
+app.component("companyfooter-component",CompanyFooter);
 
 import CompanyPage from "./components/CompanyPage.vue";
 app.component("company-page",CompanyPage)
