@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // import "bootstrap";
+=======
+//import 'bootstrap';
+>>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

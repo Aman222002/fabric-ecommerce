@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+ // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable 
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
     const USER_CV = "cv";
@@ -50,6 +50,13 @@ class User extends Authenticatable
     // {
     //     return $this->belongsToMany(Role::class);
     // }
+<<<<<<< HEAD
 
 
+=======
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'user_id', 'id');
+    }
+>>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
 }

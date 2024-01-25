@@ -28,8 +28,14 @@ use App\Http\Controllers\JobTypesController;
 */
 
 
+<<<<<<< HEAD
 Route::get('/', function () {
     return view('layouts.default');
+=======
+Route::get('/', function()
+{
+   return view('companypage');
+>>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
 });
 Auth::routes();
 
@@ -57,9 +63,14 @@ Route::get('/postjob', function () {
 Route::get('/crud', function () {
     return view('jobcrud');
 });
-// Route::get('/home', [function () {
-//     return view('home');
-// }]);
+Route::get('/findcv', function () {
+    return view('findcv');
+});
+Route::get('/companypost', function () {
+    return view('companypost');
+});
+
+
 
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index'])->name('login');

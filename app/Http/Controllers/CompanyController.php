@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Http\Requests\CompanyRagistrationRequest;
+use App\Jobs\SendEmailJob;
+use App\Jobs\VerificationMail;
 
 class CompanyController extends Controller
 {
@@ -33,19 +36,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyRagistrationRequest $request)
     {
-        $validationRules = [
-            'company_name' => 'required|string|max:255',
-            'company_email' => 'required|email|unique:companies|max:255',
-            'registration_number' => 'required|string|max:255|unique:companies',
-            'company_address' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
-            'description' => 'nullable|string',
-            'status' => 'required|in:0,1',
-        ];
-        $request->validate($validationRules);
-        //
+        $request->validated();
         try {
             $input = $request->all();
             $user = User::create([
@@ -55,16 +48,23 @@ class CompanyController extends Controller
                 'phone' => $input['phone'],
             ]);
             $user->assignRole('Company Admin');
-            Company::create([
+            $company =  Company::create([
                 'user_id' =>  $user->id,
                 'company_name' => $input['company_name'],
                 'company_email' => $input['company_email'],
-                'registration_number' => $input['registration_number'],
-                'company_address' => $input['company_address'],
                 'phone_number' => $input['phone_number'],
                 'description' => $input['description'],
-                'status' => $input['status'],
             ]);
+            $company->address()->create([
+                'company_id' => $company->id,
+                'first_line_address' => $input['first_line_address'],
+                'street' => $input['street'],
+                'city' => $input['city'],
+                'state' => $input['state'],
+                'postal_code' => $input['postal_code'],
+            ]);
+
+            dispatch(new VerificationMail($user->email));
             return response()->json([
                 'status' => true,
                 'message' => "Registation Successfully"
@@ -76,6 +76,7 @@ class CompanyController extends Controller
             ], 500);
         }
     }
+<<<<<<< HEAD
     /**
      * to fetch all companies
      */
@@ -89,6 +90,8 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+=======
+>>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
     /**
      * Display the specified resource.
      */

@@ -1,26 +1,24 @@
 <template>
-  <v-container fluid class="div1">
-    <div class="register-form">
-      <v-col cols="12" sm="6" md="6">
-        <v-col class="mt-5"
-          style="background-color:#9a6a4f; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-          <v-card-title class="text-center">Login</v-card-title>
-          <v-card-text>
-            <v-form ref="form" @submit.prevent="submitForm">
-              <v-text-field v-model="formData.email" id="email" label="Email" type="email" :rules="emailRules" required
-                variant="outlined"></v-text-field>
-              <v-text-field v-model="formData.password" id="password" label="Password" type="password"
-                :rules="passwordRules" required variant="outlined"></v-text-field>
-              <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <div class="text-hint">Don't have an account? <router-link to="/registration">Register</router-link>
-            </div>
-          </v-card-actions>
-        </v-col>
-      </v-col>
-    </div>
+  <v-container fluid>
+    <v-card class="mt-5 mx-auto" max-width="400">
+      <v-card-title class="text-center">Log in</v-card-title>
+
+      <v-card-text>
+        <v-form @submit.prevent="login">
+          <v-text-field v-model="email" label="Email" type="email" :rules="[rules.required, rules.email]"></v-text-field>
+          <v-text-field v-model="password" label="Password" type="password"
+            :rules="[rules.required, rules.password]"></v-text-field>
+
+          <v-checkbox v-model="rememberMe" label="Remember Me"></v-checkbox>
+
+          <v-btn type="submit" color="primary" class="mt-3">Login</v-btn>
+        </v-form>
+
+        <v-card-actions>
+          <div class="text-hint">Already have an account?</div>
+        </v-card-actions>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
