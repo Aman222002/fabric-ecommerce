@@ -29,7 +29,7 @@ use App\Http\Controllers\JobTypesController;
 
 Route::get('/', function()
 {
-   return view('layouts.default');
+   return view('companypage');
 });
 // Route::get('{any}', function () {
 //     return view('app');
@@ -72,9 +72,14 @@ Route::get('/postjob', function () {
 Route::get('/crud', function () {
     return view('jobcrud');
 });
-// Route::get('/home', [function () {
-//     return view('home');
-// }]);
+Route::get('/findcv', function () {
+    return view('findcv');
+});
+Route::get('/companypost', function () {
+    return view('companypost');
+});
+
+
 
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);

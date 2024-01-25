@@ -14,11 +14,6 @@
                 <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
               </v-form>
             </v-card-text>
-  
-            <v-card-actions>
-              <div class="text-hint">Login As Company ? <a href="/job">Login here</a><br></div>
-              
-            </v-card-actions>
           </v-card>
         </v-col>
         <v-col cols="12" sm="8" md="4">

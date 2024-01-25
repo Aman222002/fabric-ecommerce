@@ -1,9 +1,8 @@
 <template>
-  <v-btn color="success"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
+  <v-btn color="success" style="margin-top: 40px;"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
     <v-table>
       <thead>
         <tr>
-          <th class="text-left">Id</th>
           <th class="text-left">Company Name</th>
           <th class="text-left">Job Title</th>
           <th class="text-left">Vacancy</th>
@@ -14,8 +13,7 @@
       </thead>
       <tbody>
         <tr v-for="job in jobs" :key="job.id">
-          <td>{{ job.id }}</td>
-          <td>{{ job.company_name }}</td>
+          <td>{{ job.company.company_name }}</td>
           <td>{{ job.title }}</td>
           <td>{{ job.vacancy }}</td>
           <td>{{ job.salary }}</td>
@@ -31,10 +29,11 @@
     <v-card>
       <v-card-title>Edit Job</v-card-title>
       <v-card-text>
-        <v-text-field v-model="editedJob.title" label="Job Title"></v-text-field>
-        <v-text-field v-model="editedJob.vacancy" label="Vacancy"></v-text-field>
-        <v-text-field v-model="editedJob.experience" label="Experience"></v-text-field>
+        <v-text-field variant="outlined" v-model="editedJob.title" label="Job Title"></v-text-field>
+        <v-text-field variant="outlined" v-model="editedJob.vacancy" label="Vacancy"></v-text-field>
+        <v-text-field variant="outlined" v-model="editedJob.experience" label="Experience"></v-text-field>
         <v-text-field
+        variant="outlined"
               v-model="editedJob.salary"
               label="Salary"
               placeholder="Salary"

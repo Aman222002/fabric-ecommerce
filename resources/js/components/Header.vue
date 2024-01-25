@@ -4,12 +4,11 @@
       <v-row align="center" justify="space-between">
         <v-col class="nav-links">
           <a href="/home" class="nav-link">Home</a>
-          <a href="/job" class="nav-link">Post a Job</a>
-          <a href="/" class="nav-link">Find CVs</a>
+          <!-- <a href="/login" class="nav-link">Login</a> -->
+          <!-- <a href="/" class="nav-link">Find CVs</a>
           <a href="/product" class="nav-link">Products</a>
-          <a href="/" class="nav-link">Resources</a>
+          <a href="/" class="nav-link">Resources</a> -->
         </v-col>
-
         <v-col class="nav-links">
           <a href="/login" class="btn-dashboard outlined">
             Login
@@ -17,6 +16,7 @@
           <a href="/registration" class="btn-dashboard outlined">
             Registration
           </a>
+          <a href="/job" class="nav-link" style="float: right;">Login as Company</a>
         </v-col>
       </v-row>
     </v-container>
