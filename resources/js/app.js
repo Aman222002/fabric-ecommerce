@@ -17,20 +17,18 @@ import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.light.css";
 const emitter = mitt();
 import "vue-tel-input/vue-tel-input.css";
-import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
+import { createPinia } from "pinia";
 
-import { createPinia } from 'pinia'
-
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 const pinia = createPinia({
     components,
-    directives
-  });
-  pinia.use(piniaPluginPersistedstate)
+    directives,
+});
+pinia.use(piniaPluginPersistedstate);
 
 const VueTelInputOptions = {
     mode: "national",
@@ -43,8 +41,8 @@ const VueTelInputOptions = {
  */
 const app = createApp({
     theme: {
-        defaultTheme: 'light'
-    }
+        defaultTheme: "light",
+    },
 });
 const vuetify = createVuetify({
     components,
@@ -88,7 +86,7 @@ import { DxTooltip } from "devextreme-vue/tooltip";
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
-app.use(VueTelInput, VueTelInputOptions);
+// app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
 
@@ -149,19 +147,16 @@ const component = {
     DxExport,
 };
 
-<<<<<<< HEAD
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
-import Home from "./components/Home.vue";
-app.component("home-component", Home);
-=======
-import DashboardComponent from "./components/DashboardComponent.vue";
-app.component("dashboard-component", DashboardComponent);
+// import Home from "./components/Home.vue";
+// app.component("home-component", Home);
+// import DashboardComponent from "./components/DashboardComponent.vue";
+// app.component("dashboard-component", DashboardComponent);
 
 import FindCv from "./components/FindCv.vue";
-app.component("findcv-component",FindCv);
->>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
+app.component("findcv-component", FindCv);
 
 import Job from "./components/Job.vue";
 app.component("job-component", Job);
@@ -181,21 +176,14 @@ app.component("jobcrud-component", JobCrud);
 import CompanyNav from "./components/CompanyNav.vue";
 app.component("companynav-component", CompanyNav);
 
-<<<<<<< HEAD
-import CompanyFotter from "./components/CompanyFotter.vue";
-app.component("companyfotter-component", CompanyFotter);
-=======
 import CompanyFooter from "./components/CompanyFooter.vue";
-app.component("companyfooter-component",CompanyFooter);
+app.component("companyfooter-component", CompanyFooter);
 
 import CompanyPage from "./components/CompanyPage.vue";
-app.component("company-page",CompanyPage)
-
+app.component("company-page", CompanyPage);
 
 import CompanyPost from "./components/CompanyPost.vue";
-app.component("company-post",CompanyPost)
-
->>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
+app.component("company-post", CompanyPost);
 
 /**
  * The following block of code may be used to automatically register your

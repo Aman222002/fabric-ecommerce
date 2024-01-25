@@ -10,11 +10,8 @@
             <DxColumn data-field="company_email" data-type="string">
                 <DxRequiredRule />
             </DxColumn>
-            <DxColumn data-field="registration_number" data-type="string">
-            </DxColumn>
-            <DxColumn data-field="company_address" data-type="string" />
             <DxColumn data-field="description" data-type="string" />
-            <DxColumn data-field="phone_number" data-type="number" />
+            <DxColumn data-field="phone_number" data-type="string" />
             <DxColumn data-field="name" data-type="string" caption="User Name" :visible="showColumn">
                 <DxPatternRule :pattern="namePattern" message="Name should of min 3 and max 10 word" />
             </DxColumn>
@@ -28,6 +25,10 @@
             <DxColumn data-field="phone" data-type="string" caption="User Phone" :visible="showColumn">
                 <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
             </DxColumn>
+            <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
+            <template #masterDetailTemplate="{ data: representative }">
+                <DetailTemplate :template-data="representative" />
+            </template>
             <DxSummary>
                 <DxTotalItem column="id" summary-type="count" />
             </DxSummary>
@@ -42,6 +43,7 @@ import {
     DxScrolling,
     DxSummary,
     DxLookup,
+    DxMasterDetail,
     DxSearchPanel,
     DxTotalItem,
     DxRequiredRule,
@@ -78,7 +80,7 @@ export default {
         };
     },
 
-    components: { DxRequiredRule }
+    components: { DxRequiredRule, }
 }
 </script>
 <style scoped>

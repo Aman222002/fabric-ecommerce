@@ -190,6 +190,26 @@ export default {
             console.log(formDetail.value);
             axios.post(`./user/update-password`, formDetail.value).then((response) => {
                 console.log(response);
+                if (response.data.status === true) {
+                    window.Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        icon: 'success',
+                        title: 'Password updated successfully!',
+                    });
+                }
+            }).catch((error) => {
+                console.log('here');
+                window.Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    icon: 'error',
+                    title: 'Incoreect Password!',
+                });
             })
         }
         return {

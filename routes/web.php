@@ -28,14 +28,8 @@ use App\Http\Controllers\JobTypesController;
 */
 
 
-<<<<<<< HEAD
 Route::get('/', function () {
-    return view('layouts.default');
-=======
-Route::get('/', function()
-{
-   return view('companypage');
->>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
+    return view('companypage');
 });
 Auth::routes();
 

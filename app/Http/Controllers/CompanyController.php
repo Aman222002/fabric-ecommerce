@@ -76,7 +76,6 @@ class CompanyController extends Controller
             ], 500);
         }
     }
-<<<<<<< HEAD
     /**
      * to fetch all companies
      */
@@ -90,8 +89,6 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-=======
->>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
     /**
      * Display the specified resource.
      */

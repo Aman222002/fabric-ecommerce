@@ -4,10 +4,10 @@
       <v-card-title class="text-center">Log in</v-card-title>
 
       <v-card-text>
-        <v-form @submit.prevent="login">
-          <v-text-field v-model="email" label="Email" type="email" :rules="[rules.required, rules.email]"></v-text-field>
-          <v-text-field v-model="password" label="Password" type="password"
-            :rules="[rules.required, rules.password]"></v-text-field>
+        <v-form @submit.prevent="submitForm()">
+          <v-text-field v-model="formData.email" label="Email" type="email" :rules="emailRules"></v-text-field>
+          <v-text-field v-model="formData.password" label="Password" type="password"
+            :rules="passwordRules"></v-text-field>
 
           <v-checkbox v-model="rememberMe" label="Remember Me"></v-checkbox>
 
