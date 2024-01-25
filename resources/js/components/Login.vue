@@ -14,7 +14,7 @@
         </v-form>
 
         <v-card-actions>
-          <div class="text-hint">Already have an account? <router-link to="/Registration">Sign up</router-link></div>
+          <div class="text-hint">Already have an account?</div>
         </v-card-actions>
       </v-card-text>
     </v-card>

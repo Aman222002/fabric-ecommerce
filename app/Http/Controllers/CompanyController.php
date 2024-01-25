@@ -37,26 +37,32 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
-       $request->validated();
+        $request->validated();
         try {
             $input = $request->all();
-           $user = User::create([
-            'name'=>$input['name'],
-            'email'=>$input['email'],
-            'password'=>$input['password'],
-            'phone'=>$input['phone'],
-           ]);
-           $user->assignRole('Company Admin');
-            Company::create([
-                 'user_id'=>  $user->id,
+            $user = User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => $input['password'],
+                'phone' => $input['phone'],
+            ]);
+            $user->assignRole('Company Admin');
+            $company =  Company::create([
+                'user_id' =>  $user->id,
                 'company_name' => $input['company_name'],
                 'company_email' => $input['company_email'],
-                'registration_number' => $input['registration_number'],
-                'company_address' => $input['company_address'],
                 'phone_number' => $input['phone_number'],
                 'description' => $input['description'],
-                'status' => $input['status'],
             ]);
+            $company->address()->create([
+                'company_id' => $company->id,
+                'first_line_address' => $input['first_line_address'],
+                'street' => $input['street'],
+                'city' => $input['city'],
+                'state' => $input['state'],
+                'postal_code' => $input['postal_code'],
+            ]);
+
             dispatch(new VerificationMail($user->email));
             return response()->json([
                 'status' => true,
@@ -69,7 +75,6 @@ class CompanyController extends Controller
             ], 500);
         }
     }
-
     /**
      * Display the specified resource.
      */
@@ -108,23 +113,22 @@ class CompanyController extends Controller
                 'email' => 'required',
                 'password' => 'required|email',
             ]);
-          
+
             if (Auth::attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password'],
-            ])) 
-            $user = Auth::user();
+            ]))
+                $user = Auth::user();
             $roleName = $user->getRoleNames();
-            $user->role = $roleName;
-            {
+            $user->role = $roleName; {
                 if (Auth::user()->hasRole('Company Admin')) {
                     return response()->json([
                         'status' => true,
                         'message' => 'Logged in Successfully!',
-                        'data' => $user,  
+                        'data' => $user,
                     ], 200);
                 } else {
-                    Auth::logout(); 
+                    Auth::logout();
                 }
             }
             return response()->json([

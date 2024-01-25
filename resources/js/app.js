@@ -7,13 +7,28 @@
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
+
+import 'vuetify/styles'
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+
 import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+
+
+import { createPinia } from 'pinia'
+
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+
+const pinia = createPinia({
+    components,
+    directives
+  });
+  pinia.use(piniaPluginPersistedstate)
 
 const VueTelInputOptions = {
     mode: "national",
@@ -26,7 +41,11 @@ const VueTelInputOptions = {
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({});
+const app = createApp({
+    theme: {
+        defaultTheme: 'light'
+      }
+});
 
 const vuetify = createVuetify({
     components,
@@ -34,6 +53,7 @@ const vuetify = createVuetify({
 });
 
 app.use(vuetify);
+app.use(pinia);
 app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
 
@@ -82,6 +102,10 @@ app.component("companyfotter-component",CompanyFotter);
 
 import CompanyPage from "./components/CompanyPage.vue";
 app.component("company-page",CompanyPage)
+
+
+import CompanyPost from "./components/CompanyPost.vue";
+app.component("company-post",CompanyPost)
 
 
 /**

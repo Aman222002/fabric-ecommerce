@@ -9,22 +9,24 @@
           </v-card-title>
           <v-card-text class="card-form p-4">
             <v-text-field
+            variant="outlined"
               v-model="job.title"
               label="Title"
               placeholder="Job Title"
             ></v-text-field>
            
 
-            <v-select v-model="job.category"  :items="categories"
+            <v-select  variant="outlined" v-model="job.category"  :items="categories"
                       item-title="name" item-value="id" label="Select Category" 
                     ></v-select>
 
-                    <v-select v-model="job.jobType"  :items="jobTypes"
+                    <v-select  variant="outlined" v-model="job.jobType"  :items="jobTypes"
                       item-title="name" item-value="id" label="Select JobType" 
                     ></v-select>
 
            
             <v-text-field
+            variant="outlined"
               v-model="job.vacancy"
               type="number"
               min="1"
@@ -32,50 +34,46 @@
               placeholder="Vacancy"
             ></v-text-field>
             <v-text-field
+            variant="outlined"
               v-model="job.salary"
               label="Salary"
               placeholder="Salary"
             ></v-text-field>
             <v-text-field
+            variant="outlined"
               v-model="job.location"
               label="Location"
               placeholder="Location"
             ></v-text-field>
             <v-textarea
+            variant="outlined"
               v-model="job.description"
               label="Description"
               placeholder="Description"
             ></v-textarea>
             <v-text-field
+            variant="outlined"
               v-model="job.qualifications"
               label="Qualifications"
               placeholder="Qualifications"
             ></v-text-field>
             <v-select
+            variant="outlined"
               v-model="job.experience"
               :items="experienceOptions"
               label="Experience"
               placeholder="Select Experience"
             ></v-select>
-            <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Company Details</h3>
+            <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Company Details</h3><br>
             <v-text-field
-              v-model="job.companyname"
-              label="Name"
-              placeholder="Company Name"
-            ></v-text-field>
-            <v-text-field
-              v-model="job.companylocation"
-              label="Location"
-              placeholder="Location"
-            ></v-text-field>
-            <v-text-field
+            variant="outlined"
               v-model="job.companywebsite"
               label="Website"
               placeholder="Website"
             ></v-text-field>
           </v-card-text>
           <v-card-actions class="p-4">
-            <v-btn type="submit" >Save Job</v-btn>
+            <v-btn type="submit" color="primary" style="background-color: white;">Save Job</v-btn>
           </v-card-actions>
         </v-card>
      
@@ -99,8 +97,6 @@ export default {
       description: "",
       qualifications: "",
       experience: "",
-      companyname: "",
-      companylocation: "",
       companywebsite: "",
     });
     const categories = ref([]);

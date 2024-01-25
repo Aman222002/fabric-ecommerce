@@ -32,7 +32,7 @@ Indeed helps you connect with talent, on desktop and mobile, <br>so you can make
           <v-card-title style="font-size: 30px;">Build your
 job post</v-card-title>
           <v-card-text style="font-style: 20px; margin-top: 10px;">
-            Then just add a title, description and location to your job post,<br> and you're ready to go.
+            Then just add a title, description and location to your job post, and you're ready to go.
           </v-card-text>
         </v-card>
       </v-col>

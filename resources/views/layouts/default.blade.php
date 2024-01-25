@@ -22,7 +22,9 @@
     <v-app>
        <companynav-component></companynav-component>
         <v-main>
+           
             @yield('content')
+           
         </v-main>
         <companyfotter-component></companyfotter-component>
        </v-app>

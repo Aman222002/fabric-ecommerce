@@ -1,39 +1,43 @@
 <template>
-  
   <v-container class="my-8">
-    <v-card class="pa-6 registration-form">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
       <v-form ref="form" @submit.prevent="submitForm" class="custom-form">
-        <v-row>
-          <!-- Left Side: User Detail -->
-          <v-col cols="12" md="6" class="custom-col left-side">
-            <h1 class="mb-4 form-title">User Detail:</h1>
-            <v-text-field v-model="company.name" label="User Name" :rules="nameRules" required outlined></v-text-field>
-            <v-text-field v-model="company.email" label="User Email" :rules="emailRules" required outlined></v-text-field>
-            <v-text-field v-model="company.password" label="User Password" :rules="passwordRules" type="password" required outlined></v-text-field>
-            <v-text-field v-model="company.phone" label="Phone" type="phone" required outlined></v-text-field>
-          </v-col>
+        <div class="custom-col left-side">
+          <h3 class="mb-4 form-title">User Detail:</h3>
+          <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules" required outlined style="margin-bottom: 10px; margin-top: 5px; max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.email" label=" Representative Email" :rules="emailRules" required outlined style="margin-bottom: 10px;max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.password" label=" Password" :rules="passwordRules" type="password" required outlined style="margin-top: 10px;max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.phone" label="Phone" type="phone" required outlined style="margin-top: 10px;max-width: 140%;"></v-text-field><br>
+        </div>
+        <div class="custom-col right-side">
+          <div class="company-details">
+            <h3 class="mb-4 form-title">Company Details:</h3>
+            <v-text-field variant="outlined" v-model="company.company_name" label="Company Name" required outlined style="margin-bottom: 10px; max-width: 140%;"></v-text-field>
+            <v-text-field variant="outlined" v-model="company.company_email" label="Company Email" required outlined style="margin-bottom: 10px; max-width: 140%;"></v-text-field>
+            <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number" required outlined style="margin-bottom: 10px; max-width: 140%;"></v-text-field>
+            <v-textarea variant="outlined" v-model="company.description" label="Description" outlined style="margin-bottom: 10px; max-width: 140%;"></v-textarea>
+          </div>
+        </div>
 
-          <!-- Right Side: Company Details -->
-          <v-col cols="12" md="6" class="custom-col right-side">
-            <div class="company-details">
-              <h1 class="mb-4 form-title">Company Details:</h1>
-              <v-text-field v-model="company.company_name" label="Company Name" required outlined></v-text-field>
-              <v-text-field v-model="company.company_email" label="Company Email" required outlined></v-text-field>
-              <v-text-field v-model="company.registration_number" label="Registration Number" outlined></v-text-field>
-              <v-text-field v-model="company.company_address" label="Company Address" required outlined></v-text-field>
-              <v-text-field v-model="company.phone_number" label="Phone Number" required outlined></v-text-field>
-              <v-textarea v-model="company.description" label="Description" outlined></v-textarea>
-              <v-select v-model="company.status" :items="['0', '1']" label="Status" outlined></v-select>
-            </div>
-          </v-col>
-        </v-row>
+        <div class="custom-col left-side">
+          <h3 class="mb-4 form-title">Company Address:</h3>
+          <v-text-field variant="outlined" v-model="company.first_line_address" label="First_Line_Address" outlined style="max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.street" label="Street" outlined style="max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.city" label="City" outlined style="max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.state" label="State" outlined style="max-width: 140%;"></v-text-field>
+          <v-text-field variant="outlined" v-model="company.postal_code" label="Postal Code" outlined style="max-width: 140%;"></v-text-field>
+        </div>
 
-        <!-- Submit Button -->
+      
         <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
+
       </v-form>
-    </v-card>
+    </v-col>
+    </v-row>
   </v-container>
 </template>
+
 
 <script>
 import { ref } from 'vue';
@@ -48,8 +52,11 @@ export default {
       phone: '',
       company_name: '',
       company_email: '',
-      registration_number: '',
-      company_address: '',
+      first_line_address: '',
+      street: '',
+      state: '',
+      city: '',
+      postal_code:'',
       phone_number: '',
       description: '',
       status: '1',
@@ -71,7 +78,6 @@ export default {
           console.error('Error:', error);
         });
     };
-
     return {
       company,
       submitForm,
@@ -82,49 +88,17 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-.registration-form {
-  max-width: 1000px;
+
+
+/* Optional: Add some margin or padding if needed */
+.v-row.center {
   margin: auto;
 }
 
-.custom-col {
-  width: 48%;
-}
-
-.left-side {
-  border-right: 2px solid #ec9898;
-  padding-right: 20px;
-  max-height: 600px; /* Increased max-height for better readability */ 
-  overflow-y: auto;
-}
-
-.right-side {
-  padding-left: 20px;
-}
-
-.form-title {
-  font-size: xx-large;
-  margin-top: 20px;
-}
-
-.custom-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.custom-input {
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.custom-button {
-  margin-top: 20px;
-  width: 100%;
-}
-
-.company-details {
-  padding-left: 20px;
+.v-col.center {
+  text-align: center;
 }
 </style>
+
+

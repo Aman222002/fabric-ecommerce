@@ -12,8 +12,6 @@ class Company extends Model
         'user_id',
         'company_name',
         'company_email',
-        'registration_number',
-        'company_address',
         'phone_number',
         'description',
         'status',
@@ -21,5 +19,13 @@ class Company extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function jobs()
+    {
+        return $this->hasMany(Job::class, 'company_id', 'id');
+    }
+    public function address()
+    {
+        return $this->hasOne(Address::class);
     }
 }

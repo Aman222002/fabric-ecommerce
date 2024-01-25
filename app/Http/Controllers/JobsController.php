@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\Category;
+use App\Models\Company;
 use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,11 +22,22 @@ class JobsController extends Controller
     public function index()
     {
         try {
-            // $jobs = Job::all();
-            $jobs = Job::join('companies', 'post_jobs.id', '=', 'companies.id')
-            ->whereColumn('post_jobs.company_name', '=', 'companies.company_name')
-            ->select('post_jobs.*')
-            ->get();
+            $user = auth()->user();
+
+            $companyId = 0;
+
+            if($user->hasRole('Company Admin')){
+                $companyId =  $user->company ? $user->company->id : 0;
+            }
+            
+            $jobs = Job::with("company");
+
+            if($companyId != 0){
+                $jobs->where('company_id', $companyId);
+            }
+            $jobs =   $jobs->get();
+           // $jobs = Job::all();
+          
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -41,17 +53,17 @@ class JobsController extends Controller
         try {
             $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
             $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
-        
+
             if ($categories->isEmpty() || $jobTypes->isEmpty()) {
                 return response()->json(['message' => 'No categories or job types found', 'status' => false], 404);
-            }else {
-        
-            return response()->json([
-                'categories' => $categories,
-                'jobTypes' => $jobTypes,
-                'status' => true, 
-            ], 200);
-        }
+            } else {
+
+                return response()->json([
+                    'categories' => $categories,
+                    'jobTypes' => $jobTypes,
+                    'status' => true,
+                ], 200);
+            }
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error retrieving data', 'error' => $e->getMessage(), 'status' => false], 500);
         }
@@ -61,7 +73,7 @@ class JobsController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'category' => 'required|exists:categories,id',
@@ -69,16 +81,20 @@ class JobsController extends Controller
             'vacancy' => 'required|integer',
             'location' => 'required',
             'experience' => 'required|string',
-            'companyname' => 'required|string',
-            'companylocation' => 'required|string',
             'companywebsite' => 'required|url',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => $validator->errors()], 422);
         }
-        try{
+        try {
+            $user = Auth::user();
+            if (!$user->company) {
+                return response()->json(['status' => false, 'message' => 'User does not have a company'], 422);
+            }
+            $company = $user->company;
             $input = $request->all();
-            $job= Job::create([
+            $job = Job::create([
+                'company_id' =>  $company->id,
                 'title' => $input['title'],
                 'category_id' => $input['category'],
                 'job_type_id' => $input['jobType'],
@@ -88,18 +104,15 @@ class JobsController extends Controller
                 'description' => $input['description'],
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
-                'company_name' => $input['companyname'],
-                'company_location' => $input['companylocation'],
                 'company_website' => $input['companywebsite'],
-            ]);  
-           
+            ]);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',
                 'data' => $job,
             ], 201);
-
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -113,7 +126,7 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-        
+
             if ($job) {
                 return response()->json(['status' => true, 'data' => $job], 200);
             } else {
@@ -128,17 +141,17 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
- 
+
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request, $id = 0)
     {
-        
+
         try {
             $job = Job::find($id);
-        
+
             if ($job) {
                 return response()->json(['status' => true, 'data' => $job], 200);
             } else {
@@ -152,7 +165,6 @@ class JobsController extends Controller
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
-        
     }
 
     /**
@@ -162,13 +174,13 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-        
+
             if ($job) {
                 $input = $request->all();
                 $job->update($input);
                 $response = [
                     'status' => true,
-                    'data' => $job, 
+                    'data' => $job,
                 ];
                 return response()->json($response, 200);
             } else {
@@ -191,7 +203,7 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-        
+
             if ($job) {
                 $job->delete();
                 $response = [
@@ -209,7 +221,6 @@ class JobsController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
-        }   
+        }
     }
 }
-

@@ -75,6 +75,9 @@ Route::get('/crud', function () {
 Route::get('/findcv', function () {
     return view('findcv');
 });
+Route::get('/companypost', function () {
+    return view('companypost');
+});
 
 
 

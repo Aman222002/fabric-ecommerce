@@ -11,6 +11,7 @@ class Job extends Model
     protected $table ='post_jobs';
     protected $primaryKey='id';
     protected $fillable = [
+        'company_id',
         'title',
         'category_id',
         'job_type_id',
@@ -20,10 +21,10 @@ class Job extends Model
         'description',
         'qualifications',
         'experience',
-        'company_name',
-        'company_location',
         'company_website',
     ];
+
+   
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -32,9 +33,13 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class);
     }
+   
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_name', 'company_name');
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
-    
 }

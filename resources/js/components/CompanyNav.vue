@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar app class="custom-app-bar">
-    <v-container>
+  <v-app-bar app class="custom-app-bar" color="primary">
+   
       <v-row align="center" justify="space-between">
         <v-col class="nav-links">
           <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
@@ -10,18 +10,20 @@
           <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
           
         </v-col>
-        <!-- <a href="/logout" class="nav-link" style="float: right; margin-top: 15px;">Logout</a> -->
+        <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
       </v-row>
-    </v-container>
+    
   </v-app-bar>
 </template>
 
 <script>
 import { reactive, onMounted } from 'vue';
+import { useUsersStore } from "../store/user";
 
 export default {
   name: "CompanyNav",
   setup() {
+    const usersStore = useUsersStore();
     const state = reactive({
       activeLink: window.location.pathname
     });
@@ -34,9 +36,14 @@ export default {
     const isActive = (link) => {
       return state.activeLink === link;
     };
-
+    const logout = () => {
+      usersStore.isLogOut();
+      window.location.href = '/job';
+    };
     return {
       isActive,
+      logout,
+      usersStore
     };
   },
 };
@@ -78,7 +85,7 @@ export default {
 }
 
 .v-app-bar {
-  background-color: #add8e6;
+  /* background-color: #236aee; */
   border-bottom: 1px solid #161414;
 }
 

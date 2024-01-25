@@ -20,6 +20,7 @@
         "@mdi/font": "^7.4.47",
         "esbuild": "^0.19.11",
         "pinia": "^2.1.7",
+        "pinia-plugin-persistedstate": "^3.2.1",
         "vite-plugin-vuetify": "^2.0.1",
         "vue-sweetalert2": "^5.0.5",
         "vue-tel-input": "^8.3.1",
