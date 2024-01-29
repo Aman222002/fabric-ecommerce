@@ -8,27 +8,25 @@ import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
 
-import 'vuetify/styles'
+import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
 import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
-import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
+import { createPinia } from "pinia";
 
-import { createPinia } from 'pinia'
-
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 const pinia = createPinia({
     components,
-    directives
-  });
-  pinia.use(piniaPluginPersistedstate)
+    directives,
+});
+pinia.use(piniaPluginPersistedstate);
 
 const VueTelInputOptions = {
     mode: "national",
@@ -43,32 +41,30 @@ const VueTelInputOptions = {
 
 const app = createApp({
     theme: {
-        defaultTheme: 'light'
-      }
+        defaultTheme: "light",
+    },
 });
 
 const vuetify = createVuetify({
     components,
     directives,
 });
-
+// app.use(DropZone);
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
-
 app.component("registration-component", Registration);
-
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
-
-import Footer from "./components/Footer.vue";
-app.component("footer-component", Footer);
-
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
+import Home from "./components/Home.vue";
+app.component("home-component", Home);
+import ResumeComponent from "./components/ResumeComponent.vue";
+app.component("resume-component", ResumeComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
@@ -77,32 +73,31 @@ import DashboardComponent from "./components/DashboardComponent.vue";
 app.component("dashboard-component", DashboardComponent);
 
 import FindCv from "./components/FindCv.vue";
-app.component("findcv-component",FindCv);
+app.component("findcv-component", FindCv);
 
 import Job from "./components/Job.vue";
-app.component("job-component",Job);
+app.component("job-component", Job);
 
 import CompanyRegister from "./components/CompanyRegister.vue";
-app.component("company-component",CompanyRegister)
+app.component("company-component", CompanyRegister);
 
 import Product from "./components/Product.vue";
-app.component("product-component",Product)
+app.component("product-component", Product);
 
 import postjob from "./components/postjob.vue";
-app.component("postjob-component",postjob);
+app.component("postjob-component", postjob);
 
 import JobCrud from "./components/Jobcrud.vue";
-app.component("jobcrud-component",JobCrud);
+app.component("jobcrud-component", JobCrud);
 
 import CompanyNav from "./components/CompanyNav.vue";
-app.component("companynav-component",CompanyNav);
+app.component("companynav-component", CompanyNav);
 
 import CompanyFooter from "./components/CompanyFooter.vue";
-app.component("companyfooter-component",CompanyFooter);
+app.component("companyfooter-component", CompanyFooter);
 
 import CompanyPage from "./components/CompanyPage.vue";
-app.component("company-page",CompanyPage)
-
+app.component("company-page", CompanyPage);
 
 import CompanyPost from "./components/CompanyPost.vue";
 app.component("company-post",CompanyPost)

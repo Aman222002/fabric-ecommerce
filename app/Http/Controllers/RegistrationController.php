@@ -31,8 +31,9 @@ class RegistrationController extends Controller
             $user->assignRole('User');
             return response()->json([
                 'status' => true,
-                'message' => "Registation Success"
-            ],201);
+                'message' => "Registation Successfully",
+
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
