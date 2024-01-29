@@ -21,7 +21,7 @@
 import { ref, onMounted } from "vue";
 import { useMyStore } from "../../store";
 export default {
-    name: 'UserDetails',
+    name: 'UsersDetails',
     setup() {
         const store = useMyStore();
         const users = ref(store.userDetails);

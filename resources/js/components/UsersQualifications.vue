@@ -45,6 +45,7 @@
 </template>
 <script>
 import { ref } from 'vue';
+import { useDropzone } from 'vue3-dropzone';
 export default {
     name: 'UsersQualifications',
     data() {
@@ -63,13 +64,13 @@ export default {
             },
             educationLevels: ['10th', 'Higher Secondary (+2)', 'Graduation', 'Post Graduation',],
             educationLevels: ['10th', '12th', 'Graduation', 'Post Graduation',],
-            yearOptions: ['2020', '2019', '2018', '2017', '2016', /* Add more years as needed */],
+            yearOptions: ['2020', '2019', '2018', '2017', '2016',],
             educationCourse: ['diploma',]
         };
     },
     methods: {
         submitForm() {
-            // Handle form submission logic here
+
             console.log('Form submitted:', this.formData);
         },
         addAnotherCourse() {

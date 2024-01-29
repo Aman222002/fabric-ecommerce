@@ -22,7 +22,6 @@
                             <v-stepper-window-item v-for="n in steps" :key="`${n}-content`" :value="n">
                                 <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '100px'">
                                     <v-form @submit.prevent="goToNext()" ref="myForm">
-
                                         <template v-if="n === 1">
                                             <div class="flex-container">
                                                 <div style="flex-grow: 1"> <users-details :form-data="formData"
@@ -35,6 +34,7 @@
                                             <div>
                                                 <users-qualifications :form-data="formData"
                                                     :name-rules="nameRules"></users-qualifications>
+                                                <hr style="width:100%;text-align:left;margin-left:0">
                                                 <user-skills :form-data="formData" :name-rules="nameRules"></user-skills>
 
                                             </div>
@@ -43,15 +43,14 @@
                                             <div>
                                                 <work-experience :form-data="formData"
                                                     :name-rules="nameRules"></work-experience>
+                                                <hr style="width:100%;text-align:left;margin-left:0">
                                                 <users-achievments :form-data="formData"
                                                     :name-rules="nameRules"></users-achievments>
                                             </div>
                                         </template>
                                         <template v-if="n === 4">
                                             <div>
-
                                                 <user-profile :form-data="formData" :name-rules="nameRules"></user-profile>
-
                                             </div>
                                         </template>
                                         <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="goToNext()"
@@ -67,7 +66,7 @@
     </div>
 </template>
 <script>
-// import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import UsersDetails from './UserInformations/UsersDetails.vue';
 import UsersAchievments from './UserInformations/UsersAchievments.vue';
 import UserAddress from './UserInformations/UserAddress.vue';
@@ -75,6 +74,8 @@ import UserSkills from './UserInformations/UserSkills.vue';
 import WorkExperience from './UserInformations/WorkExperience.vue';
 import UserProfile from './UserInformations/UserProfile.vue';
 import UsersQualifications from './UserInformations/UsersQualifications.vue';
+import { useMyStore } from '../store';
+
 export default {
     name: 'ResumeComponent',
     components: {
@@ -85,82 +86,92 @@ export default {
         WorkExperience,
         UserAddress,
         UsersAchievments
-
     },
-    data() {
-        return {
+    setup() {
+        const maxSteps = ref(4);
+        const e1 = ref(1);
+        const steps = ref(4);
+        const stepHeaders = ref(["Step 1", "Step 2", "Step 3", "Step 4"]);
+        const stepTitles = ref(["Personal Details", "Education Details", "Work Experience", "Hobbies"]);
+        const stepBackgrounds = ref([]);
+        const formData = ref({});
+        const nameRules = ref([]);
+        const myForm = ref(null);
 
-            // myStore: useMyStore(),
-
-            maxSteps: 4,
-            e1: 1,
-            steps: 4,
-            stepHeaders: ["Step 1", "Step 2", "Step 3", "Step 4"],
-            stepTitles: ["Personal Details", "Education Details", "Work Experience", "Hobbies"],
-            stepBackgrounds: [],
-            formData: {},
-            nameRules: []
-        };
-    },
-    computed: {
-        circularSteps() {
+        const circularSteps = computed(() => {
             const circularSteps = [];
-            for (let i = 2; i <= this.maxSteps; i++) {
+            for (let i = 2; i <= maxSteps.value; i++) {
                 circularSteps.push(i);
             }
             return circularSteps;
-        },
-        disabled() {
-            return this.e1 === 1 ? "prev" : this.e1 === this.steps ? "next" : undefined;
-        },
-        degreeOptionsWithAdditional() {
-            return [...this.degreeOptions, this.formData.degree === "Other" ? this.formData.otherDegree : ""];
-        },
+        });
+
+        const disabled = computed(() => {
+            const val = e1.value === 1 ? "prev" : false;
+            console.log("val", val, e1.value, steps.value);
+            return val;
+        });
+
+        const degreeOptionsWithAdditional = computed(() => {
+            return [...degreeOptions, formData.value.degree === "Other" ? formData.value.otherDegree : ""];
+        });
+
+
+
+        return {
+            maxSteps,
+            e1,
+            steps,
+            stepHeaders,
+            stepTitles,
+            stepBackgrounds,
+            formData,
+            nameRules,
+            circularSteps,
+            disabled,
+            myForm,
+            degreeOptionsWithAdditional,
+        };
+
+
     },
     methods: {
-
-        updateSteps() {
-            this.steps = this.steps.map((step) => ((step - 2 + this.maxSteps - 1) % (this.maxSteps - 1)) + 2);
-
-        },
-
-
-        prev() {
-            this.e1 = this.e1 > 1 ? this.e1 - 1 : this.steps;
-        },
-        next() {
-            this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
-        },
         async goToNext() {
+
             const { valid } = await this.$refs['myForm'][0].validate();
 
             if (!valid) {
                 return false;
             } else {
-                if (this.le == this.steps) {
-                    // const submittedData = {
-                    //     users: this.myStore.userDetails,
-                    //     educationDetails: this.myStore.educationDetails,
-                    //     fields: this.myStore.fields,
-                    //     address: this.myStore.address,
-                    //     achievments: this.myStore.achievments,
-                    //     workExperiences: this.myStore.experiences
-                    // };
-                    // this.myStore.submitForm(submittedData);
 
-                }
-                else {
+                if (this.e1 === this.steps) {
+                    const submittedData = {
+                        userDetails: this.formData.users,
+                        educationDetails: this.formData.educationDetails,
+                        fields: this.formData.fields,
+                        address: this.formData.address,
+                        achievements: this.formData.achievements,
+                        workExperiences: this.formData.workExperiences,
+                    };
+
+                    useMyStore().submitForm(submittedData);
+                } else {
                     this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
                 }
             }
+        },
+        async updateSteps() {
+            this.steps = this.steps.map((step) => ((step - 2 + this.maxSteps - 1) % (this.maxSteps - 1)) + 2);
 
         },
-
-
-    },
+        async prev() {
+            this.e1 = this.e1 > 1 ? this.e1 - 1 : this.steps;
+        },
+        async next() {
+            this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
+        },
+    }
 };
-
-
 </script>
 <style scoped>
 .flex-container {

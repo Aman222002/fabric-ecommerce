@@ -7,21 +7,32 @@
         <v-row v-for="(experience, index) in workExperiences" :key="index">
 
             <v-col cols="12" md="3">
-                <v-text-field v-model="experience.company_name" label="Company Name" required
-                    variant="outlined"></v-text-field>
+                <v-text-field v-model="experience.company_name" label="Company Name" required variant="outlined"
+                    :rules="[v => !!v || 'Company Name is required']"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <v-text-field v-model="experience.position" label="Position" required variant="outlined"></v-text-field>
+                <v-text-field v-model="experience.position" label="Position" required variant="outlined"
+                    :rules="[v => !!v || 'Position is required']"></v-text-field>
             </v-col>
+
             <v-col cols="12" md="3">
-                <v-text-field v-model="experience.start_date" label="Start Date" required></v-text-field>
+                <v-text-field v-model="experience.start_date" @click="openDatePicker" placeholder="Starting Date" required
+                    :rules="[v => !!v || 'Starting Date is required']" />
+                <v-date-picker v-if="isDatePickerOpen" v-model="experience.start_date"
+                    @update:picker-date="toggleDatePicker">
+                    <template #actions>
+                        <v-btn text @click="cancelDate">Cancel</v-btn>
+                        <v-btn text @click="selectDate">OK</v-btn>
+                    </template>
+                </v-date-picker>
             </v-col>
             <v-col cols="12" md="3">
                 <v-text-field v-model="experience.expiry_date" label="End Date"></v-text-field>
             </v-col>
 
             <v-col cols="12" md="50">
-                <v-textarea v-model="experience.description" label="Description" variant="outlined"></v-textarea>
+                <v-textarea v-model="experience.description" label="Description" variant="outlined"
+                    :rules="[v => !!v || 'Description is required']"></v-textarea>
             </v-col>
 
             <v-col v-if="index > 0" cols="2">
@@ -44,59 +55,67 @@ export default {
     name: 'WorkExperience',
     setup() {
         const store = useMyStore();
+
         const workExperiences = ref(store.experience);
+        const experience = ref({
+            // start_date: null,
+        });
 
-        // const addWorkExperience = () => {
-        //     workExperiences.value.push({
-        //         company_name: '',
-        //         position: '',
-        //         description: '',
-        //         start_date: null,
-        //         expiry_date: null,
-        //     });
-        // };
-        // const removeWorkExperience = () => {
-
-        //     if (workExperiences.value.length > 1) {
-        //         workExperiences.value.splice(-1, 1);
-        //     }
-        // };
+        const isDatePickerOpen = ref(false);
+        const isDatePickerOpen2 = ref(false);
 
 
-        // const submitForm = () => {
-
-        //     workExperiences.value.forEach((experience) => {
-        //         const formData = {
-        //             company_name: experience.company_name,
-        //             position: experience.position,
-        //             description: experience.description,
-        //             start_date: experience.start_date,
-        //             expiry_date: experience.expiry_date,
-        //         };
-
-        //         axios.post('/work_experience', formData)
-        //             .then(response => {
-
-        //             })
-        //             .catch(error => {
-
-        //                 console.error(error.message);
-        //             });
-        //     });
+        const openDatePicker = () => {
+            isDatePickerOpen.value = true;
+        };
+        const openDatePicker2 = () => {
+            isDatePickerOpen2.value = true;
+        };
 
 
-        //     workExperiences.value = [
-        //         {
-        //             company_name: '',
-        //             position: '',
-        //             description: '',
-        //             start_date: null,
-        //             expiry_date: null,
-        //         },
-        //     ];
-        // };
+        const toggleDatePicker2 = () => {
+            isDatePickerOpen2.value = !isDatePickerOpen2.value;
+        };
+
+        const toggleDatePicker = () => {
+            isDatePickerOpen.value = !isDatePickerOpen.value;
+        };
+
+        const selectDate = () => {
+
+            console.log('Selected Date:', experience.value.start_date);
+            isDatePickerOpen.value = false;
+        };
+        const selectDate2 = () => {
+
+            console.log('Selected Date:', experience.value.end_date);
+            isDatePickerOpen2.value = false;
+        };
+
+        const cancelDate = () => {
+            experience.value.start_date = null;
+            isDatePickerOpen.value = false;
+        };
+        const cancelDate2 = () => {
+            experience.value.end_date = null;
+            isDatePickerOpen2.value = false;
+        };
+
 
         return {
+
+            openDatePicker,
+            openDatePicker2,
+            toggleDatePicker,
+            toggleDatePicker2,
+            selectDate,
+            cancelDate,
+            selectDate2,
+            cancelDate2,
+
+            isDatePickerOpen,
+            isDatePickerOpen2,
+
             workExperiences,
             addWorkExperience: store.addWorkExperience,
             removeWorkExperience: store.removeWorkExperience,

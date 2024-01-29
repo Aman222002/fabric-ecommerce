@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 const defaultState = () => {
     return {
+        allSkills: [],
         address: {
             address1: "",
             address2: "",
@@ -45,8 +46,8 @@ const defaultState = () => {
         fields: [{ hobbies: "", strengths: "" }],
         hobbies: "",
         strengths: "",
-        skills: [],
-        selectedSkills: [],
+        userSkills: [],
+
         achievements: [
             {
                 certification_name: "",
@@ -110,24 +111,52 @@ export const useMyStore = defineStore("myStore", {
                 certificate_file_path: null,
             });
         },
-        setSkills(newSkills) {
-            this.skills = newSkills;
-        },
-
         removeAchievement(index) {
             if (this.achievements.length > 1) {
                 this.achievements.splice(index, 1);
             }
         },
+        addSkill(selectedSkill) {
+            if (
+                selectedSkill &&
+                !this.selectedSkills.find(
+                    (skill) => skill.id === selectedSkill.id
+                )
+            ) {
+                this.selectedSkills.push(selectedSkill);
+            }
+        },
+        setSkills(newSkills) {
+            this.skills = newSkills;
+        },
+
         addFields() {
             this.fields.push({
                 hobbies: "",
                 strengths: "",
             });
         },
-        removeFields() {
+        removeFields(index) {
             if (this.fields.length > 1) {
                 this.fields.splice(index, 1);
+            }
+        },
+        async fetchSkills() {
+            try {
+                const { data } = await axios.get("/skills");
+                this.allSkills = data.skills;
+            } catch (error) {
+                console.error("Error fetching skills:", error);
+            }
+        },
+        addSkill(selectedSkill) {
+            if (
+                selectedSkill &&
+                !this.selectedSkills.find(
+                    (skill) => skill.id === selectedSkill.id
+                )
+            ) {
+                this.selectedSkills.push(selectedSkill);
             }
         },
 
@@ -141,6 +170,12 @@ export const useMyStore = defineStore("myStore", {
         },
         setUser(user) {
             Object.assign(this.userDetails, user);
+        },
+        setSkills(user) {
+            Object.assign(this.skills, user);
+        },
+        submitForm(submittedData) {
+            console.log("here ", submittedData);
         },
     },
 });
@@ -162,7 +197,19 @@ export const useUserDetailsStore = defineStore({
         },
     },
 });
-
+export const useResumeStore = defineStore("resume", {
+    state: () => ({
+        userDetails: {},
+        educationDetails: {},
+        fields: {},
+        address: {},
+        achievements: {},
+        workExperiences: {},
+    }),
+    actions: {
+        submitForm(submittedData) {},
+    },
+});
 export const useEducationDetailsStore = defineStore("educationDetails", {
     state: () => ({
         educationDetails: [
