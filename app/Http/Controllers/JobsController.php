@@ -36,7 +36,7 @@ class JobsController extends Controller
                 $jobs->where('company_id', $companyId);
             }
             $jobs =   $jobs->get();
-           // $jobs = Job::all();
+            // $jobs = Job::all();
           
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
@@ -107,6 +107,7 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
+                'skill' => $input['jobSkill'],
             ]);
 
             return response()->json([

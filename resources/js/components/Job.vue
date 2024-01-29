@@ -119,8 +119,15 @@ export default {
       try {
         const response = await axios.post("/company/login", formData.value);
         if (response.data.status == true) {
+          jobDialog.value = false;
           usersStore.isLogIn();
-          window.location.href = "/postjob";
+          window.Swal.fire({
+              icon: 'success',
+              title: 'Company Login',
+              text: 'Login successfully ',
+              confirmButtonText: 'OK',
+            })
+          window.location.href = '/company/profile';
         }
         
       } catch (err) {

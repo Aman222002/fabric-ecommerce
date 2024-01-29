@@ -63,7 +63,6 @@ export default {
   align-items: center;
   min-height: 100vh;
 }
-
 .v-card {
   max-width: 400px;
   margin: 0 auto;

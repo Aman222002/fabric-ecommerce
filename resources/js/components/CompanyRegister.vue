@@ -17,6 +17,8 @@
             <v-text-field variant="outlined" v-model="company.company_email" label="Company Email" required outlined style="margin-bottom: 10px; max-width: 140%;"></v-text-field>
             <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number" required outlined style="margin-bottom: 10px; max-width: 140%;"></v-text-field>
             <v-textarea variant="outlined" v-model="company.description" label="Description" outlined style="margin-bottom: 10px; max-width: 140%;"></v-textarea>
+            <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined style="max-width: 140%;"></v-file-input>
+ 
           </div>
         </div>
 
@@ -60,17 +62,40 @@ export default {
       phone_number: '',
       description: '',
       status: '1',
+      logo:'',
     });
     const nameRules = [v => !!v || 'Name is required'];
     const emailRules = [v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Enter a valid email'];
     const passwordRules = [v => !!v || 'Password is required'];
 
     const submitForm = () => {
-      console.log('Company Data:', company.value);
-      axios.post('/company/post', company.value)
+      const formData = new FormData();
+      for (let key in company.value) {
+    if (key !== 'logo') {
+      formData.append(key, company.value[key]);
+      console.log(key, company.value[key]);
+    }
+  else{
+    console.log(key, company.value[key][0]);
+    formData.append('logo', company.value[key][0]);
+    
+  }
+      }
+      axios.post('/company/post', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+      // axios.post('/company/post', company.value)
         .then((response) => {
           console.log(response);
           if (response.data.status == true) {
+           window.Swal.fire({
+              icon: 'success',
+              title: 'Company Registered',
+              text: 'Your company has been successfully registered!',
+              confirmButtonText: 'OK',
+            })
             window.location.href = '/job';
           }
         })
@@ -90,8 +115,6 @@ export default {
 </script>
 <style scoped>
 
-
-/* Optional: Add some margin or padding if needed */
 .v-row.center {
   margin: auto;
 }

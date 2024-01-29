@@ -12,8 +12,12 @@ use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
+use App\Http\Controllers\SearchjobController;
+use App\Http\Controllers\SkillController;
+use App\Models\Skill;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,9 +79,11 @@ Route::get('/crud', function () {
 Route::get('/findcv', function () {
     return view('findcv');
 });
-Route::get('/companypost', function () {
-    return view('companypost');
-});
+
+Route::get('/companypost', [SearchjobController::class, 'index']);
+Route::get('/company/post', [SearchjobController::class, 'fetchData']);
+Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
+
 
 
 
@@ -92,16 +98,19 @@ Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
+   
 });
 
 
 
+
+Route::group(['middleware' => 'auth'],function(){
 Route::get('/post/jobs', [JobsController::class, 'index']);
 Route::post('/post', [JobsController::class, 'store']);
 Route::get('/post/edit/{id}', [JobsController::class,'edit']);
 Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
-
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
@@ -109,6 +118,15 @@ Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
 });
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
+Route::get('/skill', [SkillController::class, 'index']);
+
+
+
+Route::prefix('company')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::get('/list', [ProfileController::class, 'show']);
+});
+
 
 
 //users

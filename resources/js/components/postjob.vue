@@ -24,7 +24,9 @@
                       item-title="name" item-value="id" label="Select JobType" 
                     ></v-select>
 
-           
+                    <v-select  variant="outlined" v-model="job.jobSkill"  :items="jobSkills"
+                      item-title="skill_name" item-value="id" label="Select Skills" 
+                    ></v-select>
             <v-text-field
             variant="outlined"
               v-model="job.vacancy"
@@ -98,6 +100,7 @@ export default {
       qualifications: "",
       experience: "",
       companywebsite: "",
+      jobSkill:"",
     });
     const categories = ref([]);
 
@@ -125,12 +128,23 @@ export default {
         console.error("Error fetching job types:", error);
       }
     };
+    const jobSkills = ref([]);
+    const fetchJobSkill =async () =>{
+      try {
+        axios.get("/skill").then((response) => {
+          jobSkills.value = response.data;
+        });
+      } catch (error) {
+        console.error("Error fetching job types:", error);
+      }
+    };
     const selectJobType = (selectedJobType) => {
       job.jobType = selectedJobType.name;
     };
     onMounted(() => {
       fetchCategories();
       fetchJobTypes();
+      fetchJobSkill();
     });
 
     const experienceOptions = ref([
@@ -153,6 +167,12 @@ export default {
           axios.post('/post',job.value).then((response)=>{
             console.log(response.data);
             if (response.data.status === true) {
+              window.Swal.fire({
+              icon: 'success',
+              title: 'Job Posted ',
+              text: 'Job Posted successfully ',
+              confirmButtonText: 'OK',
+            })
               window.location.href = '/crud';
             }
           })
@@ -168,6 +188,7 @@ export default {
       selectCategory,
       selectJobType,
       saveJob,
+      jobSkills,
     };
   },
 };

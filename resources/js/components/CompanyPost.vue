@@ -1,5 +1,6 @@
 <template>
     <v-container>
+      
      <v-row  style="margin-top: 30px;">
       <v-col cols="12" md="6">
         <v-text-field v-model="jobTitle" label="Job Title" outlined clearable style="max-width: 60%;"></v-text-field>
@@ -9,7 +10,10 @@
         <v-btn @click="searchJobs" color="primary">Search</v-btn>
       </v-col>
     </v-row>
+
     <div class="card-container">
+     
+      
       <v-card v-for="job in jobs" :key="job.id" class="custom-card">
         
         <v-card-title style="font-size: 30px;">{{ job.title }}</v-card-title>
@@ -23,6 +27,7 @@
         </v-card-text>
         <v-card-actions>
             <v-btn  color="white" class="bg-primary">Apply</v-btn>
+            <v-btn  color="white" class="bg-primary">Save</v-btn>
         </v-card-actions>
       </v-card>
     </div>
@@ -36,21 +41,46 @@
   export default {
     name: 'CompanyPost',
     setup() {
-      const jobs = ref([]);
+    
+      const jobs = ref({
+
+      });
       const jobTitle = ref('');
     const location = ref('');
-    const searchJobs = () => {
-     
-    };
+    const searchJobs = async () => {
+    
+    try {
+      
+        const response = await axios.get('/search-jobs', {
+            params: {
+                jobTitle: jobTitle.value,
+                location: location.value,
+            },
+        });
+
+        jobs.value = response.data.data;
+    } catch (err) {
+        console.error(err);
+    }
+};
       const fetchJobs = async () => {
         try {
-          const response = await axios.get('/post/jobs');
+          const response = await axios.get('/company/post');
+          jobs.value = response.data.data;
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      const companypost = async () => {
+        try {
+          const response = await axios.get('/companypost');
           jobs.value = response.data.data;
         } catch (err) {
           console.error(err);
         }
       };
       onMounted(() => {
+        companypost();
         fetchJobs();
       });
   
@@ -59,6 +89,8 @@
         jobTitle,
       location,
       searchJobs,
+      companypost,
+     
       };
     },
   };

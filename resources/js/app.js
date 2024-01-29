@@ -107,6 +107,9 @@ app.component("company-page",CompanyPage)
 import CompanyPost from "./components/CompanyPost.vue";
 app.component("company-post",CompanyPost)
 
+import CompanyProfile from "./components/CompanyProfile.vue";
+app.component("company-profile",CompanyProfile)
+
 
 /**
  * The following block of code may be used to automatically register your

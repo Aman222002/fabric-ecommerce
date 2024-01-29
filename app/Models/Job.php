@@ -22,6 +22,7 @@ class Job extends Model
         'qualifications',
         'experience',
         'company_website',
+        'skill',
     ];
 
    
@@ -32,6 +33,10 @@ class Job extends Model
     public function jobType()
     {
         return $this->belongsTo(JobType::class);
+    }
+    public function jobskill()
+    {
+        return $this->belongsTo(Skill::class);
     }
    
     public function user()

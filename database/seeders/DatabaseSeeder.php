@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         // ]);
          \App\Models\Category::factory(4)->create();
          \App\Models\JobType::factory(4)->create();
+       
         //  $this->call([
         //     RoleSeeder::class,
         // ]);
