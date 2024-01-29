@@ -17,8 +17,7 @@
             </v-col>
             <v-col md="2">
                 <v-select v-model="educationDetails[index].starting_year" label="Starting Year" :items="yearOptions"
-                    @change="updatePassingYearOptions(index)" required :rules="[v => !!v || 'Starting Year is required']"
-                    variant="outlined"></v-select>
+                    required :rules="[v => !!v || 'Starting Year is required']" variant="outlined"></v-select>
             </v-col>
             <v-col md="2">
                 <v-select v-model="educationDetails[index].passing_year" label="Passing Year" :items="yearOptions" required

@@ -44,11 +44,19 @@ class DatabaseSeeder extends Seeder
         $permissions = Permission::pluck('id', 'id')->all();
         $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
+    public function run(): void
+    {
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+         \App\Models\Category::factory(4)->create();
+         \App\Models\JobType::factory(4)->create();
+        //  $this->call([
+        //     RoleSeeder::class,
+        // ]);
+
     }
 }

@@ -7,20 +7,27 @@
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
-import DropZone from "dropzone-vue";
-
-import "dropzone-vue/dist/dropzone-vue.common.css";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-import { createPinia } from "pinia";
-
-const pinia = createPinia();
 
 import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+
+import { createPinia } from "pinia";
+
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+
+const pinia = createPinia({
+    components,
+    directives,
+});
+pinia.use(piniaPluginPersistedstate);
+
 const VueTelInputOptions = {
     mode: "national",
     onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
@@ -32,14 +39,20 @@ const VueTelInputOptions = {
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({});
+const app = createApp({
+    theme: {
+        defaultTheme: "light",
+    },
+});
 
 const vuetify = createVuetify({
     components,
     directives,
 });
-app.use(DropZone);
+// app.use(DropZone);
 app.use(vuetify);
+app.use(pinia);
+app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
@@ -59,6 +72,36 @@ app.component("resume-component", ResumeComponent);
 import DashboardComponent from "./components/DashboardComponent.vue";
 app.component("dashboard-component", DashboardComponent);
 
+import FindCv from "./components/FindCv.vue";
+app.component("findcv-component", FindCv);
+
+import Job from "./components/Job.vue";
+app.component("job-component", Job);
+
+import CompanyRegister from "./components/CompanyRegister.vue";
+app.component("company-component", CompanyRegister);
+
+import Product from "./components/Product.vue";
+app.component("product-component", Product);
+
+import postjob from "./components/postjob.vue";
+app.component("postjob-component", postjob);
+
+import JobCrud from "./components/Jobcrud.vue";
+app.component("jobcrud-component", JobCrud);
+
+import CompanyNav from "./components/CompanyNav.vue";
+app.component("companynav-component", CompanyNav);
+
+import CompanyFooter from "./components/CompanyFooter.vue";
+app.component("companyfooter-component", CompanyFooter);
+
+import CompanyPage from "./components/CompanyPage.vue";
+app.component("company-page", CompanyPage);
+
+import CompanyPost from "./components/CompanyPost.vue";
+app.component("company-post", CompanyPost);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -76,5 +119,5 @@ app.component("dashboard-component", DashboardComponent);
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
-app.use(pinia);
+window.Swal = app.config.globalProperties.$swal;
 app.mount("#app");

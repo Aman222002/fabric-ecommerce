@@ -91,7 +91,7 @@ export default defineComponent({
     },
 });
 </script>
-<style scoped>
+<!-- <style scoped>
 .job-search-card {
     /* margin: auto; */
     /* height: 5%;
@@ -118,4 +118,4 @@ export default defineComponent({
     padding: 30px 40px;
 }
 </style>
-  
+   -->

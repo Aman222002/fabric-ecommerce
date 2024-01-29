@@ -12,6 +12,9 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasRoles;
+    use HasApiTokens, HasFactory, Notifiable;
+    const USER_CV = "cv";
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +24,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password', 'phone'
+        'password',
+        'phone',
+
     ];
 
     /**
@@ -80,8 +85,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(Skill::class);
     }
-    public function country()
+
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
+    public function company()
     {
-        return $this->hasOne(Country::class);
+        return $this->hasOne(Company::class, 'user_id', 'id');
     }
 }

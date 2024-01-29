@@ -1,29 +1,33 @@
 <!doctype html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    @include('includes.head')
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+   
+
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body>
-    <div class="container">
-        <header class="fixed-top">
-            <header-component></header-component>
-        </header>
-        <div id="main" class="row">
+    <div id="app">
+    <v-app>
+       <companynav-component></companynav-component>
+        <v-main>
+           
             @yield('content')
-        </div>
-        <footer class="fixed-bottom">
-            <footer-component></footer-component>
-        </footer>
-    </div>
+           
+        </v-main>
+        <companyfooter-component></companyfooter-component>
+       </v-app>
+    </div> 
 </body>
-<style>
-    #main {
-        margin-top: 100px;
-    }
-</style>
-
 </html>

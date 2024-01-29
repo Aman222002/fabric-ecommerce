@@ -1,4 +1,3 @@
-
 <template>
     <v-container>
         <div class="register-form">
@@ -33,36 +32,57 @@
         </div>
     </v-container>
 </template>
+  
 <script>
+import { ref } from 'vue';
+
 export default {
     name: 'Registration',
-    data() {
-        return {
-            valid: false,
-            response: {},
-            formData: {
-                name: '',
-                email: '',
-                password: '',
-                phone: '',
-            },
-            nameRules: [
-                v => !!v || 'Full Name is required',
-                v => (v && v.length >= 3) || 'Full Name must be at least 3 characters',
-            ],
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-            ],
-            passwordRules: [
-                v => !!v || 'Password is required',
-                v => (v && v.length >= 6) || 'Password must be at least 6 characters',
-            ],
-            phoneRules: [
-                v => !!v || 'Phone number is required',
-                v => (v && v.length >= 10) || 'Phone number must be a valid 10-digit number',
-            ],
+    setup() {
+        const valid = ref(false);
+        const response = ref({});
+        const formData = ref({
+            name: '',
+            email: '',
+            password: '',
+            phone: '',
+        });
 
+        const nameRules = [
+            v => !!v || 'Full Name is required',
+            v => (v && v.length >= 3) || 'Full Name must be at least 3 characters',
+        ];
+        const emailRules = [
+            v => !!v || 'E-mail is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ];
+        const passwordRules = [
+            v => !!v || 'Password is required',
+            v => (v && v.length >= 6) || 'Password must be at least 6 characters',
+        ];
+        const phoneRules = [
+            v => !!v || 'Phone number is required',
+            v => (v && v.length >= 10) || 'Phone number must be a valid 10-digit number',
+        ];
+        const submitForm = () => {
+            if (this.$refs.form.validate()) {
+                console.log(formData.value.phone);
+                window.axios.post('/registration', formData.value)
+                    .then((data) => {
+                        console.log(data);
+                        alert('success');
+                    });
+            }
+        };
+        return {
+            valid,
+            response,
+            formData,
+            nameRules,
+            emailRules,
+            passwordRules,
+            phoneRules,
+            submitForm,
         };
     },
     methods: {
