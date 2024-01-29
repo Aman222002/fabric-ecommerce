@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\UsersController;
+
 // use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/users/{id}', [UsersController::class, 'show']);
 
 // Route::apiResource('products', ProductController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

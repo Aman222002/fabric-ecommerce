@@ -15,6 +15,10 @@ return new class extends Migration
             $table->string('phone')->after('email');
         });
     }
+    // Schema::table('users', function (Blueprint $table) {
+    //     $table->string('phone')->after('email');
+    // });
+
 
     /**
      * Reverse the migrations.
