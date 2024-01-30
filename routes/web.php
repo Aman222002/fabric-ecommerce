@@ -106,6 +106,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
     });
     Route::group(["prefix" => "/company"], function () {
+        Route::get('/address/{addressId?}', [CompanyController::class, 'getAddress']);
         Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
         Route::post('/store', [CompanyController::class, 'store']);
         Route::post('/update/{id}', [CompanyController::class, 'update']);

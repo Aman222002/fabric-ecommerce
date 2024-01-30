@@ -26,8 +26,8 @@
                 <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
             </DxColumn>
             <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
-            <template #masterDetailTemplate="{ data: representative }">
-                <DetailTemplate :template-data="representative" />
+            <template #masterDetailTemplate="{ data: cellInfo }">
+                <masterDetailTemplate :company-info="cellInfo.data" />
             </template>
             <DxSummary>
                 <DxTotalItem column="id" summary-type="count" />
@@ -50,6 +50,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
+import masterDetailTemplate from './MasterdetailView.vue'
 export default {
     name: 'CompaniesComponent',
     setup() {
@@ -80,7 +81,7 @@ export default {
         };
     },
 
-    components: { DxRequiredRule, }
+    components: { DxRequiredRule, masterDetailTemplate }
 }
 </script>
 <style scoped>

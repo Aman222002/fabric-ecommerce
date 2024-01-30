@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
+        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+            @init-new-row="initNewRow" @row-inserted="rowInserted">
             <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
             <DxSearchPanel :visible="true" />
             <DxColumn data-field="id" caption="ID" data-type="int" />
@@ -14,9 +15,9 @@
             <DxColumn data-field="phone" data-type="string">
                 <DxPatternRule :pattern="phonePattern" message="Should be numeric value only" />
             </DxColumn>
-            <DxColumn data-field="password" data-type="password" :visible="showPasswordColumn">
+            <DxColumn data-field="password" data-type="password" :visible="showColumn">
                 <DxPatternRule :pattern="passwordPattern"
-                    message="Should be of seven charcter and must contains a special character only" />
+                    message="Should be of min. seven charcter and must contains a special character only" />
             </DxColumn>
             <DxScrolling mode="virtual" />
             <DxSummary>
@@ -26,37 +27,31 @@
     </div>
 </template>
 <script>
-import {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxScrolling,
-    DxSummary,
-    DxLookup,
-    DxTotalItem,
-} from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
 export default {
     name: 'CompaniesComponent',
     setup() {
         const phonePattern = ref("^[0-9]{9,13}$");
-        const passwordPattern = ref(/^.{8,}$/);
-        const showPasswordColumn = ref(false);
+        const passwordPattern = ref(/^.{7,}$/);
+        const showColumn = ref(false);
         const loadURL = `/admin/user/index`;
         const insertURL = `/admin/user/store`;
         const updateURL = `/admin/user/update`;
         const deleteUrl = `/admin/user/destroy`;
+        const initNewRow = (e) => {
+            console.log(showColumn.value);
+            e.data.status = '1';
+            showColumn.value = true;
+        };
+        const rowInserted = (e) => {
+            showColumn.value = false;
+        };
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         return {
-            dataSource, showPasswordColumn, phonePattern, passwordPattern
+            dataSource, showColumn, phonePattern, passwordPattern, initNewRow, rowInserted
         };
     },
-    watch: {
-        'DxEditing.allowAdding': function () {
-            showPasswordColumn.value = true;
-        },
-    }
 }
 </script>
 <style scoped>

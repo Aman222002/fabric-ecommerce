@@ -77,6 +77,18 @@ class CompanyController extends Controller
         }
     }
     /**
+     * to get address details
+     */
+    public function getAddress(Request $request, $addressId = 0)
+    {
+        try {
+            $address = \App\Models\Address::find($addressId);
+            return response()->json(['status' => true, 'data' => $address]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
      * to fetch all companies
      */
     public function getCompanies()

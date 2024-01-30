@@ -82,7 +82,7 @@ import {
     DxGroupItem,
 } from "devextreme-vue/form";
 import { DxTooltip } from "devextreme-vue/tooltip";
-
+import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
@@ -145,6 +145,8 @@ const component = {
     DxRequiredRule,
     DxEmailRule,
     DxExport,
+    DxTabPanel,
+    DxItem,
 };
 
 Object.entries(component).forEach(([name, component]) => {

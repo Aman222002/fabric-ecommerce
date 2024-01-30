@@ -96,15 +96,16 @@
 <script>
 import axios from 'axios';
 import { ref, nextTick, onMounted } from 'vue';
-
+import { useUsersStore } from "../store/user";
 export default {
     name: 'ProfileComponent',
     setup() {
+        const userStore = useUsersStore();
         const show1 = ref(false);
         const show2 = ref(false);
         const show3 = ref(false);
         const imageUrl = ref();
-        const fileInputRef = ref();
+        const fileInput = ref();
         const formData = ref({
             id: '',
             name: '',
@@ -139,14 +140,14 @@ export default {
             value => (value === formDetail.value.new) || 'Passwords do not match',
         ]);
         const openFileInput = () => {
-            fileInputRef.value.click();
+            fileInput.value.click();
         };
         const handleImageChange = () => {
-            const file = fileInputRef.value.files[0];
+            const file = fileInput.value.files[0];
             if (file) {
                 if (!file.type.startsWith('image/')) {
                     alert('Please select a valid image file.');
-                    fileInputRef.value.value = null;
+                    fileInput.value.value = null;
                     return;
                 }
                 const reader = new FileReader();
@@ -158,19 +159,16 @@ export default {
             }
         };
         const fetchProfile = () => {
-            axios.get('./profile/getProfile').then((response) => {
-                formData.value = response.data.user;
-                console.log(response.data.user);
-                imageUrl.value = response.data.user.user_image;
-            })
+            userStore.fetchUser();
+            formData.value = userStore.user.user;
+            imageUrl.value = userStore.user.user.user_image;
         };
         onMounted(async () => {
             await nextTick();
-            fileInputRef.value = document.getElementById('fileInput');
+            fileInput.value = document.getElementById('fileInput');
             fetchProfile();
         });
         const updateProfile = (id) => {
-            console.log('Updating profile:', formData.value);
             const formDataUpload = new FormData();
             formDataUpload.append('name', formData.value.name);
             formDataUpload.append('email', formData.value.email);
@@ -183,7 +181,28 @@ export default {
                     'Content-Type': 'multipart/form-data',
                 }
             }).then((response) => {
-                console.log(response.status);
+                console.log(response.data.status);
+                if (response.data.status === true) {
+                    window.Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        icon: 'success',
+                        title: 'User Profile updated successfully!',
+                    });
+                    window.location.reload();
+                }
+            }).catch((error) => {
+                console.log('here');
+                window.Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    icon: 'error',
+                    title: 'Incoreect Password!',
+                });
             })
         };
         const updatePassword = () => {
@@ -213,6 +232,7 @@ export default {
             })
         }
         return {
+            userStore,
             show1,
             show2,
             show3,
@@ -227,11 +247,12 @@ export default {
             newRules,
             confirmRules,
             imageUrl,
-            fileInputRef,
+            fileInput,
             openFileInput,
             handleImageChange,
         };
     }
+
 }
 </script>
   
@@ -268,7 +289,7 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 24px;
-    color: white;
+    color: black;
     cursor: pointer;
 }
 

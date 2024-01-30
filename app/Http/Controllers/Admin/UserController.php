@@ -110,11 +110,9 @@ class UserController extends Controller
                     $image = $request->file('user_image');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assets', $imageName);
-                } else {
-                    $imageName = 'null';
                 }
                 $user->update([
-                    'user_image' => $imageName,
+                    'user_image' => empty($imageName) ? $user->user_image : $imageName,
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'phone' => $request->input('phone'),
