@@ -19,10 +19,7 @@ export default {
     name: 'UserSkills',
     setup() {
         const store = useMyStore();
-
         const localSkills = ref([]);
-
-
         return {
             store,
             localSkills,

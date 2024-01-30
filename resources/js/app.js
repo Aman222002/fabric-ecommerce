@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import "./bootstrap";
+// import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
 
@@ -120,4 +120,5 @@ app.component("company-post", CompanyPost);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
+
 app.mount("#app");

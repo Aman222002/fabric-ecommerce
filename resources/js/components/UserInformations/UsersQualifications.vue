@@ -8,20 +8,23 @@
 
         <v-row v-for="(education, index) in educationDetails" :key="index">
             <v-col md="3">
-                <v-select v-model="educationDetails[index].education_type" :items="educationTypes" required
+                <v-select v-model="educationDetails[index].education_type" :items="educationTypes" name='education_type'
                     :rules="[v => !!v || 'Education Type is required']" label="Education Type"></v-select>
             </v-col>
             <v-col md="3">
-                <v-text-field v-model="educationDetails[index].school_university" label="School/University" required
-                    :rules="[v => !!v || 'School/University is required']" variant="outlined"></v-text-field>
+                <v-text-field v-model="educationDetails[index].school_university" name="school_university"
+                    label="School/University" required :rules="[v => !!v || 'School/University is required']"
+                    variant="outlined"></v-text-field>
             </v-col>
             <v-col md="2">
-                <v-select v-model="educationDetails[index].starting_year" label="Starting Year" :items="yearOptions"
-                    required :rules="[v => !!v || 'Starting Year is required']" variant="outlined"></v-select>
+                <v-select v-model="educationDetails[index].starting_year" name="starting_year" label="Starting Year"
+                    :items="yearOptions" required :rules="[v => !!v || 'Starting Year is required']"
+                    variant="outlined"></v-select>
             </v-col>
             <v-col md="2">
-                <v-select v-model="educationDetails[index].passing_year" label="Passing Year" :items="yearOptions" required
-                    :rules="[v => !!v || 'Passing Year is required']" variant="outlined"></v-select>
+                <v-select v-model="educationDetails[index].passing_year" name="passing_year" label="Passing Year"
+                    :items="yearOptions" required :rules="[v => !!v || 'Passing Year is required']"
+                    variant="outlined"></v-select>
             </v-col>
             <v-col v-if="index > 0" md="2">
                 <v-btn @click="removeEducationEntry(index)" color="red" class="custom-button">Remove</v-btn>

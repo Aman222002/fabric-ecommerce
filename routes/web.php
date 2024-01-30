@@ -16,6 +16,7 @@ use App\Http\Controllers\UserSkillController;
 use App\Http\Controllers\UserExperienceController;
 use App\Http\Controllers\AdditionalInformationController;
 use App\Http\Controllers\QualificationsController;
+use App\Http\Controllers\ResumeController;
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyLoginController;
@@ -64,6 +65,7 @@ Route::get('/header', function () {
 Route::get('/resume', function () {
     return view('resume');
 });
+Route::post('/resume', [ResumeController::class, 'store']);
 Route::get('/user-skills', [UserSkillController::class, 'index']);
 Route::post('/user-skills', [UserSkillController::class, 'store']);
 Route::post('/users-achievments', [UserAchievementController::class, 'store']);

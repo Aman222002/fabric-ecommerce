@@ -163,7 +163,7 @@ export const useMyStore = defineStore("myStore", {
         // Add other methods to update/store data as needed
 
         setFormData(formData) {
-            // Object.assign(this, formData);
+            Object.assign(this, formData);
         },
         clearFormData() {
             Object.assign(this, defaultState());
@@ -174,8 +174,24 @@ export const useMyStore = defineStore("myStore", {
         setSkills(user) {
             Object.assign(this.skills, user);
         },
-        submitForm(submittedData) {
+        submitForm() {
+            const submittedData = {
+                userDetails: this.userDetails,
+                educationDetails: this.educationDetails,
+                address: this.address,
+                achievements: this.achievements,
+                workExperiences: this.workExperiences,
+            };
             console.log("here ", submittedData);
+            axios.post("/submit", submittedData)
+                .then(({ data }) => {
+                    console.log("response", data);
+
+                    // TODO: Clear state and show message
+                })
+                .catch((error) => {
+                    console.log("Error", error);
+                });
         },
     },
 });
@@ -345,3 +361,5 @@ export const useUserAchievementsStore = defineStore({
         },
     },
 });
+
+export default useMyStore;

@@ -6,12 +6,12 @@
         </v-card-title>
         <v-row v-for="(field, index) in fields" :key="index">
             <v-col cols="10" sm="50">
-                <v-textarea v-model="field.hobbies" label="Hobbies"
-                    :rules="[v => !!v || 'hobbies  is required']"></v-textarea>
+                <v-textarea v-model="field.hobbies" label="Hobbies"></v-textarea>
+                <ErrorMessage name="Hobbies are required" />
             </v-col>
             <v-col cols="10" sm="50">
-                <v-textarea v-model="field.strengths" label="Strengths"
-                    :rules="[v => !!v || 'strengths  is required']"></v-textarea>
+                <v-textarea v-model="field.strengths" label="Strengths"></v-textarea>
+                <ErrorMessage name="Strengths are required" />
             </v-col>
 
         </v-row>
