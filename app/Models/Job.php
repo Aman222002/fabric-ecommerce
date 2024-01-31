@@ -11,6 +11,7 @@ class Job extends Model
     protected $table ='post_jobs';
     protected $primaryKey='id';
     protected $fillable = [
+        'user_id',
         'company_id',
         'title',
         'category_id',
@@ -46,5 +47,8 @@ class Job extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+    public function applications() {
+        return $this->hasMany(JobApply::class);
     }
 }

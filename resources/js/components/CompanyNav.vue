@@ -10,6 +10,7 @@
           <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
           
         </v-col>
+        <v-btn   @click="login()" style="margin-top: 10px;">Login as User</v-btn>
         <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
       </v-row>
     
@@ -38,12 +39,17 @@ export default {
     };
     const logout = () => {
       usersStore.isLogOut();
-      window.location.href = '/job';
+      window.location.href = '/';
+    };
+    const login = () => {
+     
+      window.location.href = '/login';
     };
     return {
       isActive,
       logout,
-      usersStore
+      usersStore,
+      login
     };
   },
 };
@@ -85,7 +91,7 @@ export default {
 }
 
 .v-app-bar {
-  /* background-color: #236aee; */
+  
   border-bottom: 1px solid #161414;
 }
 

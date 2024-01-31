@@ -18,6 +18,8 @@ import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
+
+
 import { createPinia } from "pinia";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -54,6 +56,8 @@ app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
 app.use(VueTelInput, VueTelInputOptions);
+
+
 
 import Registration from "./components/Registration.vue";
 app.component("registration-component", Registration);

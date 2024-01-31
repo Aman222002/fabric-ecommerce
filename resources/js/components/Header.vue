@@ -5,11 +5,13 @@
       <v-row align="center" justify="space-between">
         <v-col class="nav-links">
           <a href="/companypost" class="nav-link" :class="{ 'active': isActive('/companypost') }">Home</a>
-          <a href="/login" class="nav-link" :class="{ 'active': isActive('/login') }">Login</a>
-          <a href="/registration" class="nav-link" :class="{ 'active': isActive('/registration') }">Register</a>
+          <a href="/login" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/login') }">Login</a>
+          <a href="/registration" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/registration') }">Register</a>
           
-          <a href="/" class="nav-link" :class="{ 'active': isActive('/') }">Login as Company</a>
+          <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Login as Company</a>
+
         </v-col>
+        <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
       </v-row>
     
   </v-app-bar>
@@ -17,12 +19,12 @@
 
 <script>
 import { reactive, onMounted } from 'vue';
-
+import { useUsersStore } from "../store/user";
 
 export default {
   name: "Header",
   setup() {
-  
+    const usersStore = useUsersStore();
     const state = reactive({
       activeLink: window.location.pathname
     });
@@ -35,9 +37,14 @@ export default {
     const isActive = (link) => {
       return state.activeLink === link;
     };
-   
+    const logout = () => {
+      usersStore.isLogOut();
+      window.location.href = '/login';
+    };
     return {
       isActive,
+      logout,
+      usersStore,
     };
   },
 };

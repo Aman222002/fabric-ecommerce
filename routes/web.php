@@ -24,6 +24,7 @@ use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CategoryController;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
@@ -140,6 +141,8 @@ Route::post('/post', [JobsController::class, 'store']);
 Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
 Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
+
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -155,7 +158,9 @@ Route::get('/skill', [SkillController::class, 'index']);
 Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);
+    Route::post('/update', [ProfileController::class, 'update']);
 });
+
 
 
 

@@ -26,7 +26,7 @@
           <div>Vacancy: {{ job.vacancy }}</div>
         </v-card-text>
         <v-card-actions>
-            <v-btn  color="white" class="bg-primary">Apply</v-btn>
+            <v-btn  color="white" class="bg-primary" v-if="usersStore.isloggedin"  @click="apply(job.id)">Apply</v-btn>
             <v-btn  color="white" class="bg-primary">Save</v-btn>
         </v-card-actions>
       </v-card>
@@ -37,11 +37,11 @@
   <script>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
-  
+  import { useUsersStore } from '../store/user';
   export default {
     name: 'CompanyPost',
     setup() {
-    
+      const usersStore = useUsersStore();
       const jobs = ref({
 
       });
@@ -79,17 +79,29 @@
           console.error(err);
         }
       };
+      const apply = async(id) => {
+ try{
+ await axios.post(`/apply-job/${id}`) . then((response)=>{
+  
+ });
+    
+ }catch(err){
+  console.error(err);
+ }
+      };
+      
       onMounted(() => {
         companypost();
         fetchJobs();
       });
-  
       return {
         jobs,
         jobTitle,
       location,
       searchJobs,
       companypost,
+      usersStore,
+      apply
      
       };
     },

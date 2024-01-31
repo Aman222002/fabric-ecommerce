@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\JobApply;
 
 
 
@@ -96,6 +97,7 @@ class JobsController extends Controller
             $company = $user->company;
             $input = $request->all();
             $job = Job::create([
+                'user_id' => $user->id,
                 'company_id' =>  $company->id,
                 'title' => $input['title'],
                 'category_id' => $input['category'],
@@ -206,7 +208,6 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-
             if ($job) {
                 $job->delete();
                 $response = [
@@ -226,4 +227,44 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    public function applyJob(Request $request) {
+        try {
+            $id = $request->id;
+       
+            $job = Job::find($id);
+          
+            $company_id = $job->company_id;
+           
+            if ($company_id == Auth::user()->id) {
+                $message = 'You cannot apply to your own job.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message
+                ]);
+            }
+            $application = new JobApply();
+            $application->job_id = $id;
+            $application->user_id = Auth::user()->id;
+            $application->company_id = $company_id;
+            $application->applied_date = now();
+            $application->save();
+           
+            $message = 'You have successfully applied.';
+    
+            return response()->json([
+                'status' => true,
+                'message' => $message,
+                'data' => $application
+            ], 200);
+        } catch (\Exception $e) {
+            
+            $errorMessage = $e->getMessage();
+    
+            return response()->json([
+                'status' => false,
+                'message' => $errorMessage
+            ], 500); 
+        }
+    }
+    
 }
