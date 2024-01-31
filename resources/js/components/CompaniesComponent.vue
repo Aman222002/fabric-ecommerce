@@ -1,9 +1,11 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+            :remote-operations="true" @content-ready="onContentReady" @row-expanding="onRowExpanding"
             :onEditingStart="EditStart" @init-new-row="initNewRow" @row-inserted="rowInserted">
             <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
             <DxSearchPanel :visible="true" />
+            <DxScrolling mode="virtual" row-rendering-mode="virtual" />
             <DxColumn data-field="company_name" data-type="string">
                 <DxRequiredRule />
             </DxColumn>
@@ -37,15 +39,6 @@
 </template>
 <script>
 import {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxScrolling,
-    DxSummary,
-    DxLookup,
-    DxMasterDetail,
-    DxSearchPanel,
-    DxTotalItem,
     DxRequiredRule,
 } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
@@ -64,20 +57,26 @@ export default {
         const updateURL = `/admin/company/update`;
         const deleteUrl = `/admin/company/destroy`;
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
+        const onRowExpanding = (e) => {
+            e.component.collapseAll(-1);
+        }
+        const onContentReady = (e) => {
+            if (!e.component.getSelectedRowKeys().length) {
+                e.component.selectRowsByIndexes(0);
+            }
+        }
         const initNewRow = (e) => {
-            console.log(showColumn.value);
             e.data.status = '1';
             showColumn.value = true;
         };
         const EditStart = (e) => {
             showColumn.value = false;
-            console.log('started Editting', e.data);
         };
         const rowInserted = (e) => {
             showColumn.value = false;
         };
         return {
-            dataSource, showColumn, EditStart, initNewRow, rowInserted, namePattern, emailPattern, phonePattern, paswordPattern,
+            dataSource, showColumn, EditStart, initNewRow, rowInserted, namePattern, emailPattern, phonePattern, onRowExpanding, paswordPattern, onContentReady
         };
     },
 
@@ -92,7 +91,7 @@ export default {
 .container {
     margin-top: 15px;
     margin-left: 90px;
-    width: fit-content;
+    width: 90%;
 }
 
 .options {

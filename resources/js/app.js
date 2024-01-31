@@ -74,6 +74,7 @@ import {
     DxRequiredRule,
     DxEmailRule,
     DxExport,
+    DxStringLengthRule,
 } from "devextreme-vue/data-grid";
 import {
     DxForm,
@@ -147,6 +148,7 @@ const component = {
     DxExport,
     DxTabPanel,
     DxItem,
+    DxStringLengthRule,
 };
 
 Object.entries(component).forEach(([name, component]) => {

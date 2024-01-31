@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Models\Address;
 use App\Http\Requests\CompanyRagistrationRequest;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
@@ -77,12 +78,37 @@ class CompanyController extends Controller
         }
     }
     /**
+     * function to find company representative
+     */
+    public function findRepresentative($userId = 0)
+    {
+        try {
+            $user = User::find($userId);
+            return response()->json(['status' => true, 'data' => $user]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
      * to get address details
      */
     public function getAddress(Request $request, $addressId = 0)
     {
         try {
-            $address = \App\Models\Address::find($addressId);
+            $address = Address::find($addressId);
+            return response()->json(['status' => true, 'data' => $address]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * to update company address
+     */
+    public function updateAddress(Request $request, $addressId = 0)
+    {
+        try {
+            $address = Address::find($addressId);
+            $address->update($request->all());
             return response()->json(['status' => true, 'data' => $address]);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);

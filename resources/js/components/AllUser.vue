@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
-            @init-new-row="initNewRow" @row-inserted="rowInserted">
+            :column-max-width="150" :column-auto-width="true" :allow-column-resizing="true" @init-new-row="initNewRow"
+            @row-inserted="rowInserted">
             <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
             <DxSearchPanel :visible="true" />
-            <DxColumn data-field="id" caption="ID" data-type="int" />
             <DxColumn data-field="name" data-type="string">
                 <DxRequiredRule />
             </DxColumn>
@@ -40,7 +40,6 @@ export default {
         const updateURL = `/admin/user/update`;
         const deleteUrl = `/admin/user/destroy`;
         const initNewRow = (e) => {
-            console.log(showColumn.value);
             e.data.status = '1';
             showColumn.value = true;
         };
@@ -62,7 +61,7 @@ export default {
 .container {
     margin-top: 15px;
     margin-left: 90px;
-    width: fit-content;
+    width: 90%;
 }
 
 .options {

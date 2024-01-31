@@ -1,8 +1,18 @@
 <template>
     <div class="container">
-        <h3>here</h3>
-        {{ value }}
-        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
+        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+            :column-auto-width="true" :allow-column-resizing="true">
+            <DxEditing :allow-updating="true" mode="row" />
+            <DxSearchPanel :visible="true" />
+            <DxColumn data-field="first_line_address" caption="First Line Address" data-type="string" />
+            <DxColumn data-field="street" caption="Street" data-type="string">
+                <DxRequiredRule />
+            </DxColumn>
+            <DxColumn data-field="state" caption="State" data-type="string">
+                <DxRequiredRule />
+            </DxColumn>
+            <DxColumn data-field="postal_code" data-type="int">
+            </DxColumn>
         </DxDataGrid>
     </div>
 </template>
@@ -10,17 +20,17 @@
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
 export default {
-    name: 'CompaniesComponent',
+    name: 'AddressTab',
     props: {
         addressId: {
             type: Number,
-            default: 0
+            default: 0,
         }
     },
     setup(props) {
-        console.log('here', props.addressId);
         const loadURL = `/admin/company/address/${props.addressId}`;
-        const { dataSource } = dxGridStore(loadURL);
+        const updateURL = `/admin/company/address/update`;
+        const { dataSource } = dxGridStore(loadURL, null, updateURL, null);
         return {
             dataSource,
         };
@@ -29,12 +39,14 @@ export default {
 </script>
 <style scoped>
 #grid {
-    height: 400px;
+    max-height: 200px;
 }
 
 .container {
     margin-top: 15px;
-    width: fit-content;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    width: 95%;
 }
 
 .options {
@@ -74,7 +86,6 @@ export default {
 }
 
 #requests>div::after {
-    content: "";
     display: table;
     clear: both;
 }
@@ -85,7 +96,6 @@ export default {
 
 #requests ul {
     list-style: none;
-    max-height: 100px;
     overflow: auto;
     margin: 0;
 }

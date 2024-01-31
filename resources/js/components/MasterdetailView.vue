@@ -1,17 +1,16 @@
 <template>
     <DxTabPanel>
-        <DxItem title="Orders" template="representatives-tab" />
-        <template #representatives-tab>
-            <RepresentativesTab />
+        <DxItem title="Representative" template="representativesTab" />
+        <template #representativesTab>
+            <RepresentativesTab :user-id="companyInfo.user_id" />
         </template>
-        <DxItem title="Address" template="address-tab" />
-        <template #address-tab>
+        <DxItem title="Address" template="addressTab" />
+        <template #addressTab>
             <AddressTab :address-id="companyInfo.id" />
         </template>
     </DxTabPanel>
 </template>
 <script>
-
 import RepresentativesTab from './RepresentativeTab.vue';
 import AddressTab from './AddressTab.vue';
 export default {
@@ -22,7 +21,6 @@ export default {
         },
     },
     setup(props) {
-        console.log("here I am", props.companyInfo);
         // const masterDetailData = ref({
         //     key: 0,
         // });

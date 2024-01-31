@@ -19,9 +19,11 @@ class UserController extends Controller
     {
         //
         try {
-            $users = User::select('id', 'name', 'email', 'phone')->get();
-            // return $users;
-            return response()->json(['data' => $users, 'status' => true], 200);
+            $user = Auth::user();
+            if ($user->hasRole('Admin')) {
+                $users = User::where('id', '!=', $user->id)->get();
+                return response()->json(['data' => $users, 'status' => true], 200);
+            }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -180,7 +182,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id = 0)
     {
         //
         try {
