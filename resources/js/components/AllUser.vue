@@ -1,8 +1,7 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
-            :column-max-width="150" :column-auto-width="true" :allow-column-resizing="true" @init-new-row="initNewRow"
-            @row-inserted="rowInserted">
+            :column-auto-width="true" :allow-column-resizing="true" @init-new-row="initNewRow" @row-inserted="rowInserted">
             <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
             <DxSearchPanel :visible="true" />
             <DxColumn data-field="name" data-type="string">
@@ -39,6 +38,7 @@ export default {
         const insertURL = `/admin/user/store`;
         const updateURL = `/admin/user/update`;
         const deleteUrl = `/admin/user/destroy`;
+        const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         const initNewRow = (e) => {
             e.data.status = '1';
             showColumn.value = true;
@@ -46,7 +46,6 @@ export default {
         const rowInserted = (e) => {
             showColumn.value = false;
         };
-        const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         return {
             dataSource, showColumn, phonePattern, passwordPattern, initNewRow, rowInserted
         };

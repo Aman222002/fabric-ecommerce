@@ -87,6 +87,7 @@ Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
 Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
@@ -94,6 +95,9 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/profile/getProfile', [UserController::class, 'getProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
+    Route::get('/plans', [DashboardController::class, 'plans']);
+    Route::get('/get/plans', [DashboardController::class, 'getplans']);
+    Route::post('/update/plans/{planID?}', [DashboardController::class, 'updateplans']);
 
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);

@@ -82,8 +82,9 @@ import {
     DxLabel,
     DxGroupItem,
 } from "devextreme-vue/form";
+import { DxBox, DxItem } from "devextreme-vue/box";
 import { DxTooltip } from "devextreme-vue/tooltip";
-import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
+import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
@@ -106,10 +107,14 @@ app.component("login-component", Login);
 // app.component("userprofile-component", UserprofileComponent);
 import NavbarComponent from "./components/NavbarComponent.vue";
 app.component("navbar-component", NavbarComponent);
+import DashBoard from "./components/DashBoard.vue";
+app.component("dashboard-component", DashBoard);
 import AllUser from "./components/AllUser.vue";
 app.component("alluser-component", AllUser);
 import ProfileComponent from "./components/ProfileComponent.vue";
 app.component("profile-component", ProfileComponent);
+import SubscriptionPlans from "./components/SubscriptionPlans.vue";
+app.component("plans-component", SubscriptionPlans);
 import CompaniesComponent from "./components/CompaniesComponent.vue";
 app.component("companies-component", CompaniesComponent);
 import SidebarComponent from "./components/SidebarComponent.vue";
@@ -141,6 +146,7 @@ const component = {
     DxTooltip,
     DxEditing,
     DxFormItem,
+    DxTabItem,
     DxLookup,
     DxPatternRule,
     DxRequiredRule,
@@ -149,6 +155,7 @@ const component = {
     DxTabPanel,
     DxItem,
     DxStringLengthRule,
+    DxBox,
 };
 
 Object.entries(component).forEach(([name, component]) => {

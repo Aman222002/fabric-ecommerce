@@ -56,6 +56,11 @@ export default {
                 icon: 'mdi-account-circle',
                 href: '/admin/profile'
             },
+            {
+                title: 'Subscription Plans',
+                icon: 'mdi-list-box',
+                href: '/admin/plans'
+            },
         ]);
 
         const isActiveItem = (item) => {
