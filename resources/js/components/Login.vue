@@ -68,10 +68,18 @@
           const data = response.data;
   
           if (data.status === true) {
-            alert('Login successful');
-            // Use router.push for navigation in Vue 3
+            console.log(data.data.roles[0].name);
+          alert('Login successful');
+
+          if (data.data.roles[0].name == 'Admin') {
+            window.location.href = './admin/dashboard';
+          } else if(data.data.roles[0].name == 'Company Admin') {
+            window.location.href = '/job';
+         
+          }else {
             usersStore.isLogIn();
             window.location.href = '/resume';
+          }
           } else {
             alert('Login failed');
           }

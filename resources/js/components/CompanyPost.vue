@@ -19,7 +19,7 @@
         <v-card-title style="font-size: 30px;">{{ job.title }}</v-card-title>
   
         <v-card-text>
-          <div style="font-size: 20px;">Company Name: {{ job.company.company_name }}</div><br>
+          <div style="font-size: 15px;">Company Name: {{ job.company.company_name }}</div><br>
           <div>Location: {{ job.location }}</div><br>
           <div>Experience: {{ job.experience }}</div><br>
           <div>Salary: {{ job.salary }}</div><br>

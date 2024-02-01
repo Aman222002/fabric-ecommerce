@@ -27,7 +27,17 @@ class LoginController extends Controller
                 'password' => ['required'],
             ]);
             if (Auth::attempt($credential)) {
-
+                $user = Auth::user();
+                if ($user) {
+                    $user->getRoleNames();
+                    return response()->json(['status' => true, 'data' => $user]);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'No data found',
+                    ];
+                    return response()->json($response, 404);
+                }
                 return response()->json([
                     'status' => true,
                     'message' => "Login Successfully",

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JobApply;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JobNotificationEmail;
+use App\Models\User;
 
 
 
@@ -231,16 +234,22 @@ class JobsController extends Controller
         try {
             $id = $request->id;
        
-            $job = Job::find($id);
+            $job = Job::where('id',$id)->first();
           
             $company_id = $job->company_id;
-           
-            if ($company_id == Auth::user()->id) {
-                $message = 'You cannot apply to your own job.';
+          
+ 
+            $jobApplicationCount = JobApply::where([
+                'user_id' => Auth::user()->id,
+                'job_id' => $id
+            ])->count();
+            
+            if ($jobApplicationCount > 0) {
+                $message = 'You already applied on this job.';
                 return response()->json([
                     'status' => false,
                     'message' => $message
-                ]);
+                ],500);
             }
             $application = new JobApply();
             $application->job_id = $id;
@@ -249,6 +258,18 @@ class JobsController extends Controller
             $application->applied_date = now();
             $application->save();
            
+            $company = Company::where('id',$company_id)->first();
+        
+            $mailData = [
+                'company' => $company,
+                'user' => Auth::user(),
+                'job' => $job,
+            ];
+    
+            Mail::to($company->company_email)->send(new JobNotificationEmail($mailData));
+    
+            $message = 'You have successfully applied.';
+    
             $message = 'You have successfully applied.';
     
             return response()->json([

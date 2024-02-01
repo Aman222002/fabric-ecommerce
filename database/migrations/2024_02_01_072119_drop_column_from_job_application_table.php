@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('job_application', function (Blueprint $table) {
             //
-            $table->dropForeign(['employer_id']);
-            $table->dropColumn('employer_id');
+          
+            $table->dropColumn('company_id');
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
     {
         Schema::table('job_application', function (Blueprint $table) {
             //
-            $table->foreignId('employer_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
         });
     }
 };
