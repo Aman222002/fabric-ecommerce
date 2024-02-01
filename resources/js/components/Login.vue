@@ -30,9 +30,11 @@
                 <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
               </v-form>
             </v-card-text>
-            <v-card-actions>
-              <div class="text-hint">Don't have an account? <router-link to="/registration">Register</router-link></div>
-            </v-card-actions>
+           
+              <div style="text-align: center; margin-top: 30px;">
+                    <h5 class="new-client-text" >Don't have an Account?</h5> 
+                    <a href="/registration" class="register-link" style="margin-top: 30px;">Register Now</a></div>
+           
           </v-col>
         </v-col>
       </div>

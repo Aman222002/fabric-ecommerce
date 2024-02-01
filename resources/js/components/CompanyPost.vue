@@ -16,10 +16,10 @@
       
       <v-card v-for="job in jobs" :key="job.id" class="custom-card">
         
-        <v-card-title style="font-size: 30px;">{{ job.title }}</v-card-title>
+        <v-card-title style="font-size: 30px; font-weight: bolder;">{{ job.title }}</v-card-title>
   
         <v-card-text>
-          <div style="font-size: 15px;">Company Name: {{ job.company.company_name }}</div><br>
+          <div style="font-size: 20px;">Company Name: {{ job.company.company_name }}</div><br>
           <div>Location: {{ job.location }}</div><br>
           <div>Experience: {{ job.experience }}</div><br>
           <div>Salary: {{ job.salary }}</div><br>
@@ -82,7 +82,15 @@
       const apply = async(id) => {
  try{
  await axios.post(`/apply-job/${id}`) . then((response)=>{
+  if (response.data.success) {
   
+    window.Swal.fire({
+              icon: 'success',
+              title: 'Applied Successfully',
+              text: 'Applied successfully ',
+              confirmButtonText: 'OK',
+            })
+  }
  });
     
  }catch(err){
@@ -119,7 +127,7 @@
     display: flex;
     flex-direction: column;
     height: 300px;
-    width: 300px;
+    width: 400px;
     border: 1px solid rgb(7, 5, 5);
  
   }

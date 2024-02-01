@@ -65,8 +65,7 @@ import Header from "./components/Header.vue";
 app.component("header-component", Header);
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
-import Home from "./components/Home.vue";
-app.component("home-component", Home);
+
 import ResumeComponent from "./components/ResumeComponent.vue";
 app.component("resume-component", ResumeComponent);
 
@@ -108,6 +107,9 @@ app.component("company-post",CompanyPost)
 
 import CompanyProfile from "./components/CompanyProfile.vue";
 app.component("company-profile",CompanyProfile)
+
+import JobApplied from "./components/JobApplied.vue";
+app.component("jobapply-component", JobApplied);
 
 
 /**

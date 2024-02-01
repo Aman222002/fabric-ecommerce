@@ -14,5 +14,8 @@ class JobApply extends Model
         'user_id',
         'company_id'
     ];
+    public function job() {
+        return $this->belongsTo(Job::class);
+    }
     
 }

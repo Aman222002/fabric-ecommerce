@@ -122,7 +122,7 @@ Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 
 
 Route::prefix('company')->group(function () {
@@ -142,7 +142,7 @@ Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
 Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
-
+Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

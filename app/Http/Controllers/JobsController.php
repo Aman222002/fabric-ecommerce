@@ -287,5 +287,14 @@ class JobsController extends Controller
             ], 500); 
         }
     }
+    public function myJobApplications(){
+        $jobApplications = JobApply::where('user_id',Auth::user()->id)->with('job')->get();
+        
+        // dd($jobApplications);
+        
+        return view('jobapply',[
+            'jobApplications' => $jobApplications
+        ]);
+    }
     
 }
