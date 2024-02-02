@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\JobApply;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JobNotificationEmail;
+use App\Models\User;
 
 
 
@@ -36,7 +40,7 @@ class JobsController extends Controller
                 $jobs->where('company_id', $companyId);
             }
             $jobs =   $jobs->get();
-           // $jobs = Job::all();
+            // $jobs = Job::all();
           
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
@@ -96,6 +100,7 @@ class JobsController extends Controller
             $company = $user->company;
             $input = $request->all();
             $job = Job::create([
+                'user_id' => $user->id,
                 'company_id' =>  $company->id,
                 'title' => $input['title'],
                 'category_id' => $input['category'],
@@ -107,6 +112,7 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
+                'skill' => $input['jobSkill'],
             ]);
 
             return response()->json([
@@ -205,7 +211,6 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-
             if ($job) {
                 $job->delete();
                 $response = [
@@ -225,4 +230,71 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    public function applyJob(Request $request) {
+        try {
+            $id = $request->id;
+       
+            $job = Job::where('id',$id)->first();
+          
+            $company_id = $job->company_id;
+          
+ 
+            $jobApplicationCount = JobApply::where([
+                'user_id' => Auth::user()->id,
+                'job_id' => $id
+            ])->count();
+            
+            if ($jobApplicationCount > 0) {
+                $message = 'You already applied on this job.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message
+                ],500);
+            }
+            $application = new JobApply();
+            $application->job_id = $id;
+            $application->user_id = Auth::user()->id;
+            $application->company_id = $company_id;
+            $application->applied_date = now();
+            $application->save();
+           
+            $company = Company::where('id',$company_id)->first();
+        
+            $mailData = [
+                'company' => $company,
+                'user' => Auth::user(),
+                'job' => $job,
+            ];
+    
+            Mail::to($company->company_email)->send(new JobNotificationEmail($mailData));
+    
+            $message = 'You have successfully applied.';
+    
+            $message = 'You have successfully applied.';
+    
+            return response()->json([
+                'status' => true,
+                'message' => $message,
+                'data' => $application
+            ], 200);
+        } catch (\Exception $e) {
+            
+            $errorMessage = $e->getMessage();
+    
+            return response()->json([
+                'status' => false,
+                'message' => $errorMessage
+            ], 500); 
+        }
+    }
+    public function myJobApplications(){
+        $jobApplications = JobApply::where('user_id',Auth::user()->id)->with('job')->get();
+        
+        // dd($jobApplications);
+        
+        return view('jobapply',[
+            'jobApplications' => $jobApplications
+        ]);
+    }
+    
 }

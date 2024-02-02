@@ -1,38 +1,63 @@
+
 <template>
-  <v-app-bar app>
-    <v-container>
+  <v-app-bar app class="custom-app-bar" color="primary">
+   
       <v-row align="center" justify="space-between">
         <v-col class="nav-links">
-          <a href="/home" class="nav-link">Home</a>
-          <!-- <a href="/login" class="nav-link">Login</a> -->
-          <!-- <a href="/" class="nav-link">Find CVs</a>
-          <a href="/product" class="nav-link">Products</a>
-          <a href="/" class="nav-link">Resources</a> -->
+          <a href="/companypost" class="nav-link" :class="{ 'active': isActive('/companypost') }">Home</a>
+          <a href="/login" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/login') }">Login</a>
+          <a href="/registration" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/registration') }">Register</a>
+          <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/job-apply') }">Jobs Applied</a>
+          <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Login as Company</a>
+
         </v-col>
-        <v-col class="nav-links">
-          <a href="/login" class="btn-dashboard outlined">
-            Login
-          </a>
-          <a href="/registration" class="btn-dashboard outlined">
-            Registration
-          </a>
-          <a href="/job" class="nav-link" style="float: right;">Login as Company</a>
-        </v-col>
+        <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
       </v-row>
-    </v-container>
+    
   </v-app-bar>
 </template>
 
 <script>
+import { reactive, onMounted } from 'vue';
+import { useUsersStore } from "../store/user";
+
 export default {
-  name: "Header"
+  name: "Header",
+  setup() {
+    const usersStore = useUsersStore();
+    const state = reactive({
+      activeLink: window.location.pathname
+    });
+
+    
+    onMounted(() => {
+      state.activeLink = window.location.pathname;
+    });
+
+    const isActive = (link) => {
+      return state.activeLink === link;
+    };
+    const logout = () => {
+      usersStore.isLogOut();
+      window.location.href = '/login';
+    };
+    return {
+      isActive,
+      logout,
+      usersStore,
+    };
+  },
 };
 </script>
 
 <style scoped>
+.custom-app-bar {
+  height: 80px;
+}
+
 .nav-links {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .nav-link,
@@ -42,11 +67,14 @@ export default {
   margin-right: 20px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 18px;
+  transition: color 0.3s ease-in-out;
 }
 
 .btn-dashboard {
   border-radius: 4px;
   margin-left: 10px;
+  transition: background 0.3s ease-in-out;
 }
 
 .outlined {
@@ -58,7 +86,14 @@ export default {
 }
 
 .v-app-bar {
-  background-color: #add8e6;
+
   border-bottom: 1px solid #161414;
 }
+.nav-link:hover {
+  color: #ca82e9;
+}
+.active {
+  color: #ca82e9;
+}
 </style>
+

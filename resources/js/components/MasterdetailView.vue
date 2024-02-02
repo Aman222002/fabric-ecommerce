@@ -21,6 +21,7 @@ export default {
         },
     },
     setup(props) {
+        console.log(props.companyInfo);
         // const masterDetailData = ref({
         //     key: 0,
         // });

@@ -42,6 +42,7 @@ class CompanyController extends Controller
         $request->validated();
         try {
             $input = $request->all();
+
             $user = User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
@@ -49,12 +50,16 @@ class CompanyController extends Controller
                 'phone' => $input['phone'],
             ]);
             $user->assignRole('Company Admin');
+            $image = $request->file('logo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/assest', $imageName);
             $company =  Company::create([
                 'user_id' =>  $user->id,
                 'company_name' => $input['company_name'],
                 'company_email' => $input['company_email'],
                 'phone_number' => $input['phone_number'],
                 'description' => $input['description'],
+                'logo' => $imageName,
             ]);
             $company->address()->create([
                 'company_id' => $company->id,
@@ -64,7 +69,6 @@ class CompanyController extends Controller
                 'state' => $input['state'],
                 'postal_code' => $input['postal_code'],
             ]);
-
             dispatch(new VerificationMail($user->email));
             return response()->json([
                 'status' => true,
@@ -130,10 +134,8 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+   
+
 
     /**
      * Show the form for editing the specified resource.

@@ -20,6 +20,8 @@ import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
+
+
 import { createPinia } from "pinia";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -89,6 +91,8 @@ app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
+
+
 import Registration from "./components/Registration.vue";
 
 app.component("registration-component", Registration);
@@ -101,6 +105,9 @@ app.component("footer-component", Footer);
 
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
+
+import ResumeComponent from "./components/ResumeComponent.vue";
+app.component("resume-component", ResumeComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
@@ -156,8 +163,7 @@ const component = {
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
-import Home from "./components/Home.vue";
-app.component("home-component", Home);
+
 import DashBoard from "./components/DashBoard.vue";
 app.component("dashboard-component", DashBoard);
 
@@ -189,7 +195,14 @@ import CompanyPage from "./components/CompanyPage.vue";
 app.component("company-page", CompanyPage);
 
 import CompanyPost from "./components/CompanyPost.vue";
-app.component("company-post", CompanyPost);
+app.component("company-post",CompanyPost)
+
+import CompanyProfile from "./components/CompanyProfile.vue";
+app.component("company-profile",CompanyProfile)
+
+import JobApplied from "./components/JobApplied.vue";
+app.component("jobapply-component", JobApplied);
+
 
 /**
  * The following block of code may be used to automatically register your

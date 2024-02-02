@@ -28,6 +28,7 @@ export default function useDataSource(
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
+                    console.log(data.data);
                     return {
                         data: data.data || [],
                         summary: data.summary || [],

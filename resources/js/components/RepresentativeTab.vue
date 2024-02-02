@@ -26,6 +26,7 @@ export default {
         },
     },
     setup(props) {
+        console.log(props.userId);
         const loadURL = `/admin/company/representative/${props.userId}`;
         const updateURL = `/admin/user/update`;
         const { dataSource } = dxGridStore(loadURL, null, updateURL);

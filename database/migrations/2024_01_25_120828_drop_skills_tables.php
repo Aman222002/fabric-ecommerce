@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('userskills', 'user_skills');
+        //
+        Schema::dropIfExists('skills');
     }
 
     /**
@@ -19,6 +20,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::rename('user_skills', 'userskills');
+        //
     }
 };
