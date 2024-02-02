@@ -8,7 +8,7 @@
           <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Products</a>
           
           <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
-          
+          <a href="/company/profile" class="nav-link" :class="{ 'active': isActive('/company/profile') }" v-if="usersStore.isloggedin">Profile</a>
         </v-col>
         <v-btn   @click="login()" style="margin-top: 10px;">Login as User</v-btn>
         <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>

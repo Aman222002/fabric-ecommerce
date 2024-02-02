@@ -128,6 +128,7 @@ Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
 Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
+Route::get('/jobs/detail/{id}',[JobsController::class,'detail']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

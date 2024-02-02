@@ -9,7 +9,7 @@ class Job extends Model
 {
     use HasFactory;
     protected $table ='post_jobs';
-    protected $primaryKey='id';
+    // protected $primaryKey='id';
     protected $fillable = [
         'user_id',
         'company_id',
@@ -46,9 +46,7 @@ class Job extends Model
     }
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
-    public function applications() {
-        return $this->hasMany(JobApply::class);
-    }
+    
 }

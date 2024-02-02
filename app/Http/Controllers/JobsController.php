@@ -296,5 +296,15 @@ class JobsController extends Controller
             'jobApplications' => $jobApplications
         ]);
     }
-    
+    public function detail($id) {
+        $job = Job::where([
+            'id' => $id, 
+        ])->first();
+        if ($job == null) {
+            abort(404);
+        }
+       
+        return view('postdetail',['job' => $job]);
+    }
+   
 }
