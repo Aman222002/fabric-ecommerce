@@ -27,7 +27,6 @@ export default function useDataSource(
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
-                        console.log(data.data);
                     }
                     return {
                         data: data.data || [],
@@ -54,7 +53,6 @@ export default function useDataSource(
                 });
         },
         update: (key, values) => {
-            console.log(values);
             return window.axios
                 .post(updateURL + "/" + key.id, values)
                 .then(() => {

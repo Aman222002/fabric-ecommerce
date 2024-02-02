@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('post_jobs', function (Blueprint $table) {
+        Schema::table('plans', function (Blueprint $table) {
             //
-            $table->dropColumn('company_id');
+            $table->integer('Posts_Allowed');
         });
     }
 
@@ -22,10 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('post_jobs', function (Blueprint $table) {
+        Schema::table('plans', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->dropColumn('Posts_Allowed');
         });
     }
 };

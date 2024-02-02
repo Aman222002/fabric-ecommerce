@@ -28,14 +28,8 @@ use App\Http\Controllers\JobTypesController;
 */
 
 
-<<<<<<< HEAD
 Route::get('/', function () {
-    return view('layouts.default');
-=======
-Route::get('/', function()
-{
-   return view('companypage');
->>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
+    return view('companypage');
 });
 Auth::routes();
 
@@ -92,9 +86,8 @@ Route::post('/post', [JobsController::class, 'store']);
 Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
 Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
-
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
@@ -102,6 +95,10 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/profile/getProfile', [UserController::class, 'getProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
+    Route::get('/plans', [DashboardController::class, 'plans']);
+    Route::get('/get/plans', [DashboardController::class, 'getplans']);
+    Route::post('/update/plans/{planID?}', [DashboardController::class, 'updateplans']);
+
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
         Route::get('/edit/{id}', [UserController::class, 'edit']);
@@ -112,6 +109,9 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
     });
     Route::group(["prefix" => "/company"], function () {
+        Route::get('/address/{addressId?}', [CompanyController::class, 'getAddress']);
+        Route::post('/address/update/{addressId?}', [CompanyController::class, 'updateAddress']);
+        Route::get('/representative/{userId?}', [CompanyController::class, 'findRepresentative']);
         Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
         Route::post('/store', [CompanyController::class, 'store']);
         Route::post('/update/{id}', [CompanyController::class, 'update']);
@@ -120,7 +120,5 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
 });
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
-
-
 //users
 //user/{id} function(Request $request, $id)

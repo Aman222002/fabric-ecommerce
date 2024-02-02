@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) { 
-            $table->unique('email');
+        Schema::table('users', function (Blueprint $table) {
             //
+            $table->dropColumn('user_image');
         });
     }
+
     /**
      * Reverse the migrations.
      */
@@ -23,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropUnique('email');
+            $table->string('user_image');
         });
     }
 };

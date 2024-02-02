@@ -1,20 +1,19 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+            :remote-operations="true" @content-ready="onContentReady" @row-expanding="onRowExpanding"
             :onEditingStart="EditStart" @init-new-row="initNewRow" @row-inserted="rowInserted">
             <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
             <DxSearchPanel :visible="true" />
+            <DxScrolling mode="virtual" row-rendering-mode="virtual" />
             <DxColumn data-field="company_name" data-type="string">
                 <DxRequiredRule />
             </DxColumn>
             <DxColumn data-field="company_email" data-type="string">
                 <DxRequiredRule />
             </DxColumn>
-            <DxColumn data-field="registration_number" data-type="string">
-            </DxColumn>
-            <DxColumn data-field="company_address" data-type="string" />
             <DxColumn data-field="description" data-type="string" />
-            <DxColumn data-field="phone_number" data-type="number" />
+            <DxColumn data-field="phone_number" data-type="string" />
             <DxColumn data-field="name" data-type="string" caption="User Name" :visible="showColumn">
                 <DxPatternRule :pattern="namePattern" message="Name should of min 3 and max 10 word" />
             </DxColumn>
@@ -28,6 +27,10 @@
             <DxColumn data-field="phone" data-type="string" caption="User Phone" :visible="showColumn">
                 <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
             </DxColumn>
+            <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
+            <template #masterDetailTemplate="{ data: cellInfo }">
+                <masterDetailTemplate :company-info="cellInfo.data" />
+            </template>
             <DxSummary>
                 <DxTotalItem column="id" summary-type="count" />
             </DxSummary>
@@ -36,18 +39,11 @@
 </template>
 <script>
 import {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxScrolling,
-    DxSummary,
-    DxLookup,
-    DxSearchPanel,
-    DxTotalItem,
     DxRequiredRule,
 } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
+import masterDetailTemplate from './MasterdetailView.vue'
 export default {
     name: 'CompaniesComponent',
     setup() {
@@ -61,24 +57,30 @@ export default {
         const updateURL = `/admin/company/update`;
         const deleteUrl = `/admin/company/destroy`;
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
+        const onRowExpanding = (e) => {
+            e.component.collapseAll(-1);
+        }
+        const onContentReady = (e) => {
+            if (!e.component.getSelectedRowKeys().length) {
+                e.component.selectRowsByIndexes(0);
+            }
+        }
         const initNewRow = (e) => {
-            console.log(showColumn.value);
             e.data.status = '1';
             showColumn.value = true;
         };
         const EditStart = (e) => {
             showColumn.value = false;
-            console.log('started Editting', e.data);
         };
         const rowInserted = (e) => {
             showColumn.value = false;
         };
         return {
-            dataSource, showColumn, EditStart, initNewRow, rowInserted, namePattern, emailPattern, phonePattern, paswordPattern,
+            dataSource, showColumn, EditStart, initNewRow, rowInserted, namePattern, emailPattern, phonePattern, onRowExpanding, paswordPattern, onContentReady
         };
     },
 
-    components: { DxRequiredRule }
+    components: { DxRequiredRule, masterDetailTemplate }
 }
 </script>
 <style scoped>
@@ -89,7 +91,7 @@ export default {
 .container {
     margin-top: 15px;
     margin-left: 90px;
-    width: fit-content;
+    width: 90%;
 }
 
 .options {

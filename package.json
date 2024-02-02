@@ -20,12 +20,10 @@
         "@mdi/font": "^7.4.47",
         "devextreme-vue": "21.1",
         "esbuild": "^0.19.11",
-<<<<<<< HEAD
         "mitt": "^3.0.1",
-=======
         "pinia": "^2.1.7",
         "pinia-plugin-persistedstate": "^3.2.1",
->>>>>>> c31050688b381a531574f7d7dfa8cd492933ed5d
+        "sweetalert2": "^11.10.4",
         "vite-plugin-vuetify": "^2.0.1",
         "vue-event-bus": "^1.0.2",
         "vue-sweetalert2": "^5.0.5",
