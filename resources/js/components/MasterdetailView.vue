@@ -21,19 +21,6 @@ export default {
         },
     },
     setup(props) {
-        console.log(props.companyInfo);
-        // const masterDetailData = ref({
-        //     key: 0,
-        // });
-        // // Access the props directly
-        // const { masterDetailData: propsMasterDetailData } = this;
-        // // Update the masterDetailData ref when props change
-        // if (propsMasterDetailData) {
-        //     masterDetailData.value = propsMasterDetailData;
-        // }
-        // return {
-        //     masterDetailData,
-        // }
     },
     components: { RepresentativesTab, AddressTab }
 }

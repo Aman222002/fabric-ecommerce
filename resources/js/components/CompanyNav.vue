@@ -1,39 +1,37 @@
 <template>
   <v-app-bar app class="custom-app-bar" color="primary">
-   
-      <v-row align="center" justify="space-between">
-        <v-col class="nav-links">
-          <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
-          <a href="/findcv" class="nav-link" :class="{ 'active': isActive('/findcv') }">Find CVs</a>
-          <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Products</a>
-          
-          <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
-          
-        </v-col>
-        <v-btn   @click="login()" style="margin-top: 10px;">Login as User</v-btn>
-        <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
-      </v-row>
-    
+
+    <v-row align="center" justify="space-between">
+      <v-col class="nav-links">
+        <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
+        <a href="/findcv" class="nav-link" :class="{ 'active': isActive('/findcv') }">Find CVs</a>
+        <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Buy Subscription</a>
+        <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
+      </v-col>
+      <v-btn class="mt-3"><v-icon size="25">mdi-cart</v-icon> <v-badge color="success" :content="count"
+          inline></v-badge></v-btn>
+      <v-btn @click="login()" style="margin-top: 10px;">Login as User</v-btn>
+      <v-btn v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
+    </v-row>
   </v-app-bar>
 </template>
 
 <script>
 import { reactive, onMounted } from 'vue';
 import { useUsersStore } from "../store/user";
-
+import { ref } from "vue";
 export default {
   name: "CompanyNav",
   setup() {
+    const count = ref(0);
     const usersStore = useUsersStore();
     const state = reactive({
       activeLink: window.location.pathname
     });
-
-    
+    count.value = usersStore.countCartItems;
     onMounted(() => {
       state.activeLink = window.location.pathname;
     });
-
     const isActive = (link) => {
       return state.activeLink === link;
     };
@@ -42,14 +40,15 @@ export default {
       window.location.href = '/job';
     };
     const login = () => {
-     
+
       window.location.href = '/login';
     };
     return {
       isActive,
       logout,
       usersStore,
-      login
+      login,
+      count
     };
   },
 };
@@ -91,7 +90,7 @@ export default {
 }
 
 .v-app-bar {
-  
+
   border-bottom: 1px solid #161414;
 }
 
