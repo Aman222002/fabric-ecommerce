@@ -7,10 +7,6 @@
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
-<<<<<<< HEAD
-=======
-
->>>>>>> 970323addb3a7f2552311484f205d30a74e0bc7e
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
@@ -52,7 +48,6 @@ const vuetify = createVuetify({
     components,
     directives,
 });
-<<<<<<< HEAD
 import {
     DxDataGrid,
     DxPager,
@@ -79,7 +74,6 @@ import {
     DxRequiredRule,
     DxEmailRule,
     DxExport,
-    DxStringLengthRule,
 } from "devextreme-vue/data-grid";
 import {
     DxForm,
@@ -87,42 +81,39 @@ import {
     DxLabel,
     DxGroupItem,
 } from "devextreme-vue/form";
-import { DxBox, DxItem } from "devextreme-vue/box";
 import { DxTooltip } from "devextreme-vue/tooltip";
-import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
-=======
-// app.use(DropZone);
->>>>>>> 970323addb3a7f2552311484f205d30a74e0bc7e
+import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
+import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
-// app.use(VueTelInput, VueTelInputOptions);
+//app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
+
 app.component("registration-component", Registration);
+
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
+
+import Footer from "./components/Footer.vue";
+app.component("footer-component", Footer);
+
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
-import Home from "./components/Home.vue";
-app.component("home-component", Home);
-import ResumeComponent from "./components/ResumeComponent.vue";
-app.component("resume-component", ResumeComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
 import NavbarComponent from "./components/NavbarComponent.vue";
 app.component("navbar-component", NavbarComponent);
-import DashBoard from "./components/DashBoard.vue";
-app.component("dashboard-component", DashBoard);
 import AllUser from "./components/AllUser.vue";
 app.component("alluser-component", AllUser);
 import ProfileComponent from "./components/ProfileComponent.vue";
 app.component("profile-component", ProfileComponent);
-import SubscriptionPlans from "./components/SubscriptionPlans.vue";
-app.component("plans-component", SubscriptionPlans);
 import CompaniesComponent from "./components/CompaniesComponent.vue";
 app.component("companies-component", CompaniesComponent);
+import SubscriptionPlans from "./components/SubscriptionPlans.vue";
+app.component("plans-component", SubscriptionPlans);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
 app.config.globalProperties.emitter = emitter;
@@ -152,7 +143,6 @@ const component = {
     DxTooltip,
     DxEditing,
     DxFormItem,
-    DxTabItem,
     DxLookup,
     DxPatternRule,
     DxRequiredRule,
@@ -160,17 +150,16 @@ const component = {
     DxExport,
     DxTabPanel,
     DxItem,
-    DxStringLengthRule,
     DxBox,
+    DxBoxItem,
 };
-
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
-// import Home from "./components/Home.vue";
-// app.component("home-component", Home);
-// import DashboardComponent from "./components/DashboardComponent.vue";
-// app.component("dashboard-component", DashboardComponent);
+import Home from "./components/Home.vue";
+app.component("home-component", Home);
+import DashBoard from "./components/DashBoard.vue";
+app.component("dashboard-component", DashBoard);
 
 import FindCv from "./components/FindCv.vue";
 app.component("findcv-component", FindCv);

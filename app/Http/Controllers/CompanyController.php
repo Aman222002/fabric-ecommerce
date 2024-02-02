@@ -102,19 +102,6 @@ class CompanyController extends Controller
         }
     }
     /**
-     * to update company address
-     */
-    public function updateAddress(Request $request, $addressId = 0)
-    {
-        try {
-            $address = Address::find($addressId);
-            $address->update($request->all());
-            return response()->json(['status' => true, 'data' => $address]);
-        } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
-        }
-    }
-    /**
      * to fetch all companies
      */
     public function getCompanies()
@@ -124,6 +111,19 @@ class CompanyController extends Controller
             return response()->json(['data' => $companies, 'status' => true], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * to update company address
+     */
+    public function updateAddress(Request $request, $addressId = 0)
+    {
+        try {
+            $address = Address::find($addressId);
+            $address->update($request->all());
+            return response()->json(['status' => true, 'data' => $address]);
+        } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }

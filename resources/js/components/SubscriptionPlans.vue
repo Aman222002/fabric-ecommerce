@@ -19,7 +19,7 @@ import { ref } from "vue";
 export default {
     name: 'SubscriptionPlans',
     setup() {
-        const namePattern = ref("^[0-9]{9,13}$");
+        const namePattern = ref("[a-zA-Z]{3,30}");
         const loadURL = `/admin/get/plans`;
         const updateURL = `/admin/update/plans`;
         const { dataSource } = dxGridStore(loadURL, null, updateURL);
