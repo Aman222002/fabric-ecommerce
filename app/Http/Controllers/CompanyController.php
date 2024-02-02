@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Models\Address;
 use App\Http\Requests\CompanyRagistrationRequest;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
@@ -80,6 +82,56 @@ class CompanyController extends Controller
         }
     }
     /**
+     * function to find company representative
+     */
+    public function findRepresentative($userId = 0)
+    {
+        try {
+            $user = User::find($userId);
+            return response()->json(['status' => true, 'data' => $user]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * to get address details
+     */
+    public function getAddress(Request $request, $addressId = 0)
+    {
+        try {
+            $address = Address::find($addressId);
+            return response()->json(['status' => true, 'data' => $address]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * to fetch all companies
+     */
+    public function getCompanies()
+    {
+        try {
+            $companies = Company::all();
+            return response()->json(['data' => $companies, 'status' => true], 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * to update company address
+     */
+    public function updateAddress(Request $request, $addressId = 0)
+    {
+        try {
+            $address = Address::find($addressId);
+            $address->update($request->all());
+            return response()->json(['status' => true, 'data' => $address]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
      * Display the specified resource.
      */
    
@@ -99,6 +151,22 @@ class CompanyController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try {
+            $company = Company::find($id);
+            if ($company) {
+                $company->update($request->all());
+                return response()->json(['status' => true, 'message' => 'Company data updated successfully'], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'Company not found'
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -107,6 +175,26 @@ class CompanyController extends Controller
     public function destroy(string $id)
     {
         //
+        try {
+            $company = Company::find($id);
+            if ($company) {
+                $company->delete();
+                $response = [
+                    'status' => true,
+                    'data' => 'Company deleted Successsfully',
+                ];
+                return response()->json($response, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'no data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
     public function check(Request $request)
     {

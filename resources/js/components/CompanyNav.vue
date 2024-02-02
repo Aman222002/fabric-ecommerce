@@ -39,7 +39,7 @@ export default {
     };
     const logout = () => {
       usersStore.isLogOut();
-      window.location.href = '/';
+      window.location.href = '/job';
     };
     const login = () => {
      

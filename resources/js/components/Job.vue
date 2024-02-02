@@ -127,7 +127,7 @@ export default {
               text: 'Login successfully ',
               confirmButtonText: 'OK',
             })
-          window.location.href = '/company/profile';
+          window.location.href = '/postjob';
         }
         
       } catch (err) {
