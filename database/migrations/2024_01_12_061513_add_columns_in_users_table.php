@@ -17,6 +17,10 @@ return new class extends Migration
             }
         });
     }
+    // Schema::table('users', function (Blueprint $table) {
+    //     $table->string('phone')->after('email');
+    // });
+
 
     /**
      * Reverse the migrations.

@@ -57,7 +57,7 @@ class LoginController extends Controller
             $user = Auth::user();
             if ($user) {
                 $role = $user->getRoleNames();
-                return response()->json(['status' => true, 'data' => $user, 'role' => $role]);
+                return response()->json(['status' => true, 'data' => $user], 200);
             } else {
                 $response = [
                     'status' => false,

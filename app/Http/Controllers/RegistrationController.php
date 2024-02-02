@@ -30,7 +30,8 @@ class RegistrationController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => "Registation Success"
+                'message' => "Registation Successfully",
+
             ]);
         } catch (\Exception $e) {
             return response()->json([

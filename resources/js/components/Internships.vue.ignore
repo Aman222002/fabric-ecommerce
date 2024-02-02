@@ -1,0 +1,51 @@
+<template>
+    <div>
+        <h1>Internships compaines </h1>
+        <v-row>
+            <v-col v-for="internship in internships" :key="internship.id" cols="12" md="6" lg="4">
+                <v-card class="internship-card">
+                    <v-img :src="internship.logo" height="200"></v-img>
+                    <v-card-title>{{ internship.title }}</v-card-title>
+                    <v-card-subtitle>{{ internship.company }}</v-card-subtitle>
+                    <v-card-text>{{ internship.description }}</v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </div>
+</template>
+
+<script>
+    import { ref, onMounted } from 'vue';
+    export default {
+        name: 'Internships',
+        setup() {
+            const internships = ref([]);
+            // const fetchInternships = async () => {
+            //     try {
+            //         const response = await axios.get('http://your-laravel-api.com/api/internships');
+            //         internships.value = response.data;
+            //     } catch (error) {
+            //         console.error('Error fetching internships:', error);
+            //     }
+            // };
+
+            // onMounted(fetchInternships);
+
+            return {
+                internships,
+            };
+        },
+    };
+</script>
+
+<style scoped>
+    .internship-card {
+        margin: 16px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .internship-card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+</style>

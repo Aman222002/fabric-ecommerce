@@ -7,6 +7,10 @@
 import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 970323addb3a7f2552311484f205d30a74e0bc7e
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
@@ -48,6 +52,7 @@ const vuetify = createVuetify({
     components,
     directives,
 });
+<<<<<<< HEAD
 import {
     DxDataGrid,
     DxPager,
@@ -85,23 +90,24 @@ import {
 import { DxBox, DxItem } from "devextreme-vue/box";
 import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
+=======
+// app.use(DropZone);
+>>>>>>> 970323addb3a7f2552311484f205d30a74e0bc7e
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
 // app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
-
 app.component("registration-component", Registration);
-
 import Header from "./components/Header.vue";
 app.component("header-component", Header);
-
-import Footer from "./components/Footer.vue";
-app.component("footer-component", Footer);
-
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
+import Home from "./components/Home.vue";
+app.component("home-component", Home);
+import ResumeComponent from "./components/ResumeComponent.vue";
+app.component("resume-component", ResumeComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);

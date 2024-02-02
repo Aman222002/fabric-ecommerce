@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers\API;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -22,6 +24,7 @@ class UserCotroller extends Controller
         return view('user.index', compact('data'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -37,7 +40,7 @@ class UserCotroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:user.email',
@@ -51,16 +54,29 @@ class UserCotroller extends Controller
         return redirect()->route('user.index')->with('success', 'user created Successfully');
     }
 
+    public function updateUser(Request $request, $userId)
+    {
+        $data = $request->all();
+
+        User::updateOrCreate(['id' => $userId], $data);
+
+        return response()->json(['message' => 'User updated successfully']);
+    }
+
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $user = User::find($id);
-        return view('user.show', compact('data'));
-    }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        return response()->json(['user' => $user]);
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -106,5 +122,25 @@ class UserCotroller extends Controller
         //
         User::find($id)->delete();
         return redirect()->route('user.index')->with('success', 'User DEleted Successfully');
+    }
+    /**
+     * get users from backend
+     */
+    public function getUser()
+    {
+
+        $user = User::first();
+
+        if ($user) {
+            return response()->json([
+                'data' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                ],
+            ]);
+        } else {
+            return response()->json(['error' => 'User not found'], 404);
+        }
     }
 }
