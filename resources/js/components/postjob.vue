@@ -162,6 +162,9 @@ export default {
         console.error("Error fetching job types:", error);
       }
     };
+    const selectJobSkill = (selectedJobSkill) => {
+      job.jobSkill = selectedJobSkill.name;
+    };
     const selectJobType = (selectedJobType) => {
       job.jobType = selectedJobType.name;
     };
@@ -210,7 +213,7 @@ export default {
               text: 'Job Posted successfully ',
               confirmButtonText: 'OK',
             })
-              window.location.href = '/crud';
+              window.location.href = '/company/profile';
             }
           })
         }catch(err){
@@ -226,6 +229,7 @@ export default {
       experienceOptions,
       selectCategory,
       selectJobType,
+      selectJobSkill,
       saveJob,
       jobSkills,
       form,

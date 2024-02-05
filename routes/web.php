@@ -129,6 +129,11 @@ Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
 Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
 Route::get('/jobs/detail/{id}',[JobsController::class,'detail']);
+Route::post('/save-job/{id}',[JobsController::class,'saveJob']);
+Route::get('/savedjobs',[JobsController::class,'savedJobsdetail']);
+Route::post('/removesavedjobs/{id}',[JobsController::class,'removeSavedJob']);
+Route::post('/removeappliedjobs/{id}',[JobsController::class,'removeAppliedJob']);
+
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

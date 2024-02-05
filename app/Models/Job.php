@@ -23,7 +23,7 @@ class Job extends Model
         'qualifications',
         'experience',
         'company_website',
-        'skill',
+        'skill_id',
     ];
 
    
@@ -48,5 +48,6 @@ class Job extends Model
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
+ 
     
 }

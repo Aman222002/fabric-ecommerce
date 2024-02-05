@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Job;
+use App\Models\UserSkill;
 
 class SearchjobController extends Controller
 {
@@ -24,17 +25,19 @@ class SearchjobController extends Controller
     try {
         // $jobs = Job::all();
         $user = auth()->user();
+   $skills = UserSkill::where('user_id', $user->id)->pluck('skill_id');
 
         $companyId = 0;
 
         if($user->hasRole('User')){
             $companyId =  $user->company ? $user->company->id : 0;
         }
-        $jobs = Job::with("company");
+        $jobs = Job::whereIn('skill_id', $skills)->with("company");
         if($companyId != 0){
             $jobs->where('company_id', $companyId);
         }
         $jobs =   $jobs->get();
+    
         return response()->json(['status' => true, 'data' => $jobs], 200);
     } catch (\Exception $e) {
         Log::error($e->getMessage());

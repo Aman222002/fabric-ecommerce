@@ -10,8 +10,8 @@
         <v-btn @click="searchJobs" color="primary">Search</v-btn>
       </v-col>
     </v-row>
-
-    <div class="card-container">
+    
+    <div class="card-container" >
      
       
       <v-card v-for="job in jobs" :key="job.id" class="custom-card">
@@ -93,7 +93,6 @@
       searchJobs,
       companypost,
       usersStore,
-      // apply,
       detail,
      
       };
@@ -105,8 +104,9 @@
   .card-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; 
+    gap: 60px; 
     margin-top: 20px;
+    
   }
   .custom-card {
     display: flex;
@@ -114,6 +114,7 @@
     height: 330px;
     width: 350px;
     border: 1px solid rgb(7, 5, 5);
+    background-color: rgb(251, 251, 252);
  
   }
   

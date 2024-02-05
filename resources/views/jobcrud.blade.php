@@ -1,4 +1,4 @@
-@extends('layouts.default')
+<!-- @extends('layouts.default')
 @section('content')
 <jobcrud-component></jobcrud-component>
-@endsection
+@endsection -->

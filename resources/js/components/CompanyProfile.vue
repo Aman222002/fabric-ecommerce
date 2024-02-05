@@ -1,51 +1,44 @@
 <template>
-  <v-container class="my-8">
-   
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="10" md="8" lg="6">
-        <v-card class="custom-card">
-          <v-card-title class="mb-4 form-title">Company Profile</v-card-title>
-
-          <v-avatar size="250" v-if="company.length > 0">
-            <img :src="`/storage/assest/${company[0].logo}`" />
-          </v-avatar>
-
-          <v-card-text class="profile-details">
-            <div class="profile-detail">
-              <div class="detail-label">Username:</div>
-              <div class="detail-value">{{ user.name }}</div>
-            </div>
-            <div class="profile-detail">
-              <div class="detail-label">UserEmail:</div>
-              <div class="detail-value">{{ user.email }}</div>
-            </div>
-            <div class="profile-detail">
-              <div class="detail-label">UserPhone:</div>
-              <div class="detail-value">{{ user.phone }}</div>
-            </div>
-
-            <div v-if="company.length > 0" class="profile-detail">
-              <div class="detail-label">Company Name:</div>
-              <div class="detail-value">{{ company[0].company_name }}</div>
-            </div>
-            <div v-if="company.length > 0" class="profile-detail">
-              <div class="detail-label">Company Email:</div>
-              <div class="detail-value">{{ company[0].company_email }}</div>
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="goToEditPage()" class="custom-button"
-              >Edit Profile</v-btn
-            >
-            <v-btn color="white" class="bg-primary">
-              <a href="/postjob" style="text-decoration: none; color: white"
-                >Post a Job</a
-              >
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+  <div class="full-screen-image-container" style=" margin-top: 20px;">
+    <v-card class="custom-card">
+      <v-card-title class="mb-4 form-title" style="font-size: 30px;">Company Profile</v-card-title>
+      <v-col cols="2">
+        <v-avatar size="150" v-if="company.length > 0">
+          <img :src="`/storage/assest/${company[0].logo}`" />
+        </v-avatar>
       </v-col>
-    </v-row>
+
+      <v-card-text class="profile-details">
+        <div class="profile-detail">
+          <div class="detail-label">Username:</div>
+          <div class="detail-value">{{ user.name }}</div>
+        </div>
+        <div class="profile-detail">
+          <div class="detail-label">UserEmail:</div>
+          <div class="detail-value">{{ user.email }}</div>
+        </div>
+        <div class="profile-detail">
+          <div class="detail-label">UserPhone:</div>
+          <div class="detail-value">{{ user.phone }}</div>
+        </div>
+
+        <div v-if="company.length > 0" class="profile-detail">
+          <div class="detail-label">Company Name:</div>
+          <div class="detail-value">{{ company[0].company_name }}</div>
+        </div>
+        <div v-if="company.length > 0" class="profile-detail">
+          <div class="detail-label">Company Email:</div>
+          <div class="detail-value">{{ company[0].company_email }}</div>
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="white" @click="goToEditPage()" class="bg-primary"
+          >Edit Profile</v-btn
+        >
+        
+      </v-card-actions>
+    </v-card>
+
     <v-dialog v-model="isEditModalOpen" max-width="600px">
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
@@ -89,8 +82,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
-
+  </div>
 </template>
 
 <script>
@@ -104,9 +96,9 @@ export default {
     const user = ref([]);
     const isEditModalOpen = ref(false);
     const editedJob = ref({
-      name:"",
-      email:"",
-      phone:"",
+      name: "",
+      email: "",
+      phone: "",
       company_name: "",
       company_email: "",
       logo: null,
@@ -122,11 +114,11 @@ export default {
       }
     };
     const goToEditPage = () => {
-      editedJob.value.name = user.value.name; 
+      editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
       editedJob.value.phone = user.value.phone;
-      editedJob.value.company_name = company.value[0].company_name ;
-      editedJob.value.company_email =  company.value[0].company_email;
+      editedJob.value.company_name = company.value[0].company_name;
+      editedJob.value.company_email = company.value[0].company_email;
       editedJob.value.logo = null;
       isEditModalOpen.value = true;
     };
@@ -155,9 +147,9 @@ export default {
       }
     };
     const handleImage = (event) => {
-  const file = event.target.files[0];
-  editedJob.value.logo = file;
-};
+      const file = event.target.files[0];
+      editedJob.value.logo = file;
+    };
 
     onMounted(() => {
       fetchCompanyProfile();
@@ -179,10 +171,6 @@ export default {
 </script>
 
 <style scoped>
-.custom-card {
-  width: 100%;
-}
-
 .profile-details {
   display: flex;
   flex-direction: column;
@@ -202,7 +190,11 @@ export default {
 .profile-picture {
   width: 50%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 20px;
   margin-bottom: 16px;
+}
+.custom-card {
+  border: 1px solid rgb(7, 5, 5);
+  width: 100vw;
 }
 </style>

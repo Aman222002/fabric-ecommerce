@@ -1,4 +1,6 @@
 <template>
+
+  <div style="text-align: center; font-size: 30px;">Job Posted</div>
   <v-btn color="success" style="margin-top: 40px;"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
     <v-table>
       <thead>

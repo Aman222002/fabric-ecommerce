@@ -5,13 +5,14 @@
       <v-card-title style="font-size: 40px; font-weight: bolder; text-align: center; margin-top: 30px; color: rgb(139, 238, 144);">{{ job.title }}</v-card-title>
       <v-card-text>
         <div style="font-size: 20px;margin-top: 30px; color: red;  ">Location:<span style="color: black;margin-left: 140px;"> {{ job.location }}</span></div><br>
-        <div style="font-size: 20px; color: red;  ">Experience:<span style="color: black;margin-left: 140px;"> {{ job.experience }}</span></div><br>
-        <div style="font-size: 20px;color: red;  ">Description:<span style="color: black;margin-left: 140px;"> {{ job.description }}</span></div><br>
+        <div style="font-size: 20px; color: red;  ">Experience:<span style="color: black;margin-left: 110px;"> {{ job.experience }}</span></div><br>
+        <div style="font-size: 20px;color: red;  ">Description:<span style="color: black;margin-left: 110px;"> {{ job.description }}</span></div><br>
         <div style="font-size: 20px; color: red;  ">Vacancy:<span style="color: black;margin-left: 140px;"> {{ job.vacancy }}</span></div>
       </v-card-text>
       <v-card-actions style="justify-content: center;">
+     
           <v-btn  color="white" class="bg-primary" v-if="usersStore.isloggedin"  @click="apply(job.id)" >Apply</v-btn>
-          <v-btn  color="white" class="bg-success">Save</v-btn>
+          <v-btn  color="white" class="bg-success" @click="save(job.id)">Save</v-btn>
          
       </v-card-actions>
     </v-card>
@@ -27,8 +28,8 @@ export default {
   name: 'PostDetail',
   props:{
             data:{
-                type:Array,
-                default: ()=>{[]},
+                type:Object,
+                default: ()=>{{}},
             }
         },
   setup(props) {
@@ -41,9 +42,9 @@ export default {
     job.value=props.data;
       const apply = async(id) => {
  try{
- await axios.post(`/apply-job/${id}`) . then((response)=>{
-  if (response.data.success) {
 
+ await axios.post(`/apply-job/${id}`) . then((response)=>{
+  if (response.data.status == true) {
     window.Swal.fire({
               icon: 'success',
               title: 'Applied Successfully',
@@ -51,10 +52,42 @@ export default {
               confirmButtonText: 'OK',
             })
   }
+ 
  });
   
  }catch(err){
   console.error(err);
+  window.Swal.fire({
+        title: 'Application Failed',
+        text: 'You Already apply on this Job',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+ }
+
+      };
+      const save = async(id) => {
+ try{
+ await axios.post(`/save-job/${id}`) . then((response)=>{
+  if (response.data.status == true) {
+    window.Swal.fire({
+              icon: 'success',
+              title: 'saved Successfully',
+              text: 'saved successfully ',
+              confirmButtonText: 'OK',
+            })
+  }
+ });
+  
+ }catch(err){
+  console.error(err);
+  window.Swal.fire({
+        title: 'Application Failed',
+        text: 'You Already saved this Job',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+  
  }
       };
 
@@ -65,9 +98,8 @@ export default {
     
     usersStore,
     apply,
-    job
-
-   
+    job,
+    save
     };
   },
 };
@@ -80,8 +112,4 @@ export default {
   width: 100vw;
  
 }
-
-
-
-
 </style>
