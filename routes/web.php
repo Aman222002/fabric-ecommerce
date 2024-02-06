@@ -65,17 +65,25 @@ Route::get('/header', function () {
 Route::get('/resume', function () {
     return view('resume');
 });
-Route::post('/resume', [ResumeController::class, 'store']);
+Route::post('/removedEducation/{educationId}', [ResumeController::class, 'destroyEducation']);
+Route::post('/removedExperience/{experienceId}', [ResumeController::class, 'destroyExperience']);
+Route::post('/removedAchievment/{achievmentId}', [ResumeController::class, 'destroyAchievment']);
+Route::post('/submit', [ResumeController::class, 'store']);
+
+Route::get('/my-profile', [ResumeController::class, 'getUserData']);
+Route::get('/getprofile', [ResumeController::class, 'getProfile']);
 Route::get('/user-skills', [UserSkillController::class, 'index']);
 Route::post('/user-skills', [UserSkillController::class, 'store']);
 Route::post('/users-achievments', [UserAchievementController::class, 'store']);
 Route::post('/user-profile', [UserProfileController::class, 'store']);
 Route::post('/work_experience', [UserExperienceController::class, 'store']);
 Route::post('/user-address', [UserAddressController::class, 'store']);
+Route::get('/getcountry', [UserAddressController::class, 'index']);
 Route::post('/address', [UserAddressController::class, 'index']);
 Route::post('/users-qualifications', [QualificationsController::class, 'store']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/getuser', [LoginController::class, 'getUser']);
+
 
 Route::get('/header', function () {
     return view('Header');
@@ -107,9 +115,6 @@ Route::get('/findcv', function () {
 Route::get('/companypost', function () {
     return view('companypost');
 });
-
-
-
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
@@ -118,23 +123,16 @@ Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-
 Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
 });
-
-
-
 Route::get('/post/jobs', [JobsController::class, 'index']);
 Route::post('/post', [JobsController::class, 'store']);
 Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
 Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
-
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);

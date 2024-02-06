@@ -14,9 +14,7 @@
 
     @section('scripts')
     @parent
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
-        async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize" async defer></script>
     <script src="/js/mapInput.js"></script>
     @stop
     <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key={AIzaSyB6E8Zp9ZTTovGtmiumT9KWneM13zxNjAw}">
@@ -27,6 +25,23 @@
 
 <body>
     <div id="app">
+        <v-app>
+            <header-component></header-component>
+            <v-main>
+
+                @yield('content')
+
+            </v-main>
+            <companyfooter-component></companyfooter-component>
+        </v-app>
+    </div>
+</body>
+
+</html>
+
+
+<!-- <body> -->
+<!-- <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -76,8 +91,9 @@
                     </ul>
                 </div>
             </div>
-        </nav>
-        <v-container>
+        </nav> -->
+
+<!-- <v-container>
             <main class="">
                 @yield('content')
             </main>
@@ -86,4 +102,4 @@
     </div>
 </body>
 
-</html>
+</html> -->

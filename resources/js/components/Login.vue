@@ -4,8 +4,7 @@
 
         <div class="register-form">
             <v-col cols="12" sm="6" md="6">
-                <v-col class="mt-5"
-                    style="background-color:#9a6a4f; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <v-col class="mt-5" style=" border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <v-card-title class="text-center">Login</v-card-title>
                     <v-card-text>
                         <v-form ref="form" @submit.prevent="submitForm">
@@ -28,7 +27,7 @@
 </template>
   
 <script>
-
+import axios from 'axios';
 export default {
     name: 'Login',
     data() {
@@ -50,8 +49,9 @@ export default {
     },
     methods: {
         async submitForm() {
+            console.log('Submitting form...', this.formData);
             try {
-                const response = await window.axios.post('/login', this.formData);
+                const response = await axios.post('/login', this.formData);
                 const data = response.data;
 
                 if (data.status === true) {
@@ -72,9 +72,9 @@ export default {
   
 <style scoped>
 .register-form {
-    background-image: url('/storage/assets/p.jpg');
+    /* background-image: url('/storage/assets/p.jpg'); */
     background-size: cover;
-    padding: 5vh;
+    padding: 15vh;
     height: 100%;
     display: flex;
     justify-content: center;

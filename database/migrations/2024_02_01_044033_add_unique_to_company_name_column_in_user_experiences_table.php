@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('post_jobs', function (Blueprint $table) {
-            //
-            $table->dropColumn('company_location');
-            $table->dropColumn('company_name');
+        Schema::table('user_experiences', function (Blueprint $table) {
+            $table->unique('company_name');
         });
     }
 
@@ -23,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('post_jobs', function (Blueprint $table) {
-            //
+        Schema::table('user_experiences', function (Blueprint $table) {
+
+            $table->dropUnique(['company_name']);
         });
     }
 };

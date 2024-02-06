@@ -2,8 +2,7 @@
     <v-container>
         <div class="register-form">
             <v-col cols="12" sm="8" md="6">
-                <v-col class="mt-5"
-                    style="background-color:#9a6a4f; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <v-col class="mt-5" style=" border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <v-card-title class="text-center">Find a job & grow your career</v-card-title>
                     <v-form ref="form" @submit.prevent="submitForm">
                         <v-text-field v-model="formData.name" id="fullName" label="Full Name" :rules="nameRules" required
@@ -35,7 +34,7 @@
   
 <script>
 import { ref } from 'vue';
-
+import axios from 'axios';
 export default {
     name: 'Registration',
     setup() {
@@ -88,8 +87,9 @@ export default {
     methods: {
         submitForm() {
             if (this.$refs.form.validate()) {
+
                 console.log(this.formData.phone);
-                window.axios.post('/registration', this.formData)
+                axios.post('/registration', this.formData)
                     .then((data) => {
                         if (data.status = true) {
                             alert("Registration successful");
@@ -111,7 +111,7 @@ export default {
 
 <style scoped>
 .register-form {
-    background-image: url('/storage/assets/p.jpg');
+
     background-size: cover;
     padding: 5vh;
     height: 100%;

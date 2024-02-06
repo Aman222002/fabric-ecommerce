@@ -1,30 +1,33 @@
 
 <template>
     <div>
-        <v-card-title>
+        <v-card-title class="pl-0">
             Achievements</v-card-title>
         <v-row v-for="(achievement, index) in achievements" :key="index">
             <v-row></v-row>
             <v-col cols="12" md="3">
-
-                <v-text-field v-model="achievement.certification_name" name="certification_name" label="Certification Name"
-                    variant="outlined"></v-text-field>
+                <v-text-field v-model="achievements[index].certification_name" :name="'certification_name_' + index"
+                    label="Certification Name" variant="outlined"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <v-text-field v-model="achievement.company_name" name="company_name" label="Company Name" variant="outlined"
+                <v-text-field v-model="achievements[index].company_name" :name="'company_name_' + index"
+                    label="Company Name" variant="outlined"
                     :rules="[v => !!v || 'Company Name is required']"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <v-text-field v-model="achievement.certificate_number" name="certificate_number" label="Certificate Number"
-                    variant="outlined" :rules="[v => !!v || 'Certificate Number is required']"></v-text-field>
+                <v-text-field v-model="achievements[index].certificate_number" :name="'certificate_number_' + index"
+                    label="Certificate Number" variant="outlined"
+                    :rules="[v => !!v || 'Certificate Number is required']"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <v-text-field v-model="achievement.expiry_date" name="expiry_date" label="Expiry Date" variant="outlined"
-                    :rules="[v => !!v || 'Expiry Date is required']"></v-text-field>
+                <h5 style="height:15px">expiry date</h5>
+                <VueDatePicker format="yyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
+                    v-model="achievements[index].expiry_date" :name="'expiry_date_' + index"
+                    :rules="index === 0 ? [] : [v => !!v || 'Expiry date  is required']" />
             </v-col>
             <v-col cols="12" md="12">
-                <v-file-input v-model="achievement.certificate_file_path" name="certificate_file_path"
-                    label="Certificate File"></v-file-input>
+                <v-file-input v-model="achievements[index].certificate_file" :name="'certificate_file_' + index"
+                    label="Certificate File" accept="application/pdf"></v-file-input>
             </v-col>
             <v-col v-if="index > 0" md="2">
                 <v-btn @click="removeAchievement(index)" color="red" class="custom-button">Remove</v-btn>
@@ -36,30 +39,32 @@
         </v-row>
     </div>
 </template>
-  
 <script>
-import { ref, computed } from 'vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import { useMyStore } from '../../store';
 export default {
     name: 'UsersAchievments',
     setup() {
         const store = useMyStore();
         const achievements = ref(store.achievements);
-        console.log(achievements, 'here`s the data');
-
-        const getRules = (index, field) => {
-            return computed(() => [v => !!v || `${field} is required`]);
+        const removeAchievement = async (index) => {
+            const achievmentId = achievements.value[index].id;
+            try {
+                console.log(achievmentId, 'achievmentId')
+                await axios.post(`/removedAchievment/${achievmentId}`);
+                achievements.value.splice(index, 1);
+            } catch (error) {
+                console.error('Error deleting experience detail:', error);
+            }
         };
 
 
-
         return {
+            removeAchievement,
             achievements,
-            getRules,
-            store,
-            addAchievement: store.addAchievement,
-            removeAchievement: store.removeAchievement
-
+            // removeAchievement: store.removeAchievement,
+            addAchievement: store.AddAchievement,
 
         };
     },

@@ -1,7 +1,25 @@
 import { defineStore } from "pinia";
+import axios from "axios";
+
+const educationItem = {
+    id: null,
+    education_type: "",
+    school_university: "",
+    starting_year: "",
+    passing_year: "",
+    passing_year_options: [],
+    still_pursuing: false,
+};
+
 const defaultState = () => {
     return {
-        allSkills: [],
+        selectedSkills: [],
+        userProfile: {
+            hobbies: "",
+            strengths: "",
+        },
+
+        // allSkills: [],
         address: {
             address1: "",
             address2: "",
@@ -19,41 +37,39 @@ const defaultState = () => {
             email: "",
             phone: "",
         },
-        educationDetails: [
-            {
-                education_type: "",
-                school_university: "",
-                starting_year: "",
-                passing_year: "",
-                passing_year_options: [],
-                still_pursuing: false,
-            },
-        ],
+        educationDetails: [educationItem],
+
         educationTypes: ["High School", "College", "University"],
         yearOptions: [2022, 2023, 2024],
         highest_education_path: null,
         still_pursuing: false,
-
         experience: [
             {
+                id: null,
                 company_name: "",
                 position: "",
                 description: "",
                 start_date: null,
-                expiry_date: null,
+                end_date: null,
             },
         ],
-        fields: [{ hobbies: "", strengths: "" }],
-        hobbies: "",
-        strengths: "",
-        userSkills: [],
+        userProfile: [
+            {
+                hobbies: "",
+                strengths: "",
+            },
+        ],
+        // fields: { hobbies: "", strengths: "" },
 
+        userSkills: [],
         achievements: [
             {
+                id: null,
                 certification_name: "",
                 company_name: "",
                 certificate_number: "",
                 expiry_date: null,
+                certificate_file: [],
                 certificate_file_path: null,
             },
         ],
@@ -64,11 +80,29 @@ export const useMyStore = defineStore("myStore", {
     id: "user",
     state: () => defaultState(),
     actions: {
+        addSkill(skill) {
+            if (!this.selectedSkills.find((s) => s.id === skill.id)) {
+                this.selectedSkills.push(skill);
+            }
+        },
+        removeSkill(skillId) {
+            this.selectedSkills = this.selectedSkills.filter(
+                (s) => s.id !== skillId
+            );
+        },
+        updateSkills(skills) {
+            this.selectedSkills = [...skills];
+        },
+        clearSelectedSkills() {
+            this.selectedSkills = [];
+        },
+
         setEducation(education) {
             Object.assign(this.educationDetails, education);
         },
         addEducationEntry() {
             this.educationDetails.push({
+                id: null,
                 education_type: "",
                 school_university: "",
                 starting_year: "",
@@ -83,6 +117,7 @@ export const useMyStore = defineStore("myStore", {
         },
         addWorkExperience() {
             this.experience.push({
+                id: null,
                 company_name: "",
                 position: "",
                 description: "",
@@ -90,24 +125,20 @@ export const useMyStore = defineStore("myStore", {
                 expiry_date: null,
             });
         },
+
         removeWorkExperience(index) {
             if (this.experience.length > 1) {
-                this.educationDetails.splice(index, 1);
+                this.experience.splice(index, 1);
             }
         },
-        updatePassingYearOptions(index) {
-            const selectedStartingYear =
-                this.educationDetails[index].starting_year;
-            this.educationDetails[index].passing_year = null;
-            this.educationDetails[index].passing_year_options =
-                this.yearOptions.filter((year) => year >= selectedStartingYear);
-        },
-        addAchievement() {
+        AddAchievement() {
             this.achievements.push({
+                id: null,
                 certification_name: "",
                 company_name: "",
                 certificate_number: "",
                 expiry_date: null,
+                certificate_file: [],
                 certificate_file_path: null,
             });
         },
@@ -130,18 +161,8 @@ export const useMyStore = defineStore("myStore", {
             this.skills = newSkills;
         },
 
-        addFields() {
-            this.fields.push({
-                hobbies: "",
-                strengths: "",
-            });
-        },
-        removeFields(index) {
-            if (this.fields.length > 1) {
-                this.fields.splice(index, 1);
-            }
-        },
         async fetchSkills() {
+            console.log("Fetching skills...");
             try {
                 const { data } = await axios.get("/skills");
                 this.allSkills = data.skills;
@@ -160,8 +181,6 @@ export const useMyStore = defineStore("myStore", {
             }
         },
 
-        // Add other methods to update/store data as needed
-
         setFormData(formData) {
             Object.assign(this, formData);
         },
@@ -171,26 +190,197 @@ export const useMyStore = defineStore("myStore", {
         setUser(user) {
             Object.assign(this.userDetails, user);
         },
+        setAddress(user) {
+            console.log(user);
+            Object.assign(this.address, user);
+        },
+        setEducation(user) {
+            console.log(user);
+            Object.assign(this.educationDetails, user);
+        },
+        setProfile(user) {
+            console.log(user);
+            Object.assign(this.userProfile, user);
+        },
+        setAchievments(user) {
+            console.log(user);
+            Object.assign(this.achievements, user);
+        },
+        setExperience(user) {
+            console.log(user);
+            Object.assign(this.experience, user);
+        },
         setSkills(user) {
-            Object.assign(this.skills, user);
+            Object.assign(this.selectedSkills, user);
         },
         submitForm() {
-            const submittedData = {
-                userDetails: this.userDetails,
-                educationDetails: this.educationDetails,
-                address: this.address,
-                achievements: this.achievements,
-                workExperiences: this.workExperiences,
-            };
-            console.log("here ", submittedData);
-            axios.post("/submit", submittedData)
-                .then(({ data }) => {
-                    console.log("response", data);
+            const formData = new FormData();
+            formData.append("userDetails[name]", this.userDetails.name);
+            formData.append("userDetails[email]", this.userDetails.email);
+            formData.append("userDetails[phone]", this.userDetails.phone);
+            formData.append("address[address1]", this.address.address1);
+            formData.append("address[address2]", this.address.address2);
+            formData.append("address[city]", this.address.city);
+            formData.append("address[state]", this.address.state);
+            formData.append("address[latitude]", this.address.latitude);
+            formData.append("address[longitude]", this.address.longitude);
+            formData.append("address[zip_code]", this.address.zip_code);
+            formData.append("address[country]", this.address.country);
+            formData.append("address[county]", this.address.county);
+            formData.append("userProfile[hobbies]", this.userProfile.hobbies);
+            formData.append(
+                "userProfile[strengths]",
+                this.userProfile.strengths
+            );
+            formData.append("selectedSkills", this.selectedSkills);
 
-                    // TODO: Clear state and show message
+            for (let index = 0; index < this.educationDetails.length; index++) {
+                const education = this.educationDetails[index];
+
+                formData.append(
+                    `educationDetails[${index}][education_type]`,
+                    education.education_type
+                );
+                formData.append(
+                    `educationDetails[${index}][school_university]`,
+                    education.school_university
+                );
+                formData.append(
+                    `educationDetails[${index}][starting_year]`,
+                    education.starting_year
+                );
+                formData.append(
+                    `educationDetails[${index}][passing_year]`,
+                    education.passing_year?.toString() || ""
+                );
+            }
+            for (let index = 0; index < this.experience.length; index++) {
+                const experience = this.experience[index];
+
+                formData.append(
+                    `experience[${index}][company_name]`,
+                    experience.company_name
+                );
+                formData.append(
+                    `experience[${index}][position]`,
+                    experience.position
+                );
+                formData.append(
+                    `experience[${index}][description]`,
+                    experience.description
+                );
+                formData.append(
+                    `experience[${index}][start_date]`,
+                    experience.start_date
+                );
+                formData.append(
+                    `experience[${index}][end_date]`,
+                    experience.end_date
+                );
+            }
+            for (let index = 0; index < this.achievements.length; index++) {
+                const achievement = this.achievements[index];
+
+                formData.append(
+                    `achievements[${index}][certification_name]`,
+                    achievement.certification_name
+                );
+                formData.append(
+                    `achievements[${index}][company_name]`,
+                    achievement.company_name
+                );
+                formData.append(
+                    `achievements[${index}][certificate_number]`,
+                    achievement.certificate_number
+                );
+                formData.append(
+                    `achievements[${index}][expiry_date]`,
+                    achievement.expiry_date || ""
+                );
+
+                formData.append(
+                    `achievements[${index}][certificate_file_path]`,
+                    achievement.certificate_file &&
+                        achievement.certificate_file.length
+                        ? achievement.certificate_file[0]
+                        : achievement.certificate_file_path
+                );
+            }
+
+            // formData.append("fields", JSON.stringify(this.fields));
+            formData.append(
+                "selectedSkills",
+                JSON.stringify(this.selectedSkills)
+            );
+
+            axios
+                .post("/submit", formData, {})
+                .then(({ data }) => {
+                    console.log("Response", data);
+                    window.Swal.fire({
+                        title: "Success!",
+                        text: "Form submitted successfully.",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    });
                 })
                 .catch((error) => {
                     console.log("Error", error);
+                    if (error.response && error.response.status === 422) {
+                        console.log(
+                            "Validation Errors:",
+                            error.response.data.errors
+                        );
+                    }
+                });
+        },
+
+        getUserData() {
+            axios
+                .get("/my-profile")
+                .then(({ data }) => {
+                    if (data.status) {
+                        const resp = data.data;
+
+                        //Object.assign(this, data.data);
+                        this.$patch(resp);
+
+                        // if (resp.userDetails) {
+                        //     console.log("resp", resp.userDetails);
+                        //     Object.keys(this.userDetails, resp.userDetails);
+                        // }
+
+                        // if (resp.address) {
+                        //     Object.keys(this.address, resp.address);
+                        // }
+
+                        // if (resp.experience && resp.experience.length) {
+                        //     Object.keys(this.experience, resp.experience);
+                        // }
+
+                        // if (resp.achievements && resp.achievements.length) {
+                        //     Object.keys(this.achievements, resp.achievements);
+                        // }
+
+                        // this.hobbies = resp.hobbies;
+                        // this.strengths = resp.strengths;
+
+                        // Object.assign(
+                        //     this.selectedSkills,
+                        //     resp.selectedSkills ?? []
+                        // );
+
+                        // // this.educationDetails = resp.educationDetails;
+                        // Object.assign(
+                        //     this.educationDetails,
+                        //     resp.educationDetails.length
+                        //         ? resp.educationDetails
+                        //         : [educationItem]
+                        // );
+                    }
+                })
+                .catch((err) => {
+                    console.log("Error", err);
                 });
         },
     },
@@ -287,6 +477,28 @@ export const useWorkExperienceStore = defineStore({
         setWorkExperienceFormData(formData) {
             Object.assign(this, formData);
         },
+        addWorkExperience() {
+            this.experience.push({
+                id: null,
+                company_name: "",
+                position: "",
+                description: "",
+                start_date: null,
+                expiry_date: null,
+            });
+        },
+        removeWorkExperience(index) {
+            if (this.experience.length > 1) {
+                this.educationDetails.splice(index, 1);
+            }
+        },
+        updatePassingYearOptions(index) {
+            const selectedStartingYear =
+                this.educationDetails[index].starting_year;
+            this.educationDetails[index].passing_year = null;
+            this.educationDetails[index].passing_year_options =
+                this.yearOptions.filter((year) => year >= selectedStartingYear);
+        },
         clearWorkExperienceFormData() {
             this.company_name = "";
             this.position = "";
@@ -300,16 +512,17 @@ export const useWorkExperienceStore = defineStore({
 export const useUserProfileStore = defineStore({
     id: "userProfile",
     state: () => ({
-        hobbies: "",
-        strengths: "",
+        fields: {
+            hobbies: "",
+            strengths: "",
+        },
     }),
     actions: {
-        setUserProfileFormData(formData) {
-            Object.assign(this, formData);
+        setUserProfile(formData) {
+            Object.assign(this.fields, formData);
         },
         clearUserProfileFormData() {
-            this.hobbies = "";
-            this.strengths = "";
+            this.fields = "";
         },
     },
 });
