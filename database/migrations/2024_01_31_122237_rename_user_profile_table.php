@@ -12,9 +12,10 @@ return new class extends Migration
         public function up(): void
         {
 
+                Schema::rename('user_profile', 'user_profiles');
 
                 //
-                Schema::dropIfExists('user_skills');
+
         }
 
         /**
@@ -23,6 +24,7 @@ return new class extends Migration
         public function down(): void
         {
 
+                Schema::rename('user_profiles', 'user_profile');
 
                 //
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Country;
+use App\Models\AppsCountry;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class UserAddressController extends Controller
 
     public function index()
     {
-        $countries = Country::all();
+        $countries = AppsCountry::all();
         return response()->json(['countries' => $countries]);
     }
     // public function storeOrUpdate(Request $request)

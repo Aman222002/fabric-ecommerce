@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class AppsCountry extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'skill_name',
+        'id',
+        'country_name',
+        'country_code',
+
     ];
-
-    // You can define relationships if needed
-
 }

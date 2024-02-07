@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('job_id')->nullable();
             $table->foreign('job_id')->references('id')->on('post_jobs')->onDelete('set NULL');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users'); 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -27,6 +27,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('saved_jobs');
-      
     }
 };

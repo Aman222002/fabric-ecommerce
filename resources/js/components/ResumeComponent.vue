@@ -1,6 +1,6 @@
 
 <template>
-    <div>
+    <v-container>
         <div>
             <div style="text-align: center;">
                 <h1 style="margin-top: 30px;">Fill your Personal Details</h1>
@@ -9,52 +9,47 @@
                 <v-stepper v-model="e1">
                     <template v-slot:default="{ prev }">
                         <v-stepper-header>
-                            <template v-for="n in steps" :key="`${n}-step`">
-                                <v-stepper-item :complete="e1 > n" :step="stepHeaders[n - 1]" :value="n" editable>
+                            <template v-for="currentStep in steps" :key="`${currentStep}-step`">
+                                <v-stepper-item :complete="e1 > currentStep" :step="stepHeaders[currentStep - 1]"
+                                    :value="currentStep" editable>
                                     <template v-slot:title>
-                                        {{ stepTitles[n - 1] }}
+                                        {{ stepTitles[currentStep - 1] }}
                                     </template>
                                 </v-stepper-item>
-                                <v-divider v-if="n !== steps" :key="n"></v-divider>
+                                <v-divider v-if="currentStep !== steps" :key="currentStep"></v-divider>
                             </template>
                         </v-stepper-header>
                         <v-stepper-window>
-                            <v-stepper-window-item v-for="n in steps" :key="`${n}-content`" :value="n">
-                                <v-card :color="stepBackgrounds[n - 1]" :height="n === e1 ? 'auto' : '100px'">
+                            <v-stepper-window-item v-for="currentStep in steps" :key="`${currentStep}-content`"
+                                :value="currentStep">
+                                <v-card :color="stepBackgrounds[currentStep - 1]"
+                                    :height="currentStep === e1 ? 'auto' : '100px'">
                                     <v-form @submit.prevent="goToNext()" ref="myForm">
-                                        <template v-if="n === 1">
-                                            <div class="flex-container">
-                                                <div style="flex-grow: 1"> <users-details :form-data="formData"
-                                                        :name-rules="nameRules"></users-details></div>
-                                                <div style="flex-grow: 1"> <user-address :form-data="formData"
-                                                        :name-rules="nameRules"></user-address></div>
+                                        <template v-if="currentStep === 1">
+                                            <v-row>
+                                                <v-col cols="6"> <users-details></users-details></v-col>
+                                                <v-col cols="6"> <user-address></user-address></v-col>
+                                            </v-row>
+                                        </template>
+                                        <template v-if="currentStep === 2">
+                                            <div class="flex-container-1">
+                                                <users-qualifications></users-qualifications>
+                                                <user-skills></user-skills>
                                             </div>
                                         </template>
-                                        <template v-if="n === 2">
-                                            <div>
-                                                <users-qualifications :form-data="formData"
-                                                    :name-rules="nameRules"></users-qualifications>
-                                                <hr style="width:100%;text-align:left;margin-left:0">
-                                                <user-skills :form-data="formData" :name-rules="nameRules"></user-skills>
-
+                                        <template v-if="currentStep === 3">
+                                            <div class="flex-container-1">
+                                                <work-experience></work-experience>
+                                                <users-achievments></users-achievments>
                                             </div>
                                         </template>
-                                        <template v-if="n === 3">
+                                        <template v-if="currentStep === 4">
                                             <div>
-                                                <work-experience :form-data="formData"
-                                                    :name-rules="nameRules"></work-experience>
-                                                <hr style="width:100%;text-align:left;margin-left:0">
-                                                <users-achievments :form-data="formData"
-                                                    :name-rules="nameRules"></users-achievments>
-                                            </div>
-                                        </template>
-                                        <template v-if="n === 4">
-                                            <div>
-                                                <user-profile :form-data="formData" :name-rules="nameRules"></user-profile>
+                                                <user-profile></user-profile>
                                             </div>
                                         </template>
                                         <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="goToNext()"
-                                            color="#006400" style="font-size: 20%;"></v-stepper-actions>
+                                            color="#006400"></v-stepper-actions>
                                     </v-form>
                                 </v-card>
                             </v-stepper-window-item>
@@ -63,10 +58,13 @@
                 </v-stepper>
             </div>
         </div>
-    </div>
+    </v-container>
 </template>
-<script>
-import { ref, computed } from 'vue';
+<script >
+
+import { ref, computed, onMounted } from 'vue';
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 import UsersDetails from './UserInformations/UsersDetails.vue';
 import UsersAchievments from './UserInformations/UsersAchievments.vue';
 import UserAddress from './UserInformations/UserAddress.vue';
@@ -79,6 +77,9 @@ import { useMyStore } from '../store';
 export default {
     name: 'ResumeComponent',
     components: {
+        Form,
+        Field,
+        ErrorMessage,
         UsersDetails,
         UserSkills,
         UsersQualifications,
@@ -88,6 +89,9 @@ export default {
         UsersAchievments
     },
     setup() {
+        const store = useMyStore()
+        const currentStep = ref(0);
+        let valid = true;
         const maxSteps = ref(4);
         const e1 = ref(1);
         const steps = ref(4);
@@ -97,7 +101,33 @@ export default {
         const formData = ref({});
         const nameRules = ref([]);
         const myForm = ref(null);
+        const schemas = [
+            yup.object({
+                address1: yup.string().required(),
+                address2: yup.string().required(),
+                city: yup.string().required(),
+                country: yup.string().required(),
+                Zip_code: yup.number().required(),
+                state: yup.string().required(),
 
+
+            }),
+            yup.object({
+                education_type: yup.string().required(),
+                school_university: yup.string().required(),
+                starting_year: yup.string().required(),
+                passing_year: yup.string().required(),
+
+            }),
+
+            yup.object({
+                terms: yup.bool().required().equals([true]),
+            }),
+        ];
+
+        const currentSchema = computed(() => {
+            return schemas[currentStep.value];
+        });
         const circularSteps = computed(() => {
             const circularSteps = [];
             for (let i = 2; i <= maxSteps.value; i++) {
@@ -106,20 +136,24 @@ export default {
             return circularSteps;
         });
 
+
+
+        function prev() {
+            if (currentStep.value <= 0) {
+                return;
+            }
+
+            currentStep.value--;
+        }
+
         const disabled = computed(() => {
             const val = e1.value === 1 ? "prev" : false;
-            console.log("val", val, e1.value, steps.value);
+
             return val;
         });
-
-        const degreeOptionsWithAdditional = computed(() => {
-            return [...degreeOptions, formData.value.degree === "Other" ? formData.value.otherDegree : ""];
-        });
-
-
-
         return {
-            maxSteps,
+            store,
+            maxSteps: 4,
             e1,
             steps,
             stepHeaders,
@@ -127,39 +161,42 @@ export default {
             stepBackgrounds,
             formData,
             nameRules,
+            valid,
             circularSteps,
-            disabled,
             myForm,
-            degreeOptionsWithAdditional,
+
         };
 
-
+    },
+    computed: {
+        disabled: function () {
+            const val = this.e1 === 1 ? "prev" : false;
+            return val;
+        }
+    },
+    async mounted() {
+        await this.store.getUserData()
     },
     methods: {
         async goToNext() {
+            const formRefs = this.$refs.myForm;
 
-            const { valid } = await this.$refs['myForm'][0].validate();
+            for (let i = 0; i < formRefs.length; i++) {
+                const { valid } = await formRefs[i].validate();
+                if (!valid) {
 
-            if (!valid) {
-                return false;
-            } else {
-
-                if (this.e1 === this.steps) {
-                    const submittedData = {
-                        userDetails: this.formData.users,
-                        educationDetails: this.formData.educationDetails,
-                        fields: this.formData.fields,
-                        address: this.formData.address,
-                        achievements: this.formData.achievements,
-                        workExperiences: this.formData.workExperiences,
-                    };
-
-                    useMyStore().submitForm(submittedData);
-                } else {
-                    this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
+                    return;
                 }
             }
+            if (this.e1 === this.steps) {
+
+                useMyStore().submitForm();
+            } else {
+                this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
+            }
         },
+
+
         async updateSteps() {
             this.steps = this.steps.map((step) => ((step - 2 + this.maxSteps - 1) % (this.maxSteps - 1)) + 2);
 
@@ -177,14 +214,24 @@ export default {
 .flex-container {
     display: flex;
     align-items: stretch;
+    height: 50%;
+    width: 100%;
 
 }
 
-.flex-container>div {
+.flex-container-1 {
 
+    align-items: stretch;
+    height: 60%;
+    width: 100%;
+
+}
+
+
+.flex-container>div {
     text-align: center;
-    line-height: 75px;
-    font-size: 30px;
+
+
 }
 
 .custom-stepper {
@@ -192,4 +239,5 @@ export default {
 
 }
 </style>
+
 

@@ -18,10 +18,11 @@
                         <br />
                         <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
                     </v-form>
-                  <div style="text-align: center; margin-top: 30px;">
-                    <h5 class="new-client-text" >Already have an Account?</h5> 
-                    <a href="/login" class="register-link" style="margin-top: 30px;">Login</a></div>
-                
+                    <div style="text-align: center; margin-top: 30px;">
+                        <h5 class="new-client-text">Already have an Account?</h5>
+                        <a href="/login" class="register-link" style="margin-top: 30px;">Login</a>
+                    </div>
+
 
                     <v-col cols="12" sm="8" md="4">
                         <v-card class="mt-5"
@@ -36,7 +37,7 @@
   
 <script>
 import { ref } from 'vue';
-
+import axios from 'axios';
 export default {
     name: 'Registration',
     setup() {
@@ -68,7 +69,7 @@ export default {
         const submitForm = () => {
             if (this.$refs.form.validate()) {
                 console.log(formData.value.phone);
-                window.axios.post('/registration', formData.value)
+                axios.post('/registration', formData.value)
                     .then((data) => {
                         console.log(data);
                         alert('success');
@@ -89,8 +90,9 @@ export default {
     methods: {
         submitForm() {
             if (this.$refs.form.validate()) {
+
                 console.log(this.formData.phone);
-                window.axios.post('/registration', this.formData)
+                axios.post('/registration', this.formData)
                     .then((data) => {
                         if (data.status = true) {
                             alert("Registration successful");
@@ -112,7 +114,7 @@ export default {
 
 <style scoped>
 .register-form {
-    background-image: url('/storage/assets/p.jpg');
+
     background-size: cover;
     padding: 5vh;
     height: 100%;
@@ -127,8 +129,8 @@ export default {
 
 
 .register-link {
-  text-decoration: none;
-  
+    text-decoration: none;
+
 }
 </style> 
 

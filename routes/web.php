@@ -17,6 +17,7 @@ use App\Http\Controllers\UserSkillController;
 use App\Http\Controllers\UserExperienceController;
 use App\Http\Controllers\AdditionalInformationController;
 use App\Http\Controllers\QualificationsController;
+use App\Http\Controllers\ResumeController;
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyLoginController;
@@ -55,16 +56,25 @@ Route::get('/header', function () {
 Route::get('/resume', function () {
     return view('resume');
 });
+Route::post('/removedEducation/{educationId}', [ResumeController::class, 'destroyEducation']);
+Route::post('/removedExperience/{experienceId}', [ResumeController::class, 'destroyExperience']);
+Route::post('/removedAchievment/{achievmentId}', [ResumeController::class, 'destroyAchievment']);
+Route::post('/submit', [ResumeController::class, 'store']);
+
+Route::get('/my-profile', [ResumeController::class, 'getUserData']);
+Route::get('/getprofile', [ResumeController::class, 'getProfile']);
 Route::get('/user-skills', [UserSkillController::class, 'index']);
 Route::post('/user-skills', [UserSkillController::class, 'store']);
 Route::post('/users-achievments', [UserAchievementController::class, 'store']);
 Route::post('/user-profile', [UserProfileController::class, 'store']);
 Route::post('/work_experience', [UserExperienceController::class, 'store']);
 Route::post('/user-address', [UserAddressController::class, 'store']);
+Route::get('/getcountry', [UserAddressController::class, 'index']);
 Route::post('/address', [UserAddressController::class, 'index']);
 Route::post('/users-qualifications', [QualificationsController::class, 'store']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/getuser', [LoginController::class, 'getUser']);
+
 
 Route::get('/header', function () {
     return view('Header');
@@ -115,26 +125,24 @@ Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
-   
 });
 
 
 
 
-Route::group(['middleware' => 'auth'],function(){
-Route::get('/post/jobs', [JobsController::class, 'index']);
-Route::post('/post', [JobsController::class, 'store']);
-Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
-Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
-Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
-Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
-Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/post/jobs', [JobsController::class, 'index']);
+    Route::post('/post', [JobsController::class, 'store']);
+    Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
+    Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+    Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+    Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
+    Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
 
-Route::post('/save-job/{id}',[JobsController::class,'saveJob']);
-Route::get('/savedjobs',[JobsController::class,'savedJobsdetail']);
-Route::post('/removesavedjobs/{id}',[JobsController::class,'removeSavedJob']);
-Route::post('/removeappliedjobs/{id}',[JobsController::class,'removeAppliedJob']);
-
+    Route::post('/save-job/{id}', [JobsController::class, 'saveJob']);
+    Route::get('/savedjobs', [JobsController::class, 'savedJobsdetail']);
+    Route::post('/removesavedjobs/{id}', [JobsController::class, 'removeSavedJob']);
+    Route::post('/removeappliedjobs/{id}', [JobsController::class, 'removeAppliedJob']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -167,7 +175,6 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::post('/store', [CompanyController::class, 'store']);
         Route::post('/update/{id}', [CompanyController::class, 'update']);
         Route::delete('/destroy/{id}', [CompanyController::class, 'destroy']);
-
     });
 });
 Route::get('/categories', [CategoryController::class, 'index']);
@@ -181,7 +188,7 @@ Route::prefix('company')->group(function () {
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
 });
-Route::get('/jobs/application/{id}',[JobsController::class,'detail']);
+Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
 
 
 

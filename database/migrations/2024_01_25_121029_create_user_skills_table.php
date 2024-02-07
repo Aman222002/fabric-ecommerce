@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Check if the table exists before creating it
-        if (!Schema::hasTable('user_skills')) {
-            Schema::create('user_skills', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('user_id')->nullable()->after('id');
-                $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('skill_id');
-            $table->foreign('skill_id')->references('id')->on('skills');
-                $table->timestamps();
-            });
-        }
+        Schema::create('user_skills', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('SET NULL');
+
+            $table->unsignedBigInteger('skill_id')->nullable();
+            $table->foreign('skill_id')->references('id')->on('skills')->onDelete('SET NULL');
+
+            $table->unique(['user_id', 'skill_id']);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -29,7 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
         Schema::dropIfExists('user_skills');
     }
 };

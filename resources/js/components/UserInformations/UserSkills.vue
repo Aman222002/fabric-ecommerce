@@ -1,13 +1,11 @@
-
 <template>
     <v-card-title class="pl-0">
         Add your skills
     </v-card-title>
     <v-row>
         <v-col cols="12" md="12">
-            <v-select v-model="localSkills" :items="allSkills" item-title="skill_name" item-value="id"
-                label="Select Multiple Skills" chips multiple></v-select>
-
+            <v-select v-model="selectedSkills" :items="skills" item-title="skill_name" item-value="id"
+                label="Select Multiple Skills" chips multiple @update:modelValue="updateSkills"></v-select>
         </v-col>
     </v-row>
 </template>
@@ -15,30 +13,37 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useMyStore } from "../../store";
+import axios from 'axios';
 export default {
     name: 'UserSkills',
     setup() {
         const store = useMyStore();
+        const selectedSkills = ref(store.selectedSkills ?? []);
+        // const selectedSkill = ref(null);
+        const skills = ref([]);
+        onMounted(async () => {
+            try {
+                const response = await axios.get('/skills');
+                skills.value = response.data;
 
-        const localSkills = ref([]);
+            } catch (error) {
+                console.error('Error fetching skills:', error);
+            }
+        });
 
+        const updateSkills = () => {
+            store.updateSkills(selectedSkills.value);
+        }
 
         return {
-            store,
-            localSkills,
-            allSkills: store.allSkills,
-            skills: store.userSkills,
+            updateSkills,
+            selectedSkills,
+            //useMyStore,
+            skills,
+            // addSkill,
+
         };
     },
-    onMounted() {
-        this.store.fetchSkills()
-    },
-    methods: {
-        checkSkills() {
-            this.store.userSkills = this.localSkills;
-            console.log("here", this.localSkills)
-        }
-    }
 };
 </script>
   
@@ -49,4 +54,3 @@ export default {
     align-items: center;
 }
 </style>
-  
