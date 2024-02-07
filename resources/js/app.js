@@ -203,7 +203,11 @@ app.component("company-profile",CompanyProfile)
 import JobApplied from "./components/JobApplied.vue";
 app.component("jobapply-component", JobApplied);
 
+import PostDetail from "./components/PostDetail.vue";
+app.component("job-detail",PostDetail)
 
+import SaveJob from "./components/SaveJob.vue";
+app.component("savejob-component",SaveJob)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

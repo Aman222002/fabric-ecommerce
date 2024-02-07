@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\Category;
+use App\Models\SavedJob;
 use App\Models\Company;
 use App\Models\JobType;
 use Illuminate\Http\Request;
@@ -40,6 +41,7 @@ class JobsController extends Controller
                 $jobs->where('company_id', $companyId);
             }
             $jobs =   $jobs->get();
+
             // $jobs = Job::all();
           
             return response()->json(['status' => true, 'data' => $jobs], 200);
@@ -112,7 +114,7 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
-                'skill' => $input['jobSkill'],
+                'skill_id' => $input['jobSkill'],
             ]);
 
             return response()->json([
@@ -287,14 +289,156 @@ class JobsController extends Controller
             ], 500); 
         }
     }
-    public function myJobApplications(){
-        $jobApplications = JobApply::where('user_id',Auth::user()->id)->with('job')->get();
-        
-        // dd($jobApplications);
-        
-        return view('jobapply',[
-            'jobApplications' => $jobApplications
-        ]);
+    public function myJobApplications() {
+        try {
+            $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get();
+    
+            return view('jobapply', [
+                'jobApplications' => $jobApplications
+            ]);
+        } catch (\Exception $e) {
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
     }
     
+   
+    public function saveJob(Request $request) {
+        try {
+            $id = $request->id;
+    
+            $job = Job::find($id);
+    
+            if ($job == null) {
+                $message = 'No Job Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+    
+            $count = SavedJob::where([
+                'user_id' => Auth::user()->id,
+                'job_id' => $id
+            ])->count();
+    
+            if ($count > 0) {
+                $message = 'You already saved this job.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 500);
+            }
+            $savedJob = new SavedJob;
+            $savedJob->job_id = $id;
+            $savedJob->user_id = auth()->id();
+            $savedJob->save();
+            $message = 'You successfully saved this job.';
+            return response()->json([
+                'status' => true,
+                'message' => $message,
+                'data' => $savedJob
+            ], 200);
+        } catch (\Exception $e) {
+           
+            return response()->json([
+                'status' => false,
+                'error' => $e->getMessage(), 
+            ], 500);
+        }
+    }
+    public function savedJobsdetail(){
+        try {
+            $savedJobs = SavedJob::where([
+                    'user_id' => auth()->id()
+                ])->with('job')
+                ->orderBy('created_at','DESC')->get();
+            return view('savejob', [
+                'savedJobs' => $savedJobs
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+    }
+    public function removeSavedJob(Request $request){
+        try {
+            $savedJob = SavedJob::where([
+                'id' => $request->id, 
+                'user_id' => auth()->id()
+            ])->first();
+            if ($savedJob == null) {
+                return response()->json([
+                    'status' => false,
+                ], 404);
+            }
+            SavedJob::find($request->id)->delete();
+            $message = 'You successfully removed this job.';
+            return response()->json([
+                'status' => true,
+                'message' => $message
+            ], 200);
+    
+        } catch (\Exception $e) {
+            
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred while removing the job.'
+            ], 500);
+        }
+    }
+
+
+        public function removeAppliedJob(Request $request){
+            try {
+                $jobApplication = JobApply::where([
+                    'id' => $request->id, 
+                    'user_id' => auth()->id()]
+                )->first();
+                if ($jobApplication == null) {
+                    return response()->json([
+                        'status' => false,
+                    ], 404);
+                }
+                JobApply ::find($request->id)->delete();
+                $message = 'You successfully removed this job.';
+                return response()->json([
+                    'status' => true,
+                    'message' => $message
+                ], 200);
+        
+            } catch (\Exception $e) {
+                
+                return response()->json([
+                    'status' => false,
+                    'message' => 'An error occurred while removing the job.'
+                ], 500);
+            }
+    }
+    public function detail($id) {
+       
+        try {
+          
+           
+           
+    
+            $job = Job::find($id);
+     
+            if ($job == null) {
+                $message = 'No Job Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+          
+            $application = JobApply::where('job_id', $id)->with('user','job')->get();
+      
+            return view('postdetail', ['application'=>$application]);
+        } catch (\Exception $e) {
+            
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+    }
+    
+   
 }

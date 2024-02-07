@@ -7,7 +7,9 @@
           <a href="/companypost" class="nav-link" :class="{ 'active': isActive('/companypost') }">Home</a>
           <a href="/login" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/login') }">Login</a>
           <a href="/registration" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/registration') }">Register</a>
+          
           <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/job-apply') }">Jobs Applied</a>
+          <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/savedjobs') }">Jobs Saved</a>
           <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Login as Company</a>
 
         </v-col>

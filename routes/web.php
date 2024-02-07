@@ -30,7 +30,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
-
+use App\Models\Job;
 use App\Models\Skill;
 
 /*
@@ -94,6 +94,7 @@ Route::get('/findcv', function () {
     return view('findcv');
 });
 
+
 Route::get('/companypost', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
@@ -128,6 +129,12 @@ Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
 Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
 Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
 Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
+
+Route::post('/save-job/{id}',[JobsController::class,'saveJob']);
+Route::get('/savedjobs',[JobsController::class,'savedJobsdetail']);
+Route::post('/removesavedjobs/{id}',[JobsController::class,'removeSavedJob']);
+Route::post('/removeappliedjobs/{id}',[JobsController::class,'removeAppliedJob']);
+
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -160,6 +167,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::post('/store', [CompanyController::class, 'store']);
         Route::post('/update/{id}', [CompanyController::class, 'update']);
         Route::delete('/destroy/{id}', [CompanyController::class, 'destroy']);
+
     });
 });
 Route::get('/categories', [CategoryController::class, 'index']);
@@ -173,6 +181,7 @@ Route::prefix('company')->group(function () {
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
 });
+Route::get('/jobs/application/{id}',[JobsController::class,'detail']);
 
 
 

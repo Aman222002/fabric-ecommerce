@@ -1,4 +1,6 @@
 <template>
+
+  <div style="text-align: center; font-size: 30px;">Job Posted</div>
   <v-btn color="success" style="margin-top: 40px;"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
     <v-table>
       <thead>
@@ -21,6 +23,7 @@
           <td>
             <v-btn @click="openEditDialog(job.id)" color="primary">Edit</v-btn>
             <v-btn @click="deleteItem(job.id)" color="error">Delete</v-btn>
+            <v-btn @click="checkItem(job.id)" color="success" style="margin-left: 10px;">Check Applicants</v-btn>
           </td>
         </tr>
       </tbody>
@@ -122,6 +125,10 @@ import { onMounted, ref } from 'vue';
         console.log(err);
       }
     };
+    const checkItem =(id)=> {
+      window.location.href=`/jobs/application/${id}`
+    }
+
       onMounted(() => {
       fetchJobs();
 
@@ -134,6 +141,8 @@ import { onMounted, ref } from 'vue';
       saveEditedJob,
       closeEditDialog,
       deleteItem,
+      checkItem,
+
       
       };
     },
