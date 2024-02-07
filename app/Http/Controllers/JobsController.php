@@ -291,7 +291,7 @@ class JobsController extends Controller
     }
     public function myJobApplications() {
         try {
-            $jobApplications = JobApply::where('user_id', Auth::user()->id)->with('job')->get();
+            $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get();
     
             return view('jobapply', [
                 'jobApplications' => $jobApplications
@@ -330,7 +330,7 @@ class JobsController extends Controller
             }
             $savedJob = new SavedJob;
             $savedJob->job_id = $id;
-            $savedJob->user_id = Auth::user()->id;
+            $savedJob->user_id = auth()->id();
             $savedJob->save();
             $message = 'You successfully saved this job.';
             return response()->json([
@@ -349,7 +349,7 @@ class JobsController extends Controller
     public function savedJobsdetail(){
         try {
             $savedJobs = SavedJob::where([
-                    'user_id' => Auth::user()->id
+                    'user_id' => auth()->id()
                 ])->with('job')
                 ->orderBy('created_at','DESC')->get();
             return view('savejob', [
@@ -364,7 +364,7 @@ class JobsController extends Controller
         try {
             $savedJob = SavedJob::where([
                 'id' => $request->id, 
-                'user_id' => Auth::user()->id
+                'user_id' => auth()->id()
             ])->first();
             if ($savedJob == null) {
                 return response()->json([
@@ -392,7 +392,7 @@ class JobsController extends Controller
             try {
                 $jobApplication = JobApply::where([
                     'id' => $request->id, 
-                    'user_id' => Auth::user()->id]
+                    'user_id' => auth()->id()]
                 )->first();
                 if ($jobApplication == null) {
                     return response()->json([
@@ -418,10 +418,10 @@ class JobsController extends Controller
        
         try {
           
-            $job = Job::where([
-                'id' => $id,
-              
-            ])->first();
+           
+           
+    
+            $job = Job::find($id);
      
             if ($job == null) {
                 $message = 'No Job Found.';

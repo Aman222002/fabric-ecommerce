@@ -22,6 +22,13 @@
             <td>{{ savedJobs.job.salary }}</td>
           
             <td>
+              <v-btn
+              color="white"
+              class="bg-primary"
+           
+              @click="apply(savedJobs.job.id)"
+              >Apply</v-btn
+            >
                 <v-btn @click="deleteItem(savedJobs.id)" color="error">Delete</v-btn>
             </td>
           </tr>
@@ -76,9 +83,34 @@
 });
     
     };
+    const apply = async (id) => {
+      try {
+        await axios.post(`/apply-job/${id}`).then((response) => {
+          if (response.data.status == true) {
+           
+            window.Swal.fire({
+              icon: "success",
+              title: "Applied Successfully",
+              text: "Applied successfully ",
+              confirmButtonText: "OK",
+            });
+          }
+        });
+      } catch (err) {
+        console.error(err);
+      
+        window.Swal.fire({
+          title: "Application Failed",
+          text: "You Already apply on this Job",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    };
               return {
                 savedJob,
             deleteItem,
+          apply
           };
         
         },
