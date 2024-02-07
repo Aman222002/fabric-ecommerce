@@ -24,7 +24,13 @@
                       item-title="name" item-value="id" label="Select JobType" 
                     ></v-select>
 
+<<<<<<< Updated upstream
            
+=======
+                    <v-select  variant="outlined" v-model="job.jobSkill"  :items="jobSkills"
+                      item-title="skill_name" item-value="id" label="Select Skills" :rules="rules.jobSkill" 
+                    ></v-select>
+>>>>>>> Stashed changes
             <v-text-field
             variant="outlined"
               v-model="job.vacancy"
