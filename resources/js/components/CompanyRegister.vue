@@ -3,6 +3,7 @@
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
+          
           <div class="custom-col left-side">
             <h3 class="mb-4 form-title">User Detail:</h3>
             <v-text-field

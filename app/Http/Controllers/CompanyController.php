@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Job;
+use App\Models\JobApply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -232,4 +234,6 @@ class CompanyController extends Controller
             ], 500);
         }
     }
+  
+    
 }

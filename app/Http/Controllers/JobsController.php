@@ -41,6 +41,7 @@ class JobsController extends Controller
                 $jobs->where('company_id', $companyId);
             }
             $jobs =   $jobs->get();
+
             // $jobs = Job::all();
           
             return response()->json(['status' => true, 'data' => $jobs], 200);
@@ -300,25 +301,7 @@ class JobsController extends Controller
         }
     }
     
-    public function detail($id) {
-        try {
-            $job = Job::where([
-                'id' => $id,
-            ])->first();
-    
-            if ($job == null) {
-                $message = 'No Job Found.';
-                return response()->json([
-                    'status' => false,
-                    'message' => $message,
-                ], 404);
-            }
-            return view('postdetail', ['job' => $job]);
-        } catch (\Exception $e) {
-            
-            return response()->view('error.view', ['error' => $e->getMessage()], 500);
-        }
-    }
+   
     public function saveJob(Request $request) {
         try {
             $id = $request->id;
@@ -430,6 +413,31 @@ class JobsController extends Controller
                     'message' => 'An error occurred while removing the job.'
                 ], 500);
             }
+    }
+    public function detail($id) {
+       
+        try {
+          
+            $job = Job::where([
+                'id' => $id,
+              
+            ])->first();
+     
+            if ($job == null) {
+                $message = 'No Job Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+          
+            $application = JobApply::where('job_id', $id)->with('user','job')->get();
+      
+            return view('postdetail', ['application'=>$application]);
+        } catch (\Exception $e) {
+            
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
     }
     
    
