@@ -16,11 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('education_type');
-            $table->string('school_unversity')->nullable(); // For High School or 10/12
-            $table->unsignedSmallInteger('starting_year')->nullable(); // New column for starting year
-            $table->unsignedSmallInteger('passing_year')->nullable(); // 
+            $table->string('school_unversity')->nullable();
+            $table->unsignedSmallInteger('starting_year')->nullable();
+            $table->unsignedSmallInteger('passing_year')->nullable();
             $table->string('highest_education_path')->nullable();
-            $table->tinyInteger('still_pursuing')->default(0); // New column for status
+            $table->tinyInteger('still_pursuing')->default(0);
             $table->timestamps();
         });
     }

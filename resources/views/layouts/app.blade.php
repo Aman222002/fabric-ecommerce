@@ -27,15 +27,16 @@
 
 <body>
     <div id="app">
-    <v-app>
-       <header-component></header-component>
-        <v-main>
-           
-            @yield('content')
-           
-        </v-main>
-        <companyfooter-component></companyfooter-component>
-       </v-app>
-    </div> 
+        <v-app>
+            <header-component></header-component>
+            <v-main>
+
+                @yield('content')
+
+            </v-main>
+            <companyfooter-component></companyfooter-component>
+        </v-app>
+    </div>
 </body>
+
 </html>

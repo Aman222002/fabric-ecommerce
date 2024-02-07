@@ -4,10 +4,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import "./bootstrap";
+// import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
 import "vuetify/styles";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
@@ -30,6 +32,7 @@ const pinia = createPinia({
     components,
     directives,
 });
+
 pinia.use(piniaPluginPersistedstate);
 
 const VueTelInputOptions = {
@@ -226,4 +229,6 @@ app.component("savejob-component",SaveJob)
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
+app.component("VueDatePicker", VueDatePicker);
+
 app.mount("#app");

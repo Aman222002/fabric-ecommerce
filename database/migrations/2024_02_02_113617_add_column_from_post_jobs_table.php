@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+
         Schema::table('post_jobs', function (Blueprint $table) {
             //
             $table->unsignedBigInteger('company_id')->nullable()->after('id');
@@ -23,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+
+
         Schema::table('post_jobs', function (Blueprint $table) {
             //
             $table->dropForeign(['company_id']);

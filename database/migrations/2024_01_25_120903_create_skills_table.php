@@ -14,13 +14,11 @@ return new class extends Migration
         if (!Schema::hasTable('skills')) {
             Schema::create('skills', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('user_id')->nullable()->after('id');
-                $table->foreign('user_id')->references('id')->on('users');
-            $table->string('skill_name');
+
+                $table->string('skill_name');
                 $table->timestamps();
             });
         }
-        
     }
 
     /**
@@ -28,7 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-       
+
         if (Schema::hasTable('skills')) {
             Schema::dropIfExists('skills');
         }

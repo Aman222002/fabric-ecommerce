@@ -1,21 +1,25 @@
 
 <template>
   <v-app-bar app class="custom-app-bar" color="primary">
-   
-      <v-row align="center" justify="space-between">
-        <v-col class="nav-links">
-          <a href="/companypost" class="nav-link" :class="{ 'active': isActive('/companypost') }">Home</a>
-          <a href="/login" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/login') }">Login</a>
-          <a href="/registration" v-if="!usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/registration') }">Register</a>
-          
-          <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/job-apply') }">Jobs Applied</a>
-          <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link" :class="{ 'active': isActive('/savedjobs') }">Jobs Saved</a>
-          <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Login as Company</a>
 
-        </v-col>
-        <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
-      </v-row>
-    
+    <v-row align="center" justify="space-between">
+      <v-col class="nav-links">
+        <a href="/companypost" class="nav-link" :class="{ 'active': isActive('/companypost') }">Home</a>
+        <a href="/login" v-if="!usersStore.isloggedin" class="nav-link"
+          :class="{ 'active': isActive('/login') }">Login</a>
+        <a href="/registration" v-if="!usersStore.isloggedin" class="nav-link"
+          :class="{ 'active': isActive('/registration') }">Register</a>
+
+        <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link"
+          :class="{ 'active': isActive('/job-apply') }">Jobs Applied</a>
+        <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link"
+          :class="{ 'active': isActive('/savedjobs') }">Jobs Saved</a>
+        <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Login as Company</a>
+
+      </v-col>
+      <v-btn v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
+    </v-row>
+
   </v-app-bar>
 </template>
 
@@ -31,7 +35,7 @@ export default {
       activeLink: window.location.pathname
     });
 
-    
+
     onMounted(() => {
       state.activeLink = window.location.pathname;
     });
@@ -91,9 +95,15 @@ export default {
 
   border-bottom: 1px solid #161414;
 }
+
 .nav-link:hover {
   color: #ca82e9;
 }
+
+.nav-link:hover {
+  color: #ca82e9;
+}
+
 .active {
   color: #ca82e9;
 }
