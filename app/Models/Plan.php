@@ -14,4 +14,8 @@ class Plan extends Model
         'price',
         'Posts_Allowed',
     ];
+    public function features()
+    {
+        return $this->belongsTo(Feature::class,  'feature_id');
+    }
 }

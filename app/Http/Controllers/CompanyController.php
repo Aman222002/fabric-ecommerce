@@ -33,7 +33,11 @@ class CompanyController extends Controller
     {
         //
     }
-
+    public function buyplansview()
+    {
+        //
+        return view('buyplan');
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -134,7 +138,7 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-   
+
 
 
     /**

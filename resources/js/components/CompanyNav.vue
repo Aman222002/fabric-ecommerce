@@ -1,6 +1,5 @@
 <template>
   <v-app-bar app class="custom-app-bar" color="primary">
-
     <v-row align="center" justify="space-between">
       <v-col class="nav-links">
         <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
@@ -8,11 +7,9 @@
         <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Buy Subscription</a>
         <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
       </v-col>
-      <v-btn class="mt-3"><v-icon size="25">mdi-cart</v-icon> <v-badge color="success" :content="count"
-          inline></v-badge></v-btn>
-      <v-btn @click="login()" style="margin-top: 10px;">Login as User</v-btn>
-      <v-btn v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
     </v-row>
+    <v-btn @click="login()" style="margin-top: 10px;">Login as User</v-btn>
+    <v-btn v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
   </v-app-bar>
 </template>
 
@@ -23,12 +20,10 @@ import { ref } from "vue";
 export default {
   name: "CompanyNav",
   setup() {
-    const count = ref(0);
     const usersStore = useUsersStore();
     const state = reactive({
       activeLink: window.location.pathname
     });
-    count.value = usersStore.countCartItems;
     onMounted(() => {
       state.activeLink = window.location.pathname;
     });
@@ -48,7 +43,6 @@ export default {
       logout,
       usersStore,
       login,
-      count
     };
   },
 };

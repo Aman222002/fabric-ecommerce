@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('job_application', function (Blueprint $table) {
+        Schema::table('features', function (Blueprint $table) {
             //
-          
-            $table->dropColumn('company_id');
+            $table->dropForeign(['plan_id']);
+            $table->dropColumn('plan_id');
         });
     }
 
@@ -23,9 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('job_application', function (Blueprint $table) {
-            //
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+        Schema::table('features', function (Blueprint $table) {
+            $table->unsignedBigInteger('plan_id')->nullable();
+            $table->foreign('plan_id')->references('id')->on('plans');
         });
     }
 };

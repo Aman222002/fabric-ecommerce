@@ -20,8 +20,6 @@ import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
-
-
 import { createPinia } from "pinia";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -90,8 +88,6 @@ app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
-
-
 
 import Registration from "./components/Registration.vue";
 
@@ -179,6 +175,9 @@ app.component("company-component", CompanyRegister);
 import Product from "./components/Product.vue";
 app.component("product-component", Product);
 
+import cart from "./components/Cart.vue";
+app.component("cart-component", cart);
+
 import postjob from "./components/postjob.vue";
 app.component("postjob-component", postjob);
 
@@ -195,14 +194,16 @@ import CompanyPage from "./components/CompanyPage.vue";
 app.component("company-page", CompanyPage);
 
 import CompanyPost from "./components/CompanyPost.vue";
-app.component("company-post",CompanyPost)
+app.component("company-post", CompanyPost);
 
 import CompanyProfile from "./components/CompanyProfile.vue";
-app.component("company-profile",CompanyProfile)
+app.component("company-profile", CompanyProfile);
 
 import JobApplied from "./components/JobApplied.vue";
 app.component("jobapply-component", JobApplied);
 
+import BuySubscription from "./components/Buy.vue";
+app.component("buy-component", BuySubscription);
 
 /**
  * The following block of code may be used to automatically register your
