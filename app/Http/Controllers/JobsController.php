@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\Category;
+use App\Models\SavedJob;
 use App\Models\Company;
 use App\Models\JobType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\JobApply;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JobNotificationEmail;
+use App\Models\User;
 
 
 
@@ -36,7 +41,8 @@ class JobsController extends Controller
                 $jobs->where('company_id', $companyId);
             }
             $jobs =   $jobs->get();
-           // $jobs = Job::all();
+
+            // $jobs = Job::all();
           
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
@@ -96,6 +102,7 @@ class JobsController extends Controller
             $company = $user->company;
             $input = $request->all();
             $job = Job::create([
+                'user_id' => $user->id,
                 'company_id' =>  $company->id,
                 'title' => $input['title'],
                 'category_id' => $input['category'],
@@ -107,6 +114,7 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
+                'skill_id' => $input['jobSkill'],
             ]);
 
             return response()->json([
@@ -205,7 +213,6 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-
             if ($job) {
                 $job->delete();
                 $response = [
@@ -225,8 +232,7 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-<<<<<<< Updated upstream
-=======
+
     public function applyJob(Request $request) {
         try {
             $id = $request->id;
@@ -287,7 +293,7 @@ class JobsController extends Controller
     public function myJobApplications() {
         try {
             $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get();
-          
+    
             return view('jobapply', [
                 'jobApplications' => $jobApplications
             ]);
@@ -436,5 +442,4 @@ class JobsController extends Controller
     }
     
    
->>>>>>> Stashed changes
 }

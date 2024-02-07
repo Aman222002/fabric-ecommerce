@@ -21,6 +21,7 @@
     <div id="app">
     <v-app>
        <companynav-component></companynav-component>
+     
         <v-main>
            
             @yield('content')

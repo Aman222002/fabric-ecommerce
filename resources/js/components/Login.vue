@@ -1,86 +1,118 @@
 <template>
-  <v-container fluid>
-    <v-card class="mt-5 mx-auto" max-width="400">
-      <v-card-title class="text-center">Log in</v-card-title>
+    <v-container fluid class="div1">
+      <div class="register-form">
+        <v-col cols="12" sm="6" md="6">
+          <v-col
+            class="mt-5"
+            style="background-color:#ece5e1; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"
+          >
+            <v-card-title class="text-center">Login</v-card-title>
+            <v-card-text>
+              <v-form ref="form" @submit.prevent="submitForm">
+                <v-text-field
+                  v-model="formData.email"
+                  id="email"
+                  label="Email"
+                  type="email"
+                  :rules="emailRules"
+                  required
+                  variant="outlined"
+                ></v-text-field>
+                <v-text-field
+                  v-model="formData.password"
+                  id="password"
+                  label="Password"
+                  type="password"
+                  :rules="passwordRules"
+                  required
+                  variant="outlined"
+                ></v-text-field>
+                <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
+              </v-form>
+            </v-card-text>
+           
+              <div style="text-align: center; margin-top: 30px;">
+                    <h5 class="new-client-text" >Don't have an Account?</h5> 
+                    <a href="/registration" class="register-link" style="margin-top: 30px;">Register Now</a></div>
+           
+          </v-col>
+        </v-col>
+      </div>
+    </v-container>
+  </template>
+  
+  <script>
+  import { ref } from 'vue';
+  import { useUsersStore } from '../store/user';
+  
+  export default {
+    name: 'Login',
+    setup() {
+        const usersStore = useUsersStore();
+      const formData = ref({
+        email: '',
+        password: '',
+      });
+  
+      const emailRules = [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ];
+  
+      const passwordRules = [
+        v => !!v || 'Password is required',
+        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
+      ];
+  
+      const submitForm = async () => {
+        try {
+          const response = await window.axios.post('/login', formData.value);
+          const data = response.data;
+  
+          if (data.status === true) {
+            console.log(data.data.roles[0].name);
+          alert('Login successful');
 
-      <v-card-text>
-        <v-form @submit.prevent="login">
-          <v-text-field v-model="email" label="Email" type="email" :rules="[rules.required, rules.email]"></v-text-field>
-          <v-text-field v-model="password" label="Password" type="password" :rules="[rules.required, rules.password]"></v-text-field>
-
-          <v-checkbox v-model="rememberMe" label="Remember Me"></v-checkbox>
-
-          <v-btn type="submit" color="primary" class="mt-3">Login</v-btn>
-        </v-form>
-
-        <v-card-actions>
-          <div class="text-hint">Already have an account?</div>
-        </v-card-actions>
-      </v-card-text>
-    </v-card>
-  </v-container>
-</template>
-
-<script>
-import { ref } from 'vue';
-
-export default {
-  name: "Login",
-  setup() {
-    const email = ref("");
-    const password = ref("");
-    const rememberMe = ref(false);
-
-    const rules = {
-      required: (value) => !!value || "This field is required",
-      email: (value) => /.+@.+\..+/.test(value) || "Enter a valid email address",
-      password: (value) => value.length >= 8 || "Password must be at least 8 characters",
-    };
-
-    const login = () => {
-      console.log('Logging in with:', email.value, password.value, 'Remember Me:', rememberMe.value);
-    };
-
-    const forgotPassword = () => {
-      console.log('Forgot Password clicked');
-    };
-
-    return {
-      email,
-      password,
-      rememberMe,
-      rules,
-      login,
-      forgotPassword,
-    };
-  },
-};
-</script>
-
-<style scoped>
-.center-form {
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.v-card {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.v-text-field,
-.v-checkbox,
-.v-btn {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.text-hint {
-  text-align: center;
-}
-</style>
+          if (data.data.roles[0].name == 'Admin') {
+            window.location.href = './admin/dashboard';
+          } else if(data.data.roles[0].name == 'Company Admin') {
+            window.location.href = '/job';
+         
+          }else {
+            usersStore.isLogIn();
+            window.location.href = '/resume';
+          }
+          } else {
+            alert('Login failed');
+          }
+        } catch (error) {
+          console.error(error);
+          alert('An error occurred during login');
+        }
+      };
+  
+      return {
+        formData,
+        emailRules,
+        passwordRules,
+        submitForm,
+      };
+    },
+  };
+  </script>
+  
+  <style scoped>
+  .register-form {
+    background-image: url('/storage/assets/p.jpg');
+    background-size: cover;
+    padding: 5vh;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: "#006400";
+  }
+  </style>
+  

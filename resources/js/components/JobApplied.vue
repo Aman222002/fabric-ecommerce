@@ -26,7 +26,7 @@
         <td>{{ jobApplications.job.title }}</td>
         <td>{{ jobApplications.job.location }}</td>
         <td>{{ jobApplications.job.salary }}</td>
-        <td>{{ jobApplications.job.created_at  }}</td>
+        <td>{{ jobApplications.job.created_at }}</td>
         <td>
           <v-btn @click="deleteItem(jobApplications.id)" color="error"
             >Delete</v-btn

@@ -21,22 +21,24 @@ class RegistrationController extends Controller
         try {
 
             $input = $request->all();
-            User::create([
+           
+            $user = User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'phone' => $input['phone'],
             ]);
-
+            $user->assignRole('User');
             return response()->json([
                 'status' => true,
-                'message' => "Registation Success"
+                'message' => "Registation Successfully",
+
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 }
