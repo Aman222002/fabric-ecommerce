@@ -98,7 +98,7 @@ export const useMyStore = defineStore("myStore", {
         },
 
         setEducation(education) {
-            Object.assign(this.educationDetails, education);
+            Object.assign(this.educationItem, education);
         },
         addEducationEntry() {
             this.educationDetails.push(educationItem);

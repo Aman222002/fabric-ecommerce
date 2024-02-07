@@ -62,10 +62,10 @@ export default {
         };
         return {
             educationTypes,
-            removeEducationEntry,
+            // removeEducationEntry,
             educationDetails,
             addEducationEntry: store.addEducationEntry,
-            // removeEducationEntry: store.removeEducationEntry,
+            removeEducationEntry: store.removeEducationEntry,
             still_pursuing,
             yearOptions,
 

@@ -72,7 +72,7 @@ export default {
                 axios.post('/registration', formData.value)
                     .then((data) => {
                         console.log(data);
-                        alert('success');
+
                     });
             }
         };
@@ -95,7 +95,13 @@ export default {
                 axios.post('/registration', this.formData)
                     .then((data) => {
                         if (data.status = true) {
-                            alert("Registration successful");
+                            window.Swal.fire({
+                                title: "Success!",
+                                text: "Registration  successfully.",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                            });
+                            // alert("Registration successful");
                             window.location.href = './login';
                         } else {
                             alert("Registration failed");

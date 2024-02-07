@@ -67,11 +67,10 @@ export default {
 
 
         return {
-            removeAchievement,
+            // removeAchievement,
             achievements,
             dateClicked,
-
-            // removeAchievement: store.removeAchievement,
+            removeAchievement: store.removeAchievement,
             addAchievement: store.AddAchievement,
 
         };

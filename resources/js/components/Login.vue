@@ -57,8 +57,12 @@ export default {
 
         if (data.status === true) {
           console.log(data.data.roles[0].name);
-          alert('Login successful');
-
+          window.Swal.fire({
+            title: "Success!",
+            text: "Form submitted successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
           if (data.data.roles[0].name == 'Admin') {
             window.location.href = './admin/dashboard';
           } else if (data.data.roles[0].name == 'Company Admin') {
