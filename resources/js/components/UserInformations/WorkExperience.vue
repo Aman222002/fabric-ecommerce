@@ -17,22 +17,24 @@
                     :rules="index === 0 ? [] : [v => !!v || 'Company Position is required']"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <h5 style="height:15px">start date</h5>
+
                 <VueDatePicker format="yyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
                     v-model="experience[index].start_date" :name="'start_date_' + index"
+                    @internal-model-change="(e) => dateClicked(index, 'start_date', e)"
                     :rules="index === 0 ? [] : [v => !!v || 'start date  is required']" />
 
             </v-col>
             <v-col cols="10" md="3">
-                <h5 style="height:15px">end date</h5>
+
                 <VueDatePicker format="yyyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
                     v-model="experience[index].end_date" :name="'end_date' + index"
+                    @internal-model-change="(e) => dateClicked(index, 'end_date', e)"
                     :rules="index === 0 ? [] : [v => !!v || 'end date  is required']" />
 
             </v-col>
             <v-col cols="12" md="50">
                 <v-textarea v-model="experience[index].description" :name="'description_' + index" label="Description"
-                    variant="outlined" :rules="[v => !!v || 'Description is required']"></v-textarea>
+                    variant="outlined" :rules="index === 0 ? [] : [v => !!v || 'description  is required']"></v-textarea>
             </v-col>
             <v-col v-if="index > 0" md="2">
                 <v-btn @click="removeWorkExperience(index)" color="red" class="custom-button">Remove</v-btn>
@@ -66,11 +68,16 @@ export default {
             }
         };
 
-
+        const dateClicked = (index, type, date) => {
+            const x = new Date(date);
+            //console.log("date", date, x.toJSON().split('T')[0])
+            experience.value[index][type] = x.toJSON().split('T')[0];
+        }
         return {
             experience,
             removeWorkExperience,
             addWorkExperience: store.addWorkExperience,
+            dateClicked
             // removeWorkExperience:store.removeWorkExperience,
         };
     },

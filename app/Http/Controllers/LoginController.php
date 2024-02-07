@@ -21,26 +21,33 @@ class LoginController extends Controller
 
     public function  check(Request $request)
     {
+
+        $credential = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
         try {
-            $credential = $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
             if (Auth::attempt($credential)) {
-
-                return response()->json([
-                    'status' => true,
-                    'message' => "Login Successfully",
-
-                ]);
+                $user = Auth::user();
+                if ($user) {
+                    $user->getRoleNames();
+                    return response()->json(['status' => true, 'data' => $user]);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'No data found',
+                    ];
+                    return response()->json($response, 404);
+                }
             } else {
-                return response()->json([
+                $response = [
                     'status' => false,
-                    'message' => " Invalid Credentials !",
-
-                ]);
+                    'message' => 'Invalid Credentials',
+                ];
+                return response()->json($response, 500);
             }
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
@@ -49,7 +56,8 @@ class LoginController extends Controller
         try {
             $user = Auth::user();
             if ($user) {
-                return response()->json(['status' => true, 'data' => $user]);
+                $role = $user->getRoleNames();
+                return response()->json(['status' => true, 'data' => $user], 200);
             } else {
                 $response = [
                     'status' => false,

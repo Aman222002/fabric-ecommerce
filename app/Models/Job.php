@@ -9,8 +9,9 @@ class Job extends Model
 {
     use HasFactory;
     protected $table ='post_jobs';
-    protected $primaryKey='id';
+    // protected $primaryKey='id';
     protected $fillable = [
+        'user_id',
         'company_id',
         'title',
         'category_id',
@@ -22,6 +23,7 @@ class Job extends Model
         'qualifications',
         'experience',
         'company_website',
+        'skill_id',
     ];
 
    
@@ -33,6 +35,10 @@ class Job extends Model
     {
         return $this->belongsTo(JobType::class);
     }
+    public function jobskill()
+    {
+        return $this->belongsTo(Skill::class);
+    }
    
     public function user()
     {
@@ -40,6 +46,8 @@ class Job extends Model
     }
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
+ 
+    
 }

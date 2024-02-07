@@ -34,7 +34,8 @@
             <v-row>
                 <v-col cols="12" md="6">
                     <v-select v-model="address.country" :items="countries" :rules="[v => !!v || 'Country is required']"
-                        item-title="country_name" item-value="id" label="country" clearable searchable></v-select>
+                        item-title="country_name" item-value="id" label="country" clearable searchable
+                        placeholder="Select Country"></v-select>
                 </v-col>
                 <v-col cols="12" md="6">
                     <v-text-field v-model="address.zip_code"

@@ -11,6 +11,25 @@ const educationItem = {
     still_pursuing: false,
 };
 
+const expItem = {
+    id: null,
+    company_name: "",
+    position: "",
+    description: "",
+    start_date: null,
+    end_date: null,
+};
+
+const achievementItem = {
+    id: null,
+    certification_name: "",
+    company_name: "",
+    certificate_number: "",
+    expiry_date: null,
+    certificate_file: [],
+    certificate_file_path: null,
+};
+
 const defaultState = () => {
     return {
         selectedSkills: [],
@@ -29,7 +48,7 @@ const defaultState = () => {
             state: "",
             zip_code: "",
             country: "",
-            county: "",
+            county: null,
         },
 
         userDetails: {
@@ -43,16 +62,7 @@ const defaultState = () => {
         yearOptions: [2022, 2023, 2024],
         highest_education_path: null,
         still_pursuing: false,
-        experience: [
-            {
-                id: null,
-                company_name: "",
-                position: "",
-                description: "",
-                start_date: null,
-                end_date: null,
-            },
-        ],
+        experience: [expItem],
         userProfile: [
             {
                 hobbies: "",
@@ -62,17 +72,7 @@ const defaultState = () => {
         // fields: { hobbies: "", strengths: "" },
 
         userSkills: [],
-        achievements: [
-            {
-                id: null,
-                certification_name: "",
-                company_name: "",
-                certificate_number: "",
-                expiry_date: null,
-                certificate_file: [],
-                certificate_file_path: null,
-            },
-        ],
+        achievements: [achievementItem],
     };
 };
 
@@ -101,13 +101,7 @@ export const useMyStore = defineStore("myStore", {
             Object.assign(this.educationDetails, education);
         },
         addEducationEntry() {
-            this.educationDetails.push({
-                id: null,
-                education_type: "",
-                school_university: "",
-                starting_year: "",
-                passing_year: "",
-            });
+            this.educationDetails.push(educationItem);
         },
 
         removeEducationEntry(index) {
@@ -116,14 +110,7 @@ export const useMyStore = defineStore("myStore", {
             }
         },
         addWorkExperience() {
-            this.experience.push({
-                id: null,
-                company_name: "",
-                position: "",
-                description: "",
-                start_date: null,
-                expiry_date: null,
-            });
+            this.experience.push(expItem);
         },
 
         removeWorkExperience(index) {
@@ -132,15 +119,7 @@ export const useMyStore = defineStore("myStore", {
             }
         },
         AddAchievement() {
-            this.achievements.push({
-                id: null,
-                certification_name: "",
-                company_name: "",
-                certificate_number: "",
-                expiry_date: null,
-                certificate_file: [],
-                certificate_file_path: null,
-            });
+            this.achievements.push(achievementItem);
         },
         removeAchievement(index) {
             if (this.achievements.length > 1) {
@@ -215,6 +194,7 @@ export const useMyStore = defineStore("myStore", {
         },
         submitForm() {
             const formData = new FormData();
+
             formData.append("userDetails[name]", this.userDetails.name);
             formData.append("userDetails[email]", this.userDetails.email);
             formData.append("userDetails[phone]", this.userDetails.phone);
@@ -343,6 +323,27 @@ export const useMyStore = defineStore("myStore", {
                         const resp = data.data;
 
                         //Object.assign(this, data.data);
+                        if (!resp.achievements.length) {
+                            resp.achievements = [achievementItem];
+                        }
+                        if (!resp.educationDetails.length) {
+                            resp.educationDetails = [educationItem];
+                        }
+
+                        if (!resp.experience.length) {
+                            resp.experience = [expItem];
+                        }
+                        if (!resp.address) {
+                            resp.address = JSON.parse(
+                                JSON.stringify(this.address)
+                            );
+                        }
+                        if (!resp.userProfile) {
+                            resp.userProfile = JSON.parse(
+                                JSON.stringify(this.userProfile)
+                            );
+                        }
+
                         this.$patch(resp);
 
                         // if (resp.userDetails) {

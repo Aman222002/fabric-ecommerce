@@ -20,10 +20,11 @@
                     :rules="[v => !!v || 'Certificate Number is required']"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <h5 style="height:15px">expiry date</h5>
-                <VueDatePicker format="yyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
-                    v-model="achievements[index].expiry_date" :name="'expiry_date_' + index"
-                    :rules="index === 0 ? [] : [v => !!v || 'Expiry date  is required']" />
+                <VueDatePicker format="yyyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
+                    v-model="achievements[index].expiry_date" :name="'expiry_date' + index"
+                    @internal-model-change="(e) => dateClicked(index, 'expiry_date', e)"
+                    :rules="index === 0 ? [] : [v => !!v || 'expiry date  is required']" />
+
             </v-col>
             <v-col cols="12" md="12">
                 <v-file-input v-model="achievements[index].certificate_file" :name="'certificate_file_' + index"
@@ -58,11 +59,18 @@ export default {
                 console.error('Error deleting experience detail:', error);
             }
         };
+        const dateClicked = (index, type, date) => {
+            const x = new Date(date);
+            //console.log("date", date, x.toJSON().split('T')[0])
+            achievements.value[index][type] = x.toJSON().split('T')[0];
+        }
 
 
         return {
             removeAchievement,
             achievements,
+            dateClicked,
+
             // removeAchievement: store.removeAchievement,
             addAchievement: store.AddAchievement,
 

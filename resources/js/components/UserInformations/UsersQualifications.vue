@@ -28,7 +28,7 @@
             <v-col v-if="index > 0" md="2">
                 <v-btn @click="removeEducationEntry(index)" color="red" class="custom-button">Remove</v-btn>
             </v-col>
-            <v-col cols="12" class="flex-end" md="2" v-else>
+            <v-col md="2" v-else>
                 <v-btn @click="addEducationEntry" color="blue" class="custom-button">Add More</v-btn>
             </v-col>
         </v-row>
@@ -45,6 +45,7 @@ export default {
     setup() {
         const store = useMyStore();
         const educationDetails = ref(store.educationDetails ?? []);
+        console.log(educationDetails.value);
         const educationTypes = ref(['High School', 'College', 'University']);
         const still_pursuing = ref(false);
         const yearOptions = ref([2022, 2023, 2024]);

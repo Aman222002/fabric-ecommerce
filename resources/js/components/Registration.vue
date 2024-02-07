@@ -2,7 +2,8 @@
     <v-container>
         <div class="register-form">
             <v-col cols="12" sm="8" md="6">
-                <v-col class="mt-5" style=" border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <v-col class="mt-5"
+                    style="background-color:#f8f7f7; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <v-card-title class="text-center">Find a job & grow your career</v-card-title>
                     <v-form ref="form" @submit.prevent="submitForm">
                         <v-text-field v-model="formData.name" id="fullName" label="Full Name" :rules="nameRules" required
@@ -17,9 +18,11 @@
                         <br />
                         <v-btn type="submit" color="primary" class="mt-3">Submit</v-btn>
                     </v-form>
-                    <v-card-actions>
-                        <div class="text-hint">Already have an account? <a href="/login">Login In</a></div>
-                    </v-card-actions>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <h5 class="new-client-text">Already have an Account?</h5>
+                        <a href="/login" class="register-link" style="margin-top: 30px;">Login</a>
+                    </div>
+
 
                     <v-col cols="12" sm="8" md="4">
                         <v-card class="mt-5"
@@ -66,7 +69,7 @@ export default {
         const submitForm = () => {
             if (this.$refs.form.validate()) {
                 console.log(formData.value.phone);
-                window.axios.post('/registration', formData.value)
+                axios.post('/registration', formData.value)
                     .then((data) => {
                         console.log(data);
                         alert('success');
@@ -121,6 +124,12 @@ export default {
     background-repeat: no-repeat;
     background-position: center;
     color: "#006400";
+
+}
+
+
+.register-link {
+    text-decoration: none;
 
 }
 </style> 

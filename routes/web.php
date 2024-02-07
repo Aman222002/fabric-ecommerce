@@ -4,6 +4,7 @@ use App\Http\Controllers\API\UsersController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\UserAchievementController;
@@ -25,8 +26,13 @@ use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
+use App\Http\Controllers\SearchjobController;
+use App\Models\Job;
+use App\Models\Skill;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,21 +49,6 @@ use App\Http\Controllers\JobTypesController;
 Route::get('/', function () {
     return view('companypage');
 });
-// Route::get('{any}', function () {
-//     return view('app');
-// })->where('any', '.*');
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-//     // Our resource routes
-//     Route::resource('roles', RoleController::class);
-//     Route::resource('users', UserController::class);
-//     Route::resource('products', ProductController::class);
-// });
 Auth::routes();
 Route::get('/header', function () {
     return view('header');
@@ -112,9 +103,14 @@ Route::get('/crud', function () {
 Route::get('/findcv', function () {
     return view('findcv');
 });
-Route::get('/companypost', function () {
-    return view('companypost');
-});
+
+
+Route::get('/companypost', [SearchjobController::class, 'index']);
+Route::get('/company/post', [SearchjobController::class, 'fetchData']);
+Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
+
+
+
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
@@ -122,23 +118,79 @@ Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+
 Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
 });
-Route::get('/post/jobs', [JobsController::class, 'index']);
-Route::post('/post', [JobsController::class, 'store']);
-Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
-Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
-Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+
+
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/post/jobs', [JobsController::class, 'index']);
+    Route::post('/post', [JobsController::class, 'store']);
+    Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
+    Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+    Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+    Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
+    Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
+
+    Route::post('/save-job/{id}', [JobsController::class, 'saveJob']);
+    Route::get('/savedjobs', [JobsController::class, 'savedJobsdetail']);
+    Route::post('/removesavedjobs/{id}', [JobsController::class, 'removeSavedJob']);
+    Route::post('/removeappliedjobs/{id}', [JobsController::class, 'removeAppliedJob']);
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
+
+Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/logout', [DashboardController::class, 'logout']);
+    Route::get('/profile', [DashboardController::class, 'viewProfile']);
+    Route::get('/profile/getProfile', [UserController::class, 'getProfile']);
+    Route::get('/users', [DashboardController::class, 'viewUsers']);
+    Route::get('/companies', [DashboardController::class, 'viewCompanies']);
+    Route::get('/plans', [DashboardController::class, 'plans']);
+    Route::get('/get/plans', [DashboardController::class, 'getplans']);
+    Route::post('/update/plans/{planID?}', [DashboardController::class, 'updateplans']);
+
+    Route::group(["prefix" => "/user"], function () {
+        Route::get('/index', [UserController::class, 'index']);
+        Route::get('/edit/{id}', [UserController::class, 'edit']);
+        Route::post('/store', [UserController::class, 'store']);
+        Route::post('/update/{id}', [UserController::class, 'update']);
+        Route::post('/update-profile/{id}', [UserController::class, 'updateProfile']);
+        Route::post('/update-password', [UserController::class, 'updatePassword']);
+        Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
+    });
+    Route::group(["prefix" => "/company"], function () {
+        Route::get('/address/{addressId?}', [CompanyController::class, 'getAddress']);
+        Route::post('/address/update/{addressId?}', [CompanyController::class, 'updateAddress']);
+        Route::get('/representative/{userId?}', [CompanyController::class, 'findRepresentative']);
+        Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
+        Route::post('/store', [CompanyController::class, 'store']);
+        Route::post('/update/{id}', [CompanyController::class, 'update']);
+        Route::delete('/destroy/{id}', [CompanyController::class, 'destroy']);
+    });
 });
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
+Route::get('/skill', [SkillController::class, 'index']);
+
+
+
+Route::prefix('company')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::get('/list', [ProfileController::class, 'show']);
+    Route::post('/update', [ProfileController::class, 'update']);
+});
+Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
+
+
 
 
 //users
