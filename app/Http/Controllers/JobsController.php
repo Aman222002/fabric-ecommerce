@@ -433,7 +433,7 @@ class JobsController extends Controller
             }
           
             $application = JobApply::where('job_id', $id)->with('user','job')->get();
-      
+     
             return view('postdetail', ['application'=>$application]);
         } catch (\Exception $e) {
             

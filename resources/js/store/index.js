@@ -293,8 +293,7 @@ export const useMyStore = defineStore("myStore", {
                 JSON.stringify(this.selectedSkills)
             );
 
-            axios
-                .post("/submit", formData, {})
+            axios.post("/submit", formData, {})
                 .then(({ data }) => {
                     console.log("Response", data);
                     window.Swal.fire({

@@ -94,6 +94,7 @@
 <script>
 import { onMounted, ref } from "vue";
 import { useUsersStore } from "../store/user";
+import axios from 'axios';
 export default {
   name: "Job",
   setup() {

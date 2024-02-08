@@ -18,7 +18,7 @@ use App\Http\Controllers\UserExperienceController;
 use App\Http\Controllers\AdditionalInformationController;
 use App\Http\Controllers\QualificationsController;
 use App\Http\Controllers\ResumeController;
-
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyLoginController;
 
@@ -190,7 +190,7 @@ Route::prefix('company')->group(function () {
 });
 Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
 
-
+Route::get('/generate-pdf', [PdfController::class, 'download']);
 
 
 //users

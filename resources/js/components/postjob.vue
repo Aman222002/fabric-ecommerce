@@ -99,7 +99,7 @@
   
   <script>
 import { ref, onMounted } from "vue";
-
+import axios from 'axios';
 export default {
   name: "Postjob",
   setup() {

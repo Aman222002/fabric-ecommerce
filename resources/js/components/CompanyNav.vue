@@ -20,7 +20,7 @@
 <script>
 import { reactive, onMounted } from 'vue';
 import { useUsersStore } from "../store/user";
-
+import axios from 'axios';
 export default {
   name: "CompanyNav",
   setup() {

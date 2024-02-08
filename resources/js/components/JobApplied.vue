@@ -38,7 +38,7 @@
 </template>
     <script>
 import { onMounted, ref } from "vue";
-
+import axios from 'axios';
 export default {
   name: "JobApplied",
   props: {

@@ -50,6 +50,7 @@
                                         </template>
                                         <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="goToNext()"
                                             color="#006400"></v-stepper-actions>
+                                            <v-btn @click="downloadcv()">Generate CV</v-btn>
                                     </v-form>
                                 </v-card>
                             </v-stepper-window-item>
@@ -151,6 +152,9 @@ export default {
 
             return val;
         });
+        const downloadcv =()=> {
+      window.location.href='/generate-pdf'
+    }
         return {
             store,
             maxSteps: 4,
@@ -164,7 +168,7 @@ export default {
             valid,
             circularSteps,
             myForm,
-
+      downloadcv,
         };
 
     },

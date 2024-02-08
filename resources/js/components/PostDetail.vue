@@ -10,6 +10,7 @@
           <th class="text-left">Email</th>
           <th class="text-left">Applied Date</th>
           <th class="text-left">Post Name</th>
+          <th class="text-left">Action</th>
          
         </tr>
       </thead>
@@ -20,6 +21,9 @@
           <td>{{ application.user.email }}</td>
           <td>{{ application.applied_date }}</td>
           <td>{{ application.job.title }}</td>
+          <td> 
+            <v-btn @click="view()" color="success">View</v-btn>
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -30,7 +34,7 @@
   <script>
 
 import { ref } from 'vue';
-  
+import axios from 'axios';
   export default {
     name: 'PostDetail',
     props:{
@@ -42,10 +46,17 @@ import { ref } from 'vue';
     setup(props) {
       const applications = ref([]);
       applications.value = props.data;
+
+
+      const view =()=> {
+   
+    }
       return {
-        applications
+        applications,
+        view,
       };
     },
   };
   </script>
+   
   

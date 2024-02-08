@@ -10,7 +10,7 @@ class UserSkill extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'skill_id'];
-
+    protected $appends=['skill'];
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -19,5 +19,9 @@ class UserSkill extends Model
     public function skill()
     {
         return $this->belongsTo(Skill::class);
+    }
+    public function getSkillAttribute()
+    {
+        return $this->skill()->get();
     }
 }

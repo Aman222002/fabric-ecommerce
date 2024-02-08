@@ -38,7 +38,7 @@
     <script>
 
     import { onMounted, ref } from 'vue';
-      
+    import axios from 'axios';
       export default {
         name: 'SaveJob',
         props:{
