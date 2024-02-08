@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Job extends Model
 {
     use HasFactory;
-    protected $table ='post_jobs';
+    protected $table = 'post_jobs';
     // protected $primaryKey='id';
     protected $fillable = [
         'user_id',
@@ -24,9 +24,10 @@ class Job extends Model
         'experience',
         'company_website',
         'skill_id',
+        'seen',
     ];
 
-   
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -39,7 +40,7 @@ class Job extends Model
     {
         return $this->belongsTo(Skill::class);
     }
-   
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -48,6 +49,4 @@ class Job extends Model
     {
         return $this->belongsTo(Company::class, 'company_id');
     }
- 
-    
 }

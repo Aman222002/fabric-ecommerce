@@ -2,11 +2,8 @@
   <div style="text-align: center; margin-top: 20px">
     <h1>Jobs <span style="color: red">Applied</span></h1>
   </div>
-  <v-btn color="success" style="margin-top: 20px"
-    ><a href="/companypost" style="text-decoration: none"
-      >Apply For New Job</a
-    ></v-btn
-  >
+  <v-btn color="success" style="margin-top: 20px"><a href="/companypost" style="text-decoration: none">Apply For New
+      Job</a></v-btn>
   <v-table>
     <thead>
       <tr style="font-size: 30px">
@@ -18,34 +15,32 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="jobApplications in jobApplication"
-        :key="jobApplications.job.id"
-        style="font-size: 23px"
-      >
+      <tr v-for="jobApplications in jobApplication" :key="jobApplications.job.id" style="font-size: 23px">
         <td>{{ jobApplications.job.title }}</td>
         <td>{{ jobApplications.job.location }}</td>
         <td>{{ jobApplications.job.salary }}</td>
         <td>{{ jobApplications.job.created_at }}</td>
-        <td>
-          <v-btn @click="deleteItem(jobApplications.id)" color="error"
-            >Delete</v-btn
-          >
+        <td> <button v-if="jobApplications.seen === 1">Seen</button>
+          <button v-else>Not Seen</button>
+        </td>
+        <td><v-btn @click="deleteItem(jobApplications.id)" color="error">Delete</v-btn>
         </td>
       </tr>
     </tbody>
   </v-table>
 </template>
-    <script>
-import { onMounted, ref } from "vue";
+<script>
+import { onMounted, ref, computed } from "vue";
 
 export default {
   name: "JobApplied",
   props: {
+
     data: {
       type: Array,
       default: () => {
-        [];
+        ['seen'];
+
       },
     },
   },
@@ -53,7 +48,9 @@ export default {
     console.log(props.data);
     const jobApplication = ref([]);
     jobApplication.value = props.data;
-
+    const buttonText = computed(() => {
+      return props.seen === 1 ? 'seen' : 'seen not';
+    });
     const deleteItem = (id) => {
       window.Swal.fire({
         title: "Are you sure?",
@@ -90,6 +87,7 @@ export default {
     return {
       jobApplication,
       deleteItem,
+      buttonText
     };
   },
 };

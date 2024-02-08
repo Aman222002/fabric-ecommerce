@@ -214,7 +214,7 @@ class ResumeController extends Controller
         }
     }
 
-    public function destroyEducation($id)
+    public function destroyEducation(Request $id)
     {
         try {
             $id = Qualification::find($id);
@@ -239,7 +239,7 @@ class ResumeController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    public function destroyExperience($id)
+    public function destroyExperience(Request $id)
     {
         try {
 

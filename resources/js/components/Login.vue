@@ -59,7 +59,7 @@ export default {
           console.log(data.data.roles[0].name);
           window.Swal.fire({
             title: "Success!",
-            text: "Form submitted successfully.",
+            text: "Login  successfully.",
             icon: "success",
             confirmButtonText: "OK",
           });

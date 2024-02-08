@@ -48,7 +48,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
+
 import { countries } from "../../utils/countries"
 import { ref, onMounted } from 'vue';
 import { useMyStore } from '@/store';
@@ -59,19 +59,17 @@ export default {
         const store = useMyStore();
         const address = ref(store.address);
         const countriesList = ref(countries);
-        onMounted(() => {
-            try {
-                axios.get('/getcountry').then(({ data }) => {
-                    console.log(data.countries, "dbvdbgvcdgcvg")
-                    countries.value = data.countries ?? [];
+        // onMounted(() => {
+        //     try {
+        //         axios.get('/getcountry').then(({ data }) => {
+        //             console.log(data.countries, "dbvdbgvcdgcvg")
+        //             countries.value = data.countries ?? [];
 
-                });
-            } catch (err) {
-                console.log(err);
-            }
-        });
-
-
+        //         });
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        // });
         return {
             address,
             countries: countriesList,

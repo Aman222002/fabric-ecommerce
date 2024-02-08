@@ -175,7 +175,7 @@ export const useMyStore = defineStore("myStore", {
         },
         setEducation(user) {
             console.log(user);
-            Object.assign(this.educationDetails, user);
+            Object.assign(this.educationItem, user);
         },
         setProfile(user) {
             console.log(user);
@@ -437,12 +437,7 @@ export const useEducationDetailsStore = defineStore("educationDetails", {
 
     actions: {
         addEducationEntry() {
-            this.educationDetails.push({
-                education_type: "",
-                school_university: "",
-                starting_year: "",
-                passing_year: "",
-            });
+            this.educationDetails.push(educationItem);
         },
 
         removeEducationEntry(index) {

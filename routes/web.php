@@ -118,17 +118,11 @@ Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
-
-
-
 Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
 });
-
-
-
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/post/jobs', [JobsController::class, 'index']);
@@ -138,7 +132,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
     Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
     Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
-
     Route::post('/save-job/{id}', [JobsController::class, 'saveJob']);
     Route::get('/savedjobs', [JobsController::class, 'savedJobsdetail']);
     Route::post('/removesavedjobs/{id}', [JobsController::class, 'removeSavedJob']);
@@ -180,15 +173,13 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
 Route::get('/skill', [SkillController::class, 'index']);
-
-
-
 Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
 });
 Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
+Route::post('/jobs/application/{user_id}/markAsSeen', [JobsController::class, 'markAsSeen']);
 
 
 

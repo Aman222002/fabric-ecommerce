@@ -22,8 +22,6 @@
                         <h5 class="new-client-text">Already have an Account?</h5>
                         <a href="/login" class="register-link" style="margin-top: 30px;">Login</a>
                     </div>
-
-
                     <v-col cols="12" sm="8" md="4">
                         <v-card class="mt-5"
                             style="background-color:red; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">

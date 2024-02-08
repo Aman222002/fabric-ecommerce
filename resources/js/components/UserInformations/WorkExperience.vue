@@ -75,10 +75,10 @@ export default {
         }
         return {
             experience,
-            removeWorkExperience,
+            // removeWorkExperience,
             addWorkExperience: store.addWorkExperience,
-            dateClicked
-            // removeWorkExperience:store.removeWorkExperience,
+            dateClicked,
+            removeWorkExperience: store.removeWorkExperience,
         };
     },
 };
