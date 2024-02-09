@@ -153,8 +153,6 @@ class JobsController extends Controller
         }
     }
 
-
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -210,34 +208,17 @@ class JobsController extends Controller
     /**
      * company seen 
      */
-    public function markAsSeen($job_id, $user_id)
+    public function markAsSeen($id)
     {
         try {
-            $jobPost = JobApply::where('user_id', $user_id)->where('job_id', $job_id)->first();
-            //  $jobPost = JobApply::where('user_id', $user_id)->first();
+            $jobPost = JobApply::findOrFail($id);
+            $jobPost->seen = 1;
             $jobPost->update(['seen' => 1]);
             return response()->json(['status' => true, 'message' => 'Job post marked as seen']);
         } catch (\Exception $e) {
-
             return response()->json(['status' => false, 'message' => 'Failed to mark job post as seen'], 500);
         }
     }
-    // public function markAsSeen($user_id)
-    // {
-    //     try {
-    //         // Update 'seen' column directly using raw SQL
-    //         $affected = DB::update('UPDATE job_application SET seen = 1 WHERE user_id = ?', [$user_id]);
-
-    //         if ($affected) {
-    //             return response()->json(['status' => true, 'message' => 'Job post marked as seen']);
-    //         } else {
-    //             return response()->json(['status' => false, 'message' => 'Job post not found for the user'], 404);
-    //         }
-    //     } catch (\Exception $e) {
-    //         return response()->json(['status' => false, 'message' => 'Failed to mark job post as seen: ' . $e->getMessage()], 500);
-    //     }
-    // }
-
 
     /**
      * Remove the specified resource from storage.

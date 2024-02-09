@@ -179,7 +179,7 @@ Route::prefix('company')->group(function () {
     Route::post('/update', [ProfileController::class, 'update']);
 });
 Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
-Route::post('/jobs/application/{user_id}/markAsSeen', [JobsController::class, 'markAsSeen']);
+Route::post('/jobs/application/{id}/markAsSeen', [JobsController::class, 'markAsSeen']);
 
 
 

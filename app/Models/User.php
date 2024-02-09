@@ -46,6 +46,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    // $user = User::with([
+    //     'qualifications', 
+    //     'address', 
+    //     'experience', 
+    //     'skills', 
+    //     'additionalInformation', 
+    //     'userAchievements', 
+    //     'userProfile', 
+    //     'skill', 
+    //     'resume', 
+    //     'company'
+    // ])->find($userId);
     public function qualifications()
     {
         return $this->hasMany(Qualification::class);
@@ -96,4 +108,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'user_id', 'id');
     }
+  
+    
 }
