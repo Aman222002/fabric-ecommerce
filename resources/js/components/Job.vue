@@ -13,13 +13,14 @@
           Let's hire your next great candidate Fast.
         </h3>
         <br />
-        <v-btn large color="primary" @click="jobDialog = true">
+        <v-btn large  color="primary"     style=" color: white;  width: 130px; height: 50px;" @click="jobDialog = true">
           Post a Job
         </v-btn>
       </div>
         <v-dialog
           v-model="jobDialog"
           max-width="600px"
+         
           @click:outside="jobDialog = false"
           class="login-dialog"
         >
@@ -48,12 +49,10 @@
               ></v-text-field>
             </v-card-text>
             <v-card-actions class="login-dialog-actions">
-            <v-btn @click="handleLogin" class="login-btn" color="primary">Login</v-btn>
+            <v-btn @click="handleLogin"  color="primary"   class="login-btn" style=" color: white;  width: 130px; height: 50px;">Login</v-btn>
           </v-card-actions>
-          <h5 class="new-client-text" style="text-align: center;">Are you a new client?</h5>
-          <v-btn color="primary" class="register-btn">
-            <a href="./company/register" class="register-link">Register Now</a>
-          </v-btn>
+          <h5 class="new-client-text" style="text-align: center;">Are you a new client?
+            <a href="/company/register"  class="register-link" style="margin-top: 30px;text-decoration: none; color: rgb(109, 109, 236); ">Register Now<v-icon>mdi-arrow-expand-right</v-icon></a></h5>
           </v-card>
         </v-dialog>
   <div class="aa">
@@ -92,6 +91,7 @@
 
 </template>
 <script>
+
 import { onMounted, ref } from "vue";
 import { useUsersStore } from "../store/user";
 import axios from 'axios';

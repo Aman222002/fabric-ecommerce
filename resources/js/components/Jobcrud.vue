@@ -1,151 +1,52 @@
-<template>
 
-  <div style="text-align: center; font-size: 30px;">Job Posted</div>
-  <v-btn color="success" style="margin-top: 40px;"><a href="/postjob" style="text-decoration: none;">Add new Job</a></v-btn>
-    <v-table>
-      <thead>
-        <tr>
-        
-          <th class="text-left">Job Title</th>
-          <th class="text-left">Vacancy</th>
-          <th class="text-left">Salary</th>
-          <th class="text-left">Created At</th>
-          <th class="text-left">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="job in jobs" :key="job.id">
-         
-          <td>{{ job.title }}</td>
-          <td>{{ job.vacancy }}</td>
-          <td>{{ job.salary }}</td>
-          <td>{{ job.created_at }}</td>
-          <td>
-            <v-btn @click="openEditDialog(job.id)" color="primary">Edit</v-btn>
-            <v-btn @click="deleteItem(job.id)" color="error">Delete</v-btn>
-            <v-btn @click="checkItem(job.id)" color="success" style="margin-left: 10px;">Check Applicants</v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
-    <v-dialog v-model="editDialog" max-width="500">
-    <v-card>
-      <v-card-title>Edit Job</v-card-title>
-      <v-card-text>
-        <v-text-field variant="outlined" v-model="editedJob.title" label="Job Title"></v-text-field>
-        <v-text-field variant="outlined" v-model="editedJob.vacancy" label="Vacancy"></v-text-field>
-        <v-text-field variant="outlined" v-model="editedJob.experience" label="Experience"></v-text-field>
-        <v-text-field
-        variant="outlined"
-              v-model="editedJob.salary"
-              label="Salary"
-              placeholder="Salary"
-            ></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn @click="saveEditedJob(editedJob.id)">Save</v-btn>
-        <v-btn @click="closeEditDialog">Close</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  </template>
-  
-  <script>
-
-import { onMounted, ref } from 'vue';
-import axios from 'axios';
-  export default {
-    name: 'JobCrud',
-    setup() {
-     
-      const jobs = ref([]);
-      const editDialog = ref(false);
-    const editedJob = ref({
-      title: "",
-      vacancy: "",
-      experience: "",
-      salary: "",
-    });
-    
-       const fetchJobs= () =>{
-        try{
-            axios.get('/post/jobs').then((response)=>{
-                jobs.value= response.data.data;
-            })
-        }catch(err){
-            console.log(err);
-        }
-       }
-      const openEditDialog = (id) => {
-        console.log(id)
-        try {
-        axios.get(`/post/edit/${id}`).then((response) => {
-            if (response.data.status) {
-                editedJob.value = response.data.data;
-                console.log(response.data);
-            } else {
-                console.log(' request was not successful:', response.data.message);  
-            }
-        });
-    } catch (err) {
-        console.log(err);
-    }
-    editDialog.value = true;
+   <template>
+  <p style="text-align: center; font-size: 20px; margin-top: 20px;">My Jobs</p>
+ 
+  <DxDataGrid
+    id="grid"
+    :show-borders="true"
+    :data-source="dataSource"
+    :repaint-changes-only="true"
+  >
+    <DxEditing :allow-updating="true" :allow-deleting="true" mode="row" />
+    <DxSearchPanel :visible="true" />
+    <DxScrolling mode="virtual" row-rendering-mode="virtual" />
+    <DxColumn data-field="title" data-type="string"> </DxColumn>
+    <DxColumn data-field="location" data-type="string">
+       </DxColumn>
+     <!-- <DxColumn caption="Applicants" cell-template="customButtonTemplate">
+    </DxColumn>
+     <template #customButtonTemplate="{data}">
+      <DxButton @click="checkItem(data.row.data.id)" text=" Applicants"></DxButton>
+      </template> -->
+      <DxMasterDetail :enabled="true" template="masterTemplate" />
+      <template #masterTemplate="{ data: cellInfo }">
+                <masterTemplate :application-info="cellInfo.data" />
+            </template>
+           
+  </DxDataGrid>
+</template>
+    <script >
+import DxButton from "devextreme-vue/button";
+import dxGridStore from "../composition/dxGridStore";
+import masterTemplate from './MasterdetailApplicant.vue'
+export default {
+  name: "JobCrud",
+  components: {
+    DxButton,
+   masterTemplate
+  },
+  setup() {
+    const loadUrl = `/post/jobs`;
+    const deleteUrl = `/post/delete`;
+    const updateURL = `/post/jobs`;
+    const { dataSource } = dxGridStore(loadUrl, null, updateURL, deleteUrl);
+    // const checkItem = (id) => {
+    //   window.location.href = `/jobs/application/${id}`;
+    // };
+    return {
+      dataSource,   
+    };
+  },
 };
-    const saveEditedJob = (id) => {
-      try{
-         axios.post(`/post/jobs/${id}`, editedJob.value).then((response)=>{
-          if (response.data.status ===true) {
-        window.location.reload();
-      } else {
-        console.log('Request was not successful:', response.data.message);
-      }
-         })
-      }catch(err){
-        console.log(err);
-      }
-      closeEditDialog();
-    };
-    const closeEditDialog = () => {
-      editDialog.value = false;
-      editedJob.value = {}; 
-    };
-
-    const deleteItem = (id) => {
-      try{
-         axios.post(`/post/delete/${id}`).then((response)=>{
-          if (response.data.status ===true) {
-        window.location.reload();
-      } else {
-        console.log('Request was not successful:', response.data.message);
-      }
-         })
-      }catch(err){
-        console.log(err);
-      }
-    };
-    const checkItem =(id)=> {
-      window.location.href=`/jobs/application/${id}`
-    }
-
-      onMounted(() => {
-      fetchJobs();
-
-    });
-      return {
-        jobs,
-        editDialog,
-      editedJob,
-      openEditDialog,
-      saveEditedJob,
-      closeEditDialog,
-      deleteItem,
-      checkItem,
-
-      
-      };
-    },
-  };
-  </script>
-  
+</script>

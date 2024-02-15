@@ -234,6 +234,11 @@ class CompanyController extends Controller
             ], 500);
         }
     }
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
+    }
   
     
 }

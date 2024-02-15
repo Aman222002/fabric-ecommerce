@@ -50,7 +50,7 @@
                                         </template>
                                         <v-stepper-actions :disabled="disabled" @click:prev="prev" @click:next="goToNext()"
                                             color="#006400"></v-stepper-actions>
-                                            <v-btn @click="downloadcv()">Generate CV</v-btn>
+                                            <v-btn v-if="currentStep === 4" @click="downloadcv()">Generate CV</v-btn>
                                     </v-form>
                                 </v-card>
                             </v-stepper-window-item>

@@ -97,7 +97,7 @@ Route::get('/product', function () {
 Route::get('/postjob', function () {
     return view('postjob');
 });
-Route::get('/crud', function () {
+Route::get('/posted-jobs', function () {
     return view('jobcrud');
 });
 Route::get('/findcv', function () {
@@ -105,7 +105,7 @@ Route::get('/findcv', function () {
 });
 
 
-Route::get('/companypost', [SearchjobController::class, 'index']);
+Route::get('/jobs-detail', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 
@@ -114,6 +114,7 @@ Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
+Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
@@ -125,7 +126,9 @@ Route::prefix('company')->group(function () {
     Route::get('/register', [CompanyController::class, 'index']);
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
+    Route::get('/logout', [CompanyController::class, 'logout']); 
 });
+
 
 
 
@@ -135,14 +138,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/post', [JobsController::class, 'store']);
     Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
     Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
-    Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+    Route::delete('/post/delete/{id}', [JobsController::class, 'destroy']);
     Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
     Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
-
+    // Route::get('/get/job-apply', [JobsController::class, 'myJobApplications']);
     Route::post('/save-job/{id}', [JobsController::class, 'saveJob']);
     Route::get('/savedjobs', [JobsController::class, 'savedJobsdetail']);
     Route::post('/removesavedjobs/{id}', [JobsController::class, 'removeSavedJob']);
-    Route::post('/removeappliedjobs/{id}', [JobsController::class, 'removeAppliedJob']);
+    Route::post('/remove-applied-jobs/{id}', [JobsController::class, 'removeAppliedJob']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -188,7 +191,11 @@ Route::prefix('company')->group(function () {
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
 });
+// Route::get('/jobs/applicants', [JobsController::class, 'getapplicants']);
 Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
+Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
+Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
+
 
 Route::get('/generate-pdf', [PdfController::class, 'download']);
 

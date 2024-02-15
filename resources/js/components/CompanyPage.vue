@@ -56,7 +56,7 @@
     <v-img src="/storage/assest/26.png" contain class="mb-4 full-screen-image"></v-img>
   </div>
   <div class="ff">
-    <v-btn color="primary" style="height: 40px;">
+    <v-btn color="primary" style="height: 40px; color: white;">
       <a href="/login" style="color: inherit; text-decoration: none;">Get Started</a>
     </v-btn>
     <p style="font-size: 20px;">

@@ -128,7 +128,7 @@
             ></v-text-field>
           </div>
 
-          <v-btn type="submit" color="primary" class="custom-button"
+          <v-btn type="submit"  color="primary" class="custom-button" style=" color: white;  width: 180px; height: 50px; margin-left: 30%; "
             >Register Company</v-btn
           >
         </v-form>

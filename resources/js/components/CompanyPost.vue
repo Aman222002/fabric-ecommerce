@@ -1,53 +1,55 @@
 <template>
   <v-container>
-    <v-row style="margin-top: 30px">
-      <v-col cols="12" md="4">
-        <v-text-field
-          v-model="jobTitle"
-          label="Job Title"
-          outlined
-          clearable
-          style="width: 100%"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-text-field
-          v-model="location"
-          label="Location"
-          outlined
-          clearable
-          style="width: 100%"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-btn @click="searchJobs" color="primary" style="margin-top: 15px;">Search</v-btn>
-      </v-col>
-    </v-row>
+    <v-row style="margin-top: 10px;">
+  <v-col cols="12" md="4">
+    <v-text-field
+      v-model="jobTitle"
+      label="Job Title"
+      outlined
+      clearable
+      style="width: 100%"
+    ></v-text-field>
+  </v-col>
 
+  <v-col cols="12" md="4">
+    <v-text-field
+      v-model="location"
+      label="Location"
+      outlined
+      clearable
+      style="width: 100%"
+    ></v-text-field>
+  </v-col>
+
+  <v-col cols="12" md="4">
+    <v-btn @click="searchJobs"  style="margin-top: 15px; color: white;" color="primary">Search</v-btn>
+  </v-col>
+</v-row>
     <div class="card-container">
       <v-card v-for="job in jobs" :key="job.id" class="custom-card" @click="openDetailDialog(job)">
         <v-card-title
           style="
             font-size: 30px;
             font-weight: bolder;
-            text-align: center;
-            color: rgb(81, 81, 85);
+            color: rgb(44, 44, 151);
           "
           >{{ job.title }}</v-card-title
         >
 
-        <v-card-text style="display: flex;">
-          <div style="font-size: 20px">
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-domain</v-icon>
-            Company Name:<span style=" font-size: 25px;"> {{ job.company.company_name }}</span>
-          </div>
-         <div style="font-size: 20px;margin-left: 140px;" >
-          <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-map-marker</v-icon>
-           Location:<span style=" font-size: 20px;"> {{ job.location }}</span>
-        </div>
-      <br />
-        
-        </v-card-text>
+        <v-card-text>
+  <div style="display: flex; align-items: center;">
+    <v-icon color="black">mdi-domain</v-icon>
+    <span style="font-size: 20px;">{{ job.company.company_name }}  <v-icon color="black" style="margin-left: 200px;font-size: 20px;" >mdi-map-marker</v-icon> {{ job.location }}<v-icon color="black" style="margin-left: 200px;font-size: 20px;">mdi-currency-rupee</v-icon>{{ job.salary }} </span>
+  </div><br>
+  <div style="display: flex; align-items: center;">
+    <v-icon color="black" >mdi-human</v-icon>
+  <span style="font-size: 20px;">  {{ job.vacancy }} <v-icon color="black" style="margin-left: 310px;font-size: 20px;" >mdi-desktop-classic</v-icon>{{ job.experience }}<v-icon color="black" style="margin-left: 200px;font-size: 20px;">mdi-school</v-icon>{{ job.qualifications }} </span>
+  </div><br>
+  <div style="align-items: center;" >
+  <v-icon color="black">mdi-note</v-icon>
+  <span style=" font-size: 15px;"> {{ job.description }}</span></div>
+          
+</v-card-text>
       
       </v-card>
       <v-dialog v-model="dialogVisible" max-width="auto">
@@ -66,33 +68,31 @@
           <v-card-text >
          
           <div style="font-size: 20px">
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-domain</v-icon>
-            Company Name:<span style="color: rgb(59, 145, 243); font-size: 25px;margin-left: 50px;"> {{ detail.company_name }}</span>
+            <v-icon color="black" >mdi-domain</v-icon>
+            <span style="color: rgb(59, 145, 243); font-size: 25px;margin-left: 50px;"> {{ detail.company_name }}</span>
           </div>
           <br />
          <div style="font-size: 20px" >
-          <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-map-marker</v-icon>
-           Location:<span style=" font-size: 20px;margin-left: 140px;"> {{ detail.location }}</span>
+          <v-icon color="black" >mdi-map-marker</v-icon>
+          <span style=" font-size: 20px;margin-left: 140px;"> {{ detail.location }}</span>
         </div>
          <br />
          <div style="font-size: 20px" >
-          <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-desktop-classic</v-icon>
-         Experience:<span style=" font-size: 20px;margin-left: 110px; "> {{ detail.experience }}</span></div>
+          <v-icon color="black" >mdi-desktop-classic</v-icon>
+          <span style=" font-size: 20px;margin-left: 110px; "> {{ detail.experience }}</span></div>
           <br />
           <div style="font-size: 20px" >
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-human</v-icon>
-          Vacancy:<span style=" font-size: 20px;margin-left: 140px; "> {{ detail.vacancy }}</span></div>
+            <v-icon color="black" >mdi-human</v-icon>
+          <span style=" font-size: 20px;margin-left: 140px; "> {{ detail.vacancy }}</span></div>
           <br />
           <div style="font-size: 20px" >
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-note</v-icon>
-        Description:<span style=" font-size: 20px; margin-left: 90px; display: block;"> {{ detail.description }}</span></div>
-          <br />
-       
+            <v-icon color="black">mdi-note</v-icon>
+        <span style=" font-size: 15px; margin-left: 90px; display: block;"> {{ detail.description }}</span></div>
           </v-card-text>
           <v-card-actions>
             <v-btn
-              color="white"
-              class="bg-primary"
+            color="primary"
+             style=" color: white;"
               v-if="usersStore.isloggedin"
               @click="apply(detail.id)"
               >Apply</v-btn
@@ -258,15 +258,20 @@ export default {
 .custom-card {
   display: flex;
   flex-direction: column;
-  height: 100px;
-  width: 900px;
+  height: auto;
+  width: auto;
   border: 1px solid rgb(86, 50, 250);
   background-color: white;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 .custom-card:hover {
     box-shadow: 0 0 20px hsla(78, 87%, 50%, 0.788); 
-    transform: translateY(15px); 
+    background-color: #44494b; 
+  color: white;
   }
+.custom-card:hover v-icon {
+  color: white; 
+}
 </style>
   

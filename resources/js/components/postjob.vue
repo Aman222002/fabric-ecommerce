@@ -3,7 +3,7 @@
   <div>
     <v-form @submit.prevent="saveJob" id="createJobForm" name="createJobForm" ref="form">
       
-        <v-card class="border-0 shadow mb-4">
+        <v-card class="border-0 shadow mb-4" style="margin-top: 20px;">
           <v-card-title>
             <h3 class="fs-4 mb-1">Job Details</h3>
           </v-card-title>
@@ -89,7 +89,7 @@
             ></v-text-field>
           </v-card-text>
           <v-card-actions class="p-4">
-            <v-btn type="submit" color="primary" style="background-color: white;">Save Job</v-btn>
+            <v-btn type="submit" class="bg-primary"  style="  margin-left: 40%;  width: 130px; height: 50px;">Save Job</v-btn>
           </v-card-actions>
         </v-card>
      

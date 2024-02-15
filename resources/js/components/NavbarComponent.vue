@@ -33,6 +33,7 @@
 </template>
 <script >
 import { ref } from 'vue';
+import axios from 'axios';
 import eventBus from '../eventBus.js';
 export default {
     name: 'NavbarComponent',
@@ -51,7 +52,7 @@ export default {
         const Sidebar = ref(false);
         const logout = (item) => {
             if (item === 'Logout') {
-                window.axios.get('/admin/logout').then((response) => {
+                axios.get('/admin/logout').then((response) => {
                     console.log(response.data);
                     if (response.data.status === true) {
                         console.log('changed');

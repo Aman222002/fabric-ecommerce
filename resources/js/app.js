@@ -24,6 +24,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 
 
 
+
 import { createPinia } from "pinia";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -59,7 +60,7 @@ import {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    DxButton,
+    // DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -133,7 +134,7 @@ const component = {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    DxButton,
+    // DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,

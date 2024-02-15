@@ -24,6 +24,8 @@ class JobApply extends Model
     {
         return $this->belongsTo(Company::class);
     }
+   
+    
   
     
 }

@@ -1,58 +1,56 @@
+
 <template>
-  <div style="text-align: center; margin-top: 20px">
-    <h1>Jobs <span style="color: red">Applied</span></h1>
+<div>
+    <div class="title-container">
+      <h1>Jobs <span class="applied-text">Applied</span></h1>
+    </div>
+    <v-btn color="success" class="new-job-btn">
+      <a href="/jobs-detail" class="new-job-link">Apply For New Job</a>
+    </v-btn>
+    <div class="card-container">
+     
+      <v-card v-for="jobApplication in jobApplications" :key="jobApplication.id" class="job-card">
+        <v-card-title style="text-align: center; color: green;">{{ jobApplication.job.title }}</v-card-title>
+        <v-card-text style="margin-top: 20px;">
+          <div style="font-size: 20px;">
+            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-map-marker</v-icon>
+            Location:<span style="font-size: 20px;"> {{ jobApplication.job.location }}</span>
+          </div>
+          <div style="font-size: 20px; margin-top: 10px;">
+            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-currency-rupee</v-icon>
+            Salary:<span style="font-size: 20px;"> {{ jobApplication.job.salary }}</span>
+          </div>
+          <div style="font-size: 20px; margin-top: 10px;">
+            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-domain</v-icon>
+            Company Name:<span style="font-size: 20px;"> {{ jobApplication.company.company_name }}</span>
+          </div>
+          <div style="font-size: 20px; margin-top: 10px;">
+            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-email-box</v-icon>
+            Company Email:<span style="font-size: 20px;"> {{ jobApplication.company.company_email }}</span>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="deleteItem(jobApplication.id)" color="error">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </div>
   </div>
-  <v-btn color="success" style="margin-top: 20px"
-    ><a href="/companypost" style="text-decoration: none"
-      >Apply For New Job</a
-    ></v-btn
-  >
-  <v-table>
-    <thead>
-      <tr style="font-size: 30px">
-        <th class="text-left">Job Title</th>
-        <th class="text-left">Location</th>
-        <th class="text-left">Salary</th>
-        <th class="text-left">Applied At</th>
-        <th class="text-left">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="jobApplications in jobApplication"
-        :key="jobApplications.job.id"
-        style="font-size: 23px"
-      >
-        <td>{{ jobApplications.job.title }}</td>
-        <td>{{ jobApplications.job.location }}</td>
-        <td>{{ jobApplications.job.salary }}</td>
-        <td>{{ jobApplications.job.created_at }}</td>
-        <td>
-          <v-btn @click="deleteItem(jobApplications.id)" color="error"
-            >Delete</v-btn
-          >
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
 </template>
-    <script>
-import { onMounted, ref } from "vue";
+
+<script>
+import { ref } from "vue";
 import axios from 'axios';
+
 export default {
   name: "JobApplied",
   props: {
     data: {
       type: Array,
-      default: () => {
-        [];
-      },
+      default: () => [],
     },
   },
   setup(props) {
-    console.log(props.data);
-    const jobApplication = ref([]);
-    jobApplication.value = props.data;
+    const jobApplications = ref(props.data);
 
     const deleteItem = (id) => {
       window.Swal.fire({
@@ -71,7 +69,7 @@ export default {
             icon: "success",
           });
           try {
-            axios.post(`/removeappliedjobs/${id}`).then((response) => {
+            axios.post(`/remove-applied-jobs/${id}`).then((response) => {
               if (response.data.status == true) {
                 window.location.reload();
               } else {
@@ -88,9 +86,42 @@ export default {
       });
     };
     return {
-      jobApplication,
+      jobApplications,
       deleteItem,
     };
   },
 };
 </script>
+
+<style>
+.title-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.applied-text {
+  color: red;
+}
+
+.job-card {
+  width: 800px; 
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  
+  border: 1px solid rgb(86, 50, 250);
+  background-color: white;
+}
+
+.v-card__title,
+.v-card__text {
+  padding: 0; 
+}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 60px;
+  margin-top: 20px;
+}
+
+</style>

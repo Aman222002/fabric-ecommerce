@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import axios from "axios";
 import CustomStore from "devextreme/data/custom_store";
 export default function useDataSource(
     url,
@@ -21,14 +22,15 @@ export default function useDataSource(
                 "sort",
                 "filter",
             ];
-
-            return window.axios
+            console.log(url);
+            
+            return axios
                 .get(url)
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
-                    console.log(data.data);
+                    console.log(data);
                     return {
                         data: data.data || [],
                         summary: data.summary || [],
@@ -43,7 +45,7 @@ export default function useDataSource(
                 });
         },
         insert: (values) => {
-            return window.axios
+            return axios
                 .post(insertURL, values)
                 .then(() => {
                     return true;
@@ -54,7 +56,7 @@ export default function useDataSource(
                 });
         },
         update: (key, values) => {
-            return window.axios
+            return axios
                 .post(updateURL + "/" + key.id, values)
                 .then(() => {
                     return true;
@@ -65,7 +67,8 @@ export default function useDataSource(
                 });
         },
         remove: (key) => {
-            return window.axios
+            console.log(deleteURL+ "/" + key.id);
+            return axios
                 .delete(deleteURL + "/" + key.id)
                 .then(() => {
                     return true;

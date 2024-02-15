@@ -290,10 +290,25 @@ class JobsController extends Controller
             ], 500); 
         }
     }
+    // public function myJobApplications() {
+    //     try {
+    //         $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get()->map(function($item) {
+    //             return ($item->job);
+    //         });
+    //         return response()->json([ 'status' => true,
+    //         'data' => $jobApplications,
+    //     ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->view('error.view', ['error' => $e->getMessage()], 500);
+    //     }
+    // }
+    // public function getapplyjob(){
+    //     return view('jobapply');
+    // }
     public function myJobApplications() {
         try {
-            $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get();
-    
+            $jobApplications = JobApply::where('user_id', auth()->id())->with('job','company')->get();
+ 
             return view('jobapply', [
                 'jobApplications' => $jobApplications
             ]);
@@ -316,10 +331,11 @@ class JobsController extends Controller
                     'message' => $message,
                 ], 404);
             }
-    
+            $company_id = $job->company_id;
             $count = SavedJob::where([
                 'user_id' => Auth::user()->id,
-                'job_id' => $id
+                'job_id' => $id,
+                'company_id' =>  $company_id,
             ])->count();
     
             if ($count > 0) {
@@ -332,6 +348,7 @@ class JobsController extends Controller
             $savedJob = new SavedJob;
             $savedJob->job_id = $id;
             $savedJob->user_id = auth()->id();
+            $savedJob->company_id=$company_id;
             $savedJob->save();
             $message = 'You successfully saved this job.';
             return response()->json([
@@ -351,8 +368,8 @@ class JobsController extends Controller
         try {
             $savedJobs = SavedJob::where([
                     'user_id' => auth()->id()
-                ])->with('job')
-                ->orderBy('created_at','DESC')->get();
+                ])->with('job','company')->get();
+        //  dd($savedJobs);
             return view('savejob', [
                 'savedJobs' => $savedJobs
             ]);
@@ -387,43 +404,70 @@ class JobsController extends Controller
             ], 500);
         }
     }
+    //     public function removeAppliedJob($id){
+    //         try {
+               
+    //             $jobApplication = JobApply::where('job_id', $id);
 
-
-        public function removeAppliedJob(Request $request){
-            try {
-                $jobApplication = JobApply::where([
-                    'id' => $request->id, 
-                    'user_id' => auth()->id()]
-                )->first();
-                if ($jobApplication == null) {
-                    return response()->json([
-                        'status' => false,
-                    ], 404);
-                }
-                JobApply ::find($request->id)->delete();
-                $message = 'You successfully removed this job.';
-                return response()->json([
-                    'status' => true,
-                    'message' => $message
-                ], 200);
-        
-            } catch (\Exception $e) {
+    //             //if() // check
+    //             $jobApplication->where('user_id', auth()->id());
                 
+                
+    //             $jobApplication= $jobApplication->first();
+              
+
+    //             if (!$jobApplication) {
+    //                 return response()->json([
+    //                     'status' => false,
+    //                     'message' =>"Job application not found"
+    //                 ], 404);
+    //             }
+    //             $jobApplication->delete();
+
+    //             $message = 'You successfully removed this job.';
+    //             return response()->json([
+    //                 'status' => true,
+    //                 'message' => $message
+    //             ], 200);
+        
+    //         } catch (\Exception $e) {
+                
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'An error occurred while removing the job.'
+    //             ], 500);
+    //         }
+    // }
+    public function removeAppliedJob(Request $request){
+        try {
+            $jobApplication = JobApply::where([
+                'id' => $request->id, 
+                'user_id' => auth()->id()]
+            )->first();
+            if ($jobApplication == null) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'An error occurred while removing the job.'
-                ], 500);
+                ], 404);
             }
-    }
-    public function detail($id) {
-       
-        try {
-          
-           
-           
+            JobApply ::find($request->id)->delete();
+            $message = 'You successfully removed this job.';
+            return response()->json([
+                'status' => true,
+                'message' => $message
+            ], 200);
     
+        } catch (\Exception $e) {
+            
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred while removing the job.'
+            ], 500);
+        }
+}
+    public function detail($id) {
+        try {
             $job = Job::find($id);
-     
+  
             if ($job == null) {
                 $message = 'No Job Found.';
                 return response()->json([
@@ -431,15 +475,78 @@ class JobsController extends Controller
                     'message' => $message,
                 ], 404);
             }
-          
-            $application = JobApply::where('job_id', $id)->with('user','job')->get();
-     
-            return view('postdetail', ['application'=>$application]);
+            // $application = JobApply::where('job_id', $id)->with('user','job','user.qualifications','user.experience','user.address')->get();
+            $application = JobApply::where('job_id', $id)->with('user')->get()->map(function($item) {
+                return ($item->user);
+                         });
+            return response()->json([ 'status' => true,
+                    'data' => $application,
+                ], 200);
+           
         } catch (\Exception $e) {
             
             return response()->view('error.view', ['error' => $e->getMessage()], 500);
         }
     }
-    
+    public function qualification($id) {
+        try {
+            $user = User::find($id);
+            if ($user == null) {
+                $message = 'No User Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+            $qualifications = $user->qualifications;
+            return response()->json([
+                'status' => true,
+                'data' => $qualifications,
+            ]);
+         
+        } catch (\Exception $e) {
+            
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+    }
+    public function experience($id) {
+        try {
+            $user = User::find($id);
+            if ($user == null) {
+                $message = 'No User Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+            $experience = $user->experience;
+            return response()->json([
+                'status' => true,
+                'data' => $experience,
+            ]);
+            
+        } catch (\Exception $e) {
+            
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+    }
+    //   public function getapplicants(){
+    //     return view('postdetail');
+    //  }
+     // public function myJobApplications() {
+    //     try {
+    //         $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get()->map(function($item) {
+    //             return ($item->job);
+    //         });
+    //         return response()->json([ 'status' => true,
+    //         'data' => $jobApplications,
+    //     ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->view('error.view', ['error' => $e->getMessage()], 500);
+    //     }
+    // }
+    // public function getapplyjob(){
+    //     return view('jobapply');
+    // }
    
 }
