@@ -25,12 +25,13 @@ use App\Models\Company;
 use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\WebhookController;
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
-
+use App\Http\Controllers\webhookHandler;
 use App\Models\Skill;
 
 /*
@@ -102,6 +103,8 @@ Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
+Route::get('/forget/password', [LoginController::class, 'forgetPassword']);
+Route::get('/get/forget/password/link', [LoginController::class, 'getLink']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
 Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
@@ -112,7 +115,11 @@ Route::prefix('company')->group(function () {
     Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
     Route::get('/buy/plans/view/{id?}', [CompanyController::class, 'buyplansview']);
+    Route::post('/buy/plan', [CompanyController::class, 'buyplan']);
 });
+Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [CompanyController::class, 'completeRedirectFlow']);
+Route::get('/create/mendate/form/{token}', [CompanyController::class, 'showForm']);
+Route::post('/submit/mandate/form', [CompanyController::class, 'submitForm']);
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/post/jobs', [JobsController::class, 'index']);
     Route::post('/post', [JobsController::class, 'store']);
@@ -156,9 +163,6 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
 Route::get('/skill', [SkillController::class, 'index']);
-
-
-
 Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);

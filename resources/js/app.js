@@ -90,7 +90,6 @@ app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
-
 app.component("registration-component", Registration);
 
 import Header from "./components/Header.vue";
@@ -101,6 +100,9 @@ app.component("footer-component", Footer);
 
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
+
+import ForgetPassword from "./components/ForgetPassword.vue";
+app.component("forgetpassword-component", ForgetPassword);
 
 import ResumeComponent from "./components/ResumeComponent.vue";
 app.component("resume-component", ResumeComponent);

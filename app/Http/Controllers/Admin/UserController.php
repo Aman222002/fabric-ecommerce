@@ -41,7 +41,6 @@ class UserController extends Controller
                 'password' => 'required',
                 'phone' => 'required|unique:users',
             ]);
-
             $input = $request->all();
             $user = User::create([
                 'name' =>  $input['name'],

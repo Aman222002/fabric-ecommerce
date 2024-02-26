@@ -1,4 +1,4 @@
 @extends('layouts.default')
 @section('content')
-<buy-component></buy-component>
+<buy-component :data={{$plan}}></buy-component>
 @endsection

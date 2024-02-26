@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import axios from "axios";
 import CustomStore from "devextreme/data/custom_store";
 export default function useDataSource(
     url,
@@ -21,14 +22,13 @@ export default function useDataSource(
                 "sort",
                 "filter",
             ];
-
-            return window.axios
+            return axios
                 .get(url)
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
-                    console.log(data.data);
+                    console.log(data);
                     return {
                         data: data.data || [],
                         summary: data.summary || [],
