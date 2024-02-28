@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Address;
 use App\Models\Job;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,7 @@ class ProfileController extends Controller
         $userId =  $user->id;
         // dd($user);
         $company = Company::where("user_id",   $userId)->with('address','jobs')->get();
-// dd($company);
+
         if (!$company) {
             return response()->json(['error' => 'Company not found'], 404);
         }
@@ -100,6 +101,21 @@ class ProfileController extends Controller
             'logo' => $imageName
 
         ]);
+        $address = Address::where('company_id', $company->id)->first();
+        if (!$address) {
+            return response()->json(['error' => 'Address not found'], 404);
+        }
+
+        $address->update([
+            'first_line_address' => $request->input('first_line_address'),
+            'street' => $request->input('street'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'),
+            'postal_code' => $request->input('zip_code'),
+        ]);
+      
+       
+
        
         return response()->json(['message' => 'User and company profiles updated successfully']);
     }catch (\Exception $e) {
@@ -139,4 +155,36 @@ class ProfileController extends Controller
     //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     //     }
     // }
+    public function updateaddress(Request $request)
+    {
+        try {
+        $user = auth()->user();
+        $userId = $user->id;
+
+
+        $company = Company::where("user_id", $userId)->first();
+        if (!$company) {
+            return response()->json(['error' => 'Company not found'], 404);
+        }
+      
+
+     
+        $address = Address::where('company_id', $company->id)->first();
+        if (!$address) {
+            return response()->json(['error' => 'Address not found'], 404);
+        }
+
+        $address->update([
+            'first_line_address' => $request->input('first_line_address'),
+            'street' => $request->input('street'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'),
+            'postal_code' => $request->input('postal_code'),
+        ]);
+        return response()->json(['message' => 'User and company profiles updated successfully']);
+    }catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
 }

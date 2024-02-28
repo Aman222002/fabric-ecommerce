@@ -48,7 +48,7 @@
           :class="{ 'active': isActive('/registration')}">Register  <v-icon color="white">mdi-account-plus</v-icon></a>
       
     </v-row>
-    <v-menu class="profile" v-if="usersStore.isloggedin">
+    <v-menu class="profile" v-if="usersStore.isloggedin" transition="slide-x-transition">
             <template v-slot:activator="{ props }">
                
                 <span style="margin-right: 20px;"> <v-btn icon="mdi-account" v-bind="props"></v-btn></span>
@@ -66,6 +66,7 @@
                     </v-btn>
                 </v-list-item>
             </v-list>
+           
         </v-menu>
       
   </v-app-bar>
@@ -196,11 +197,6 @@ export default {
 
 .active {
   color:  #ca82e9;
-}
-.v-list-item {
- margin: auto;
- display: inline;
- 
 }
 
 .v-list-item a {

@@ -189,7 +189,7 @@
       if (progressValue.value >= 100) {
         return "green"; 
       } else if (progressValue.value >= 75) {
-        return "orange"; // 70-89%
+        return "orange"; 
       } else if (progressValue.value >= 50) {
         return "yellow";
       } else {

@@ -14,14 +14,16 @@ class PdfController extends Controller
     //
     public function download() {
        
-        $user=Auth::user();
-        $id=$user->id;
+     
+        $user = auth()->user();
+        $id = $user->id;
+       
      
         if ($user == null) {
-            $message = 'No User Found.';
+           
             return response()->json([
                 'status' => false,
-                'message' => $message,
+                'message' => 'No User Found.',
             ], 404);
         }
          $user = User::with(['qualifications', 'userAchievements', 'skills','experience','userProfile','address'])->find($id);

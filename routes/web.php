@@ -193,9 +193,10 @@ Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
+    Route::post('/updateaddress', [ProfileController::class, 'updateaddress']);
 });
 // Route::get('/jobs/applicants', [JobsController::class, 'getapplicants']);
-Route::get('/jobs/application/{id}', [JobsController::class, 'detail']);
+Route::post('/jobs/application/{id}', [JobsController::class, 'detail']);
 Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
 Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
 

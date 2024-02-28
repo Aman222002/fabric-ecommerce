@@ -16,7 +16,7 @@ use App\Models\JobApply;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\JobNotificationEmail;
 use App\Models\User;
-
+use Carbon\Carbon;
 
 
 class JobsController extends Controller
@@ -466,26 +466,39 @@ class JobsController extends Controller
 }
     public function detail($id) {
         try {
-            $job = Job::find($id);
-  
-            if ($job == null) {
-                $message = 'No Job Found.';
-                return response()->json([
-                    'status' => false,
-                    'message' => $message,
-                ], 404);
-            }
-            // $application = JobApply::where('job_id', $id)->with('user','job','user.qualifications','user.experience','user.address')->get();
-            $application = JobApply::where('job_id', $id)->with('user')->get()->map(function($item) {
-                return ($item->user);
-                         });
-            return response()->json([ 'status' => true,
-                    'data' => $application,
-                ], 200);
+            $originalJob = Job::find($id);
+            // $duplicatedJob = new Job;
+            // $duplicatedJob->user_id = auth()->id(); 
+            // $duplicatedJob->company_id = $originalJob->company_id; 
+            // $duplicatedJob->title = $originalJob->title;
+            // $duplicatedJob->category_id = $originalJob->category_id;
+            // $duplicatedJob->job_type_id = $originalJob->job_type_id;
+            // $duplicatedJob->vacancy = $originalJob->vacancy;
+            // $duplicatedJob->salary = $originalJob->salary;
+            // $duplicatedJob->location = $originalJob->location;
+            // $duplicatedJob->description = $originalJob->description;
+            // $duplicatedJob->qualifications = $originalJob->qualifications;
+            // $duplicatedJob->experience = $originalJob->experience;
+            // $duplicatedJob->company_website = $originalJob->company_website;
+            // $duplicatedJob->skill_id = $originalJob->skill_id;
+         
+            // $duplicatedJob->save();
            
-        } catch (\Exception $e) {
+            $duplicatedJob=$originalJob->replicate();
+         
+            $duplicatedJob->created_at = Carbon::now()->format('Y-m-d');
+        
+            $duplicatedJob->save();
             
-            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+            return response()->json([
+                'status' => true,
+                'message' => 'Job duplicated successfully',
+                'duplicatedJob' => $duplicatedJob,
+            ], 200);
+        } catch (\Exception $e) {
+           
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
     public function qualification($id) {

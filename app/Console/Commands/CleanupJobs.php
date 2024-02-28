@@ -29,13 +29,12 @@ class CleanupJobs extends Command
     {
       //
         try {
-            $tenMinutesAgo = Carbon::now()->subMinutes(10);
-            Job::where('created_at', '<', $tenMinutesAgo)->delete();
-            Log::info("Success");
+            $thirtyDaysAgo = Carbon::now()->subDays(30);
+            Job::where('created_at', '<', $thirtyDaysAgo)->delete();
+            Log::info("Old jobs older than 30 days have been deleted successfully.");
             return self::SUCCESS;
         } catch (\Exception $e) {
-            //$this->error('Error deleting old jobs: ' . $e->getMessage());
-            Log::debug("Fail");
+            Log::error("Error deleting old jobs: " . $e->getMessage());
             return self::FAILURE;
         }
     }

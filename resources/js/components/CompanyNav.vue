@@ -2,8 +2,8 @@
   <v-navigation-drawer location="left" id="div" v-model="drawer" :rail="rail"  >
 
     <h3 class="title" v-if="!rail">JOBS</h3>
-    <v-avatar style="margin-left: 10%;">
-      <img src="/storage/assest/15.jpg" alt="" v-if="rail" />
+    <v-avatar style="margin-left: 10%;" v-if="rail">
+      <img src="/storage/assest/15.jpg" alt=""  />
     </v-avatar>  
     <v-list>
       <v-list-group value="Jobs" class="group" v-if="usersStore.isloggedin">
