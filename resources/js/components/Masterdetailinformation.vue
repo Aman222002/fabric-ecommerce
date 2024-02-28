@@ -10,6 +10,8 @@
             <ExperienceTab :user-Id="qualificationInfo.id" />
         </template>
     </DxTabPanel>
+  
+    
 </template>
 <script>
 import QualificationTab from './QualificationTab.vue'

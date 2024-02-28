@@ -24,7 +24,7 @@
                                 :value="currentStep">
                                 <v-card :color="stepBackgrounds[currentStep - 1]"
                                     :height="currentStep === e1 ? 'auto' : '100px'">
-                                    <v-form @submit.prevent="goToNext()" ref="myForm">
+                                    <v-form @submit.prevent="goToNext(id)" ref="myForm">
                                         <template v-if="currentStep === 1">
                                             <v-row>
                                                 <v-col cols="6"> <users-details></users-details></v-col>
@@ -62,7 +62,7 @@
     </v-container>
 </template>
 <script >
-
+import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
@@ -90,7 +90,7 @@ export default {
         UsersAchievments
     },
     setup() {
-        const store = useMyStore()
+        const store = useMyStore();
         const currentStep = ref(0);
         let valid = true;
         const maxSteps = ref(4);
@@ -156,7 +156,7 @@ export default {
       window.location.href='/generate-pdf'
     }
         return {
-            store,
+store,
             maxSteps: 4,
             e1,
             steps,
@@ -182,24 +182,57 @@ export default {
         await this.store.getUserData()
     },
     methods: {
+        // async goToNext() {
+        //     const formRefs = this.$refs.myForm;
+
+        //     for (let i = 0; i < formRefs.length; i++) {
+        //         const { valid } = await formRefs[i].validate();
+        //         if (!valid) {
+
+        //             return;
+        //         }
+        //     }
+        //     if (this.e1 === this.steps) {
+
+        //         useMyStore().submitForm();
+        //     } else {
+        //         this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
+        //     }
+        // },
+
+       
         async goToNext() {
-            const formRefs = this.$refs.myForm;
+    const formRefs = this.$refs.myForm;
 
-            for (let i = 0; i < formRefs.length; i++) {
-                const { valid } = await formRefs[i].validate();
-                if (!valid) {
+ 
+    for (let i = 0; i < formRefs.length; i++) {
+        const { valid } = await formRefs[i].validate();
+        if (!valid) {
+            return;
+        }
+    }
+    const progressPercentage = 25 * this.e1;
+    const data = {
+        progressPercentage: progressPercentage
+    };
+   this.store.userDetails.status=data.progressPercentage;
 
-                    return;
-                }
-            }
-            if (this.e1 === this.steps) {
+    try {
+       
+        await axios.post('/update-status', data);
 
-                useMyStore().submitForm();
-            } else {
-                this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
-            }
-        },
-
+       console.log(data.progressPercentage,'here');
+        if (this.e1 === this.steps) {
+            useMyStore().submitForm();
+        } else {
+           
+            this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
+        }
+    } catch (error) {
+        console.error('Error updating database:', error);
+       
+    }
+},
 
         async updateSteps() {
             this.steps = this.steps.map((step) => ((step - 2 + this.maxSteps - 1) % (this.maxSteps - 1)) + 2);

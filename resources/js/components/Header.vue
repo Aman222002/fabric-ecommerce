@@ -7,30 +7,29 @@
    
       <v-col class="nav-links">
        
-          <v-avatar size="60" style="margin-left: 30px;" >
-            <img src="/storage/assest/26.png" alt="Logo" class="logo" />
-          
-          </v-avatar>
-          <a href="/login" style="margin-left:10px; font-size: 30px; text-decoration: none; color: white;">JOBS</a>
+        
          
-        <a href="/jobs-detail" class="nav-link" :class="{ 'active': isActive('/companypost') }" style="margin-left: 70px;">Home</a>
+         
+        <a href="/jobs-detail" class="nav-link" :class="{ 'active': isActive('/jobs-detail') }" style="margin-left: 70px;">Home</a>
        
         <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link"
           :class="{ 'active': isActive('/job-apply') }">Jobs Applied</a>
         <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link"
           :class="{ 'active': isActive('/savedjobs') }">Jobs Saved</a>
-      
+          <a href="/userprofile" v-if="usersStore.isloggedin" class="nav-link"
+          :class="{ 'active': isActive('/userprofile') }">Profile</a>
 
       </v-col>
       <v-menu class="profile" v-if="!usersStore.isloggedin">
       <template v-slot:activator="{ props }">
-      <v-icon color="white">mdi-login</v-icon>
+   
          <a href="#" class="nav-link" v-bind="props"
-          :class="{ 'active': isActive('#')}">Login</a>
+          :class="{ 'active': isActive('#')}" style="margin-right: 40px;">Login <v-icon color="white">mdi-login</v-icon></a>
+         
       </template>
 
       <v-list>
-        <v-list-item v-for="(item, i) in loginItems" :key="i">
+        <v-list-item v-for="(item, i) in loginItems" :key="i"  style="display: inline;">
           
             <a :href="item.href" style="text-decoration: none; color: black;">
               <span>
@@ -46,12 +45,13 @@
     </v-menu>  
    
         <a href="/registration" v-if="!usersStore.isloggedin" class="nav-link"
-          :class="{ 'active': isActive('/registration')}"> <v-icon color="white">mdi-account-plus</v-icon>Register</a>
+          :class="{ 'active': isActive('/registration')}">Register  <v-icon color="white">mdi-account-plus</v-icon></a>
       
     </v-row>
     <v-menu class="profile" v-if="usersStore.isloggedin">
             <template v-slot:activator="{ props }">
-                <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+               
+                <span style="margin-right: 20px;"> <v-btn icon="mdi-account" v-bind="props"></v-btn></span>
             </template>
 
             <v-list>
@@ -81,6 +81,7 @@ import axios from 'axios';
 export default {
   name: "Header",
   setup() {
+    const user=ref([]);
     const items = ref([
            
             {
@@ -108,6 +109,7 @@ export default {
 
     onMounted(() => {
       state.activeLink = window.location.pathname;
+     
     });
 
     const isActive = (link) => {
@@ -129,14 +131,14 @@ export default {
                 console.log('not found');
             }
         }
-       
-    
+   
     return {
       isActive,
       logout,
       usersStore,
       items,
-   
+      
+   user,
       loginItems
     };
   },
@@ -146,6 +148,7 @@ export default {
 <style scoped>
 .custom-app-bar {
   height: 65px;
+  
 }
 
 .nav-links {
@@ -160,9 +163,8 @@ export default {
   color: inherit;
   margin-right: 20px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-  transition: color 0.3s ease-in-out;
+
+  
 }
 
 .btn-dashboard {
@@ -194,6 +196,19 @@ export default {
 
 .active {
   color:  #ca82e9;
+}
+.v-list-item {
+ margin: auto;
+ display: inline;
+ 
+}
+
+.v-list-item a {
+  text-decoration: none;
+  color: black;
+}
+.v-btn {
+  cursor: pointer;
 }
 
 </style>

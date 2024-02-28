@@ -4,7 +4,7 @@
     <v-img
       src="/storage/assest/1.png"
       contain
-      class="mb-4 full-screen-image"
+      class="mb-5 full-screen-image"
     ></v-img>
    
   </div>
@@ -29,10 +29,11 @@
             <v-card-text>
               
               <v-text-field
-                label="Company Email"
+                label="User Email"
                 v-model="formData.email"
                 variant="outlined"
                 :rules="emailRules"
+                density="compact"
                 outlined
                 required
                 style="font-size: 20px; font-weight: bold"
@@ -43,16 +44,17 @@
                 v-model="formData.password"
                 outlined
                 required
+                density="compact"
                 :rules="companyNameRules"
                 type="password"
                 style="font-size: 20px; font-weight: bold"
               ></v-text-field>
             </v-card-text>
             <v-card-actions class="login-dialog-actions">
-            <v-btn @click="handleLogin"  color="primary"   class="login-btn" style=" color: white;  width: 130px; height: 50px;">Login</v-btn>
+            <v-btn @click="handleLogin"  class="bg-primary"  >Login</v-btn>
           </v-card-actions>
           <h5 class="new-client-text" style="text-align: center;">Are you a new client?
-            <a href="/company/register"  class="register-link" style="margin-top: 30px;text-decoration: none; color: rgb(109, 109, 236); ">Register Now<v-icon>mdi-arrow-expand-right</v-icon></a></h5>
+            <a href="/company/register"  class="register-link" style="margin-top: 30px;text-decoration: none; color: rgb(65, 83, 245); ">Register Now</a></h5>
           </v-card>
         </v-dialog>
   <div class="aa">
@@ -122,12 +124,7 @@ export default {
         if (response.data.status == true) {
           jobDialog.value = false;
           usersStore.isLogIn();
-          window.Swal.fire({
-              icon: 'success',
-              title: 'Company Login',
-              text: 'Login successfully ',
-              confirmButtonText: 'OK',
-            })
+         
           window.location.href = '/postjob';
         }
         
@@ -185,16 +182,14 @@ export default {
   border-bottom: 1px solid #ccc; 
 }
 .full-screen-image-container {
-    width: 100vw;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
   .full-screen-image {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 70%;
+   
     object-fit: contain; 
     opacity: 0.8;
   }

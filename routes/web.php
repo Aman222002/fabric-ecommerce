@@ -56,6 +56,9 @@ Route::get('/header', function () {
 Route::get('/resume', function () {
     return view('resume');
 });
+Route::get('/userprofile',function(){
+    return view('userprofile');
+});
 Route::post('/removedEducation/{educationId}', [ResumeController::class, 'destroyEducation']);
 Route::post('/removedExperience/{experienceId}', [ResumeController::class, 'destroyExperience']);
 Route::post('/removedAchievment/{achievmentId}', [ResumeController::class, 'destroyAchievment']);
@@ -198,6 +201,8 @@ Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
 
 
 Route::get('/generate-pdf', [PdfController::class, 'download']);
+
+Route::post('/update-status',[UserController::class,'updatestatus']);
 
 
 //users

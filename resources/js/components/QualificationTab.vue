@@ -9,6 +9,7 @@
             </DxColumn>
             <DxColumn data-field="passing_year" caption="Passing Year" data-type="int">
             </DxColumn>
+            
         </DxDataGrid>
     </div>
 </template>

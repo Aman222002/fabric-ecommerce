@@ -8,8 +8,8 @@
             <v-col cols="12" md="6">
               <v-card-text class="mt-12">
                 <v-form ref="form" @submit.prevent="submitForm">
-                  <p class="text-center" style="font-size: 20px">
-                    Login in to Your Account
+                  <p class="text-center" style="font-size: 20px;font-style: sans-serif;">
+                    Welcome Back
                   </p>
                   <v-row align="center" justify="center">
                     <v-col cols="12" sm="10">

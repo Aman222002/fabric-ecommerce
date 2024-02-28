@@ -8,11 +8,14 @@
     :data-source="dataSource"
     :repaint-changes-only="true"
   >
-    <DxEditing :allow-updating="true" :allow-deleting="true" mode="row" />
+    <DxEditing :allow-updating="true" :allow-deleting="true" mode="row">
+      
+      </DxEditing>
     <DxSearchPanel :visible="true" />
     <DxScrolling mode="virtual" row-rendering-mode="virtual" />
     <DxColumn data-field="title" data-type="string"> </DxColumn>
-    <DxColumn data-field="location" data-type="string">
+    <DxColumn data-field="location" data-type="string"></DxColumn>
+      <DxColumn data-field="vacancy" data-type="string">
        </DxColumn>
      <!-- <DxColumn caption="Applicants" cell-template="customButtonTemplate">
     </DxColumn>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Job;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
@@ -43,8 +44,8 @@ class ProfileController extends Controller
         $user = auth()->user();
         $userId =  $user->id;
         // dd($user);
-        $company = Company::where("user_id",   $userId)->get();
-
+        $company = Company::where("user_id",   $userId)->with('address','jobs')->get();
+// dd($company);
         if (!$company) {
             return response()->json(['error' => 'Company not found'], 404);
         }
@@ -112,4 +113,30 @@ class ProfileController extends Controller
     {
         //
     }
+    // public function job()
+    // {
+    //     try {
+    //         $user = auth()->user();
+
+    //         $companyId = 0;
+
+    //         if($user->hasRole('Company Admin')){
+    //             $companyId =  $user->company ? $user->company->id : 0;
+    //         }
+            
+    //         $jobs = Job::with("company");
+
+    //         if($companyId != 0){
+    //             $jobs->where('company_id', $companyId);
+    //         }
+    //         $jobs =   $jobs->get();
+
+    //         // $jobs = Job::all();
+          
+    //         return response()->json(['status' => true, 'data' => $jobs], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
 }

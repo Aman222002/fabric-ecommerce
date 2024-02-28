@@ -1,62 +1,234 @@
-
 <template>
-  <v-container>
-    <v-card-title class="form-title">Company Profile :</v-card-title>
-      <v-row>
-          <v-col cols="12">
-              <v-card class="card">
-                      <v-row>
-                          <v-col cols="12">
-                              <v-card>
-                                  <v-card-text>
-                                    <p style=" margin-bottom: 30px; font-size: 20px; margin-left: 190px; font-weight: bold;"> Represantative Detail :</p>
-                                      <v-row>
-                                          <v-col cols="2">
-                                            <v-avatar size="150" v-if="company.length > 0">
-            <img :src="`/storage/assest/${company[0].logo}`" style="width: 100%; height: 200px;" />
-          </v-avatar>
-         
-                                          </v-col>
-                                          <v-col cols="3">
-                                              <label for="name" class="custom-text-field"> Representative Name</label>
-                                              <v-text-field v-model="user.name" readonly></v-text-field>
-                                          </v-col>
-                                          <v-col cols="3">
-                                              <label for="email" class="custom-text-field">Email</label>
-                                              <v-text-field v-model="user.email" readonly></v-text-field>
-                                          </v-col>
-                                          <v-col cols="3">
-                                              <label for="phone" class="custom-text-field">Contact No.</label>
-                                              <v-text-field v-model="user.phone" readonly></v-text-field>
-                                          </v-col>
-                                      </v-row>
-                                      <p style=" margin-bottom: 30px; font-size: 20px; margin-left: 190px; font-weight: bold;"> Company Detail :</p>
-                                      <v-row  style="margin-left: 170px;">
-                                      
-                                          <v-col cols="4">
-                                           <label for="company name" class="custom-text-field">Company Name</label>
-                                           <v-text-field v-if="company.length > 0" v-model="company[0].company_name" readonly></v-text-field>
-                                          </v-col>
-                                          <v-col cols="4">
-                                            <label for="companyemail" class="custom-text-field">Company Email</label>
-                                           <v-text-field v-if="company.length > 0" v-model="company[0].company_email" readonly></v-text-field>
-                                          </v-col>
-                                         
-                                      </v-row>
-                                  </v-card-text>
-                                  <v-card-actions>
-      <v-btn  @click="goToEditPage()"  class="bg-primary" style="margin-left: 50%;  width: 130px; height: 50px;">Edit Profile</v-btn>
-    </v-card-actions>
+  <v-card style="margin-top: 10px; display: flex; flex-direction: column">
+    <div class="background-image"></div>
+    <v-icon @click="goToEditPage()" style="margin-left: 97%">mdi-pencil</v-icon>
+    <v-row>
+      <div style="align-items: center; display: flex; margin-left: 15px">
+        <!-- <v-avatar
+           size="130px"
+          class="avatar"
+          style="margin: 10px"
+          v-if="company.length > 0"
+          @click="openFileInput()" 
+        > -->
+          <!-- <span class="mdi mdi-pencil" id="icon"></span> -->
+          <v-avatar
+          size="130px"
+          class="avatar"
+          style="margin: 10px"
+          v-if="company.length > 0"
+           >
+          <input
+            type="file"
+            id="fileInput"
+            ref="fileInput"
+            style="display: none"
+            @change="handleImageChange()"
+          />
+          <img
+            :src="`/storage/assest/${company[0].logo}`"
+            alt="Selected Image"
+            width="150px"
+            height="150px"
+          />
+        </v-avatar>
+      </div>
+      <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
+        <p style="font-size: 30px;">{{ user.name }}</p>
+        <p style="font-size: 15px">Representative</p>
+        <p v-if="company.length > 0 && company[0].address">
+          <v-icon style="font-size: 15px; color: rgb(3, 3, 3)"
+            >mdi-map-marker</v-icon
+          >
+          {{ company[0].address.street }}, {{ company[0].address.city }},
+          {{ company[0].address.state }}
+        </p>
+      </v-col>
+    </v-row>
+    <div style="display: flex; margin: 40px">
+      <v-tabs>
+        <v-tab
+          :class="{ active: showOverview }"
+          @click="
+            showOverview = true;
+            showJob = false;
+            showDescription = false;
+          "
+          >Overview</v-tab
+        >
+        <v-tab
+          :class="{ active: showJob }"
+          @click="
+            showOverview = false;
+            showJob = true;
+            showDescription = false;
+          "
+          >Activities</v-tab
+        >
+        <v-tab
+          :class="{ active: showDescription }"
+          @click="
+            showOverview = false;
+            showJob = false;
+            showDescription = true;
+          "
+          >Description</v-tab
+        >
+      </v-tabs>
+    </div>
+    <v-tab-item>
+      <div
+        v-if="!showJob && !showDescription && showOverview"
+        style="display: flex; margin-top: 70px"
+      >
+        <v-card style="margin-bottom: 20px; width: 80%">
+          <v-card-title style="font-family: Poppins, sans-serif"
+            ><v-icon>mdi-account</v-icon> Details:</v-card-title
+          >
+          <v-card-text>
+            <label
+              for="name"
+              class="ps-0"
+              style="font-weight: 600; text-align: inherit"
+              >Representative Name:</label
+            >
+            <span style="margin-left: 23%">{{ user.name }}</span
+            ><br /><br />
+            <label
+              for="email"
+              class="ps-0"
+              style="font-weight: 600; text-align: inherit"
+              >Email:</label
+            >
+            <span style="margin-left: 32%">{{ user.email }}</span
+            ><br /><br />
+            <label
+              for="phone"
+              class="ps-0"
+              style="font-weight: 600; text-align: inherit"
+              >Contact No:</label
+            >
+            <span style="margin-left: 29%">{{ user.phone }}</span>
+          </v-card-text>
+        </v-card>
+        <v-card style="margin-bottom: 20px; width: 80%; margin-left: 40px">
+          <v-card-title style="font-family: Poppins, sans-serif"
+            ><v-icon>mdi-domain</v-icon> Details:</v-card-title
+          >
+          <v-card-text>
+            <label
+              for="company name"
+              class="ps-0"
+              style="font-weight: 600; text-align: inherit"
+              >Company Name</label
+            >
+            <span v-if="company.length > 0" style="margin-left: 25%">{{
+              company[0].company_name
+            }}</span
+            ><br /><br />
+            <label
+              for="company name"
+              class="ps-0"
+              style="font-weight: 600; text-align: inherit"
+              >Phone Number</label
+            >
+            <span v-if="company.length > 0" style="margin-left: 26%">{{
+              company[0].phone_number
+            }}</span
+            ><br /><br />
+            <label
+              for="companyemail"
+              class="ps-0"
+              style="font-weight: 600; text-align: inherit"
+              >Company Email</label
+            >
+            <span v-if="company.length > 0" style="margin-left: 25%">{{
+              company[0].company_email
+            }}</span>
+          </v-card-text>
+        </v-card>
+      </div>
+    </v-tab-item>
+    <v-tab-item>
+      <v-card
+        v-if="showDescription && !showOverview && !showJob"
+        class="card2"
+        style="margin-bottom: 20px"
+      >
+        <v-card-title style="font-family: Poppins, sans-serif"
+          ><v-icon>mdi-domain</v-icon> Description:</v-card-title
+        >
+        <v-card-text>
+          <div style="font-family: sans-serif" v-if="company.length > 0">
+            {{ company[0].description }}
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-tab-item>
+    <v-tab-item>
+      <v-card
+        v-if="showJob && company[0].jobs"
+        class="card2"
+        style="margin-bottom: 20px; font-size: 16px"
+      >
+        <v-card-title style="font-family: Poppins, sans-serif"
+          ><v-icon>mdi-note</v-icon>Recently Posted Jobs:</v-card-title
+        >
+        <v-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Job Title</th>
+                <th class="text-left">Vacancy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(job, index) in company[0].jobs" :key="index">
+                <td>{{ job.title }}</td>
+                <td>{{ job.vacancy }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-table>
+      </v-card>
+    </v-tab-item>
+
     <v-dialog v-model="isEditModalOpen" max-width="600px">
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
         <v-card-text>
-          <v-text-field v-model="editedJob.name" label="User Name" outlined></v-text-field>
-          <v-text-field v-model="editedJob.email" label="User Email" outlined></v-text-field>
-          <v-text-field v-model="editedJob.phone" label="User Phone" outlined></v-text-field>
-          <v-text-field v-model="editedJob.company_name" label="Company Name" outlined></v-text-field>
-          <v-text-field v-model="editedJob.company_email" label="Company Email" outlined></v-text-field>
-          <v-file-input v-model="editedJob.logo" label="Company Logo" outlined name="logo" @change="handleImage"></v-file-input>
+          <v-text-field
+            v-model="editedJob.name"
+            label="User Name"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            v-model="editedJob.email"
+            label="User Email"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            v-model="editedJob.phone"
+            label="User Phone"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            v-model="editedJob.company_name"
+            label="Company Name"
+            outlined
+          ></v-text-field>
+          <v-text-field
+            v-model="editedJob.company_email"
+            label="Company Email"
+            outlined
+          ></v-text-field>
+          <v-file-input
+            v-model="editedJob.logo"
+            label="Company Logo"
+            outlined
+            name="logo"
+            @change="handleImage"
+          ></v-file-input>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedJob">Save</v-btn>
@@ -64,15 +236,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-                              </v-card>
-                          </v-col>
-                      </v-row>
-                
-              </v-card>
-          </v-col>
-      </v-row>
-     
-  </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -84,6 +248,8 @@ export default {
   setup() {
     const company = ref([]);
     const user = ref([]);
+    const fileInput = ref();
+    const image = ref(null);
     const isEditModalOpen = ref(false);
     const editedJob = ref({
       name: "",
@@ -93,7 +259,9 @@ export default {
       company_email: "",
       logo: null,
     });
-
+    const showOverview = ref(true);
+    const showJob = ref(false);
+    const showDescription = ref(false);
     const fetchCompanyProfile = async () => {
       try {
         const response = await axios.get(`/company/list`);
@@ -103,6 +271,7 @@ export default {
         console.error("Error fetching company profile:", error);
       }
     };
+
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
@@ -112,6 +281,7 @@ export default {
       editedJob.value.logo = null;
       isEditModalOpen.value = true;
     };
+
     const closeEditModal = () => {
       isEditModalOpen.value = false;
     };
@@ -119,7 +289,6 @@ export default {
     const saveEditedJob = async () => {
       try {
         const formData = new FormData();
-        console.log(editedJob.value);
         formData.append("name", editedJob.value.name);
         formData.append("email", editedJob.value.email);
         formData.append("phone", editedJob.value.phone);
@@ -136,9 +305,20 @@ export default {
         console.error("Error updating company profile:", error);
       }
     };
+
     const handleImage = (event) => {
       const file = event.target.files[0];
       editedJob.value.logo = file;
+    };
+
+    const openFileInput = () => {
+      const fileInput = document.getElementById("fileInput");
+      fileInput.click();
+    };
+
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      image.value = file;
     };
 
     onMounted(() => {
@@ -155,53 +335,46 @@ export default {
       editedJob,
       saveEditedJob,
       handleImage,
+      openFileInput,
+      handleImageChange,
+      fileInput,
+      image,
+      showOverview,
+      showJob,
+      showDescription,
     };
   },
 };
 </script>
 
 <style scoped>
-.custom-card {
-  border: 1px white;
-  padding: 40px;
-  
+
+
+.background-image {
+
+  position: absolute;
+
+  width: 100%;
+  height: 170px;
+
+  background: linear-gradient(
+      0deg,
+      rgba(94, 94, 94, 0.7),
+      rgba(99, 99, 99, 0.7)
+    ),
+    url(/storage/assest/6.jpg);
+  background-size: cover;
+  opacity: 0.5;
+  background-repeat: no-repeat;
 }
 
-.form-title {
-  font-size: 30px;
-  margin-bottom: 20px;
+.active {
+  background-color: rgb(122, 118, 118);
+  color: white;
 }
 
-/* .profile-details {
-  margin-top: 20px;
-} */
-
-/* .detail-label {
-  font-weight: bold;
-  font-size: 20px;
-  margin: 10px;
- 
+.user-name {
+  color: white;
+  background-color: black;
 }
-
-.detail-value {
-  margin-left: 8px;
-  font-size: 20px;
-}
-
-.profile-detail {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-} */
-.input-group {
-  display: flex;
-  font-size: 20px;
-}
-
-.input-group label {
-  margin-right: 50px;
-  min-width: 100px;
-}
-
 </style>
- 

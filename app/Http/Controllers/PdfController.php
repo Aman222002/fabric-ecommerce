@@ -31,9 +31,7 @@ class PdfController extends Controller
             return $skill->map(function($data){
                         return $data->skill_name; 
                 });
-        });
-       
-        
+        }); 
         $userdata = [
             'name' => $user->name,
             'email' => $user->email,

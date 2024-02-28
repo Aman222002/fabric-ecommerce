@@ -1,15 +1,11 @@
 <template>
-  <v-footer color="primary"  style="margin-top: auto;" class="v-footer" >
-    <v-avatar size="100" style="margin-left: 30%;">
-      <img src="/storage/assest/26.png" alt="Logo" class="logo" />
-    </v-avatar>
+  <v-footer color="primary"  style="margin-top: auto;text-align: center;" class="v-footer">
+    
     <v-row>
-      <v-col md="6" sm="12" style="margin-top: 20px; margin-left: 20px;">
-        <p class="white--text company-name" style="font-size: 60px;">{{ appName }}</p>
+      <v-col md="6" sm="12" style="margin-top: 20px; margin-left: 20%;">
+        <p class="white--text company-name" style="font-size: 30px;">{{ appName }}</p>
         <p style="font-size:15px;"> Limited Jobs| Registered | Company No: 11127036</p>
       </v-col> </v-row> 
-
- 
   </v-footer>
 </template>
 

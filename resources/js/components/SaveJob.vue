@@ -1,36 +1,32 @@
 <template>
   <div>
-    <div class="title-container">
-      <h1>Jobs <span class="saved-text">Saved</span></h1>
-    </div>
+   
     <v-btn color="success" class="new-job-btn">
-      <a href="/companypost" class="new-job-link">Check New Job</a>
+      <a href="/jobs-detail" class="new-job-link">Check New Job</a>
     </v-btn>
     <div class="card-container">
       <v-card v-for="savedJob in savedJobs" :key="savedJob.id" class="job-card">
         <v-card-title style="text-align: center; color: green;">{{ savedJob.job.title }}</v-card-title>
         <v-card-text style="margin-top: 20px;">
-          <div style="font-size: 20px;">
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-map-marker</v-icon>
-            Location: <span style="font-size: 20px;">{{ savedJob.job.location }}</span>
-          </div>
-          <div style="font-size: 20px; margin-top: 20px;">
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-currency-rupee</v-icon>
-            Salary: <span style="font-size: 20px;">{{ savedJob.job.salary }}</span>
-          </div>
-          <div style="font-size: 20px; margin-top: 10px;">
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-domain</v-icon>
-            Company Name:<span style="font-size: 20px;"> {{ savedJob.company.company_name }}</span>
-          </div>
-          <div style="font-size: 20px; margin-top: 10px;">
-            <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-email-box</v-icon>
-            Company Email:<span style="font-size: 20px;"> {{ savedJob.company.company_email }}</span>
-          </div>
+          <div style="display: flex; align-items: center;">
+    <v-icon color="black">mdi-domain</v-icon>
+    <span style="font-size: 20px;">{{ savedJob.company.company_name }}<v-icon color="black" style="margin-left: 200px;font-size: 20px;">mdi-map-marker</v-icon>{{ savedJob.job.location }} </span>
+  </div><br><br>
+  <div style="display: flex; align-items: center;">
+    <v-icon color="black" >mdi-email-box</v-icon>
+  <span style="font-size: 20px;">{{ savedJob.company.company_email }}<v-icon    color="black" style="margin-left: 85px;font-size: 20px;">mdi-school</v-icon>{{savedJob.job.qualifications }}   </span>
+  </div><br><br>
+  <div style="display: flex; align-items: center;">
+   
+    <v-icon color="black" >mdi-currency-rupee</v-icon>
+  <span style="font-size: 20px;">{{savedJob.job.salary }}<v-icon color="black" style="margin-left: 270px;font-size: 20px;" >mdi-desktop-classic</v-icon>{{ savedJob.job.experience}} </span>
+  </div>
           
         </v-card-text>
         <v-card-actions>
           <v-btn   color="primary"  style=" color: white;" @click="apply(savedJob.job.id)">Apply</v-btn>
-          <v-btn @click="deleteItem(savedJob.id)" color="error">Delete</v-btn>
+   
+          <v-icon @click="deleteItem(savedJob.id)" color="red" style="font-size: 40px;"  class="delete-icon">mdi-delete-outline </v-icon>
         </v-card-actions>
       </v-card>
     </div>

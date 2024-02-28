@@ -1,8 +1,6 @@
 <template>
   <v-footer color="primary"  style="margin-top: auto;" class="v-footer" >
-    <v-avatar size="100" style="margin-left: 40%;">
-      <img src="/storage/assest/26.png" alt="Logo" class="logo" />
-    </v-avatar>
+    
     <v-row>
       <v-col md="6" sm="12" style="margin-top: 20px; margin-left: 20px;">
         <p class="white--text company-name" style="font-size: 60px;">{{ appName }}</p>
