@@ -54,7 +54,7 @@
 </template>
     
 <script>
-import { ref } from "Vue";
+import { ref } from "vue";
 import { useUsersStore } from "../store/user";
 import axios from "axios";
 

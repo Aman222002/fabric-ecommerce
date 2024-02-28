@@ -15,13 +15,9 @@ use App\Models\Address;
 use App\Models\Plan;
 use App\Models\UserSubscription;
 use App\Http\Requests\CompanyRagistrationRequest;
-use \GoCardlessPro\Client;
-use GoCardlessPro\Resources\Customer;
-use GoCardlessPro\Resources\Mandate;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
 use App\Jobs\PaymentJob;
-use GoCardless;
 
 use function PHPSTORM_META\map;
 

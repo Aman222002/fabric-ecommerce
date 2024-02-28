@@ -31,6 +31,7 @@ class User extends Authenticatable
         'payment_id',
         'phone',
         'user_image',
+        'reset_token',
     ];
 
     /**

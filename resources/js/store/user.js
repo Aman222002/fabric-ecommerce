@@ -46,6 +46,7 @@ export const useUsersStore = defineStore({
             const res = await fetch(
                 "http://127.0.0.1:8000/admin/profile/getProfile"
             );
+            console.log(res.json());
             const user = await res.json();
             this.user = user;
         },

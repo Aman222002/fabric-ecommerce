@@ -20,9 +20,9 @@
                                 </div>
                                 <v-row align="center" justify="center">
                                     <v-col cols="12" sm="10">
-                                        <v-text-field label="Email" variant="outlined" dense density="compact" color="blue"
-                                            :rules="emailRules" autocomplete="false" class="mt-8"
-                                            style="font-size: 10px;" />
+                                        <v-text-field label="Email" v-model="formData.email" variant="outlined" dense
+                                            density="compact" color="blue" :rules="emailRules" autocomplete="false"
+                                            class="mt-8" style="font-size: 10px;" />
                                     </v-col>
                                     <v-col cols="10" sm="10">
                                         <v-btn type="submit" class="bg-primary mb-2 email-button" width="100%">
@@ -37,13 +37,16 @@
             </v-card>
         </v-row>
         <div class="mt-10 text-center">
+            <p class="mb-0">Enter registered email only</p>
+        </div>
+        <div class="mt-10 text-center">
             <p class="mb-0">Wait, I remember my password... <a href="/login" class="text-primary "> Click here
                 </a> </p>
         </div>
     </v-container>
 </template>
 <script>
-import { ref } from "Vue";
+import { ref } from "vue";
 export default {
     name: "ForgetPassword",
     setup() {
@@ -56,15 +59,17 @@ export default {
         ];
         const submitForm = async () => {
             try {
+                console.log(formData.value);
                 const response = await axios.post("/get/forget/password/link", formData.value);
                 console.log(response.data);
             } catch (error) {
-
+                console.log(error);
             }
         }
         return {
             emailRules,
             submitForm,
+            formData,
         };
 
     }

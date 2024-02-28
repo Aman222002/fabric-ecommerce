@@ -18,20 +18,6 @@ class LoginController extends Controller
     {
         return view('login');
     }
-    /**
-     * function to return forgetPassword View
-     */
-    public function forgetPassword()
-    {
-        return view('ForgetPassword');
-    }
-    /**
-     * function to get Link for forget Password
-     */
-    public function getLink(Request $request)
-    {
-        $email = $request->email;
-    }
     public function  check(Request $request)
     {
 

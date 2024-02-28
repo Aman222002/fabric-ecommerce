@@ -7,22 +7,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\RegistrationConfirmation;
+use App\Mail\ResetPassword;
 use Illuminate\Support\Facades\Mail;
 
-
-class SendEmail implements ShouldQueue
+class ResetPasswordMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     protected $user;
+    protected $email;
     /**
      * Create a new job instance.
      */
-    public function __construct($user)
+    public function __construct(array $data)
     {
         //
-        $this->user = $user;
+        $this->user = $data;
+        $this->email = $data['email'];
     }
 
     /**
@@ -31,6 +31,6 @@ class SendEmail implements ShouldQueue
     public function handle(): void
     {
         //
-        Mail::to($this->user->email)->send(new RegistrationConfirmation($this->user));
+        Mail::to($this->email)->send(new ResetPassword($this->user));
     }
 }

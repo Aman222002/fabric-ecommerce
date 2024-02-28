@@ -13,11 +13,13 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\CleanupJobs::class,
         Commands\CheckPlanValidity::class,
+        Commands\CleanResetToken::class,
     ];
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('jobs:cleanup')->everyMinute();
         $schedule->command('check:planvalidity')->everyMinute();
+        $schedule->command('app:clean-reset-token')->everyFourMinutes();;
     }
     /**
      * Register the commands for the application.

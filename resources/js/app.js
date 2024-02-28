@@ -104,8 +104,14 @@ app.component("login-component", Login);
 import ForgetPassword from "./components/ForgetPassword.vue";
 app.component("forgetpassword-component", ForgetPassword);
 
+import ResetPassword from "./components/ResetPassword.vue";
+app.component("resetpassword-component", ResetPassword);
+
 import ResumeComponent from "./components/ResumeComponent.vue";
 app.component("resume-component", ResumeComponent);
+
+import ExpiredComponent from "./components/Expired.vue";
+app.component("expired-component", ExpiredComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);

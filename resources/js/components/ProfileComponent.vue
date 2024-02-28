@@ -181,7 +181,7 @@ export default {
                     'Content-Type': 'multipart/form-data',
                 }
             }).then((response) => {
-                console.log(response.data.status);
+                console.log(response.data);
                 if (response.data.status === true) {
                     window.Swal.fire({
                         toast: true,
@@ -191,7 +191,7 @@ export default {
                         icon: 'success',
                         title: 'User Profile updated successfully!',
                     });
-                    window.location.reload();
+                    // window.location.reload();
                 }
             }).catch((error) => {
                 console.log('here');

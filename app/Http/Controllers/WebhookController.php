@@ -48,11 +48,11 @@ class WebhookController extends Controller
                     }
                     if ($v->resource_type == 'payments') {
                         $user = DB::table('users')->where('payment_id', $v->links->payment);
-                        if ($v->action == 'created' || $v->action == 'failed' || $v->action == 'confirmed') {
+                        if ($v->action == 'created' || $v->action == 'failed' || $v->action == 'confirmed' || $v->action == 'paid_out') {
                             Log::info("Inside Payment");
                             if ($v->action !== 'confirmed') {
                                 log::info(print_r('Action:' . $v->action, 1));
-                            } else if ($v->action == 'confirmed') {
+                            } else if ($v->action == 'paid_out') {
                                 $user = User::where('payment_id', $v->links->payment)->get();
                                 $plan = Plan::where('id', $user->plan_id)->get();
                                 $interval = $plan->interval;
