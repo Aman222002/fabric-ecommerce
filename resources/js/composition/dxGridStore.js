@@ -83,8 +83,7 @@ export default function useDataSource(
                 });
         },
         remove: (key) => {
-            // console.log(deleteURL + "/" + key.id);
-            return window.axios
+            return axios
                 .delete(deleteURL + "/" + key.id)
                 .then(() => {
                     return true;

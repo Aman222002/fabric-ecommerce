@@ -41,8 +41,7 @@ import { useUsersStore } from "@/store/user";
 import axios from "axios";
 
 export default {
-    name: "CompanyNav",
-
+    name: "navbar-component",
     setup() {
         const usersStore = useUsersStore();
 
@@ -125,7 +124,7 @@ export default {
     },
 };
 </script>
-<style>
+<style scoped>
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
     padding-inline: 8px;
 }

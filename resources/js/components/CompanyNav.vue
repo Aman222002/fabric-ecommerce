@@ -1,6 +1,5 @@
 <template>
   <v-navigation-drawer location="left" id="div" v-model="drawer" :rail="rail">
-
     <h3 class="title" v-if="!rail">JOBS</h3>
     <v-avatar style="margin-left: 10%;" v-if="rail">
       <img src="/storage/assest/15.jpg" alt="" />
@@ -16,9 +15,6 @@
         <v-list-item :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
         </v-list-item>
       </v-list-group>
-      <!-- <v-list-item :class="{ 'group': true, 'active': currentRoute === '/job' }" href="/job" v-if="!usersStore.isloggedin" prepend-icon="mdi-note" title="Post a Job">
-       
-      </v-list-item> -->
       <v-list-item :class="{ 'group': true, 'active': currentRoute === '/findcv' }" href="/findcv"
         prepend-icon="mdi-magnify" title="Find CV">
       </v-list-item>
@@ -30,7 +26,7 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-app-bar height="70" id="header">
+  <v-app-bar height="50" id="header">
     <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
 

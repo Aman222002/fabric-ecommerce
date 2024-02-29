@@ -162,7 +162,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/get/plans', [DashboardController::class, 'getplans']);
-Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
+Route::group(["prefix" => "/admin", 'middleware' => ['auth', 'role:Admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);

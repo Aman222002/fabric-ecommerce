@@ -88,6 +88,7 @@ import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
 app.use(vuetify);
+app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
@@ -244,7 +245,5 @@ app.component("user-profile", UserProfile);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
-app.use(pinia);
 app.component("VueDatePicker", VueDatePicker);
-
 app.mount("#app");

@@ -10,7 +10,7 @@
     <div id="app">
         <v-app>
             <navbar-component></navbar-component>
-              <v-main class="p-16">
+              <v-main>
                 <v-container fluid>
             @yield('content')
                 </v-container fluid>

@@ -53,7 +53,7 @@ class WebhookController extends Controller
                             if ($v->action !== 'confirmed') {
                                 log::info(print_r('Action:' . $v->action, 1));
                             } else if ($v->action == 'paid_out') {
-                                $user = User::where('payment_id', $v->links->payment)->get();
+                                $user = User::where('payment_id', $v->links->payment)->first();
                                 $plan = Plan::where('id', $user->plan_id)->get();
                                 $interval = $plan->interval;
                                 $interval_unit = $plan->interval;
@@ -68,7 +68,7 @@ class WebhookController extends Controller
                                 }
                                 $days = $days - 1;
                                 $start_date = Carbon::now();
-                                $user_subscription = DB::table('user_subscription')->where('user_id', $user_id)->update([
+                                $user_subscription = DB::table('user_subscription')->where('user_id', $user->id)->update([
                                     'plan_id' => $user->plan_id,
                                     'user_id' => $user->id,
                                     'subscription_status' => 'active',
