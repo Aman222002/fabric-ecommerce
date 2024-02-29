@@ -24,6 +24,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 
 
 
+
 import { createPinia } from "pinia";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -59,7 +60,7 @@ import {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    DxButton,
+    // DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -133,7 +134,7 @@ const component = {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    DxButton,
+    // DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -211,6 +212,12 @@ app.component("job-detail",PostDetail)
 
 import SaveJob from "./components/SaveJob.vue";
 app.component("savejob-component",SaveJob)
+
+
+import UserProfile from "./components/UserProfile.vue";
+app.component("user-profile",UserProfile)
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

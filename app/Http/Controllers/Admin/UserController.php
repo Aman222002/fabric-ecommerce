@@ -228,4 +228,16 @@ class UserController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    public function updatestatus(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $userId = Auth::id();
+            $status = min($data['progressPercentage'], 100); 
+            User::where('id', $userId)->update(['status' => $status]);
+            return response()->json(['message' => 'Step updated successfully'],200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update step'], 500);
+        }
+    }
 }

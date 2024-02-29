@@ -13,7 +13,7 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-
+   
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
@@ -23,11 +23,12 @@
        <companynav-component></companynav-component>
      
         <v-main>
+            <v-container>
            
             @yield('content')
-           
+            </v-container>
         </v-main>
-        <companyfooter-component></companyfooter-component>
+        <!-- <companyfooter-component></companyfooter-component> -->
        </v-app>
     </div> 
 </body>

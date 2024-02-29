@@ -29,4 +29,5 @@ class Company extends Model
     {
         return $this->hasOne(Address::class);
     }
+   
 }

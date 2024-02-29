@@ -55,6 +55,8 @@ const defaultState = () => {
             name: "",
             email: "",
             phone: "",
+            status: [],
+            user_image:[],
         },
         educationDetails: [educationItem],
 
@@ -194,10 +196,11 @@ export const useMyStore = defineStore("myStore", {
         },
         submitForm() {
             const formData = new FormData();
-
             formData.append("userDetails[name]", this.userDetails.name);
             formData.append("userDetails[email]", this.userDetails.email);
             formData.append("userDetails[phone]", this.userDetails.phone);
+            formData.append("userDetails[user_image]", this.userDetails.user_image);
+            formData.append("userDetails[status]", this.userDetails.status);
             formData.append("address[address1]", this.address.address1);
             formData.append("address[address2]", this.address.address2);
             formData.append("address[city]", this.address.city);
@@ -293,8 +296,11 @@ export const useMyStore = defineStore("myStore", {
                 JSON.stringify(this.selectedSkills)
             );
 
-            axios
-                .post("/submit", formData, {})
+            axios.post("/submit", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+            })
                 .then(({ data }) => {
                     console.log("Response", data);
                     window.Swal.fire({
@@ -392,6 +398,8 @@ export const useUserDetailsStore = defineStore({
         name: "",
         email: "",
         phone: "",
+        status:[],
+        user_image:[],
     }),
     actions: {
         setUserData(userData) {
@@ -401,6 +409,8 @@ export const useUserDetailsStore = defineStore({
             this.name = "";
             this.email = "";
             this.phone = "";
+            this.status=[];
+            this.user_image=[];
         },
     },
 });

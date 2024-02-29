@@ -29,10 +29,8 @@
     <div id="app">
         <v-app>
             <header-component></header-component>
-            <v-main>
-
+            <v-main> 
                 @yield('content')
-
             </v-main>
             <companyfooter-component></companyfooter-component>
         </v-app>

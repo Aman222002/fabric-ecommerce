@@ -77,8 +77,8 @@ export default {
             experience,
             removeWorkExperience,
             addWorkExperience: store.addWorkExperience,
-            dateClicked
-            // removeWorkExperience:store.removeWorkExperience,
+            dateClicked,
+             removeWorkExperience:store.removeWorkExperience,
         };
     },
 };

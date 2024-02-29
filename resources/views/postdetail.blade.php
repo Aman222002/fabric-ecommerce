@@ -1,4 +1,4 @@
-@extends('layouts.default')
+<!-- @extends('layouts.default')
 @section('content')
 
 <job-detail :data="{{$application}}" ></job-detail>
@@ -6,4 +6,4 @@
 
 
 
-
+ -->

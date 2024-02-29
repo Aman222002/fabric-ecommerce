@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserCotroller extends Controller
 {
@@ -143,4 +144,5 @@ class UserCotroller extends Controller
             return response()->json(['error' => 'User not found'], 404);
         }
     }
+  
 }

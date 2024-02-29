@@ -20,9 +20,11 @@ class ResumeController extends Controller
 {
 
     public function store(Request $request)
-    {
+    {    
+//   dd($request);
         try {
             $user = auth()->user();
+   
             $request->validate([
                 // 'user_id' => 'required|exists:users,id',
                 'address.address1' => 'required|string|max:255',
@@ -53,8 +55,16 @@ class ResumeController extends Controller
                 'achievements.*.expiry_date' => 'required|date',
                 // 'achievements.*.certificate_file_path' => 'required|mimes:pdf|max:2048'
 
-
             ]);
+            $image = $request->userDetails['user_image'];
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/assest', $imageName);
+            $userId = $user->id;
+            $user = User::find($userId);
+            if ($user) {
+                $user->user_image = $imageName; 
+                $user->save(); 
+            }
             UserAddress::updateOrInsert(
                 [
                     'user_id' => $user->id,
@@ -70,6 +80,7 @@ class ResumeController extends Controller
                     'longitude' => $request->address['longitude'],
                     'address2' => $request->address['address2'],
                     'county' => $request->address['county'],
+                   
                 ]
             );
             $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
@@ -160,16 +171,19 @@ class ResumeController extends Controller
                 );
             }
             $userSkill = UserSkill::where('user_id', $user->id)->get()->pluck('skill_id');
+        
             //$userInfo =  UserProfile::where('user_id', $user->id)->first();
             $userProfile = UserProfile::where('user_id', $user->id)->first();
             $userExperience = UserExperience::where('user_id', $user->id)->get();
             $userAchievment = UserAchievement::where('user_id', $user->id)->get();
             $userQualification = Qualification::where('user_id', $user->id)->get();
             $userAddress = UserAddress::where('user_id', auth()->id())->first();
+          
+        
             $response = [
                 "status" => true,
                 "data" => [
-                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone],
+                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone,"user_image"=>$user->user_image],
                     "address" => $userAddress,
                     "educationDetails" => $userQualification,
                     "experience" => $userExperience,
@@ -182,7 +196,7 @@ class ResumeController extends Controller
             return response()->json($response, 200);
         } catch (\Exception $e) {
 
-            return response()->json(['sttaus' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
     public function getUserData(Request $request)
@@ -190,23 +204,28 @@ class ResumeController extends Controller
         try {
             $user = auth()->user();
             $userProfile = UserProfile::where('user_id', $user->id)->first();
-            $userSkill = UserSkill::where('user_id', $user->id)->get()->pluck('skill_id');
+            // $userSkill = UserSkill::where('user_id', $user->id)->get()->pluck('skill_id');
+            $userSkillIds = UserSkill::where('user_id', $user->id)->pluck('skill_id');
+            $userSkills = Skill::whereIn('id', $userSkillIds)->get();
             $userExperience = UserExperience::where('user_id', $user->id)->get();
             $userAchievment = UserAchievement::where('user_id', $user->id)->get();
             $userQualification = Qualification::where('user_id', $user->id)->get();
             $userAddress = UserAddress::where('user_id', auth()->id())->first();
+         
             $response = [
                 "status" => true,
                 "data" => [
-                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone],
+                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone,"user_image" =>$user->user_image,"status" => $user->status],
                     "address" => $userAddress,
                     "educationDetails" => $userQualification,
                     "experience" => $userExperience,
                     "achievements" => $userAchievment,
                     "userProfile" => $userProfile,
-                    "selectedSkills" => $userSkill,
+                    "skills" => $userSkills,
                 ]
+              
             ];
+         
             return response()->json($response, 200);
         } catch (\Exception $e) {
 
