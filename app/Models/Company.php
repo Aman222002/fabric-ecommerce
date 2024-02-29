@@ -15,6 +15,7 @@ class Company extends Model
         'phone_number',
         'description',
         'status',
+        'logo',
     ];
     public function user()
     {

@@ -3,7 +3,7 @@
     <div>
         <div>
             <div style="text-align: center;">
-                <h1>Fill your Personal Details</h1>
+                <h1 style="margin-top: 30px;">Fill your Personal Details</h1>
             </div>
             <div>
                 <v-stepper v-model="e1">

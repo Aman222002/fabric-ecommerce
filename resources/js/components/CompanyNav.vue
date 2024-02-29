@@ -1,25 +1,22 @@
 <template>
   <v-app-bar app class="custom-app-bar" color="primary">
-   
-      <v-row align="center" justify="space-between">
-        <v-col class="nav-links">
-          <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
-          <a href="/findcv" class="nav-link" :class="{ 'active': isActive('/findcv') }">Find CVs</a>
-          <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Products</a>
-          
-          <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
-          
-        </v-col>
-        <v-btn  v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
-      </v-row>
-    
+    <v-row align="center" justify="space-between">
+      <v-col class="nav-links">
+        <a href="/job" class="nav-link" :class="{ 'active': isActive('/job') }">Post a Job</a>
+        <a href="/findcv" class="nav-link" :class="{ 'active': isActive('/findcv') }">Find CVs</a>
+        <a href="/product" class="nav-link" :class="{ 'active': isActive('/product') }">Buy Subscription</a>
+        <a href="/resource" class="nav-link" :class="{ 'active': isActive('/resource') }">Resources</a>
+      </v-col>
+    </v-row>
+    <v-btn @click="login()" style="margin-top: 10px;">Login as User</v-btn>
+    <v-btn v-if="usersStore.isloggedin" @click="logout()" style="margin-top: 10px;">Logout</v-btn>
   </v-app-bar>
 </template>
 
 <script>
 import { reactive, onMounted } from 'vue';
 import { useUsersStore } from "../store/user";
-
+import { ref } from "vue";
 export default {
   name: "CompanyNav",
   setup() {
@@ -27,12 +24,9 @@ export default {
     const state = reactive({
       activeLink: window.location.pathname
     });
-
-    
     onMounted(() => {
       state.activeLink = window.location.pathname;
     });
-
     const isActive = (link) => {
       return state.activeLink === link;
     };
@@ -40,10 +34,15 @@ export default {
       usersStore.isLogOut();
       window.location.href = '/job';
     };
+    const login = () => {
+
+      window.location.href = '/login';
+    };
     return {
       isActive,
       logout,
-      usersStore
+      usersStore,
+      login,
     };
   },
 };
@@ -85,7 +84,7 @@ export default {
 }
 
 .v-app-bar {
-  /* background-color: #236aee; */
+
   border-bottom: 1px solid #161414;
 }
 

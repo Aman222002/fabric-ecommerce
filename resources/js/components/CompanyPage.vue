@@ -57,7 +57,7 @@
   </div>
   <div class="ff">
     <v-btn color="primary" style="height: 40px;">
-      <a href="/job" style="color: inherit; text-decoration: none;">Get Started</a>
+      <a href="/login" style="color: inherit; text-decoration: none;">Get Started</a>
     </v-btn>
     <p style="font-size: 20px;">
       You control your posts 24/7 – edit, add, pause, or close them whenever you want. Learn more about posting.

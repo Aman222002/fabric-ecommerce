@@ -1,5 +1,6 @@
 <template>
     <v-container>
+      
      <v-row  style="margin-top: 30px;">
       <v-col cols="12" md="6">
         <v-text-field v-model="jobTitle" label="Job Title" outlined clearable style="max-width: 60%;"></v-text-field>
@@ -9,10 +10,13 @@
         <v-btn @click="searchJobs" color="primary">Search</v-btn>
       </v-col>
     </v-row>
+
     <div class="card-container">
+     
+      
       <v-card v-for="job in jobs" :key="job.id" class="custom-card">
         
-        <v-card-title style="font-size: 30px;">{{ job.title }}</v-card-title>
+        <v-card-title style="font-size: 30px; font-weight: bolder;">{{ job.title }}</v-card-title>
   
         <v-card-text>
           <div style="font-size: 20px;">Company Name: {{ job.company.company_name }}</div><br>
@@ -22,7 +26,8 @@
           <div>Vacancy: {{ job.vacancy }}</div>
         </v-card-text>
         <v-card-actions>
-            <v-btn  color="white" class="bg-primary">Apply</v-btn>
+            <v-btn  color="white" class="bg-primary" v-if="usersStore.isloggedin"  @click="apply(job.id)">Apply</v-btn>
+            <v-btn  color="white" class="bg-primary">Save</v-btn>
         </v-card-actions>
       </v-card>
     </div>
@@ -32,33 +37,80 @@
   <script>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
-  
+  import { useUsersStore } from '../store/user';
   export default {
     name: 'CompanyPost',
     setup() {
-      const jobs = ref([]);
+      const usersStore = useUsersStore();
+      const jobs = ref({
+
+      });
       const jobTitle = ref('');
     const location = ref('');
-    const searchJobs = () => {
-     
-    };
+    const searchJobs = async () => {
+    
+    try {
+      
+        const response = await axios.get('/search-jobs', {
+            params: {
+                jobTitle: jobTitle.value,
+                location: location.value,
+            },
+        });
+
+        jobs.value = response.data.data;
+    } catch (err) {
+        console.error(err);
+    }
+};
       const fetchJobs = async () => {
         try {
-          const response = await axios.get('/post/jobs');
+          const response = await axios.get('/company/post');
           jobs.value = response.data.data;
         } catch (err) {
           console.error(err);
         }
       };
+      const companypost = async () => {
+        try {
+          const response = await axios.get('/companypost');
+          jobs.value = response.data.data;
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      const apply = async(id) => {
+ try{
+ await axios.post(`/apply-job/${id}`) . then((response)=>{
+  if (response.data.success) {
+  
+    window.Swal.fire({
+              icon: 'success',
+              title: 'Applied Successfully',
+              text: 'Applied successfully ',
+              confirmButtonText: 'OK',
+            })
+  }
+ });
+    
+ }catch(err){
+  console.error(err);
+ }
+      };
+      
       onMounted(() => {
+        companypost();
         fetchJobs();
       });
-  
       return {
         jobs,
         jobTitle,
       location,
       searchJobs,
+      companypost,
+      usersStore,
+      apply
+     
       };
     },
   };
@@ -75,7 +127,7 @@
     display: flex;
     flex-direction: column;
     height: 300px;
-    width: 300px;
+    width: 400px;
     border: 1px solid rgb(7, 5, 5);
  
   }

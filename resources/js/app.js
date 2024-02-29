@@ -85,12 +85,10 @@ import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
 app.use(vuetify);
-app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
-
 app.component("registration-component", Registration);
 
 import Header from "./components/Header.vue";
@@ -101,6 +99,21 @@ app.component("footer-component", Footer);
 
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
+
+import ForgetPassword from "./components/ForgetPassword.vue";
+app.component("forgetpassword-component", ForgetPassword);
+
+import ResetPassword from "./components/ResetPassword.vue";
+app.component("resetpassword-component", ResetPassword);
+
+import ResumeComponent from "./components/ResumeComponent.vue";
+app.component("resume-component", ResumeComponent);
+
+import ExpiredComponent from "./components/Expired.vue";
+app.component("expired-component", ExpiredComponent);
+
+import AddressTabComponent from "./components/AddressTab.vue";
+app.component("address-component", AddressTabComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
@@ -156,8 +169,7 @@ const component = {
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
-import Home from "./components/Home.vue";
-app.component("home-component", Home);
+
 import DashBoard from "./components/DashBoard.vue";
 app.component("dashboard-component", DashBoard);
 
@@ -172,6 +184,9 @@ app.component("company-component", CompanyRegister);
 
 import Product from "./components/Product.vue";
 app.component("product-component", Product);
+
+import cart from "./components/Cart.vue";
+app.component("cart-component", cart);
 
 import postjob from "./components/postjob.vue";
 app.component("postjob-component", postjob);
@@ -191,6 +206,15 @@ app.component("company-page", CompanyPage);
 import CompanyPost from "./components/CompanyPost.vue";
 app.component("company-post", CompanyPost);
 
+import CompanyProfile from "./components/CompanyProfile.vue";
+app.component("company-profile", CompanyProfile);
+
+import JobApplied from "./components/JobApplied.vue";
+app.component("jobapply-component", JobApplied);
+
+import BuySubscription from "./components/Buy.vue";
+app.component("buy-component", BuySubscription);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -209,4 +233,5 @@ app.component("company-post", CompanyPost);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
+app.use(pinia);
 app.mount("#app");

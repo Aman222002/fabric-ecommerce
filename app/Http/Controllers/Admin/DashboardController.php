@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Feature;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Plan;
+
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -41,10 +43,27 @@ class DashboardController extends Controller
     /**
      * function to get Plans
      */
-    public function getPlans()
+    public function getplans()
     {
         try {
-            $plans = Plan::all();
+            $plans = Plan::with('features')->get()->map(function ($plan) {
+                $features = $plan->features;
+                if ($features) {
+                    return [
+                        'id' => $plan['id'],
+                        'Name' => $plan['name'],
+                        'search' => $features->Search,
+                        'Mails' => $features->Mails,
+                        'Validity' => $features->Validity,
+                        'Post Job' => $features->{'Post Job'},
+                        'Duration of Job-Post' => $features->{'Duration of Job-Post'},
+                        'Number of Job-Post' => $features->{'Number of Job-Post'},
+                        'Price' => '$' . $features->price,
+                    ];
+                } else {
+                    return null;
+                }
+            });
             if ($plans) {
                 return response()->json(['status' => true, 'data' => $plans], 200);
             } else {

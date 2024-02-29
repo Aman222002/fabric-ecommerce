@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
-            <DxEditing :allow-updating="true" mode="row" />
+            <DxEditing :allow-updating="true" mode="row" :use-icons="true" />
             <DxSearchPanel :visible="true" />
             <DxColumn data-field="name" data-type="string">
                 <DxRequiredRule />
@@ -12,6 +12,7 @@
             </DxColumn>
             <DxColumn data-field="phone" data-type="string">
             </DxColumn>
+            <DxColumn type="buttons" caption="Action"></DxColumn>
         </DxDataGrid>
     </div>
 </template>
@@ -26,6 +27,7 @@ export default {
         },
     },
     setup(props) {
+        console.log(props.userId);
         const loadURL = `/admin/company/representative/${props.userId}`;
         const updateURL = `/admin/user/update`;
         const { dataSource } = dxGridStore(loadURL, null, updateURL);
