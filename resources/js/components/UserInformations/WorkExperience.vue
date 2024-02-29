@@ -4,50 +4,50 @@
         <v-card-title class="text-left">
             Work Experience
         </v-card-title>
-        <v-row v-for="(experience, index) in workExperiences" :key="index">
+        <v-row v-for="(experiences, index) in experience" :key="index">
 
             <v-col cols="12" md="3">
-                <v-text-field v-model="experience.company_name" label="Company Name" required variant="outlined"
-                    :rules="[v => !!v || 'Company Name is required']"></v-text-field>
+                <v-text-field v-model="experience[index].company_name" :name="'company_' + index" label="Company Name"
+                    required variant="outlined"
+                    :rules="index === 0 ? [] : [v => !!v || 'Company Name is required']"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
-                <v-text-field v-model="experience.position" label="Position" required variant="outlined"
-                    :rules="[v => !!v || 'Position is required']"></v-text-field>
+                <v-text-field v-model="experience[index].position" :name="'position_' + index" label="Position" required
+                    variant="outlined"
+                    :rules="index === 0 ? [] : [v => !!v || 'Company Position is required']"></v-text-field>
             </v-col>
+            <v-col cols="12" md="3">
 
-            <v-col cols="12" md="3">
-                <v-text-field v-model="experience.start_date" @click="openDatePicker" placeholder="Starting Date" required
-                    :rules="[v => !!v || 'Starting Date is required']" />
-                <v-date-picker v-if="isDatePickerOpen" v-model="experience.start_date"
-                    @update:picker-date="toggleDatePicker">
-                    <template #actions>
-                        <v-btn text @click="cancelDate">Cancel</v-btn>
-                        <v-btn text @click="selectDate">OK</v-btn>
-                    </template>
-                </v-date-picker>
-            </v-col>
-            <v-col cols="12" md="3">
-                <v-text-field v-model="experience.expiry_date" label="End Date"></v-text-field>
-            </v-col>
+                <VueDatePicker format="yyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
+                    v-model="experience[index].start_date" :name="'start_date_' + index"
+                    @internal-model-change="(e) => dateClicked(index, 'start_date', e)"
+                    :rules="index === 0 ? [] : [v => !!v || 'start date  is required']" />
 
+            </v-col>
+            <v-col cols="10" md="3">
+
+                <VueDatePicker format="yyyy/MM/dd" calendar-class="my_calendar" input-class="textfield"
+                    v-model="experience[index].end_date" :name="'end_date' + index"
+                    @internal-model-change="(e) => dateClicked(index, 'end_date', e)"
+                    :rules="index === 0 ? [] : [v => !!v || 'end date  is required']" />
+
+            </v-col>
             <v-col cols="12" md="50">
-                <v-textarea v-model="experience.description" label="Description" variant="outlined"
-                    :rules="[v => !!v || 'Description is required']"></v-textarea>
+                <v-textarea v-model="experience[index].description" :name="'description_' + index" label="Description"
+                    variant="outlined" :rules="index === 0 ? [] : [v => !!v || 'description  is required']"></v-textarea>
             </v-col>
-
-            <v-col v-if="index > 0" cols="2">
-                <v-btn @click="removeWorkExperience(index)" color="red">Remove</v-btn>
+            <v-col v-if="index > 0" md="2">
+                <v-btn @click="removeWorkExperience(index)" color="red" class="custom-button">Remove</v-btn>
             </v-col>
-            <v-col cols="12" md="2" v-else>
-                <v-btn @click="addWorkExperience" color="blue">Add More</v-btn>
+            <v-col cols="12" class="flex-end" md="2" v-else>
+                <v-btn @click="addWorkExperience" color="blue" class="custom-button">Add More</v-btn>
             </v-col>
         </v-row>
-
-
     </div>
 </template>
   
 <script>
+import axios from 'axios';
 import { ref } from 'vue';
 import { useMyStore } from '@/store';
 
@@ -55,70 +55,30 @@ export default {
     name: 'WorkExperience',
     setup() {
         const store = useMyStore();
+        const experience = ref(store.experience);
+        const removeWorkExperience = async (index) => {
 
-        const workExperiences = ref(store.experience);
-        const experience = ref({
-            // start_date: null,
-        });
-
-        const isDatePickerOpen = ref(false);
-        const isDatePickerOpen2 = ref(false);
-
-
-        const openDatePicker = () => {
-            isDatePickerOpen.value = true;
-        };
-        const openDatePicker2 = () => {
-            isDatePickerOpen2.value = true;
+            const experienceId = experience.value[index].id;
+            try {
+                console.log(experienceId, 'experienceId ')
+                await axios.post(`/removedExperience/${experienceId}`);
+                experience.value.splice(index, 1);
+            } catch (error) {
+                console.error('Error deleting experience detail:', error);
+            }
         };
 
-
-        const toggleDatePicker2 = () => {
-            isDatePickerOpen2.value = !isDatePickerOpen2.value;
-        };
-
-        const toggleDatePicker = () => {
-            isDatePickerOpen.value = !isDatePickerOpen.value;
-        };
-
-        const selectDate = () => {
-
-            console.log('Selected Date:', experience.value.start_date);
-            isDatePickerOpen.value = false;
-        };
-        const selectDate2 = () => {
-
-            console.log('Selected Date:', experience.value.end_date);
-            isDatePickerOpen2.value = false;
-        };
-
-        const cancelDate = () => {
-            experience.value.start_date = null;
-            isDatePickerOpen.value = false;
-        };
-        const cancelDate2 = () => {
-            experience.value.end_date = null;
-            isDatePickerOpen2.value = false;
-        };
-
-
+        const dateClicked = (index, type, date) => {
+            const x = new Date(date);
+            //console.log("date", date, x.toJSON().split('T')[0])
+            experience.value[index][type] = x.toJSON().split('T')[0];
+        }
         return {
-
-            openDatePicker,
-            openDatePicker2,
-            toggleDatePicker,
-            toggleDatePicker2,
-            selectDate,
-            cancelDate,
-            selectDate2,
-            cancelDate2,
-
-            isDatePickerOpen,
-            isDatePickerOpen2,
-
-            workExperiences,
+            experience,
+            removeWorkExperience,
             addWorkExperience: store.addWorkExperience,
-            removeWorkExperience: store.removeWorkExperience,
+            dateClicked,
+             removeWorkExperience:store.removeWorkExperience,
         };
     },
 };
@@ -129,6 +89,17 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.textfield {
+    width: 100px !important;
+    height: 100px;
+
+}
+
+.my_calendar {
+    width: 100px !important;
+    height: 100px;
 }
 </style>
   

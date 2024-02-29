@@ -21,10 +21,7 @@ export default {
         },
     },
     setup(props) {
-        console.log(props.value);
-        return {
-            props,
-        };
+        console.log(props.companyInfo);
     },
     components: { RepresentativesTab, AddressTab },
 }

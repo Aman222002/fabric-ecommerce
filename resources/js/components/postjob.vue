@@ -1,104 +1,157 @@
 
 <template>
-  <div>
-    <v-form @submit.prevent="saveJob" id="createJobForm" name="createJobForm" ref="form">
-      
-        <v-card class="border-0 shadow mb-4">
-          <v-card-title>
-            <h3 class="fs-4 mb-1">Job Details</h3>
-          </v-card-title>
-          <v-card-text class="card-form p-4">
-            <v-text-field
+  <v-container>
+    <v-form
+      @submit.prevent="saveJob"
+      name="createJobForm"
+      ref="form"
+      class="custom-form"
+      style="margin-left: 10%;"
+    >
+      <v-row style="margin-top: 20px">
+        <v-col cols="10">
+          <p class="mb-4 form-title" style="text-align: center; font-size: 20px;"> Post Detail:</p>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-text-field
             variant="outlined"
-              v-model="job.title"
-              label="Title"
-              placeholder="Job Title"
-              :rules="rules.title"
-            ></v-text-field>
-           
-
-            <v-select  variant="outlined" v-model="job.category"  :items="categories"
-                      item-title="name" item-value="id" label="Select Category" :rules="rules.category"
-                    ></v-select>
-
-                    <v-select  variant="outlined" v-model="job.jobType"  :items="jobTypes"
-                      item-title="name" item-value="id" label="Select JobType" :rules="rules.jobType"
-                    ></v-select>
-
-                    <v-select  variant="outlined" v-model="job.jobSkill"  :items="jobSkills"
-                      item-title="skill_name" item-value="id" label="Select Skills" :rules="rules.jobSkill"
-                    ></v-select>
-            <v-text-field
+            v-model="job.title"
+            label="Title"
+            placeholder=" Enter Job Title"
+            :rules="rules.title"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-select
             variant="outlined"
-              v-model="job.vacancy"
-              type="number"
-              min="1"
-              label="Vacancy"
-              :rules="rules.vacancy"
-            
-              placeholder="Vacancy"
-            ></v-text-field>
-            <v-text-field
+            v-model="job.category"
+            :items="categories"
+            item-title="name"
+            item-value="id"
+            label="Select Category"
+            :rules="rules.category"
+            density="compact"
+          ></v-select>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-select
             variant="outlined"
-              v-model="job.salary"
-              label="Salary"
-              placeholder="Salary"
-              :rules="rules.salary"
-            ></v-text-field>
-            <v-text-field
+            v-model="job.jobType"
+            :items="jobTypes"
+            item-title="name"
+            item-value="id"
+            label="Select JobType"
+            :rules="rules.jobType"
+            density="compact"
+          ></v-select>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-select
             variant="outlined"
-              v-model="job.location"
-              label="Location"
-              placeholder="Location"
-              :rules="rules.location"
-            ></v-text-field>
-            <v-textarea
+            v-model="job.jobSkill"
+            :items="jobSkills"
+            item-title="skill_name"
+            item-value="id"
+            label="Select Skills"
+            :rules="rules.jobSkill"
+            density="compact"
+          ></v-select>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-text-field
             variant="outlined"
-              v-model="job.description"
-              label="Description"
-              placeholder="Description"
-              :rules="rules.description"
-            ></v-textarea>
-            <v-text-field
+            v-model="job.vacancy"
+            type="number"
+            min="1"
+            label="Vacancy"
+            :rules="rules.vacancy"
+            placeholder="Vacancy"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-text-field
             variant="outlined"
-              v-model="job.qualifications"
-              label="Qualifications"
-              placeholder="Qualifications"
-              :rules="rules.qualifications"
-            ></v-text-field>
-            <v-select
+            v-model="job.salary"
+            label="Salary"
+            placeholder="Salary"
+            :rules="rules.salary"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-text-field
             variant="outlined"
-              v-model="job.experience"
-              :items="experienceOptions"
-              label="Experience"
-              placeholder="Select Experience"
-              :rules="rules.experience"
-            ></v-select>
-            <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Company Details</h3><br>
-            <v-text-field
+            v-model="job.location"
+            label="Location"
+            placeholder="Location"
+            :rules="rules.location"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="10">
+          <v-textarea
             variant="outlined"
-              v-model="job.companywebsite"
-              label="Website"
-              placeholder="Website"
-              :rules="rules.companywebsite"
-            ></v-text-field>
-          </v-card-text>
-          <v-card-actions class="p-4">
-            <v-btn type="submit" color="primary" style="background-color: white;">Save Job</v-btn>
-          </v-card-actions>
-        </v-card>
-     
+            v-model="job.description"
+            label="Description"
+            placeholder="Description"
+            :rules="rules.description"
+            density="compact"
+          ></v-textarea>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-text-field
+            variant="outlined"
+            v-model="job.qualifications"
+            label="Qualifications"
+            placeholder="Qualifications"
+            :rules="rules.qualifications"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-select
+            variant="outlined"
+            v-model="job.experience"
+            :items="experienceOptions"
+            label="Experience"
+            placeholder="Select Experience"
+            density="compact"
+            :rules="rules.experience"
+          ></v-select>
+        </v-col>
+        <v-col cols="4" sm="5">
+          <v-text-field
+            variant="outlined"
+            v-model="job.companywebsite"
+            label=" Company Website"
+            placeholder="Website"
+            density="compact"
+            :rules="rules.companywebsite"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row >
+        <v-col cols="10" class="text-center">
+          <v-btn type="submit" color="primary" class="custom-button"
+            >Save Job</v-btn
+          >
+        </v-col>
+      </v-row>
     </v-form>
-  </div>
+  
+  
+  </v-container>
 </template>
   
   <script>
 import { ref, onMounted } from "vue";
-
+import axios from "axios";
 export default {
   name: "Postjob",
   setup() {
-    const form =ref(null);
+    const form = ref(null);
     const job = ref({
       title: "",
       category: "",
@@ -110,7 +163,7 @@ export default {
       qualifications: "",
       experience: "",
       companywebsite: "",
-      jobSkill:"",
+      jobSkill: "",
     });
     const rules = {
       title: [(v) => !!v || "Title is required"],
@@ -124,15 +177,15 @@ export default {
       experience: [(v) => !!v || "Experience is required"],
       companywebsite: [(v) => !!v || "Company Website is required"],
       jobSkill: [(v) => !!v || "Job Skill is required"],
-    }
-    
+    };
+
     const categories = ref([]);
 
     const fetchCategories = async () => {
       try {
         axios.get("/categories").then((response) => {
           categories.value = response.data;
-          console.log(response.data)
+          console.log(response.data);
         });
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -153,7 +206,7 @@ export default {
       }
     };
     const jobSkills = ref([]);
-    const fetchJobSkill =async () =>{
+    const fetchJobSkill = async () => {
       try {
         axios.get("/skill").then((response) => {
           jobSkills.value = response.data;
@@ -161,6 +214,9 @@ export default {
       } catch (error) {
         console.error("Error fetching job types:", error);
       }
+    };
+    const selectJobSkill = (selectedJobSkill) => {
+      job.jobSkill = selectedJobSkill.name;
     };
     const selectJobType = (selectedJobType) => {
       job.jobType = selectedJobType.name;
@@ -189,34 +245,34 @@ export default {
     const saveJob = () => {
       form.value.validate().then((valid) => {
         if (!valid.valid) {
-      const errors = JSON.parse(JSON.stringify(valid.errors));
-  
-        let errorField = form.value[errors[0].id];
-        
-        errorField = Array.isArray(errorField) ? errorField[0] : errorField;
-        errorField.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "center"
-        });
-      }else{
-        try{
-          axios.post('/post',job.value).then((response)=>{
-            console.log(response.data);
-            if (response.data.status === true) {
-              window.Swal.fire({
-              icon: 'success',
-              title: 'Job Posted ',
-              text: 'Job Posted successfully ',
-              confirmButtonText: 'OK',
-            })
-              window.location.href = '/crud';
-            }
-          })
-        }catch(err){
-          console.log(err);
+          const errors = JSON.parse(JSON.stringify(valid.errors));
+
+          let errorField = form.value[errors[0].id];
+
+          errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+          errorField.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "center",
+          });
+        } else {
+          try {
+            axios.post("/post", job.value).then((response) => {
+              console.log(response.data);
+              if (response.data.status === true) {
+                window.Swal.fire({
+                  icon: "success",
+                  title: "Job Posted ",
+                  text: "Job Posted successfully ",
+                  confirmButtonText: "OK",
+                });
+                window.location.href = "/company/profile";
+              }
+            });
+          } catch (err) {
+            console.log(err);
+          }
         }
-      }
       });
     };
     return {
@@ -226,10 +282,11 @@ export default {
       experienceOptions,
       selectCategory,
       selectJobType,
+      selectJobSkill,
       saveJob,
       jobSkills,
       form,
-      rules
+      rules,
     };
   },
 };
@@ -266,4 +323,15 @@ export default {
 .v-card-actions {
   text-align: right;
 }
+.custom-card {
+  width: auto;
+}
+.v-text-field,
+  .v-select,
+  .v-textarea {
+    margin-bottom: 0; 
+  }
+  .custom-card {
+    width: auto;
+  }
 </style>

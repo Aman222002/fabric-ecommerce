@@ -4,10 +4,12 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import "./bootstrap";
+// import "./bootstrap";
 import "@mdi/font/css/materialdesignicons.css";
 import { createApp } from "vue";
 import "vuetify/styles";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
@@ -28,6 +30,7 @@ const pinia = createPinia({
     components,
     directives,
 });
+
 pinia.use(piniaPluginPersistedstate);
 
 const VueTelInputOptions = {
@@ -54,7 +57,7 @@ import {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    DxButton,
+    // DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -136,7 +139,7 @@ const component = {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    DxButton,
+    // DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -214,6 +217,14 @@ app.component("jobapply-component", JobApplied);
 
 import BuySubscription from "./components/Buy.vue";
 app.component("buy-component", BuySubscription);
+import PostDetail from "./components/PostDetail.vue";
+app.component("job-detail", PostDetail);
+
+import SaveJob from "./components/SaveJob.vue";
+app.component("savejob-component", SaveJob);
+
+import UserProfile from "./components/UserProfile.vue";
+app.component("user-profile", UserProfile);
 
 /**
  * The following block of code may be used to automatically register your
@@ -234,4 +245,6 @@ app.component("buy-component", BuySubscription);
  */
 window.Swal = app.config.globalProperties.$swal;
 app.use(pinia);
+app.component("VueDatePicker", VueDatePicker);
+
 app.mount("#app");

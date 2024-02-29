@@ -30,6 +30,7 @@ class User extends Authenticatable
         'subscription_status',
         'payment_id',
         'phone',
+        'status',
         'user_image',
         'reset_token',
     ];
@@ -53,6 +54,48 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function qualifications()
+    {
+        return $this->hasMany(Qualification::class);
+    }
+    public function address()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+    public function experience()
+    {
+        return $this->hasMany(UserExperience::class);
+    }
+    public function skills()
+    {
+        return $this->hasMany(UserSkill::class);
+    }
+    public function additionalInformation()
+    {
+        return $this->hasOne(AdditionalInformation::class);
+    }
+    // Inside the User model (app/User.php)
+    public function userAchievements()
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+    public function userProfile()
+    {
+        return $this->hasMany(UserProfile::class);
+    }
+    // public function profile()
+    // {
+    //     return $this->hasOne(UserProfile::class);
+    // }
+    public function skill()
+    {
+        return $this->hasOne(Skill::class);
+    }
+    public function resume()
+    {
+        return $this->hasOne(Resume::class);
+    }
+
     // public function roles()
     // {
     //     return $this->belongsToMany(Role::class);

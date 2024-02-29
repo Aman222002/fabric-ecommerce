@@ -1,225 +1,90 @@
-<!-- <template>
-  <v-container fluid>
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
-        <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
-          <div class="custom-col left-side">
-            <h3 class="mb-4 form-title">User Detail:</h3>
-            <v-text-field
-              variant="outlined"
-              v-model="company.name"
-              label="Representative Name"
-              :rules="nameRules"
-              outlined
-              style="margin-bottom: 10px; margin-top: 5px; max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.email"
-              label=" Representative Email"
-              :rules="emailRules"
-              outlined
-              style="margin-bottom: 10px; max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.password"
-              label=" Password"
-              :rules="passwordRules"
-              type="password"
-              outlined
-              style="margin-top: 10px; max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.phone"
-              label="Phone"
-              :rules="phoneRules"
-              type="phone"
-              outlined
-              style="margin-top: 10px; max-width: 140%"
-            ></v-text-field
-            ><br />
-          </div>
-          <div class="custom-col right-side">
-            <div class="company-details">
-              <h3 class="mb-4 form-title">Company Details:</h3>
-              <v-text-field
-                variant="outlined"
-                v-model="company.company_name"
-                label="Company Name"
-                :rules="nameRules"
-                outlined
-                style="margin-bottom: 10px; max-width: 140%"
-              ></v-text-field>
-              <v-text-field
-                variant="outlined"
-                v-model="company.company_email"
-                label="Company Email"
-                :rules="emailRules"
-                outlined
-                style="margin-bottom: 10px; max-width: 140%"
-              ></v-text-field>
-              <v-text-field
-                variant="outlined"
-                v-model="company.phone_number"
-                label="Phone Number"
-                :rules="phoneRules"
-                outlined
-                style="margin-bottom: 10px; max-width: 140%"
-              ></v-text-field>
-              <v-textarea
-                variant="outlined"
-                v-model="company.description"
-                label="Description"
-                outlined
-                style="margin-bottom: 10px; max-width: 140%"
-              ></v-textarea>
-              <v-file-input
-                variant="outlined"
-                v-model="company.logo"
-                label="Company Logo"
-                outlined
-                style="max-width: 140%"
-              ></v-file-input>
-            </div>
-          </div>
-
-          <div class="custom-col left-side">
-            <h3 class="mb-4 form-title">Company Address:</h3>
-            <v-text-field
-              variant="outlined"
-              v-model="company.first_line_address"
-              label="First_Line_Address"
-              outlined
-              style="max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.street"
-              label="Street"
-              outlined
-              style="max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.city"
-              label="City"
-              :rules="cityRules"
-              outlined
-              style="margin-bottom: 10px;max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.state"
-              label="State"
-              :rules="stateRules"
-              outlined
-              style="margin-bottom: 10px;max-width: 140%"
-            ></v-text-field>
-            <v-text-field
-              variant="outlined"
-              v-model="company.postal_code"
-              label="Postal Code"
-              :rules=" postalCodeRules"
-              outlined
-              style="margin-bottom: 10px;max-width: 140%"
-            ></v-text-field>
-          </div>
-
-          <v-btn type="submit" color="primary" class="custom-button"
-            >Register Company</v-btn
-          >
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
-</template> -->
 <template>
-  <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
-    <!-- User Detail Section -->
-    <v-row>
-      <v-col cols="12">
-        <h3 class="mb-4 form-title">User Detail:</h3>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.email" label="Representative Email" :rules="emailRules"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
-          type="password" outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules" type="phone"
-          outlined></v-text-field>
-      </v-col>
-    </v-row>
+  <v-container>
+    <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
 
-    <!-- Company Details Section -->
-    <v-row>
-      <v-col cols="12" sm="12">
-        <h3 class="mb-4 form-title">Company Details:</h3>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.company_name" label="Company Name" :rules="nameRules"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.company_email" label="Company Email" :rules="emailRules"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number" :rules="phoneRules"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined></v-file-input>
-      </v-col>
-      <v-col cols="6" sm="6">
-        <v-textarea variant="outlined" v-model="company.description" label="Description" outlined></v-textarea>
-      </v-col>
-    </v-row>
+      <v-row style="margin-top: 20px;">
+        <v-col cols="12">
+          <p class="mb-4 form-title">User Detail:</p>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
+            density="compact" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.email" label="Representative Email" :rules="emailRules"
+            density="compact" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
+            density="compact" type="password" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules" type="phone"
+            density="compact" outlined></v-text-field>
+        </v-col>
+      </v-row>
 
-    <!-- Company Address Section -->
-    <v-row>
-      <v-col cols="12">
-        <h3 class="mb-4 form-title">Company Address:</h3>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.first_line_address" label="First Line Address"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.street" label="Street" outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.city" label="City" :rules="cityRules" outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.state" label="State" :rules="stateRules"
-          outlined></v-text-field>
-      </v-col>
-      <v-col cols="3" sm="3">
-        <v-text-field variant="outlined" v-model="company.postal_code" label="Postal Code" :rules="postalCodeRules"
-          outlined></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" class="text-center">
-        <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
-      </v-col>
-    </v-row>
-  </v-form>
+      <v-row>
+        <v-col cols="12" sm="12">
+          <p class="mb-4 form-title">Company Details:</p>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.company_name" label="Company Name" :rules="nameRules"
+            density="compact" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.company_email" label="Company Email" :rules="emailRules"
+            density="compact" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number" :rules="phoneRules"
+            density="compact" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined
+            density="compact"></v-file-input>
+        </v-col>
+        <v-col cols="6" sm="6">
+          <v-textarea variant="outlined" v-model="company.description" label="Description" outlined
+            density="compact"></v-textarea>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          <p class="mb-4 form-title">Company Address:</p>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.first_line_address" label="First Line Address"
+            density="compact" outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.street" label="Street" outlined
+            density="compact"></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.city" label="City" :rules="cityRules" outlined
+            density="compact"></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.state" label="State" :rules="stateRules" density="compact"
+            outlined></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field variant="outlined" v-model="company.postal_code" label="Postal Code" :rules="postalCodeRules"
+            density="compact" outlined></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col cols="12" class="text-center">
+          <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
+        </v-col>
+      </v-row>
+    </v-form>
+  </v-container>
 </template>
-
 <script>
 import { ref } from "vue";
-import { useUsersStore } from '../store/user.js';
+import axios from 'axios';
 export default {
   name: "CompanyRegister",
   setup() {

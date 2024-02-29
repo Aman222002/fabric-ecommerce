@@ -18,7 +18,8 @@ use App\Http\Controllers\UserSkillController;
 use App\Http\Controllers\UserExperienceController;
 use App\Http\Controllers\AdditionalInformationController;
 use App\Http\Controllers\QualificationsController;
-
+use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyLoginController;
 
@@ -33,6 +34,7 @@ use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
 use App\Http\Controllers\webhookHandler;
+use App\Models\Job;
 use App\Models\Skill;
 
 /*
@@ -57,16 +59,28 @@ Route::get('/header', function () {
 Route::get('/resume', function () {
     return view('resume');
 });
+Route::get('/userprofile', function () {
+    return view('userprofile');
+});
+Route::post('/removedEducation/{educationId}', [ResumeController::class, 'destroyEducation']);
+Route::post('/removedExperience/{experienceId}', [ResumeController::class, 'destroyExperience']);
+Route::post('/removedAchievment/{achievmentId}', [ResumeController::class, 'destroyAchievment']);
+Route::post('/submit', [ResumeController::class, 'store']);
+
+Route::get('/my-profile', [ResumeController::class, 'getUserData']);
+Route::get('/getprofile', [ResumeController::class, 'getProfile']);
 Route::get('/user-skills', [UserSkillController::class, 'index']);
 Route::post('/user-skills', [UserSkillController::class, 'store']);
 Route::post('/users-achievments', [UserAchievementController::class, 'store']);
 Route::post('/user-profile', [UserProfileController::class, 'store']);
 Route::post('/work_experience', [UserExperienceController::class, 'store']);
 Route::post('/user-address', [UserAddressController::class, 'store']);
+Route::get('/getcountry', [UserAddressController::class, 'index']);
 Route::post('/address', [UserAddressController::class, 'index']);
 Route::post('/users-qualifications', [QualificationsController::class, 'store']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/getuser', [LoginController::class, 'getUser']);
+
 
 Route::get('/header', function () {
     return view('Header');
@@ -92,14 +106,15 @@ Route::get('/cart', function () {
 Route::get('/postjob', function () {
     return view('postjob');
 });
-Route::get('/crud', function () {
+Route::get('/posted-jobs', function () {
     return view('jobcrud');
 });
 Route::get('/findcv', function () {
     return view('findcv');
 });
 
-Route::get('/companypost', [SearchjobController::class, 'index']);
+
+Route::get('/jobs-detail', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -109,6 +124,7 @@ Route::post('/get/forget/password/link', [ForgotPasswordController::class, 'getL
 Route::get('reset/password/{user_id}/{token}', [ForgotPasswordController::class, 'showResetPasswordForm']);
 Route::post('/reset/new/password/', [ForgotPasswordController::class, 'updatePassword']);
 Route::post('/login', [LoginController::class, 'check'])->name('login');
+Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
@@ -119,18 +135,30 @@ Route::prefix('company')->group(function () {
     Route::post('/login', [CompanyController::class, 'check']);
     Route::get('/buy/plans/view/{id?}', [CompanyController::class, 'buyplansview']);
     Route::post('/buy/plan', [CompanyController::class, 'buyplan']);
+    Route::get('/logout', [CompanyController::class, 'logout']);
 });
 Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [CompanyController::class, 'completeRedirectFlow']);
 Route::get('/create/mendate/form/{token}', [CompanyController::class, 'showForm']);
 Route::post('/submit/mandate/form', [CompanyController::class, 'submitForm']);
+
+
+
+
+
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/post/jobs', [JobsController::class, 'index']);
     Route::post('/post', [JobsController::class, 'store']);
     Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
     Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
-    Route::post('/post/delete/{id}', [JobsController::class, 'destroy']);
+    Route::delete('/post/delete/{id}', [JobsController::class, 'destroy']);
     Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
     Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
+    // Route::get('/get/job-apply', [JobsController::class, 'myJobApplications']);
+    Route::post('/save-job/{id}', [JobsController::class, 'saveJob']);
+    Route::get('/savedjobs', [JobsController::class, 'savedJobsdetail']);
+    Route::post('/removesavedjobs/{id}', [JobsController::class, 'removeSavedJob']);
+    Route::post('/remove-applied-jobs/{id}', [JobsController::class, 'removeAppliedJob']);
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/get/plans', [DashboardController::class, 'getplans']);
@@ -170,9 +198,17 @@ Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
+    Route::post('/updateaddress', [ProfileController::class, 'updateaddress']);
 });
+// Route::get('/jobs/applicants', [JobsController::class, 'getapplicants']);
+Route::post('/jobs/application/{id}', [JobsController::class, 'detail']);
+Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
+Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
 
 
+Route::get('/generate-pdf', [PdfController::class, 'download']);
+
+Route::post('/update-status', [UserController::class, 'updatestatus']);
 
 
 //users

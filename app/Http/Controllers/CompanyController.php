@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\GoCardlessServices;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Job;
+use App\Models\JobApply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -459,4 +461,11 @@ class CompanyController extends Controller
             ], 500);
         }
     }
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
+    }
+  
+    
 }

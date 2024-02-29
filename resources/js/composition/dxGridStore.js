@@ -61,7 +61,7 @@ export default function useDataSource(
                 });
         },
         insert: (values) => {
-            return window.axios
+            return axios
                 .post(insertURL, values)
                 .then(() => {
                     return true;
@@ -72,7 +72,7 @@ export default function useDataSource(
                 });
         },
         update: (key, values) => {
-            return window.axios
+            return axios
                 .post(updateURL + "/" + key.id, values)
                 .then(() => {
                     return true;
