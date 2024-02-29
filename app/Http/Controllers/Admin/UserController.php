@@ -15,14 +15,56 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         try {
             $user = Auth::user();
             if ($user->hasRole('Admin')) {
-                $users = User::where('id', '!=', $user->id)->get();
-                return response()->json(['data' => $users, 'status' => true], 200);
+                $users = User::where('id', '!=', $user->id);
+            }
+            $response = [];
+            if ($request->requireTotalCount) {
+                $response['totalCount'] = $users->count();
+            }
+            if (isset($request->take)) {
+                $users->skip($request->skip)->take($request->take);
+            }
+            if (isset($request->sort)) {
+                $sort = json_decode($request->sort, true);
+                if (count($sort)) {
+                    $users->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
+                }
+            } else {
+                $users->orderBy('created_at', 'DESC');
+            }
+            if ($request->has('filter')) {
+                $filters = json_decode($request->filter, true);
+                if (count($filters)) {
+                    $filters = is_array($filters[0]) ? $filters[0] : $filters;
+                    $search = !blank($filters[2]) ? $filters[2] : false;
+
+                    if ($search) {
+                        $users->where('name', 'like', "%$search%");
+                    }
+                }
+                // dd($users);
+            }
+            $userList = $users->get();
+            $response['data'] = $userList;
+            $totalCount = $users->count();
+            if ($userList->isNotEmpty()) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $userList,
+                    'totalCount' => $totalCount,
+                ], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'No Product found',
+                ];
+                return response()->json($response, 404);
             }
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
@@ -105,13 +147,11 @@ class UserController extends Controller
                     'name' => 'required',
                     'email' => 'required',
                     'phone' => 'required',
-                    'user_image' => 'image|mimes:jpeg,png,jpg,gif',
                 ]);
                 if ($request->hasFile('user_image')) {
                     $image = $request->file('user_image');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assets', $imageName);
-                    dd($image);
                 }
                 $user->update([
                     'user_image' => empty($imageName) ? $user->user_image : $imageName,

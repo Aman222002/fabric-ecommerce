@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <v-navigation-drawer v-model="Sidebar_drawer">
         <v-list dense nav>
             <v-list-item two-line class="px-0">
@@ -127,4 +127,7 @@ export default {
     color: white;
 }
 </style>
-  
+   -->
+<template>
+    <div>hello</div>
+</template>

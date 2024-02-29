@@ -1,96 +1,94 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col cols="12">
-                <v-card class="card">
-                    <v-card-title class="bg-primary text-center">Personal Information</v-card-title>
-                    <v-form @submit.prevent="updateProfile(formData.id)">
-                        <v-row>
-                            <v-col cols="12">
-                                <v-card>
-                                    <v-card-text>
-                                        <v-row>
-                                            <v-col cols="2">
-                                                <v-avatar size="130px" class="avatar">
-                                                    <label for="fileInput" @click="openFileInput">
-                                                        <span class="mdi mdi-pencil" id="icon"></span>
-                                                    </label>
-                                                    <input type="file" id="fileInput" ref="fileInput" style="display: none"
-                                                        @change="handleImageChange" />
-                                                    <img v-if="imageUrl" :src="imageUrl" alt="Selected Image" width="150px"
-                                                        height="150px" />
-                                                </v-avatar>
-                                            </v-col>
-                                            <v-col cols="3">
-                                                <label for="name" class="custom-text-field">Name</label>
-                                                <v-text-field v-model="formData.name" :rules="nameRules"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="3">
-                                                <label for="email" class="custom-text-field">Email</label>
-                                                <v-text-field v-model="formData.email" :rules="emailRules"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="3">
-                                                <label for="phone" class="custom-text-field">Contact No.</label>
-                                                <v-text-field v-model="formData.phone" :rules="phoneRules"></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-btn class="bg-primary mx-auto" color="white" type="submit">Update</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                    </v-form>
-                </v-card>
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col cols="12">
-                <v-card class="card">
-                    <v-card-title class="bg-primary text-center">Password and Security</v-card-title>
-                    <v-form @submit.prevent="updatePassword()">
-                        <v-row>
-                            <v-col cols="12">
-                                <v-card>
-                                    <v-card-text>
-                                        <v-row>
-                                            <v-col cols="4">
-                                                <label for="Current Password" class="custom-text-field">Current
-                                                    Password</label>
-                                                <v-text-field v-model="formDetail.current"
-                                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                                    :type="show1 ? 'text' : 'password'" :rules="currentRules"
-                                                    @click:append="show1 = !show1"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="4">
-                                                <label for="New Password" class="custom-text-field">New Password</label>
-                                                <v-text-field v-model="formDetail.new" :rules="newRules"
-                                                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                                                    :type="show2 ? 'text' : 'password'"
-                                                    @click:append="show2 = !show2"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="4">
-                                                <label for="Confirm Passwprd" class="custom-text-field">Confirm
-                                                    Password</label>
-                                                <v-text-field :rules="confirmRules"
-                                                    :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-                                                    :type="show3 ? 'text' : 'password'"
-                                                    @click:append="show3 = !show3"></v-text-field>
-                                            </v-col>
-                                        </v-row>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-btn class="bg-primary mx-auto" type="submit" color="white">Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                    </v-form>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-row>
+        <v-col cols="12">
+            <v-card class="card">
+                <v-card-title class="bg-primary text-center">Personal Information</v-card-title>
+                <v-form @submit.prevent="updateProfile(formData.id)">
+                    <v-row>
+                        <v-col cols="12">
+                            <v-card>
+                                <v-card-text>
+                                    <v-row>
+                                        <v-col cols="2">
+                                            <v-avatar size="130px" class="avatar">
+                                                <label for="fileInput" @click="openFileInput">
+                                                    <span class="mdi mdi-pencil" id="icon"></span>
+                                                </label>
+                                                <input type="file" id="fileInput" ref="fileInput" style="display: none"
+                                                    @change="handleImageChange" />
+                                                <img v-if="imageUrl" :src="imageUrl" alt="Selected Image" width="150px"
+                                                    height="150px" />
+                                            </v-avatar>
+                                        </v-col>
+                                        <v-col cols="3">
+                                            <label for="name" class="custom-text-field">Name</label>
+                                            <v-text-field v-model="formData.name" :rules="nameRules"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="3">
+                                            <label for="email" class="custom-text-field">Email</label>
+                                            <v-text-field v-model="formData.email" :rules="emailRules"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="3">
+                                            <label for="phone" class="custom-text-field">Contact No.</label>
+                                            <v-text-field v-model="formData.phone" :rules="phoneRules"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-btn class="bg-primary mx-auto" color="white" type="submit">Update</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card>
+        </v-col>
+    </v-row>
+    <v-row>
+        <v-col cols="12">
+            <v-card class="card">
+                <v-card-title class="bg-primary text-center">Password and Security</v-card-title>
+                <v-form @submit.prevent="updatePassword()">
+                    <v-row>
+                        <v-col cols="12">
+                            <v-card>
+                                <v-card-text>
+                                    <v-row>
+                                        <v-col cols="4">
+                                            <label for="Current Password" class="custom-text-field">Current
+                                                Password</label>
+                                            <v-text-field v-model="formDetail.current"
+                                                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :type="show1 ? 'text' : 'password'" :rules="currentRules"
+                                                @click:append="show1 = !show1"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="4">
+                                            <label for="New Password" class="custom-text-field">New Password</label>
+                                            <v-text-field v-model="formDetail.new" :rules="newRules"
+                                                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :type="show2 ? 'text' : 'password'"
+                                                @click:append="show2 = !show2"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="4">
+                                            <label for="Confirm Passwprd" class="custom-text-field">Confirm
+                                                Password</label>
+                                            <v-text-field :rules="confirmRules"
+                                                :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :type="show3 ? 'text' : 'password'"
+                                                @click:append="show3 = !show3"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-btn class="bg-primary mx-auto" type="submit" color="white">Save</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card>
+        </v-col>
+    </v-row>
 </template>
   
 <script>
@@ -176,6 +174,7 @@ export default {
             if (formData.value.image) {
                 formDataUpload.append('user_image', formData.value.image);
             }
+            console.log(formDataUpload.keys);
             axios.post(`./user/update-profile/${id}`, formDataUpload, {
                 header: {
                     'Content-Type': 'multipart/form-data',
@@ -191,7 +190,6 @@ export default {
                         icon: 'success',
                         title: 'User Profile updated successfully!',
                     });
-                    // window.location.reload();
                 }
             }).catch((error) => {
                 console.log('here');
@@ -201,7 +199,7 @@ export default {
                     timer: 2000,
                     showConfirmButton: false,
                     icon: 'error',
-                    title: 'Incoreect Password!',
+                    title: 'Something Went Wrong!',
                 });
             })
         };

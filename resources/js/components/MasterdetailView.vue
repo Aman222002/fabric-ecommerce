@@ -12,7 +12,7 @@
 </template>
 <script>
 import RepresentativesTab from './RepresentativeTab.vue';
-import AddressTab from './AddressTab.vue';
+import AddressTab from "./AddressTab.vue";
 export default {
     props: {
         companyInfo: {
@@ -21,8 +21,12 @@ export default {
         },
     },
     setup(props) {
+        console.log(props.value);
+        return {
+            props,
+        };
     },
-    components: { RepresentativesTab, AddressTab }
+    components: { RepresentativesTab, AddressTab },
 }
 </script>
 <style scoped></style>

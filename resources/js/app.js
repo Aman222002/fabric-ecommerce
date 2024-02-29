@@ -85,7 +85,6 @@ import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
 app.use(vuetify);
-app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
@@ -112,6 +111,9 @@ app.component("resume-component", ResumeComponent);
 
 import ExpiredComponent from "./components/Expired.vue";
 app.component("expired-component", ExpiredComponent);
+
+import AddressTabComponent from "./components/AddressTab.vue";
+app.component("address-component", AddressTabComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
@@ -231,4 +233,5 @@ app.component("buy-component", BuySubscription);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
+app.use(pinia);
 app.mount("#app");

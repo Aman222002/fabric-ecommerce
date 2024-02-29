@@ -72,7 +72,7 @@
 <script>
 import axios from 'axios';
 import { useUsersStore } from '../store/user.js';
-import { ref, computed, onMounted } from "Vue";
+import { ref, computed, onMounted } from "vue";
 export default {
     props: {
         data: {

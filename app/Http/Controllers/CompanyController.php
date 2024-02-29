@@ -286,11 +286,60 @@ class CompanyController extends Controller
     /**
      * to fetch all companies
      */
-    public function getCompanies()
+    public function getCompanies(Request $request)
     {
         try {
-            $companies = Company::all();
-            return response()->json(['data' => $companies, 'status' => true], 200);
+            $companies = Company::select(
+                'user_id',
+                'company_name',
+                'company_email',
+                'phone_number',
+                'description',
+                'id'
+            );
+            $response = [];
+            if ($request->requireTotalCount) {
+                $response['totalCount'] = $companies->count();
+            }
+            if (isset($request->take)) {
+                $companies->skip($request->skip)->take($request->take);
+            }
+            if (isset($request->sort)) {
+                $sort = json_decode($request->sort, true);
+                if (count($sort)) {
+                    $companies->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
+                }
+            } else {
+                $companies->orderBy('created_at', 'DESC');
+            }
+            if ($request->has('filter')) {
+                $filters = json_decode($request->filter, true);
+                if (count($filters)) {
+                    $filters = is_array($filters[0]) ? $filters[0] : $filters;
+                    $search = !blank($filters[2]) ? $filters[2] : false;
+
+                    if ($search) {
+                        $companies->where('name', 'like', "%$search%");
+                    }
+                }
+            }
+            $companyList = $companies->get();
+            $response['data'] = $companyList;
+            $totalCount = $companies->count();
+            if ($companyList->isNotEmpty()) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $companyList,
+                    'totalCount' => $totalCount,
+                ], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'No Company found',
+                ];
+                return response()->json($response, 404);
+            }
+            // return response()->json(['data' => $companies, 'status' => true], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
