@@ -10,16 +10,13 @@
     <div id="app">
         <v-app>
             <navbar-component></navbar-component>
-            <sidebar-component></sidebar-component>
-              <main class="main">
+              <v-main class="p-16">
+                <v-container fluid>
             @yield('content')
-        </main>
+                </v-container fluid>
+        </v-main>
         </v-app>
     </div>
 </body>
 <style>
-    .main {
-        margin-top: 57px;
-        margin-left: 180px;
-    }
 </style>

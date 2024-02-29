@@ -18,7 +18,6 @@ class LoginController extends Controller
     {
         return view('login');
     }
-
     public function  check(Request $request)
     {
 

@@ -1,4 +1,3 @@
-
 <template>
   <v-container>
     <v-row align="center" justify="center">
@@ -13,53 +12,23 @@
                   </p>
                   <v-row align="center" justify="center">
                     <v-col cols="12" sm="10">
-                      <v-text-field
-                        label="Email"
-                        variant="outlined"
-                        v-model="formData.email"
-                        :rules="emailRules"
-                        dense
-                        density="compact"
-                        color="blue"
-                        autocomplete="false"
-                        class="mt-8"
-                        style="font-size: 10px;"
-                      />
-                     
-                      <v-text-field
-                        label="Password"
-                        variant="outlined"
-                        v-model="formData.password"
-                        :rules="passwordRules"
-                        dense
-                        density="compact"
-                        color="blue"
-                        autocomplete="false"
-                        type="password"
-                        style="margin-top: 10px;font-size: 10px;"
-                      />
+                      <v-text-field label="Email" variant="outlined" v-model="formData.email" :rules="emailRules" dense
+                        density="compact" color="blue" autocomplete="false" class="mt-8" style="font-size: 10px;" />
+
+                      <v-text-field label="Password" variant="outlined" v-model="formData.password" :rules="passwordRules"
+                        dense density="compact" color="blue" autocomplete="false" type="password"
+                        style="margin-top: 10px;font-size: 10px;" />
                       <v-row>
                         <v-col cols="12" sm="7">
-                          <v-checkbox
-                            label="Remember Me"
-                            class="mt-n1"
-                            color="blue"
-                          >
+                          <v-checkbox label="Remember Me" class="mt-n1" color="blue">
                           </v-checkbox>
-                         
                         </v-col>
-                        <v-col cols="12" sm="4">
-                          <a
-                            href=""
-                            class="register-link"
-                            style="margin-top: 30px; text-decoration: none;"
-                            >forgot password ?</a
-                          >
+                        <v-col cols="12" sm="5" class="mt-3">
+                          <a href="/forget/password" class="register-link" style="text-decoration: none;">forgot
+                            password?</a>
                         </v-col>
                       </v-row>
-                      <v-btn type="submit" dark block tile color="primary" 
-                        >Login</v-btn
-                      >
+                      <v-btn type="submit" dark block tile color="primary">Login</v-btn>
                     </v-col>
                   </v-row>
                 </v-form>
@@ -73,16 +42,7 @@
                     Let's get you all set up so you can start creating your
                     first onboarding experience
                   </p>
-                  <v-btn
-                    color="primary"
-                    tile
-                    outlined
-                    
-                    dark
-                    @click="signup()"
-                    style="margin-top: 20px"
-                    >SIGN UP</v-btn
-                  >
+                  <v-btn color="primary" tile outlined dark @click="signup()" style="margin-top: 20px">SIGN UP</v-btn>
                 </v-card-text>
               </div>
             </v-col>
@@ -92,7 +52,7 @@
     </v-row>
   </v-container>
 </template>
-  
+    
 <script>
 import { ref } from "vue";
 import { useUsersStore } from "../store/user";
@@ -155,7 +115,7 @@ export default {
   },
 };
 </script>
-  
+    
 <style scoped>
 .blue {
   background-color: rgb(54, 194, 250);
@@ -165,4 +125,3 @@ export default {
   border-bottom-left-radius: 250px;
 }
 </style>
-  

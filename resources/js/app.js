@@ -22,9 +22,6 @@ import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
-
-
-
 import { createPinia } from "pinia";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -91,14 +88,10 @@ import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
 app.use(vuetify);
-app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
-
-
 import Registration from "./components/Registration.vue";
-
 app.component("registration-component", Registration);
 
 import Header from "./components/Header.vue";
@@ -110,8 +103,20 @@ app.component("footer-component", Footer);
 import Login from "./components/Login.vue";
 app.component("login-component", Login);
 
+import ForgetPassword from "./components/ForgetPassword.vue";
+app.component("forgetpassword-component", ForgetPassword);
+
+import ResetPassword from "./components/ResetPassword.vue";
+app.component("resetpassword-component", ResetPassword);
+
 import ResumeComponent from "./components/ResumeComponent.vue";
 app.component("resume-component", ResumeComponent);
+
+import ExpiredComponent from "./components/Expired.vue";
+app.component("expired-component", ExpiredComponent);
+
+import AddressTabComponent from "./components/AddressTab.vue";
+app.component("address-component", AddressTabComponent);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
@@ -183,6 +188,9 @@ app.component("company-component", CompanyRegister);
 import Product from "./components/Product.vue";
 app.component("product-component", Product);
 
+import cart from "./components/Cart.vue";
+app.component("cart-component", cart);
+
 import postjob from "./components/postjob.vue";
 app.component("postjob-component", postjob);
 
@@ -199,24 +207,24 @@ import CompanyPage from "./components/CompanyPage.vue";
 app.component("company-page", CompanyPage);
 
 import CompanyPost from "./components/CompanyPost.vue";
-app.component("company-post",CompanyPost)
+app.component("company-post", CompanyPost);
 
 import CompanyProfile from "./components/CompanyProfile.vue";
-app.component("company-profile",CompanyProfile)
+app.component("company-profile", CompanyProfile);
 
 import JobApplied from "./components/JobApplied.vue";
 app.component("jobapply-component", JobApplied);
 
+import BuySubscription from "./components/Buy.vue";
+app.component("buy-component", BuySubscription);
 import PostDetail from "./components/PostDetail.vue";
-app.component("job-detail",PostDetail)
+app.component("job-detail", PostDetail);
 
 import SaveJob from "./components/SaveJob.vue";
-app.component("savejob-component",SaveJob)
-
+app.component("savejob-component", SaveJob);
 
 import UserProfile from "./components/UserProfile.vue";
-app.component("user-profile",UserProfile)
-
+app.component("user-profile", UserProfile);
 
 /**
  * The following block of code may be used to automatically register your
@@ -236,6 +244,7 @@ app.component("user-profile",UserProfile)
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
+app.use(pinia);
 app.component("VueDatePicker", VueDatePicker);
 
 app.mount("#app");

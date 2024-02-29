@@ -20,12 +20,11 @@
         "@mdi/font": "^7.4.47",
         "@vuepic/vue-datepicker": "^7.4.1",
         "devextreme-vue": "21.1",
-
         "dropzone": "^6.0.0-beta.2",
         "dropzone-vue": "^0.1.11",
-
         "esbuild": "^0.19.11",
         "mitt": "^3.0.1",
+        "ngrok": "^5.0.0-beta.2",
         "pinia": "^2.1.7",
         "pinia-plugin-persistedstate": "^3.2.1",
         "vee-validate": "^4.12.5",

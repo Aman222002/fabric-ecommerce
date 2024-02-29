@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->dropForeign(['skill_id','user_id','category_id','job_type_id']);
+            $table->dropForeign(['skill_id', 'user_id', 'category_id', 'job_type_id']);
         });
     }
 

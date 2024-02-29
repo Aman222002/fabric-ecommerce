@@ -1,45 +1,49 @@
 <template>
-    <div class="container">
-        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
-            :remote-operations="true" @content-ready="onContentReady" @row-expanding="onRowExpanding"
-            :onEditingStart="EditStart" @init-new-row="initNewRow" @row-inserted="rowInserted">
-            <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" />
-            <DxSearchPanel :visible="true" />
-            <DxScrolling mode="virtual" row-rendering-mode="virtual" />
-            <DxColumn data-field="company_name" data-type="string">
-                <DxRequiredRule />
-            </DxColumn>
-            <DxColumn data-field="company_email" data-type="string">
-                <DxRequiredRule />
-            </DxColumn>
-            <DxColumn data-field="description" data-type="string" />
-            <DxColumn data-field="phone_number" data-type="string" />
-            <DxColumn data-field="name" data-type="string" caption="User Name" :visible="showColumn">
-                <DxPatternRule :pattern="namePattern" message="Name should of min 3 and max 10 word" />
-            </DxColumn>
-            <DxColumn data-field="email" data-type="string" caption="User Email" :visible="showColumn">
-                <DxPatternRule :pattern="emailPattern" message="Email should be in email format" />
-            </DxColumn>
-            <DxColumn data-field="password" data-type="string" caption="User Password" :visible="showColumn">
-                <DxPatternRule :pattern="paswordPattern"
-                    message="Pasword should be of min. 8 words and contain one uppercase and one lowercase alphabet with a specila character" />
-            </DxColumn>
-            <DxColumn data-field="phone" data-type="string" caption="User Phone" :visible="showColumn">
-                <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
-            </DxColumn>
-            <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
-            <template #masterDetailTemplate="{ data: cellInfo }">
-                <masterDetailTemplate :company-info="cellInfo.data" />
-            </template>
-            <DxSummary>
-                <DxTotalItem column="id" summary-type="count" />
-            </DxSummary>
-        </DxDataGrid>
-    </div>
+    <DxDataGrid :remote-operations="true" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+        @content-ready="onContentReady" @row-expanding="onRowExpanding" :onEditingStart="EditStart"
+        @init-new-row="initNewRow" @row-inserted="rowInserted">
+        <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" :use-icons="true" />
+        <DxSearchPanel :visible="true" />
+        <DxScrolling mode="virtual" />
+        <DxColumn data-field="company_name" data-type="string">
+            <DxRequiredRule />
+        </DxColumn>
+        <DxColumn data-field="company_email" data-type="string">
+            <DxRequiredRule />
+        </DxColumn>
+        <DxColumn data-field="description" data-type="string" />
+        <DxColumn data-field="phone_number" data-type="string" />
+        <DxColumn data-field="name" data-type="string" caption="User Name" :visible="showColumn">
+            <DxPatternRule :pattern="namePattern" message="Name should of min 3 and max 10 word" />
+        </DxColumn>
+        <DxColumn data-field="email" data-type="string" caption="User Email" :visible="showColumn">
+            <DxPatternRule :pattern="emailPattern" message="Email should be in email format" />
+        </DxColumn>
+        <DxColumn data-field="password" data-type="string" caption="User Password" :visible="showColumn">
+            <DxPatternRule :pattern="paswordPattern"
+                message="Pasword should be of min. 8 words and contain one uppercase and one lowercase alphabet with a specila character" />
+        </DxColumn>
+        <DxColumn data-field="phone" data-type="string" caption="User Phone" :visible="showColumn">
+            <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
+        </DxColumn>
+        <DxColumn type="buttons" caption="Action"></DxColumn>
+        <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
+        <template #masterDetailTemplate="{ data: cellInfo }">
+            <masterDetailTemplate :company-info="cellInfo.data" />
+        </template>
+        <DxPaging :page-size="pageSize" />
+        <DxPager :visible="true" :allowed-page-sizes="[10, 15, 20]" :display-mode="'compact'"
+            :show-page-size-selector="true" :show-navigation-buttons="true" :show-info="true" />
+        <DxSummary>
+            <DxTotalItem column="id" summary-type="count" />
+        </DxSummary>
+    </DxDataGrid>
 </template>
 <script>
 import {
+    DxPaging,
     DxRequiredRule,
+    DxToolbarItem,
 } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
@@ -56,6 +60,7 @@ export default {
         const insertURL = `/admin/company/store`;
         const updateURL = `/admin/company/update`;
         const deleteUrl = `/admin/company/destroy`;
+        const pageSize = ref(10);
         const { dataSource } = dxGridStore(loadURL, insertURL, updateURL, deleteUrl);
         const onRowExpanding = (e) => {
             e.component.collapseAll(-1);
@@ -76,18 +81,24 @@ export default {
             showColumn.value = false;
         };
         return {
-            dataSource, showColumn, EditStart, initNewRow, rowInserted, namePattern, emailPattern, phonePattern, onRowExpanding, paswordPattern, onContentReady
+            dataSource,
+            showColumn,
+            EditStart,
+            initNewRow,
+            rowInserted,
+            namePattern,
+            emailPattern,
+            phonePattern,
+            onRowExpanding,
+            paswordPattern,
+            onContentReady,
+            pageSize
         };
     },
-
-    components: { DxRequiredRule, masterDetailTemplate }
+    components: { DxRequiredRule, masterDetailTemplate, DxPaging, DxToolbarItem }
 }
 </script>
 <style scoped>
-#grid {
-    height: 400px;
-}
-
 .container {
     margin-top: 15px;
     margin-left: 90px;

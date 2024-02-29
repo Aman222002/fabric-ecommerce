@@ -3,17 +3,22 @@ import axios from "axios";
 import CustomStore from "devextreme/data/custom_store";
 export default function useDataSource(
     url,
+    params,
     insertURL = null,
     updateURL = null,
     deleteURL = null
 ) {
     const skipLoader = ref(true);
-
+    const pageSizes = ref([10, 15, 20]);
+    const user_id = ref("");
+    const isNotEmpty = (value) => {
+        return value !== undefined && value !== null && value !== "";
+    };
     const dataSource = new CustomStore({
         byKey: (key) => {
             return fetch(url + "?id=" + key);
         },
-        load: (loadOptions) => {
+        load: async function (loadOptions) {
             const dxKeys = [
                 "skip",
                 "take",
@@ -22,10 +27,21 @@ export default function useDataSource(
                 "sort",
                 "filter",
             ];
-            console.log(url);
-            
+            let paramsObject = {};
+            dxKeys.forEach((i) => {
+                if (i in loadOptions && loadOptions[i]) {
+                    paramsObject[i] = JSON.stringify(loadOptions[i]);
+                }
+            });
+            if (!params) {
+                params = {};
+            }
+            // if (params) {
+            //     user_id.value = params.value;
+            //     paramsObject = user_id.value;
+            // }
             return axios
-                .get(url)
+                .get(url, { params: paramsObject })
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
@@ -67,8 +83,8 @@ export default function useDataSource(
                 });
         },
         remove: (key) => {
-            console.log(deleteURL+ "/" + key.id);
-            return axios
+            // console.log(deleteURL + "/" + key.id);
+            return window.axios
                 .delete(deleteURL + "/" + key.id)
                 .then(() => {
                     return true;
@@ -79,9 +95,25 @@ export default function useDataSource(
                 });
         },
     });
+    const refreshTable = (dataGridRef, changedOnly = false) => {
+        if (!dataGridRef) {
+            console.error("DataGrid ref not provided.");
+            return;
+        }
+        const dataGrid = dataGridRef.value.instance;
+        if (!dataGrid) {
+            console.error("DataGrid instance not found.");
+            return;
+        }
 
+        dataGrid.refresh(changedOnly);
+    };
     return {
         dataSource,
         skipLoader,
+        isNotEmpty,
+        pageSizes,
+        user_id,
+        refreshTable,
     };
 }

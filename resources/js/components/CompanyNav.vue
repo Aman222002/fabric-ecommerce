@@ -1,16 +1,17 @@
 <template>
-  <v-navigation-drawer location="left" id="div" v-model="drawer" :rail="rail"  >
+  <v-navigation-drawer location="left" id="div" v-model="drawer" :rail="rail">
 
     <h3 class="title" v-if="!rail">JOBS</h3>
     <v-avatar style="margin-left: 10%;" v-if="rail">
-      <img src="/storage/assest/15.jpg" alt=""  />
-    </v-avatar>  
+      <img src="/storage/assest/15.jpg" alt="" />
+    </v-avatar>
     <v-list>
       <v-list-group value="Jobs" class="group" v-if="usersStore.isloggedin">
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props" prepend-icon="mdi-view-dashboard-outline" title="Jobs"></v-list-item>
         </template>
-        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/posted-jobs' }" href="/posted-jobs" title=" My Jobs">
+        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/posted-jobs' }" href="/posted-jobs"
+          title=" My Jobs">
         </v-list-item>
         <v-list-item :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
         </v-list-item>
@@ -18,11 +19,14 @@
       <!-- <v-list-item :class="{ 'group': true, 'active': currentRoute === '/job' }" href="/job" v-if="!usersStore.isloggedin" prepend-icon="mdi-note" title="Post a Job">
        
       </v-list-item> -->
-      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/findcv' }" href="/findcv" prepend-icon="mdi-magnify" title="Find CV">
+      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/findcv' }" href="/findcv"
+        prepend-icon="mdi-magnify" title="Find CV">
       </v-list-item>
-      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product" prepend-icon="mdi-format-list-bulleted" title="Products">
+      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product"
+        prepend-icon="mdi-format-list-bulleted" title="Products">
       </v-list-item>
-      <v-list-item v-if="usersStore.isloggedin" :class="{ 'group': true, 'active': currentRoute === '/company/profile' }" href="/company/profile" prepend-icon="mdi-account-circle" title="Profile">
+      <v-list-item v-if="usersStore.isloggedin" :class="{ 'group': true, 'active': currentRoute === '/company/profile' }"
+        href="/company/profile" prepend-icon="mdi-account-circle" title="Profile">
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -36,10 +40,12 @@
         <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
       </template>
       <v-list>
-        
-          <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"  class="dropdown"></v-list-item>
-       
-        <v-list-item v-if="usersStore.isloggedin" class="dropdown" prepend-icon="mdi-logout" title="Logout" value="Dashboard" @click="logout()"></v-list-item>
+
+        <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"
+          class="dropdown"></v-list-item>
+
+        <v-list-item v-if="usersStore.isloggedin" class="dropdown" prepend-icon="mdi-logout" title="Logout"
+          value="Dashboard" @click="logout()"></v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -128,6 +134,11 @@ a {
   color: #175e56;
 }
 
+.v-app-bar {
+
+  border-bottom: 1px solid #161414;
+}
+
 .menu {
   color: #030303;
 }
@@ -162,19 +173,19 @@ a {
 .title {
   color: black;
   margin-top: 15px;
- margin-left: 32%;
+  margin-left: 32%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 .v-list-item:hover,
 .active {
   background-color: #1976D2;
-    color: white;
-}
-#div {
-  background-color: white;
-;
+  color: white;
 }
 
+#div {
+  background-color: white;
+  ;
+}
 </style>
 

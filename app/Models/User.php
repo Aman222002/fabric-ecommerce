@@ -23,9 +23,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'gc_customer_id',
+        'mandate_id',
+        'mandate_status',
+        'plan_id',
+        'subscription_status',
+        'payment_id',
         'phone',
         'status',
         'user_image',
+        'reset_token',
     ];
 
     /**
