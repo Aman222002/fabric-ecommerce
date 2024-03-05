@@ -57,7 +57,7 @@ import {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    // DxButton,
+    DxButton as DxGridButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -85,8 +85,11 @@ import {
     DxGroupItem,
 } from "devextreme-vue/form";
 import { DxTooltip } from "devextreme-vue/tooltip";
-import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
+import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
+import { DxButton } from "devextreme-vue/button";
+import { DxDropDownBox } from "devextreme-vue/drop-down-box";
+import DxList from "devextreme-vue/list";
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
@@ -140,7 +143,8 @@ const component = {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    // DxButton,
+    DxGridButton,
+    DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -166,9 +170,11 @@ const component = {
     DxEmailRule,
     DxExport,
     DxTabPanel,
-    DxItem,
     DxBox,
     DxBoxItem,
+    DxTabItem,
+    DxDropDownBox,
+    DxList,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);

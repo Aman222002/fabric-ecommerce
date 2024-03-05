@@ -33,20 +33,16 @@ export default function useDataSource(
                     paramsObject[i] = JSON.stringify(loadOptions[i]);
                 }
             });
-            if (!params) {
-                params = {};
+            if (params) {
+                Object.assign(paramsObject, params.value);
             }
-            // if (params) {
-            //     user_id.value = params.value;
-            //     paramsObject = user_id.value;
-            // }
             return axios
                 .get(url, { params: paramsObject })
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
-                    console.log(data);
+                    // console.log(data);
                     return {
                         data: data.data || [],
                         summary: data.summary || [],

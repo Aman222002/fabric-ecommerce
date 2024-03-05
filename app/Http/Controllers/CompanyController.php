@@ -466,6 +466,13 @@ class CompanyController extends Controller
         Auth::logout();
         return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
     }
-  
-    
+    public function fetchPlan($id)
+    {
+        try {
+            $plan = Plan::where('id', $id)->first();
+            return response()->json(['status' => true, 'data' => $plan], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e]);
+        }
+    }
 }

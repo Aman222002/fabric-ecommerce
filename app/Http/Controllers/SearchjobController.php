@@ -35,13 +35,13 @@ class SearchjobController extends Controller
             if ($companyId != 0) {
                 $jobs->where('company_id', $companyId);
             }
-            $jobs = $jobs->get()->map(function ($job) {
+            $jobs = $jobs->get()->filter(function ($job) {
                 $user_id = $job->user_id;
                 $subscription_status = User::where('id', $user_id)->value('subscription_status');
-                if ($subscription_status == 'active') {
+                if ($subscription_status == 'active' && $job->post_status == 'Published') {
                     return $job;
                 } else {
-                    return null;
+                    return false;
                 }
             });
             return response()->json(['status' => true, 'data' => $jobs], 200);

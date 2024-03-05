@@ -16,6 +16,7 @@ use App\Models\JobApply;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\JobNotificationEmail;
 use App\Models\User;
+use App\Models\Plan;
 use Carbon\Carbon;
 
 
@@ -24,7 +25,7 @@ class JobsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
             $user = auth()->user();
@@ -34,16 +35,21 @@ class JobsController extends Controller
             if ($user->hasRole('Company Admin')) {
                 $companyId =  $user->company ? $user->company->id : 0;
             }
-
             $jobs = Job::with("company");
-
             if ($companyId != 0) {
                 $jobs->where('company_id', $companyId);
             }
-            $jobs =   $jobs->get();
-
+            if ($request->type == 'Published') {
+                $jobs->where('post_status', $request->type);
+            } else if ($request->type == 'Expired') {
+                $jobs->where('post_status', $request->type);
+            } else if ($request->type == 'Draft') {
+                $jobs->where('post_status', $request->type);
+            } else if ($request->type == 'All') {
+                $jobs;
+            }
+            $jobs = $jobs->get();
             // $jobs = Job::all();
-
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -104,6 +110,14 @@ class JobsController extends Controller
                     'message' => 'User does not have a active subscription plan'
                 ], 402);
             }
+            $posts_allowed = Plan::where('id', $user->plan_id)->value('Posts_Allowed');
+            $job_posted = Job::where('user_id', $user->id)->where('post_status', 'Published')->count();
+            if ($posts_allowed < ($job_posted + 1)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => `User exceeds posts allowed`
+                ], 403);
+            }
             $company = $user->company;
             $input = $request->all();
             $job = Job::create([
@@ -119,6 +133,7 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
+                'post_status' => 'active',
                 'skill_id' => $input['jobSkill'],
             ]);
 
@@ -192,6 +207,7 @@ class JobsController extends Controller
 
             if ($job) {
                 $input = $request->all();
+                $job->update(['post_status', 'Published']);
                 $job->update($input);
                 $response = [
                     'status' => true,
@@ -242,12 +258,9 @@ class JobsController extends Controller
     {
         try {
             $id = $request->id;
-
             $job = Job::where('id', $id)->first();
-
+            $company_website = $job->company_website;
             $company_id = $job->company_id;
-
-
             $jobApplicationCount = JobApply::where([
                 'user_id' => Auth::user()->id,
                 'job_id' => $id
@@ -266,7 +279,6 @@ class JobsController extends Controller
             $application->company_id = $company_id;
             $application->applied_date = now();
             $application->save();
-
             $company = Company::where('id', $company_id)->first();
 
             $mailData = [
@@ -274,17 +286,12 @@ class JobsController extends Controller
                 'user' => Auth::user(),
                 'job' => $job,
             ];
-
             Mail::to($company->company_email)->send(new JobNotificationEmail($mailData));
-
             $message = 'You have successfully applied.';
-
-            $message = 'You have successfully applied.';
-
             return response()->json([
                 'status' => true,
                 'message' => $message,
-                'data' => $application
+                'company_url' => $company_website,
             ], 200);
         } catch (\Exception $e) {
 
@@ -315,7 +322,6 @@ class JobsController extends Controller
     {
         try {
             $jobApplications = JobApply::where('user_id', auth()->id())->with('job', 'company')->get();
-
             return view('jobapply', [
                 'jobApplications' => $jobApplications
             ]);
@@ -474,40 +480,50 @@ class JobsController extends Controller
             ], 500);
         }
     }
-    public function detail($id)
+    public function detail(Request $request)
     {
+        $params = ($request->input('params'));
         try {
-            $originalJob = Job::find($id);
-            // $duplicatedJob = new Job;
-            // $duplicatedJob->user_id = auth()->id(); 
-            // $duplicatedJob->company_id = $originalJob->company_id; 
-            // $duplicatedJob->title = $originalJob->title;
-            // $duplicatedJob->category_id = $originalJob->category_id;
-            // $duplicatedJob->job_type_id = $originalJob->job_type_id;
-            // $duplicatedJob->vacancy = $originalJob->vacancy;
-            // $duplicatedJob->salary = $originalJob->salary;
-            // $duplicatedJob->location = $originalJob->location;
-            // $duplicatedJob->description = $originalJob->description;
-            // $duplicatedJob->qualifications = $originalJob->qualifications;
-            // $duplicatedJob->experience = $originalJob->experience;
-            // $duplicatedJob->company_website = $originalJob->company_website;
-            // $duplicatedJob->skill_id = $originalJob->skill_id;
-
-            // $duplicatedJob->save();
-
+            $originalJob = Job::find($params['id']);
             $duplicatedJob = $originalJob->replicate();
-
             $duplicatedJob->created_at = Carbon::now()->format('Y-m-d');
-
-            $duplicatedJob->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Job duplicated successfully',
-                'duplicatedJob' => $duplicatedJob,
-            ], 200);
+            // dd($params['type']);
+            if ($params['type'] == 'Duplicate') {
+                $duplicatedJob->post_status = 'Draft';
+                $duplicatedJob->save();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Job duplicated successfully',
+                    'duplicatedJob' => $duplicatedJob,
+                ], 200);
+            }
+            if ($params['type'] == 'Post Job') {
+                $user = User::where('id', $originalJob->user_id)->first();
+                $post_allowed = Plan::where('id', $user->plan_id)->value('posts_allowed');
+                $job_count = $originalJob->where('post_status', 'Published')->count();
+                // && $user->subscription_status == 'active'
+                if ($job_count <= $post_allowed  && $user->subscription_status == 'active') {
+                    if ($originalJob->post_status == 'Published') {
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'You already posted this Job',
+                        ], 406);
+                    } else {
+                        $originalJob->post_status = 'Published';
+                        $originalJob->save();
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Job Posted Successfully',
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => `You can't post more Jobs`
+                    ], 403);
+                }
+            }
         } catch (\Exception $e) {
-
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
@@ -550,27 +566,29 @@ class JobsController extends Controller
                 'data' => $experience,
             ]);
         } catch (\Exception $e) {
-
             return response()->view('error.view', ['error' => $e->getMessage()], 500);
         }
     }
-    //   public function getapplicants(){
-    //     return view('postdetail');
-    //  }
-    // public function myJobApplications() {
-    //     try {
-    //         $jobApplications = JobApply::where('user_id', auth()->id())->with('job')->get()->map(function($item) {
-    //             return ($item->job);
-    //         });
-    //         return response()->json([ 'status' => true,
-    //         'data' => $jobApplications,
-    //     ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->view('error.view', ['error' => $e->getMessage()], 500);
-    //     }
-    // }
-    // public function getapplyjob(){
-    //     return view('jobapply');
-    // }
-
+    public function getapplicants($id)
+    {
+        try {
+            $job = Job::find($id);
+            if ($job == null) {
+                $message = 'No Job Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+            $application = JobApply::where('job_id', $id)->with('user')->get()->map(function ($item) {
+                return ($item->user);
+            });
+            return response()->json([
+                'status' => true,
+                'data' => $application,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+    }
 }

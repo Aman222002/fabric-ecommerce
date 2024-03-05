@@ -1,25 +1,26 @@
 <template>
     <div class="container">
-        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+        <DxDataGrid :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
             :column-auto-width="true" :allow-column-resizing="true">
-            
+
             <DxSearchPanel :visible="true" />
             <DxColumn data-field="education_type" caption="Education Type" data-type="string" />
             <DxColumn data-field="starting_year" caption="Starting Year" data-type="int">
             </DxColumn>
             <DxColumn data-field="passing_year" caption="Passing Year" data-type="int">
             </DxColumn>
-            
+
         </DxDataGrid>
     </div>
 </template>
+
 <script>
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
 export default {
     name: 'QualificationTab',
     props: {
-    userId: {
+        userId: {
             type: Number,
             default: 0,
         }
@@ -34,6 +35,7 @@ export default {
     },
 }
 </script>
+
 <style scoped>
 #grid {
     max-height: 200px;
@@ -106,4 +108,3 @@ export default {
     border-bottom: none;
 }
 </style>
-  

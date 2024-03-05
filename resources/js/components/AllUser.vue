@@ -30,6 +30,7 @@
         </DxSummary>
     </DxDataGrid>
 </template>
+
 <script>
 import dxGridStore from '../composition/dxGridStore';
 import { ref } from "vue";
@@ -56,15 +57,13 @@ export default {
         const rowInserted = (e) => {
             showColumn.value = false;
         };
-        const customizeEditingText = () => {
-            return '<i class="mdi mdi-pencil"></i>';
-        }
         return {
             dataSource, showColumn, updateURL, phonePattern, passwordPattern, initNewRow, rowInserted, pageSize, editItem, customizeEditingText
         };
     },
 }
 </script>
+
 <style scoped>
 .container {
     margin-top: 15px;
@@ -134,4 +133,3 @@ export default {
     border-bottom: none;
 }
 </style>
-  

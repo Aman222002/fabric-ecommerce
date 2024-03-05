@@ -12,7 +12,8 @@
         <v-list-item :class="{ 'main': true, 'active': currentRoute === '/posted-jobs' }" href="/posted-jobs"
           title=" My Jobs">
         </v-list-item>
-        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
+        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob"
+          title="Post a Job">
         </v-list-item>
       </v-list-group>
       <v-list-item :class="{ 'group': true, 'active': currentRoute === '/findcv' }" href="/findcv"
@@ -21,25 +22,27 @@
       <v-list-item :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product"
         prepend-icon="mdi-format-list-bulleted" title="Products">
       </v-list-item>
-      <v-list-item v-if="usersStore.isloggedin" :class="{ 'group': true, 'active': currentRoute === '/company/profile' }"
-        href="/company/profile" prepend-icon="mdi-account-circle" title="Profile">
+      <!-- <v-list-item :class="{ 'group': true, 'active': currentRoute === '/plan' }" href="/company/plan"
+        prepend-icon="mdi-format-list-bulleted" title="Subscription details">
+      </v-list-item> -->
+      <v-list-item v-if="usersStore.isloggedin"
+        :class="{ 'group': true, 'active': currentRoute === '/company/profile' }" href="/company/profile"
+        prepend-icon="mdi-account-circle" title="Profile">
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-app-bar height="50" id="header">
-    <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"></v-app-bar-nav-icon>
+  <v-app-bar height="56" id="header">
+    <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail" color="white"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-
     <v-menu transition="slide-y-transition">
+
       <template v-slot:activator="{ props }">
-        <v-icon v-bind="props" id="account" size="40">mdi-account-circle</v-icon>
-        <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
+        <v-icon v-bind="props" id="account" size="40" color="white">mdi-account-circle</v-icon>
+        <v-icon v-bind="props" class="menu" size="35" color="white"> mdi-menu-down</v-icon>
       </template>
       <v-list>
-
         <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"
           class="dropdown"></v-list-item>
-
         <v-list-item v-if="usersStore.isloggedin" class="dropdown" prepend-icon="mdi-logout" title="Logout"
           value="Dashboard" @click="logout()"></v-list-item>
       </v-list>
@@ -92,6 +95,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 a {
   text-decoration: none;
@@ -127,7 +131,7 @@ a {
 }
 
 .dropdown:hover {
-  color: #175e56;
+  background-color: #1976D2;
 }
 
 .v-app-bar {
@@ -184,4 +188,3 @@ a {
   ;
 }
 </style>
-

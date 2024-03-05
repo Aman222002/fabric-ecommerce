@@ -47,8 +47,8 @@
             placeholder="Select Experience" density="compact" :rules="rules.experience"></v-select>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" v-model="job.companywebsite" label=" Company Website" placeholder="Website"
-            density="compact" :rules="rules.companywebsite"></v-text-field>
+          <v-text-field variant="outlined" type="url" required v-model="job.companywebsite" label=" Company Website"
+            :rules="companywebsite" placeholder="Website" density="compact"></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -92,10 +92,12 @@ export default {
       description: [(v) => !!v || "Description is required"],
       qualifications: [(v) => !!v || "Qualifications are required"],
       experience: [(v) => !!v || "Experience is required"],
-      companywebsite: [(v) => !!v || "Company Website is required"],
       jobSkill: [(v) => !!v || "Job Skill is required"],
     };
-
+    const companywebsite = [
+      v => !!v || 'URL is required',
+      v => /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v) || 'Invalid URL'
+    ];
     const categories = ref([]);
 
     const fetchCategories = async () => {
@@ -186,14 +188,26 @@ export default {
               form.value.reset();
             }).catch((error) => {
               console.log(error);
-              window.Swal.fire({
-                toast: true,
-                position: 'top-end',
-                timer: 2000,
-                showConfirmButton: false,
-                icon: 'error',
-                title: `You don't have a active plan buy a plan or renew your plan`,
-              });
+              if (error.response.status == '402') {
+                window.Swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  timer: 2000,
+                  showConfirmButton: false,
+                  icon: 'error',
+                  title: `You don't have a active plan buy a plan or renew your plan`,
+                });
+              }
+              else if (error.response.status = '403') {
+                window.Swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  timer: 2000,
+                  showConfirmButton: false,
+                  icon: 'error',
+                  title: `You have posted number of allowed post can't post more`,
+                });
+              }
             });
           } catch (err) {
             window.Swal.fire({
@@ -220,6 +234,7 @@ export default {
       jobSkills,
       form,
       rules,
+      companywebsite,
     };
   },
 };

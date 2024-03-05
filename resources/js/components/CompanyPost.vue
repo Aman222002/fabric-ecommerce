@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
     <div class="card-container">
-      <v-card v-for="job in jobs" :key="job.id" class="custom-card" @click="openDetailPanel(job)">
+      <v-card v-for="job in jobs" class="custom-card" @click="openDetailPanel(job)">
         <v-card-title style="
             font-size: 30px;
             font-weight: bolder;
@@ -44,22 +44,22 @@
             <span style="font-size: 18px;">{{ job.vacancy }} <v-icon color="black"
                 style="margin-left: 530px; font-size: 20px;">mdi-desktop-classic</v-icon>{{ job.experience }}<v-icon
                 color="black" style="margin-left: 280px; font-size: 20px;">mdi-map-marker</v-icon>{{ job.location
-                }}</span>
+              }}</span>
           </div><br>
         </v-card-actions>
       </v-card>
-
       <v-navigation-drawer v-model="detailPanelVisible" location="right" style="width: 70%;">
         <v-card style="width: 100%;">
           <v-icon style="margin-left: 20px; margin-top: 30px; "
             @click="detailPanelVisible = false">mdi-arrow-left-top</v-icon>
           <v-card-title
             style="font-size: 40px; font-weight: bolder; text-align: center; margin-top: 30px; color: rgb(139, 238, 144);">{{
-              detail.title }}</v-card-title>
+          detail.title }}</v-card-title>
           <v-card-text>
             <div style="font-size: 18px">
               <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-domain</v-icon>
-              <span style="color: rgb(59, 145, 243); font-size: 25px; margin-left: 50px;">{{ detail.company_name }}</span>
+              <span style="color: rgb(59, 145, 243); font-size: 25px; margin-left: 50px;">{{ detail.company_name
+                }}</span>
             </div>
             <br />
             <div style="font-size: 18px">
@@ -133,6 +133,7 @@ export default {
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
+        console.log(response.data);
         jobs.value = response.data.data;
       } catch (err) {
         console.error(err);
@@ -152,6 +153,7 @@ export default {
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
+    //For job apply
     const apply = async (id) => {
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
@@ -163,6 +165,7 @@ export default {
               text: "Applied successfully ",
               confirmButtonText: "OK",
             });
+            window.location.href = response.data.company_url;
           }
         });
       } catch (err) {

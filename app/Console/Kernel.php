@@ -17,9 +17,9 @@ class Kernel extends ConsoleKernel
     ];
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('jobs:cleanup')->everyMinute();
+        $schedule->command('jobs:cleanup')->daily();
         $schedule->command('check:planvalidity')->everyMinute();
-        $schedule->command('app:clean-reset-token')->everyFourMinutes();;
+        $schedule->command('app:clean-reset-token')->everyFourMinutes();
     }
     /**
      * Register the commands for the application.
