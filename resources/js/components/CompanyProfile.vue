@@ -166,14 +166,18 @@
         <v-card-title>Subscription Details</v-card-title>
         <v-card-text>
           <label for="name" class="ps-0" style="font-weight: 600; text-align: inherit">Plan Name:</label>
-          <span style="margin-left: 23%">{{ plan.name }}</span><br /><br />
+          <span style="margin-left: 23%">{{ currentplan.name }}</span><br /><br />
           <label for="email" class="ps-0" style="font-weight: 600; text-align: inherit">Plan Duration:</label>
-          <span style="margin-left: 21%">{{ plan.duration }}</span><br /><br />
+          <span style="margin-left: 21%">{{ currentplan.duration }}</span><br /><br />
           <label for="phone" class="ps-0" style="font-weight: 600; text-align: inherit">Number of Posts:</label>
-          <span style="margin-left: 19%">{{ plan.Posts_Allowed }}</span><br><br>
+          <span style="margin-left: 19%">{{ currentplan.Posts_Allowed }}</span><br><br>
           <label for="phone" class="ps-0" style="font-weight: 600; text-align: inherit">Price:</label>
-          <span style="margin-left: 26%">{{ plan.price }}</span>
+          <span style="margin-left: 26%">${{ currentplan.price }}</span>
         </v-card-text>
+        <v-card-actions>
+          <v-btn class="bg-primary" @click="changeSubscription">Update</v-btn>
+          <v-btn class="bg-error" @click="cancelSubscription">Cancel</v-btn>
+        </v-card-actions>
       </v-card>
     </v-tab-item>
     <v-dialog v-model="isEditAddressModalOpen" max-width="600px">
@@ -217,6 +221,27 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="ChangeSubscriptionModal" max-width="600px">
+      <v-card>
+        <v-card-title>Choose Your Plan</v-card-title>
+        <v-card-text>
+          <v-combobox label="Combobox" :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+            variant="outlined"></v-combobox>
+          <v-text-field v-model="editedAddress.first_line_address" label="First_line_address" variant="outlined"
+            density="compact"></v-text-field>
+          <v-text-field v-model="editedAddress.street" label="Street" variant="outlined"
+            density="compact"></v-text-field>
+          <v-text-field v-model="editedAddress.city" label="City" variant="outlined" density="compact"></v-text-field>
+          <v-text-field v-model="editedAddress.state" label="State" density="compact" variant="outlined"></v-text-field>
+          <v-text-field v-model="editedAddress.postal_code" label="postal_code" density="compact"
+            variant="outlined"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="saveEditedAddress">Save</v-btn>
+          <v-btn @click="closeEditAddressModal">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -232,7 +257,8 @@ export default {
     const fileInput = ref();
     const image = ref(null);
     const isEditModalOpen = ref(false);
-    const plan = ref([]);
+    const plans = ref({});
+    const currentplan = ref([]);
     const editedJob = ref({
       name: "",
       email: "",
@@ -254,6 +280,22 @@ export default {
     const showDescription = ref(false);
     const showSubscription = ref(false);
     const isEditAddressModalOpen = ref(false);
+    const ChangeSubscriptionModal = ref(false);
+    const changeSubscription = () => {
+      ChangeSubscriptionModal.value = true;
+      try {
+        axios.get(`/get/plans`).then(
+          (response) => {
+            console.log(response.data);
+          }
+        )
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const cancelSubscription = () => {
+
+    };
     const fetchCompanyProfile = async () => {
       try {
         const response = await axios.get(`/company/list`);
@@ -265,7 +307,6 @@ export default {
         console.error("Error fetching company profile:", error);
       }
     };
-
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
@@ -283,8 +324,8 @@ export default {
       // console.log(user.value.plan_id);
       const response = await axios.get(`/find/plan/${user.value.plan_id}`);
       console.log(response);
-      plan.value = response.data.data;
-      console.log(plan.value);
+      currentplan.value = response.data.data;
+      console.log(currentplan.value);
     };
     const saveEditedJob = async () => {
       try {
@@ -362,6 +403,9 @@ export default {
     return {
       company,
       user,
+      changeSubscription,
+      cancelSubscription,
+      ChangeSubscriptionModal,
       fetchCompanyProfile,
       goToEditPage,
       isEditModalOpen,
@@ -383,7 +427,8 @@ export default {
       saveEditedAddress,
       editedAddress,
       showSubscription,
-      plan,
+      currentplan,
+      plans,
       fetchPlan
     };
   },

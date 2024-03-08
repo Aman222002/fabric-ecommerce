@@ -186,6 +186,7 @@ Route::group(["prefix" => "/admin", 'middleware' => ['role:Admin']], function ()
         Route::delete('/destroy/{id}', [CompanyController::class, 'destroy']);
     });
 });
+Route::get('/get/comapny-admin', [CompanyController::class, 'getCompanyAdmin']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
 Route::get('/skill', [SkillController::class, 'index']);
@@ -202,7 +203,9 @@ Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification'])
 Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
 Route::get('/generate-pdf', [PdfController::class, 'download']);
 Route::post('/update-status', [UserController::class, 'updatestatus']);
-Route::get('/find/plan/{id}', [CompanyController::class, 'fetchPlan']);
-
+Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
+Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
+Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
+Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 //users
 //user/{id} function(Request $request, $id)

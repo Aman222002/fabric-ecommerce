@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('jobs:cleanup')->daily();
         $schedule->command('check:planvalidity')->everyMinute();
-        $schedule->command('app:clean-reset-token')->everyFourMinutes();
+        $schedule->command('app:clean-reset-token')->everyMinute();
     }
     /**
      * Register the commands for the application.

@@ -44,11 +44,12 @@
               <v-card-text class="border-right border-left">
                 <v-list>
                   <v-list-item v-for="(item, key) in plan.details" :key="key">
-                    <v-list-item-title>{{ item }}</v-list-item-title>
+                    <v-list-item-title>{{ key }}={{ item }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-card-text>
-              <v-btn class="bg-primary" height="40" width="273" style="margin-top: -100px;" @click="buySubs(plan.id)">Buy
+              <v-btn class="bg-primary" height="40" width="273" style="margin-top: -100px;"
+                @click="buySubs(plan.id)">Buy
                 Now</v-btn>
             </v-card>
           </v-col>
@@ -97,6 +98,7 @@
     </div>
   </v-container>
 </template>
+
 <script>
 import axios from "axios";
 import { ref, onMounted } from "vue";

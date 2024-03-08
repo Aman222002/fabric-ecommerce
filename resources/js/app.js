@@ -230,6 +230,9 @@ app.component("job-detail", PostDetail);
 import SaveJob from "./components/SaveJob.vue";
 app.component("savejob-component", SaveJob);
 
+import CompanyPlan from "./components/CompanyPlan.vue";
+app.component("company-plan", CompanyPlan);
+
 import UserProfile from "./components/UserProfile.vue";
 app.component("user-profile", UserProfile);
 

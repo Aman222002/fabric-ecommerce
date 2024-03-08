@@ -58,7 +58,7 @@ export default {
             showColumn.value = false;
         };
         return {
-            dataSource, showColumn, updateURL, phonePattern, passwordPattern, initNewRow, rowInserted, pageSize, editItem, customizeEditingText
+            dataSource, showColumn, updateURL, phonePattern, passwordPattern, initNewRow, rowInserted, pageSize, editItem
         };
     },
 }

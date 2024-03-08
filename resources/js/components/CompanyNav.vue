@@ -22,9 +22,9 @@
       <v-list-item :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product"
         prepend-icon="mdi-format-list-bulleted" title="Products">
       </v-list-item>
-      <!-- <v-list-item :class="{ 'group': true, 'active': currentRoute === '/plan' }" href="/company/plan"
-        prepend-icon="mdi-format-list-bulleted" title="Subscription details">
-      </v-list-item> -->
+      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/company/plan' }" href="/company/plan"
+        prepend-icon="mdi-cash-sync" title="Subscription details">
+      </v-list-item>
       <v-list-item v-if="usersStore.isloggedin"
         :class="{ 'group': true, 'active': currentRoute === '/company/profile' }" href="/company/profile"
         prepend-icon="mdi-account-circle" title="Profile">
