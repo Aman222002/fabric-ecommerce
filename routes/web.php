@@ -166,6 +166,7 @@ Route::group(["prefix" => "/admin", 'middleware' => ['role:Admin']], function ()
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
     Route::get('/plans', [DashboardController::class, 'plans']);
     Route::post('/update/plans/{planID?}', [DashboardController::class, 'updateplans']);
+    Route::get('/company/plan/{planID?}', [DashboardController::class, 'getDetails']);
 
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);

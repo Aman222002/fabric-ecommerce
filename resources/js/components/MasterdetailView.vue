@@ -1,10 +1,10 @@
 <template>
     <DxTabPanel>
-        <DxItem title="Representative" template="representativesTab" />
+        <DxGridItem title="Representative" template="representativesTab" />
         <template #representativesTab>
             <RepresentativesTab :user-id="companyInfo.user_id" />
         </template>
-        <DxItem title="Address" template="addressTab" />
+        <DxGridItem title="Address" template="addressTab" />
         <template #addressTab>
             <AddressTab :address-id="companyInfo.id" />
         </template>
@@ -21,7 +21,7 @@ export default {
         },
     },
     setup(props) {
-        console.log(props.companyInfo);
+        // console.log(props.companyInfo);
     },
     components: { RepresentativesTab, AddressTab },
 }

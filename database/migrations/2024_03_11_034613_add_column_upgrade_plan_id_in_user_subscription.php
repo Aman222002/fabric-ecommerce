@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('user_subscription', function (Blueprint $table) {
             //
-            $table->string('ugrade_subscription_id')->after('subscription_status')->nullable();
+            $table->string('upgrade_subscription_id')->after('subscription_status')->nullable();
         });
     }
 

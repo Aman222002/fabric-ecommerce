@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+        <DxDataGrid :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
             :column-auto-width="true" :allow-column-resizing="true">
             <DxEditing :allow-updating="true" mode="row" :use-icons="true" />
             <DxSearchPanel :visible="true" />
@@ -109,4 +109,3 @@ export default {
     border-bottom: none;
 }
 </style>
-  

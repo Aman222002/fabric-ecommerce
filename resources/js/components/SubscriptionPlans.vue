@@ -9,11 +9,16 @@
         <DxColumn data-field='Number of Job-Post' data-type='integer' :allowEditing="false"></DxColumn>
         <DxColumn data-field='Price' :allowEditing="false"></DxColumn>
         <DxColumn type="buttons" caption="Action"></DxColumn>
+        <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
+        <template #masterDetailTemplate="{ data: cellInfo }">
+            <masterDetailTemplate :plan-id="cellInfo.data.id" />
+        </template>
     </DxDataGrid>
 </template>
 <script>
 import { DxColumn, DxEditing } from 'devextreme-vue/data-grid';
 import dxGridStore from '../composition/dxGridStore';
+import masterDetailTemplate from './MasterdetailPlan.vue'
 import { ref } from "vue";
 export default {
     name: 'SubscriptionPlans',
@@ -26,6 +31,6 @@ export default {
             dataSource, namePattern,
         };
     },
-    components: { DxColumn, DxEditing }
+    components: { DxColumn, DxEditing, masterDetailTemplate }
 }
 </script>

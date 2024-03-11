@@ -13,6 +13,7 @@ class UserSubscription extends Model
         'plan_id',
         'user_id',
         'subscription_status',
+        'upgrade_subscription_id',
         'start_date',
         'end_date',
         'next_plan_id',

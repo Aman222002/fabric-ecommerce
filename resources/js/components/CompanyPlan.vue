@@ -143,7 +143,7 @@ export default {
                 axios
                     .get(`/get/plans`)
                     .then((response) => {
-                        console.log(response.data.data);
+                        // console.log(response.data.data);
                         const Plans = response.data.data.map((item) => {
                             const { id, Name, ...filteredItem } = item;
                             return { id, Name, details: filteredItem };
@@ -164,26 +164,19 @@ export default {
             axios
                 .get("/get/comapny-admin")
                 .then((response) => {
-                    console.log(response.data.data[0].upgrade_status);
                     upgrade_status.value = response.data.data[0].upgrade_status;
-                    console.log(upgrade_status.value);
-                    // if (upgrade_status.value == 'initiated') {
-                    //     disabledButton.value = true,
-                    // }
                 })
                 .catch((error) => {
                     console.error("Error:", error);
                 });
         };
         const handleUpgradeStatusChange = () => {
-            console.log(upgrade_status.value);
             if (upgrade_status.value === 'initiated') {
                 disabledButton.value = true;
             } else {
                 disabledButton.value = false;
             }
         };
-        console.log(disabledButton.value);
         const buyPlan = (id) => {
             const formData = new FormData();
             formData.append('id', id);
@@ -199,16 +192,20 @@ export default {
                             confirmButtonText: "OK",
                         });
                     }
+                    changePlanModal.value = false;
                     changingPlan.value = true;
                 })
                 .catch((error) => {
                     console.error("Error:", error);
                 });
+            window.location.reload();
         }
         const cancelupgrade = () => {
             try {
                 axios.get(`/cancel/upgrade`).then((response) => {
                     console.log(response.data);
+                    window.location.reload();
+                    // getUser();
                 })
             } catch (error) {
                 console.log(error);
@@ -218,15 +215,16 @@ export default {
             try {
                 axios.get(`/find/plan`).then((response) => {
                     currentplan.value = response.data.data;
-                    console.log(response.data.data);
+                    // console.log(response.data);
                     subscriptionDetail.value.start_date = new Date(response.data.subscription.start_date).toLocaleDateString();
                     subscriptionDetail.value.end_date = new Date(response.data.subscription.end_date).toLocaleDateString();
                     const endDate = new Date(subscriptionDetail.value.end_date);
                     const today = new Date();
                     const differenceInTime = endDate.getTime() - today.getTime();
+                    // console.log(differenceInTime);
                     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
                     subscriptionDetail.value.remainig_days = differenceInDays;
-                    console.log(subscriptionDetail.value);
+                    // console.log(subscriptionDetail.value);
                 })
             } catch (error) {
                 console.log(error);
