@@ -57,7 +57,7 @@ import {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    // DxButton,
+    DxButton as DxGridButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -85,9 +85,13 @@ import {
     DxGroupItem,
 } from "devextreme-vue/form";
 import { DxTooltip } from "devextreme-vue/tooltip";
-import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
+import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
+import { DxButton } from "devextreme-vue/button";
+import { DxDropDownBox } from "devextreme-vue/drop-down-box";
+import DxList from "devextreme-vue/list";
 app.use(vuetify);
+app.use(pinia);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
 
@@ -139,7 +143,8 @@ const component = {
     DxPaging,
     DxFilterRow,
     DxColumn,
-    // DxButton,
+    DxGridButton,
+    DxButton,
     DxSearchPanel,
     DxSummary,
     DxTotalItem,
@@ -165,9 +170,11 @@ const component = {
     DxEmailRule,
     DxExport,
     DxTabPanel,
-    DxItem,
     DxBox,
     DxBoxItem,
+    DxTabItem,
+    DxDropDownBox,
+    DxList,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
@@ -223,6 +230,9 @@ app.component("job-detail", PostDetail);
 import SaveJob from "./components/SaveJob.vue";
 app.component("savejob-component", SaveJob);
 
+import CompanyPlan from "./components/CompanyPlan.vue";
+app.component("company-plan", CompanyPlan);
+
 import UserProfile from "./components/UserProfile.vue";
 app.component("user-profile", UserProfile);
 
@@ -244,7 +254,5 @@ app.component("user-profile", UserProfile);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 window.Swal = app.config.globalProperties.$swal;
-app.use(pinia);
 app.component("VueDatePicker", VueDatePicker);
-
 app.mount("#app");

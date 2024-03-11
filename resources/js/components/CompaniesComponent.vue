@@ -4,7 +4,6 @@
         @init-new-row="initNewRow" @row-inserted="rowInserted">
         <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" :use-icons="true" />
         <DxSearchPanel :visible="true" />
-        <DxScrolling mode="virtual" />
         <DxColumn data-field="company_name" data-type="string">
             <DxRequiredRule />
         </DxColumn>
@@ -167,4 +166,3 @@ export default {
     border-bottom: none;
 }
 </style>
-  

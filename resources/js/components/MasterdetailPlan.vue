@@ -1,7 +1,6 @@
 <template>
+    <!-- <div>User Subscribed to this plan will be shown here</div> -->
     <DxDataGrid :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
-        <DxEditing :allow-updating="true" mode="row" :use-icons="true" />
-        <DxSearchPanel :visible="true" />
         <DxColumn data-field="name" data-type="string">
             <DxRequiredRule />
         </DxColumn>
@@ -11,7 +10,6 @@
         </DxColumn>
         <DxColumn data-field="phone" data-type="string">
         </DxColumn>
-        <DxColumn type="buttons" caption="Action"></DxColumn>
     </DxDataGrid>
 </template>
 <script>
@@ -19,16 +17,16 @@ import dxGridStore from '../composition/dxGridStore';
 export default {
     name: 'RepresentativeTab',
     props: {
-        userId: {
+        planId: {
             type: Number,
             default: 0,
         },
     },
     setup(props) {
-        // console.log(props.userId);
-        const loadURL = `/admin/company/representative/${props.userId}`;
-        const updateURL = `/admin/user/update`;
-        const { dataSource } = dxGridStore(loadURL, null, updateURL);
+        console.log(props.planId);
+        const loadURL = `/admin/company/plan/${props.planId}`;
+        // const updateURL = `/admin/user/update`;
+        const { dataSource } = dxGridStore(loadURL);
         return {
             dataSource,
         };

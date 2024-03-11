@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::table('userachievements', function (Blueprint $table) {
-            $table->unique(['user_id', 'certification_name']);
+        Schema::table('user_subscription', function (Blueprint $table) {
+            //
+            $table->string('upgrade_subscription_id')->after('subscription_status')->nullable();
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-
-        Schema::table('userachievements', function (Blueprint $table) {
-            $table->dropUnique(['user_id', 'certification_name']);
+        Schema::table('user_subscription', function (Blueprint $table) {
+            //
+            $table->dropColumn('upgrade_subscription_id');
         });
     }
 };

@@ -1,157 +1,74 @@
 
 <template>
   <v-container>
-    <v-form
-      @submit.prevent="saveJob"
-      name="createJobForm"
-      ref="form"
-      class="custom-form"
-      style="margin-left: 10%;"
-    >
+    <v-form @submit.prevent="saveJob" name="createJobForm" ref="form" class="custom-form" style="margin-left: 10%;">
       <v-row style="margin-top: 20px">
         <v-col cols="10">
           <p class="mb-4 form-title" style="text-align: center; font-size: 20px;"> Post Detail:</p>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field
-            variant="outlined"
-            v-model="job.title"
-            label="Title"
-            placeholder=" Enter Job Title"
-            :rules="rules.title"
-            density="compact"
-          ></v-text-field>
+          <v-text-field variant="outlined" v-model="job.title" label="Title" placeholder=" Enter Job Title"
+            :rules="rules.title" density="compact"></v-text-field>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-select
-            variant="outlined"
-            v-model="job.category"
-            :items="categories"
-            item-title="name"
-            item-value="id"
-            label="Select Category"
-            :rules="rules.category"
-            density="compact"
-          ></v-select>
+          <v-select variant="outlined" v-model="job.category" :items="categories" item-title="name" item-value="id"
+            label="Select Category" :rules="rules.category" density="compact"></v-select>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-select
-            variant="outlined"
-            v-model="job.jobType"
-            :items="jobTypes"
-            item-title="name"
-            item-value="id"
-            label="Select JobType"
-            :rules="rules.jobType"
-            density="compact"
-          ></v-select>
+          <v-select variant="outlined" v-model="job.jobType" :items="jobTypes" item-title="name" item-value="id"
+            label="Select JobType" :rules="rules.jobType" density="compact"></v-select>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-select
-            variant="outlined"
-            v-model="job.jobSkill"
-            :items="jobSkills"
-            item-title="skill_name"
-            item-value="id"
-            label="Select Skills"
-            :rules="rules.jobSkill"
-            density="compact"
-          ></v-select>
+          <v-select variant="outlined" v-model="job.jobSkill" :items="jobSkills" item-title="skill_name" item-value="id"
+            label="Select Skills" :rules="rules.jobSkill" density="compact"></v-select>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field
-            variant="outlined"
-            v-model="job.vacancy"
-            type="number"
-            min="1"
-            label="Vacancy"
-            :rules="rules.vacancy"
-            placeholder="Vacancy"
-            density="compact"
-          ></v-text-field>
+          <v-text-field variant="outlined" v-model="job.vacancy" type="number" min="1" label="Vacancy"
+            :rules="rules.vacancy" placeholder="Vacancy" density="compact"></v-text-field>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field
-            variant="outlined"
-            v-model="job.salary"
-            label="Salary"
-            placeholder="Salary"
-            :rules="rules.salary"
-            density="compact"
-          ></v-text-field>
+          <v-text-field variant="outlined" v-model="job.salary" label="Salary" placeholder="Salary" :rules="rules.salary"
+            density="compact"></v-text-field>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field
-            variant="outlined"
-            v-model="job.location"
-            label="Location"
-            placeholder="Location"
-            :rules="rules.location"
-            density="compact"
-          ></v-text-field>
+          <v-text-field variant="outlined" v-model="job.location" label="Location" placeholder="Location"
+            :rules="rules.location" density="compact"></v-text-field>
         </v-col>
         <v-col cols="12" sm="10">
-          <v-textarea
-            variant="outlined"
-            v-model="job.description"
-            label="Description"
-            placeholder="Description"
-            :rules="rules.description"
-            density="compact"
-          ></v-textarea>
+          <v-textarea variant="outlined" v-model="job.description" label="Description" placeholder="Description"
+            :rules="rules.description" density="compact"></v-textarea>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field
-            variant="outlined"
-            v-model="job.qualifications"
-            label="Qualifications"
-            placeholder="Qualifications"
-            :rules="rules.qualifications"
-            density="compact"
-          ></v-text-field>
+          <v-text-field variant="outlined" v-model="job.qualifications" label="Qualifications"
+            placeholder="Qualifications" :rules="rules.qualifications" density="compact"></v-text-field>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-select
-            variant="outlined"
-            v-model="job.experience"
-            :items="experienceOptions"
-            label="Experience"
-            placeholder="Select Experience"
-            density="compact"
-            :rules="rules.experience"
-          ></v-select>
+          <v-select variant="outlined" v-model="job.experience" :items="experienceOptions" label="Experience"
+            placeholder="Select Experience" density="compact" :rules="rules.experience"></v-select>
         </v-col>
         <v-col cols="4" sm="5">
-          <v-text-field
-            variant="outlined"
-            v-model="job.companywebsite"
-            label=" Company Website"
-            placeholder="Website"
-            density="compact"
-            :rules="rules.companywebsite"
-          ></v-text-field>
+          <v-text-field variant="outlined" type="url" required v-model="job.companywebsite" label=" Company Website"
+            :rules="companywebsite" placeholder="Website" density="compact"></v-text-field>
         </v-col>
       </v-row>
-      <v-row >
+      <v-row>
         <v-col cols="10" class="text-center">
-          <v-btn type="submit" color="primary" class="custom-button"
-            >Save Job</v-btn
-          >
+          <v-btn type="submit" color="primary" class="custom-button">Save Job</v-btn>
         </v-col>
       </v-row>
     </v-form>
-  
-  
+
+
   </v-container>
 </template>
   
-  <script>
+<script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 export default {
   name: "Postjob",
   setup() {
-    const form = ref(null);
+    const form = ref();
     const job = ref({
       title: "",
       category: "",
@@ -175,10 +92,12 @@ export default {
       description: [(v) => !!v || "Description is required"],
       qualifications: [(v) => !!v || "Qualifications are required"],
       experience: [(v) => !!v || "Experience is required"],
-      companywebsite: [(v) => !!v || "Company Website is required"],
       jobSkill: [(v) => !!v || "Job Skill is required"],
     };
-
+    const companywebsite = [
+      v => !!v || 'URL is required',
+      v => /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v) || 'Invalid URL'
+    ];
     const categories = ref([]);
 
     const fetchCategories = async () => {
@@ -246,9 +165,7 @@ export default {
       form.value.validate().then((valid) => {
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
-
           let errorField = form.value[errors[0].id];
-
           errorField = Array.isArray(errorField) ? errorField[0] : errorField;
           errorField.scrollIntoView({
             behavior: "smooth",
@@ -258,19 +175,49 @@ export default {
         } else {
           try {
             axios.post("/post", job.value).then((response) => {
-              console.log(response.data);
               if (response.data.status === true) {
                 window.Swal.fire({
-                  icon: "success",
-                  title: "Job Posted ",
-                  text: "Job Posted successfully ",
-                  confirmButtonText: "OK",
+                  toast: true,
+                  position: 'top-end',
+                  timer: 2000,
+                  showConfirmButton: false,
+                  icon: 'success',
+                  title: 'Job posted successfully!',
                 });
-                window.location.href = "/company/profile";
+              }
+              form.value.reset();
+            }).catch((error) => {
+              console.log(error);
+              if (error.response.status == '402') {
+                window.Swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  timer: 2000,
+                  showConfirmButton: false,
+                  icon: 'error',
+                  title: `You don't have a active plan buy a plan or renew your plan`,
+                });
+              }
+              else if (error.response.status = '403') {
+                window.Swal.fire({
+                  toast: true,
+                  position: 'top-end',
+                  timer: 2000,
+                  showConfirmButton: false,
+                  icon: 'error',
+                  title: `You have posted number of allowed post can't post more`,
+                });
               }
             });
           } catch (err) {
-            console.log(err);
+            window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: `Something went Wrong`,
+            });
           }
         }
       });
@@ -287,6 +234,7 @@ export default {
       jobSkills,
       form,
       rules,
+      companywebsite,
     };
   },
 };
@@ -297,9 +245,11 @@ export default {
   max-width: 600px;
   margin: 0 auto;
 }
+
 .card-form {
   padding: 20px;
 }
+
 .v-text-field,
 .v-select,
 .v-textarea {
@@ -313,9 +263,11 @@ export default {
 .fs-4 {
   font-size: 1.5rem;
 }
+
 .mt-5 {
   margin-top: 20px;
 }
+
 .pt-5 {
   padding-top: 20px;
 }
@@ -323,15 +275,18 @@ export default {
 .v-card-actions {
   text-align: right;
 }
+
 .custom-card {
   width: auto;
 }
+
 .v-text-field,
-  .v-select,
-  .v-textarea {
-    margin-bottom: 0; 
-  }
-  .custom-card {
-    width: auto;
-  }
+.v-select,
+.v-textarea {
+  margin-bottom: 0;
+}
+
+.custom-card {
+  width: auto;
+}
 </style>

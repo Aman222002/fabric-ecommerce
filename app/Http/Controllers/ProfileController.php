@@ -45,7 +45,7 @@ class ProfileController extends Controller
         $user = auth()->user();
         $userId =  $user->id;
         // dd($user);
-        $company = Company::where("user_id",   $userId)->with('address','jobs')->get();
+        $company = Company::where("user_id",   $userId)->with('address', 'jobs')->get();
 
         if (!$company) {
             return response()->json(['error' => 'Company not found'], 404);
@@ -63,7 +63,6 @@ class ProfileController extends Controller
         $user = auth()->user();
         $userId = $user->id;
         $company = Company::where("user_id", $userId)->get();
-
         if (!$company) {
             return response()->json(['error' => 'Company not found'], 404);
         }
@@ -77,51 +76,51 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         try {
-        $user = auth()->user();
-        $userId = $user->id;
+            $user = auth()->user();
+            $userId = $user->id;
 
 
-        $company = Company::where("user_id", $userId)->first();
-        if (!$company) {
-            return response()->json(['error' => 'Company not found'], 404);
+            $company = Company::where("user_id", $userId)->first();
+            if (!$company) {
+                return response()->json(['error' => 'Company not found'], 404);
+            }
+            $user->update([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+            ]);
+            $image = $request->file('logo');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/assest', $imageName);
+
+            $company->update([
+
+                'company_name' => $request->input('company_name'),
+                'company_email' => $request->input('company_email'),
+                'logo' => $imageName
+
+            ]);
+            $address = Address::where('company_id', $company->id)->first();
+            if (!$address) {
+                return response()->json(['error' => 'Address not found'], 404);
+            }
+
+            $address->update([
+                'first_line_address' => $request->input('first_line_address'),
+                'street' => $request->input('street'),
+                'city' => $request->input('city'),
+                'state' => $request->input('state'),
+                'postal_code' => $request->input('zip_code'),
+            ]);
+
+
+
+
+            return response()->json(['message' => 'User and company profiles updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-        $user->update([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-        ]);
-        $image = $request->file('logo');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->storeAs('public/assest', $imageName);
-
-        $company->update([
-            
-            'company_name' => $request->input('company_name'),
-            'company_email' => $request->input('company_email'),
-            'logo' => $imageName
-
-        ]);
-        $address = Address::where('company_id', $company->id)->first();
-        if (!$address) {
-            return response()->json(['error' => 'Address not found'], 404);
-        }
-
-        $address->update([
-            'first_line_address' => $request->input('first_line_address'),
-            'street' => $request->input('street'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'postal_code' => $request->input('zip_code'),
-        ]);
-      
-       
-
-       
-        return response()->json(['message' => 'User and company profiles updated successfully']);
-    }catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
     /**
      * Remove the specified resource from storage.
      */
@@ -139,7 +138,7 @@ class ProfileController extends Controller
     //         if($user->hasRole('Company Admin')){
     //             $companyId =  $user->company ? $user->company->id : 0;
     //         }
-            
+
     //         $jobs = Job::with("company");
 
     //         if($companyId != 0){
@@ -148,7 +147,7 @@ class ProfileController extends Controller
     //         $jobs =   $jobs->get();
 
     //         // $jobs = Job::all();
-          
+
     //         return response()->json(['status' => true, 'data' => $jobs], 200);
     //     } catch (\Exception $e) {
     //         Log::error($e->getMessage());
@@ -158,33 +157,32 @@ class ProfileController extends Controller
     public function updateaddress(Request $request)
     {
         try {
-        $user = auth()->user();
-        $userId = $user->id;
+            $user = auth()->user();
+            $userId = $user->id;
 
 
-        $company = Company::where("user_id", $userId)->first();
-        if (!$company) {
-            return response()->json(['error' => 'Company not found'], 404);
+            $company = Company::where("user_id", $userId)->first();
+            if (!$company) {
+                return response()->json(['error' => 'Company not found'], 404);
+            }
+
+
+
+            $address = Address::where('company_id', $company->id)->first();
+            if (!$address) {
+                return response()->json(['error' => 'Address not found'], 404);
+            }
+
+            $address->update([
+                'first_line_address' => $request->input('first_line_address'),
+                'street' => $request->input('street'),
+                'city' => $request->input('city'),
+                'state' => $request->input('state'),
+                'postal_code' => $request->input('postal_code'),
+            ]);
+            return response()->json(['message' => 'User and company profiles updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-      
-
-     
-        $address = Address::where('company_id', $company->id)->first();
-        if (!$address) {
-            return response()->json(['error' => 'Address not found'], 404);
-        }
-
-        $address->update([
-            'first_line_address' => $request->input('first_line_address'),
-            'street' => $request->input('street'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'postal_code' => $request->input('postal_code'),
-        ]);
-        return response()->json(['message' => 'User and company profiles updated successfully']);
-    }catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
-
 }
