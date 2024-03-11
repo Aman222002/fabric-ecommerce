@@ -1,41 +1,89 @@
 <template>
-  <div>
-   
-    <v-btn color="success" class="new-job-btn">
-      <a href="/jobs-detail" class="new-job-link">Check New Job</a>
-    </v-btn>
-    <div class="card-container">
-      <v-card v-for="savedJob in savedJobs" :key="savedJob.id" class="job-card">
-        <v-card-title style="text-align: center; color: green;">{{ savedJob.job.title }}</v-card-title>
-        <v-card-text style="margin-top: 20px;">
-          <div style="display: flex; align-items: center;">
-    <v-icon color="black">mdi-domain</v-icon>
-    <span style="font-size: 20px;">{{ savedJob.company.company_name }}<v-icon color="black" style="margin-left: 200px;font-size: 20px;">mdi-map-marker</v-icon>{{ savedJob.job.location }} </span>
-  </div><br><br>
-  <div style="display: flex; align-items: center;">
-    <v-icon color="black" >mdi-email-box</v-icon>
-  <span style="font-size: 20px;">{{ savedJob.company.company_email }}<v-icon    color="black" style="margin-left: 85px;font-size: 20px;">mdi-school</v-icon>{{savedJob.job.qualifications }}   </span>
-  </div><br><br>
-  <div style="display: flex; align-items: center;">
-   
-    <v-icon color="black" >mdi-currency-rupee</v-icon>
-  <span style="font-size: 20px;">{{savedJob.job.salary }}<v-icon color="black" style="margin-left: 270px;font-size: 20px;" >mdi-desktop-classic</v-icon>{{ savedJob.job.experience}} </span>
-  </div>
-          
-        </v-card-text>
-        <v-card-actions>
-          <v-btn   color="primary"  style=" color: white;" @click="apply(savedJob.job.id)">Apply</v-btn>
-   
-          <v-icon @click="deleteItem(savedJob.id)" color="red" style="font-size: 40px;"  class="delete-icon">mdi-delete-outline </v-icon>
-        </v-card-actions>
-      </v-card>
+  <div class="save_Jobs">
+    <div class="sec-title text-center">
+      <h2>Featured Jobs</h2>
+      <div class="text">
+        Know your worth and find the job that qualify your life
+      </div>
+    </div>
+    <div class="body_page_section">
+      <v-container class="w-75 mb-6">
+        <v-row align="center" justify="center">
+          <v-col
+            cols="auto"
+            class="save_Jobs_col job-card"
+            sm="12"
+            md="12"
+            lg="6"
+            xl="6"
+            v-for="savedJob in savedJobs"
+            :key="savedJob.id"
+          >
+            <v-card class="mx-auto my-3 company_info">
+              <div class="job_info">
+                <v-card-title
+                  ><a href="#"> {{ savedJob.job.title }}</a>
+                </v-card-title>
+                <ul class="company_seat">
+                  <li>
+                    <v-icon>mdi-compare</v-icon
+                    >{{ savedJob.company.company_name }}
+                  </li>
+                  <li>
+                    <v-icon>mdi-map-marker-outline </v-icon
+                    >{{ savedJob.job.location }}
+                  </li>
+                  <li>
+                    <v-icon>mdi-email-box</v-icon
+                    >{{ savedJob.company.company_email }}
+                  </li>
+                  <li>
+                    <v-icon>mdi-school</v-icon>{{ savedJob.job.qualifications }}
+                  </li>
+                  <li>
+                    <v-icon>mdi-currency-rupee</v-icon>{{ savedJob.job.salary }}
+                  </li>
+                  <!-- <li>
+                  <v-icon>mdi-desktop-classic</v-icon
+                  >{{ jobApplication.job.experience }}
+                </li> -->
+                  <!-- <li>
+                  <v-icon>mdi-clock-time-two-outline</v-icon
+                  >{{ featuredJob.time }}
+                </li> -->
+                </ul>
+                <!-- <ul class="company_time">
+                <li>{{ featuredJob.companyTime }}</li>
+                <li>{{ featuredJob.companyStates }}</li>
+                <li>{{ featuredJob.projectDuration }}</li>
+              </ul> -->
+              </div>
+
+              <v-card-actions>
+                <v-btn @click="apply(savedJob.job.id)">Apply</v-btn>
+
+                <v-icon
+                  @click="deleteItem(savedJob.id)"
+                  color="red"
+                  class="delete-icon"
+                  >mdi-delete-outline
+                </v-icon>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </div>
   </div>
 </template>
 
+
+
+
+
 <script>
 import { ref } from "vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "JobSaved",
@@ -114,42 +162,104 @@ export default {
 };
 </script>
 
-<style>
-.title-container {
-  text-align: center;
-  margin-top: 20px;
-}
 
-.saved-text {
-  color: red;
-}
 
-.new-job-btn {
-  margin-top: 20px;
+<style >
+/* // save Jobs only */
+.body_page_section {
+  background: #fff;
+  padding: 50px 0 100px;
 }
-
-.new-job-link {
-  text-decoration: none;
+.save_Jobs .sec-title {
+  margin-bottom: 50px;
 }
-
-.card-container {
+.save_Jobs .sec-title h2 {
+  position: relative;
+  display: block;
+  font-size: 30px;
+  line-height: 1.2em;
+  color: #202124;
+  font-weight: 500;
+}
+.save_Jobs .sec-title .text {
+  position: relative;
+  margin-top: 15px;
+  font-size: 15px;
+  line-height: 26px;
+  color: #696969;
+  font-weight: 400;
+}
+.save_Jobs a.load_more {
+  font-size: 19px;
+  line-height: 20px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 15px 28px;
+  background-color: #1967d2;
+  text-decoration: unset;
+  display: table;
+  color: #fff;
+}
+.save_Jobs .company_info {
+  padding: 15px;
+  width: 100%;
   display: flex;
+  background: #f5f7fc;
+}
+
+.job_info .v-card-title {
+  padding-top: 0;
+}
+.job_info ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  padding-left: 13px;
+  list-style: none;
+}
+.job_info ul li {
+  font-size: 15px;
+  margin-right: 15px;
+}
+.job_info ul li i {
+  font-size: 19px;
+}
+.job_info ul.company_time {
+  margin-top: 8px;
+}
+.job_info ul.company_time li {
+  position: relative;
+  font-size: 13px;
+  line-height: 15px;
+  margin-right: 15px;
+  padding: 5px 20px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  background: rgba(25, 103, 210, 0.15);
+  color: #1967db;
+}
+.job_info ul.company_time li:nth-child(2) {
+  background: #93faae;
+  color: #34a853;
+}
+.job_info ul.company_time li:nth-child(3) {
+  background: #fddb91;
+  color: #ffae00;
 }
 
-.job-card {
-  width: 600px; 
-  margin: 20px;
+.job_info .v-card-title a {
+  color: #202124;
+  text-decoration: unset;
 }
-
-.job-info {
-  display: flex;
-  justify-content: space-between;
+.body_page_section .company_info .v-card-actions button.v-btn {
+  color: #fff;
+  background-color: #1967d2;
+  font-size: 15px;
+  border-radius: 8px;
+  font-weight: 400;
+  height: 100% !important;
+  padding: 5px 11px;
+  margin-right: 5px;
 }
-
-.info-label {
-  font-weight: bold;
-}
-
 </style>

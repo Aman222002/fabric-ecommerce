@@ -39,7 +39,6 @@
               <v-btn @click="searchJobs">Search</v-btn>
             </v-card>
           </v-col>
-
           <v-col
             cols="auto"
             sm="12"
@@ -366,11 +365,7 @@ export default {
   background: #fff;
   padding: 50px 0 100px;
 }
-/* .find_Job_list_left button.v-btn {
-  position: absolute;
-  top: 5%;
-  right: 0;
-} */
+
 .find_Job_list_right .custom-card {
   padding: 2% 1%;
   background: #fff;
