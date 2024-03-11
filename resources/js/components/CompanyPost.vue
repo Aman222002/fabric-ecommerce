@@ -215,24 +215,16 @@ export default {
         console.error(err);
       }
     };
-
+    //getting Jobs posted by company
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
+        console.log(response.data);
         jobs.value = response.data.data;
       } catch (err) {
         console.error(err);
       }
     };
-    const companypost = async () => {
-      try {
-        const response = await axios.get("/companypost");
-        jobs.value = response.data.data;
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
     const openDetailPanel = (job) => {
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
@@ -241,11 +233,13 @@ export default {
       detail.value.description = job.description;
       detail.value.vacancy = job.vacancy;
       detail.value.title = job.title;
+      detail.value.created_at = job.company.created_at;
       detail.value.id = job.id;
     };
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
+    //For job apply
     const apply = async (id) => {
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
@@ -257,6 +251,7 @@ export default {
               text: "Applied successfully ",
               confirmButtonText: "OK",
             });
+            window.location.href = response.data.company_url;
           }
         });
       } catch (err) {
@@ -305,9 +300,13 @@ export default {
     const isDescriptionLong = (description) => {
       return description.length > 90;
     };
+    const formatCreatedAt = (createdAt) => {
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      return new Date(createdAt).toLocaleDateString(undefined, options);
+    };
 
     onMounted(() => {
-      companypost();
+      // companypost();
       fetchJobs();
     });
     return {
@@ -315,7 +314,7 @@ export default {
       jobTitle,
       location,
       searchJobs,
-      companypost,
+      // companypost,
       usersStore,
       closeDetailDialog,
       apply,

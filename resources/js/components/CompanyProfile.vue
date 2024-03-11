@@ -497,15 +497,28 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-
+import { useUsersStore } from "../store/user";
 export default {
   name: "CompanyProfile",
   setup() {
     const company = ref([]);
+    const address=ref({
+    first_line_address: "",
+      street: "",
+      city: "",
+      state: "",
+      postal_code: "",
+  });
+
+     const store = useUsersStore () ;
     const user = ref([]);
     const fileInput = ref();
     const image = ref(null);
     const isEditModalOpen = ref(false);
+    const modalOpen = ref(false);
+    const editedDescription = ref({
+      description:''
+    });
     const editedJob = ref({
       name: "",
       email: "",
@@ -529,20 +542,22 @@ export default {
     const fetchCompanyProfile = async () => {
       try {
         const response = await axios.get(`/company/list`);
+        console.log(response.data);
         company.value = response.data.companydata;
+        // store.company.company_name
         user.value = response.data.user;
-        console.log(response.data.companydata);
+         address.value=response.data.companydata.address ;
+       console.log(response.data.companydata.address);
       } catch (error) {
         console.error("Error fetching company profile:", error);
       }
     };
-
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
       editedJob.value.phone = user.value.phone;
-      editedJob.value.company_name = company.value[0].company_name;
-      editedJob.value.company_email = company.value[0].company_email;
+      editedJob.value.company_name = company.value.company_name;
+      editedJob.value.company_email = company.value.company_email;
       editedJob.value.logo = null;
       isEditModalOpen.value = true;
     };
@@ -550,7 +565,12 @@ export default {
     const closeEditModal = () => {
       isEditModalOpen.value = false;
     };
-
+    // const fetchPlan = async () => {
+    //   const response = await axios.get(`/find/plan/${user.value.plan_id}`);
+    //   console.log(response);
+    //   currentplan.value = response.data.data;
+    //   console.log(currentplan.value);
+    // };
     const saveEditedJob = async () => {
       try {
         const formData = new FormData();
@@ -565,7 +585,8 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         });
-        isEditModalOpen.value = false;
+        closeEditAddressModal();
+        window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
@@ -589,20 +610,24 @@ export default {
     onMounted(() => {
       fetchCompanyProfile();
     });
-    const openEditAddressModal = () => {
-      if (company.value.length > 0 && company.value[0].address) {
-        editedAddress.value.first_line_address =
-          company.value[0].address.first_line_address;
-        editedAddress.value.street = company.value[0].address.street;
-        editedAddress.value.city = company.value[0].address.city;
-        editedAddress.value.state = company.value[0].address.state;
-        editedAddress.value.postal_code = company.value[0].address.postal_code;
-        isEditAddressModalOpen.value = true;
-      } else {
-        console.error("Company data or address not available.");
-      }
-    };
+const openEditAddressModal = () => {
+    isEditAddressModalOpen.value = true;
 
+    if (company.value?.address) {
+        editedAddress.value.first_line_address = company.value.address.first_line_address || '';
+        editedAddress.value.street = company.value.address.street || '';
+        editedAddress.value.city = company.value.address.city || '';
+        editedAddress.value.state = company.value.address.state || '';
+        editedAddress.value.postal_code = company.value.address.postal_code || '';
+    } else {
+        
+        editedAddress.value.first_line_address = '';
+        editedAddress.value.street = '';
+        editedAddress.value.city = '';
+        editedAddress.value.state = '';
+        editedAddress.value.postal_code = '';
+    }
+};
     const closeEditAddressModal = () => {
       isEditAddressModalOpen.value = false;
     };
@@ -610,10 +635,7 @@ export default {
     const saveEditedAddress = async () => {
       try {
         const formData = new FormData();
-        formData.append(
-          "first_line_address",
-          editedAddress.value.first_line_address
-        );
+        formData.append("first_line_address", editedAddress.value.first_line_address);
         formData.append("street", editedAddress.value.street);
         formData.append("city", editedAddress.value.city);
         formData.append("state", editedAddress.value.state);
@@ -624,11 +646,34 @@ export default {
           },
         });
         closeEditAddressModal();
+        window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
     };
+    const openModal = () => {
+      modalOpen.value = true;
+      editedDescription.value.description = company.value.description;
+    };
+    const closeModal = () => {
+      modalOpen.value = false;
+    };
 
+    const saveDescription = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("description", editedDescription.value.description);
+        const response = await axios.post("/company/updatedescription", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        closeModal();
+         window.location.reload();
+      } catch (error) {
+        console.error("Error updating company profile:", error);
+      }
+    };
     return {
       company,
       user,
@@ -652,6 +697,12 @@ export default {
       closeEditAddressModal,
       saveEditedAddress,
       editedAddress,
+      address,
+      modalOpen,
+      editedDescription,
+      store,
+      openModal,
+      saveDescription,closeModal
     };
   },
 };

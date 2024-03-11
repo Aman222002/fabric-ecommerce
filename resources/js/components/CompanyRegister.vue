@@ -180,13 +180,9 @@ export default {
       phone: "",
       company_name: "",
       company_email: "",
-      first_line_address: "",
-      street: "",
-      state: "",
-      city: "",
-      postal_code: "",
+
       phone_number: "",
-      description: "",
+
       status: "1",
       logo: [],
     });
@@ -207,6 +203,28 @@ export default {
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
     ];
+    const showCompanyDetails = ref(true);
+    const disabledFields = ref(false);
+    onMounted(() => {
+      const value = props.data;
+      console.log(value);
+      company.value.name = props.data.name;
+      company.value.email = props.data.email;
+      company.value.phone = props.data.phone;
+
+      if (props.data) {
+        company.value.name = props.data.name;
+        company.value.email = props.data.email;
+        company.value.phone = props.data.phone;
+
+        disabledFields.value = true;
+      }
+      if (window.location.pathname === "/company/register") {
+        showCompanyDetails.value = true;
+      } else {
+        showCompanyDetails.value = false;
+      }
+    });
     const submitForm = () => {
       form.value.validate().then((valid) => {
         // console.log(valid.errors);
@@ -232,6 +250,9 @@ export default {
               formData.append("logo", company.value[key][0]);
             }
           }
+          formData.append("company_Id", props.data.company);
+          formData.append("permission", props.data.permission);
+          console.log(props.data.permission);
           axios
             .post("/company/post", formData, {
               headers: {
@@ -267,6 +288,9 @@ export default {
       phoneRules,
       cityRules,
       stateRules,
+      usersStore,
+      showCompanyDetails,
+      disabledFields,
     };
   },
 };

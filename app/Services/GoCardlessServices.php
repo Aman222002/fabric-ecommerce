@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
 use GoCardlessPro\Client;
 
 class GoCardlessServices
@@ -42,6 +43,7 @@ class GoCardlessServices
     }
     public function removeSubscription($data)
     {
+        // dd($data);
         $this->client->subscriptions()->cancel($data);
     }
 }

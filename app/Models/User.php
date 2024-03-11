@@ -29,10 +29,14 @@ class User extends Authenticatable
         'plan_id',
         'subscription_status',
         'payment_id',
+        'upgrade_status',
+        'upgrade_plan_id',
+        'upgrade_plan_payment_id',
         'phone',
         'status',
         'user_image',
         'reset_token',
+        'company_id',
     ];
 
     /**
@@ -104,4 +108,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class, 'user_id', 'id');
     }
+    public function companies()
+    {
+        return $this->hasMany(Company::class);
+    }
+    public function permissionaccesses()
+    {
+        return $this->hasMany(Permissionaccess::class);
+    }
+    
 }

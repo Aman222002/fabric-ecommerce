@@ -123,8 +123,33 @@ export default {
       axios.get("/company/logout");
       window.location.href = "/job";
     };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/user/data");
+        console.log(response.data);
+        users.value = response.data;
+        console.log(users.value);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    const hasPermission = (permission) => {
+      if (users.value && users.value.permissions) {
+        return users.value.permissions.includes(permission);
+      }
+      return false;
+    };
+    const hasrole = (role) => {
+      console.log(role);
+      if (users.value && users.value.roles) {
+        console.log(users);
+        return users.value.roles.includes(role);
+      }
+      return false;
+    };
 
     onMounted(() => {
+      fetchUserData();
       window.addEventListener("popstate", updateRoute);
     });
 
@@ -137,6 +162,8 @@ export default {
       requests,
       updateRoute,
       logout,
+      hasPermission,
+      hasrole,
     };
   },
 };
