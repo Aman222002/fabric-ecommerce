@@ -77,7 +77,6 @@ import {
     DxRequiredRule,
     DxEmailRule,
     DxExport,
-    DxSelectBox,
 } from "devextreme-vue/data-grid";
 import {
     DxForm,
@@ -173,9 +172,9 @@ const component = {
     DxTabPanel,
     DxBox,
     DxBoxItem,
+    DxTabItem,
     DxList,
     DxDropDownBox,
-    DxSelectBox,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);

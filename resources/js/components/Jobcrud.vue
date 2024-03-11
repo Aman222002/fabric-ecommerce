@@ -69,7 +69,7 @@
         </template>
         <v-card>
           <v-list>
-            <v-list-item v-for="item in jobActions" class="dropdown"
+            <v-list-item :v-for="item in jobActions" class="dropdown"
               @click="duplicateJob(data.row.data.id, item.text)">{{
     item.text }}</v-list-item>
           </v-list>
@@ -89,7 +89,6 @@ import axios from "axios";
 import dxGridStore from "../composition/dxGridStore";
 import masterTemplate from "./MasterdetailApplicant.vue";
 import { ref, onMounted } from "vue";
-import { DxDropDownBox } from "devextreme-vue";
 export default {
   name: "JobCrud",
   components: {

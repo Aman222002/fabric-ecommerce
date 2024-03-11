@@ -14,8 +14,8 @@
         </v-list-item>
         <v-list-item v-if=" hasPermission('Post Job')|| hasrole('Company Admin')" :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
         </v-list-item>
-        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
-        </v-list-item>
+        <!-- <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
+        </v-list-item> -->
       </v-list-group>
       
       <v-list-item :class="{ 'group': true, 'active': currentRoute === '/findcv' }" href="/findcv"
