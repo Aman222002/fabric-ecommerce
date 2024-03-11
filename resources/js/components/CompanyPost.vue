@@ -36,6 +36,11 @@
               Read More
             </span>
           </div><br>
+          <div style=" align-items: center;">
+            
+            <span style="font-size: 18px;">Posted At:{{formatCreatedAt(job.company.created_at)}}</span>
+          </div><br>
+
         </v-card-text>
         <hr>
         <v-card-actions style="margin-left: 20px;">
@@ -80,7 +85,10 @@
             <div style="font-size: 18px">
               <v-icon color="black">mdi-note</v-icon>
               <span style="font-size: 15px; margin-left: 90px; display: block;">{{ detail.description }}</span>
-            </div>
+            </div><br />
+            <div style=" align-items: center;">
+            <span style="font-size: 18px;">Posted At:{{formatCreatedAt(detail.created_at)}}</span>
+          </div><br>
           </v-card-text>
           <v-card-actions>
             <v-btn class="bg-primary" v-if="usersStore.isloggedin" @click="apply(detail.id)">Apply</v-btn>
@@ -147,9 +155,9 @@ export default {
       detail.value.description = job.description;
       detail.value.vacancy = job.vacancy;
       detail.value.title = job.title;
+      detail.value.created_at = job.company.created_at;
       detail.value.id = job.id;
     };
-
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
@@ -214,6 +222,10 @@ export default {
     const isDescriptionLong = (description) => {
       return description.length > 90;
     };
+    const formatCreatedAt = (createdAt) => {
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      return new Date(createdAt).toLocaleDateString(undefined, options);
+    };
 
     onMounted(() => {
       // companypost();
@@ -233,7 +245,8 @@ export default {
       detailPanelVisible,
       detail,
       truncateDescription,
-      isDescriptionLong
+      isDescriptionLong,
+      formatCreatedAt
     };
   },
 };
@@ -250,7 +263,7 @@ export default {
 .custom-card {
   display: flex;
   flex-direction: column;
-  height: 250px;
+  height: 290px;
   width: 1100px;
   border: 1px solid rgb(21, 21, 22);
   background-color: white;

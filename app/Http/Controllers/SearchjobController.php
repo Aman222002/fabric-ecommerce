@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\UserSkill;
-
+use Carbon\Carbon;
 class SearchjobController extends Controller
 {
     /**

@@ -7,6 +7,11 @@ export const useUsersStore = defineStore({
             cart_item: [],
             user: null,
             isLoggedIN: false,
+            company:{
+                company_name:'',
+                company_email:'',
+                phone:'',
+            },
         };
     },
     actions: {
@@ -52,6 +57,7 @@ export const useUsersStore = defineStore({
         },
     },
     getters: {
+        Company:(state)=> state.company,
         isloggedin: (state) => state.isLoggedIN,
         countCartItems: (state) => state.cart_item.length,
         getCartItems(state) {

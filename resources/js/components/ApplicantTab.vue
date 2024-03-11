@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <DxDataGrid :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+        <DxDataGrid  :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
             :column-auto-width="true" :allow-column-resizing="true">
             <DxSearchPanel :visible="true" />
             <DxColumn data-field="name" caption="Applicant Name" data-type="string" />
@@ -9,8 +9,9 @@
             <DxColumn data-field="phone" caption="Phone" data-type="string">
             </DxColumn>
             <DxMasterDetail :enabled="true" template="masterTemplateTab" />
-            <template #masterTemplateTab="{ data: cellInfo }">
-                <masterTemplateTab :qualification-info="cellInfo.data" />
+      <template #masterTemplateTab="{ data: cellInfo }">
+                <masterTemplateTab :qualification-info="cellInfo.data" >
+                </masterTemplateTab>
             </template>
         </DxDataGrid>
     </div>
@@ -33,8 +34,9 @@ export default {
     },
     setup(props) {
         console.log(props.jobId)
-        const loadURL = `/jobs/application/${props.jobId}`;
-        const { dataSource } = dxGridStore(loadURL, null, null, null, null);
+        const id = props.jobId;
+        const loadURL = `/jobs/application/${id}`;
+        const { dataSource } = dxGridStore(loadURL,null, null, null);
         return {
             dataSource,
         };

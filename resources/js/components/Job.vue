@@ -1,221 +1,187 @@
 <template>
-  <div class="full-screen-image-container">
-    <v-img
-      src="/storage/assest/1.png"
-      contain
-      class="mb-5 full-screen-image"
-    ></v-img>
-  </div>
-  <div style="text-align: center">
-    <h3 class="mb-4 title-text">Let's hire your next great candidate Fast.</h3>
-    <br />
-    <v-btn
-      large
-      color="primary"
-      style="color: white; width: 130px; height: 50px"
-      @click="jobDialog = true"
-    >
-      Post a Job
-    </v-btn>
-  </div>
-  <v-dialog
-    v-model="jobDialog"
-    max-width="600px"
-    @click:outside="jobDialog = false"
-    class="login-dialog"
-  >
-    <v-card>
-      <v-card-title style="font-size: 30px">Login</v-card-title>
-      <v-card-text>
-        <v-text-field
-          label="User Email"
-          v-model="formData.email"
-          variant="outlined"
-          :rules="emailRules"
-          density="compact"
-          outlined
-          required
-          style="font-size: 20px; font-weight: bold"
-        ></v-text-field
-        ><br />
-        <v-text-field
-          label="Password"
-          variant="outlined"
-          v-model="formData.password"
-          outlined
-          required
-          density="compact"
-          :rules="companyNameRules"
-          type="password"
-          style="font-size: 20px; font-weight: bold"
-        ></v-text-field>
-        
-      </v-card-text>
-      <a href="" style="text-align: center;">forgot password ?</a>
-      <v-card-actions class="login-dialog-actions">
-        <v-btn @click="handleLogin" class="bg-primary">Login</v-btn>
-      </v-card-actions>
-      <h5 class="new-client-text" style="text-align: center">
-        Are you a new client?
-        <a
-          href="/company/register"
-          class="register-link"
-          style="
-            margin-top: 30px;
-            text-decoration: none;
-            color: rgb(65, 83, 245);
-          "
-          >Register Now</a
-        >
-      </h5>
-    </v-card>
-  </v-dialog>
-  <div class="aa">
-    <v-row justify="center" align="center" class="mt-5">
-      <v-col cols="12" md="4" class="card-col">
-        <v-card>
-          <v-img
-            src="/storage/assest/23.png"
-            alt="Cinque Terre"
-            style="height: 140px"
-          ></v-img>
-          <v-card-title style="font-size: 30px"
-            >Create your free account</v-card-title
-          >
-          <v-card-text style="font-style: 20px; margin-top: 10px">
-            All you need is your email address to create an account<br />
-            and start building your job post.
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" md="4" class="card-col">
-        <v-card>
-          <v-img
-            src="/storage/assest/24.png"
-            alt="Cinque Terre"
-            style="height: 140px"
-          ></v-img>
-          <v-card-title style="font-size: 30px"
-            >Build your job post</v-card-title
-          >
-          <v-card-text style="font-style: 20px; margin-top: 10px">
-            Then just add a title, description and location to your job post and
-            you're ready to go.
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" md="4" class="card-col">
-        <v-card>
-          <v-img
-            src="/storage/assest/25.png"
-            alt="Cinque Terre"
-            style="height: 140px"
-          ></v-img>
-          <v-card-title style="font-size: 30px">Post your job</v-card-title>
-          <v-card-text style="font-style: 20px; margin-top: 10px">
-            After you post your job, use our state-of-the-art <br />tools to
-            help you find dream talent.
-          </v-card-text>
+  <v-container class="background">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="10">
+        <v-card class="elevation-12 mt-3" style="margin-bottom: 10px;">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-card-text class="mt-12">
+                <v-form ref="form" @submit.prevent="submitForm">
+                  <p class="text-center" style="font-size: 20px;font-style: sans-serif;">
+                    Company Login
+                  </p>
+                  <v-row align="center" justify="center">
+                    <v-col cols="12" sm="10">
+                      <v-text-field label="Email" variant="outlined" v-model="formData.email" :rules="emailRules" dense
+                        density="compact" color="blue" autocomplete="false" class="mt-8" style="font-size: 10px;" />
+                 
+                      <v-text-field label="Password" variant="outlined" v-model="formData.password" :rules="passRules"
+                        dense density="compact" color="blue" autocomplete="false" type="password"
+                        style="margin-top: 10px;font-size: 10px;" />
+                      <v-row>
+                        <v-col cols="12" sm="7">
+                          <v-checkbox label="Remember Me" class="mt-n1" color="blue">
+                          </v-checkbox>
+                        </v-col>
+                        <v-col cols="12" sm="5" class="mt-3">
+                          <a href="/forget/password" class="register-link" style="text-decoration: none;">forgot
+                            password?</a>
+                        </v-col>
+                      </v-row>
+                      <v-btn type="submit" dark block tile color="primary" @click="showCompanyListDialog">Login</v-btn>
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-card-text>
+            </v-col>
+            <v-col cols="12" md="6" class="blue rounded-bl-xl">
+              <div class="text-center py-8" style="margin-top: 110px">
+                <v-card-text class="white--text">
+                  <p style="font-size: 20px">Don't Have an Account Yet?</p>
+                  <p style="font-size: 13px; margin-top: 10px">
+                    Let's get you all set up so you can start creating your
+                    first onboarding experience
+                  </p>
+                  <v-btn color="primary" tile outlined dark @click="signup()" style="margin-top: 20px">Register Now</v-btn>
+                </v-card-text>
+              </div>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
-  </div>
+    
+    <v-dialog v-model="companyListDialog" max-width="500">
+      <v-card>
+        <v-card-title>Which Company You Want To Login ?</v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item v-for="(company, index) in companyNames" :key="index" @click="selectedCompany = company">
+  <v-list-item-title>{{ company.company_name }}</v-list-item-title>
+</v-list-item>
+          </v-list>
+        </v-card-text>
+       
+      </v-card>
+    </v-dialog>
+    
+  </v-container>
 </template>
+
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useUsersStore } from "../store/user";
 import axios from "axios";
+
 export default {
   name: "Job",
   setup() {
     const usersStore = useUsersStore();
     const jobDialog = ref(false);
+    const companyListDialog = ref(false);
+    const selectedCompany = ref(null);
     const email = ref("");
     const password = ref("");
     const formData = ref({
       password: "",
       email: "",
+      company_name:"",
     });
-
-    const companyNameRules = [(v) => !!v || "Password is require"];
-
+    const companyNameRules = [(v) => !!v || "Company Name is require"];
+    const passRules = [(v) => !!v || "Password is require"];
     const emailRules = [
       (v) => !!v || "Email is required",
       (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",
     ];
-    const handleLogin = async () => {
+    const companyNames = ref([]);
+    
+    const submitForm = async () => {
+      if (!formData.value.company_name) {
+     
+        return;
+      }
       try {
         const response = await axios.post("/company/login", formData.value);
         if (response.data.status == true) {
-          jobDialog.value = false;
+          companyListDialog.value = false;
           usersStore.isLogIn();
-
+          // console.log(response.data.company_data[0].company_name);
+          // usersStore.company.company_name = response.data.company_data[0].company_name;
+          // usersStore.company.company_email = response.data.company_data[0].company_email;
+          // usersStore.company.phone = response.data.company_data[0].phone_number;
+          console.log(response.data);
           window.location.href = "/postjob";
         }
       } catch (err) {
         console.error(err);
       }
     };
+    
+    const showCompanyListDialog = async () => {
+      try {
+        const response = await axios.get("/company/names",{params: {
+          email: formData.value.email,
+        }});
+        console.log(formData.value.email)
+        if (response.data.status == true) {
+          companyNames.value = response.data.companyNames;
+          companyListDialog.value = true;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    
+    const closeCompanyListDialog = () => {
+      companyListDialog.value = false;
+    };
+    
+    const signup = async () => {
+      window.location.href = "/company/register";
+    };
+    watch(selectedCompany, () => {
+      if (selectedCompany.value) {
+        formData.value.company_name = selectedCompany.value.company_name;
+        submitForm();
+      }
+    });
+    
     return {
-      jobDialog,
       password,
       email,
-      handleLogin,
+      submitForm,
       companyNameRules,
       emailRules,
       formData,
+      passRules,
+      companyNames,
+      showCompanyListDialog,
+      closeCompanyListDialog,
+      companyListDialog,
+      signup, selectedCompany,
     };
   },
 };
 </script>
+
 <style scoped>
-.login-dialog {
-  font-size: 16px;
+.blue {
+  background-color: rgb(54, 194, 250);
 }
 
-.login-dialog-actions {
-  justify-content: center;
+.rounded-bl-xl {
+  border-bottom-left-radius: 250px;
 }
-
-.login-btn {
-  color: #ffffff;
+.background{
+  background-image: url('/storage/assest/1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-
-.new-client-text {
-  margin-top: 10px;
-}
-
-.register-btn {
-  color: #ffffff;
-  background-color: #2ecc71;
-}
-
-.register-link {
-  text-decoration: none;
-  color: #ffffff;
-}
-.aa {
-  margin-top: 30px;
-  border-style: solid;
-  border-color: rgb(12, 11, 11);
-  width: 100%;
-}
-.card-col {
-  margin-bottom: 15px;
-  border-bottom: 1px solid #ccc;
-}
-.full-screen-image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.full-screen-image {
-  max-width: 70%;
-
-  object-fit: contain;
-  opacity: 0.8;
+.v-list-item:hover{
+background-color:  rgb(54, 194, 250);
 }
 </style>
+ 
+ 
+

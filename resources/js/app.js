@@ -173,8 +173,8 @@ const component = {
     DxBox,
     DxBoxItem,
     DxTabItem,
-    DxDropDownBox,
     DxList,
+    DxDropDownBox,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
@@ -203,6 +203,9 @@ app.component("postjob-component", postjob);
 
 import JobCrud from "./components/Jobcrud.vue";
 app.component("jobcrud-component", JobCrud);
+
+import draftjobs from "./components/draftjobs.vue";
+app.component("draftjob-component", draftjobs);
 
 import CompanyNav from "./components/CompanyNav.vue";
 app.component("companynav-component", CompanyNav);
@@ -235,6 +238,12 @@ app.component("company-plan", CompanyPlan);
 
 import UserProfile from "./components/UserProfile.vue";
 app.component("user-profile", UserProfile);
+
+import user from "./components/user.vue";
+app.component("user-component",user);
+
+import CompanyUsers from "./components/CompanyUsers.vue";
+app.component("companyuser-component",CompanyUsers);
 
 /**
  * The following block of code may be used to automatically register your

@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Company;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvitationEmail;
+use App\Models\Invitation;
+use App\Models\Permission;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -81,21 +88,27 @@ class UserController extends Controller
                 'email' => 'required|unique:users',
                 'password' => 'required',
                 'phone' => 'required|unique:users',
+              
+                
             ]);
             $input = $request->all();
+            $company_id = session('company_id');
+         
             $user = User::create([
                 'name' =>  $input['name'],
                 'email' =>  $input['email'],
                 'password' =>  Hash::make($input['password']),
                 'phone' =>  $input['phone'],
+                'company_id' => $company_id,
             ]);
+            $user->assignRole('Company Admin');
+           
             return response()->json(['status' => true, 'message' => 'User created successfully'], 200);
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
             return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
-
     /**
      * Display the specified resource.
      */
@@ -279,4 +292,87 @@ class UserController extends Controller
             return response()->json(['error' => 'Failed to update step'], 500);
         }
     }
+
+
+
+    public function addnewuser(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required|unique:users',
+                'phone' => 'required|unique:users', 
+                'permission' => 'required |array',
+            ]);
+            
+            $permissionIds = [];
+            foreach ($request->input('permission') as $permissionName) {
+                $permission = Permission::where('name', $permissionName)->first();
+                if (!$permission) {
+                    return response()->json(['status' => false, 'message' => 'Permission not found'], 404);
+                }
+                $permissionIds[] = $permission->id;
+            }
+        //    dd($permissionIds);
+            $invitedUser = Invitation::create([
+                'user_email' => $request->input('email'),
+                'status' => 'pending'
+            ]);
+            $input = $request->all();
+            $company_id = session('company_id');
+            $company = Company::find($company_id);
+            if (!$company) {
+                return response()->json(['status' => false, 'message' => 'Company not found'], 404);
+            }
+            $url = url('/accepted/'.$invitedUser->id);
+            $url2 = url('/reject/'.$invitedUser->id);
+            Mail::to($input['email'])->send(new InvitationEmail($input['name'], $input['email'], $input['phone'], $company->id, $permissionIds, $url, $url2));
+            return response()->json(['status' => true, 'message' => 'User created successfully'], 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    public function accept(Request $request)
+    {
+    //   dd(urldecode($request->permission));
+        try {
+            $user = Invitation::find($request->id);
+            $user->status = 'accepted';
+            $user->update();
+
+            $existingUser = User::where('email', $user->user_email)->first();
+
+            if (!$existingUser) {
+              //  $serializedPermissions = urlencode(serialize($permissions));
+         
+                $url =  url('/company/register/'.$request->id .'/'.$request->name .'/'.$request->email. '/'.$request->phone. '/'.$request->company. '/'.$request->permission);
+                return redirect($url);
+
+            }
+            else{
+                
+                return redirect('/company/register');
+            }
+            return response()->json(['status' => true, 'message' => 'Invitation accepted successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+    public function reject(Request $request)
+    {
+        try {
+            $user = Invitation::find($request->invitation_id);
+            $user->status = 'rejected';
+            $user->update();
+            return response()->json(['status' => true, 'message' => 'Invitation rejected successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    
 }

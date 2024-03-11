@@ -19,14 +19,14 @@ class CompanyRagistrationRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            'company_name' => 'required|string|max:255',
-            'company_email' => 'required|email|unique:companies|max:255',
-            'phone_number' => 'string|max:20',
-            'description' => 'nullable|string',
-            'status' => 'required|in:0,1',
-        ];
-    }
+    // public function rules(): array
+    // {
+    //     return [
+    //         'company_name' => 'required|string|max:255',
+    //         'company_email' => 'required|email|max:255',
+    //         'phone_number' => 'string|max:20',
+    //         'description' => 'nullable|string',
+    //         'status' => 'required|in:0,1',
+    //     ];
+    // }
 }

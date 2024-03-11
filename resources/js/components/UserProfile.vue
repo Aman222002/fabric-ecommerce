@@ -124,19 +124,21 @@
           </v-table>
         </v-card>
       </v-tab-item>
-      <v-tab-item  v-if="showJob ">
-      <v-card class="card2" style="margin-bottom: 20px; font-size: 16px;" >
-        <v-card-title style="font-size: 16px;">Skills:</v-card-title>
-        <v-card-text>
-    <template v-if="skills.length > 0">
-      <p>{{ skills[0].skill_name }}</p>
-    </template>
-    <template v-else>
-      <p>No skills available</p>
-    </template>
-  </v-card-text>
-      </v-card>
-    </v-tab-item>
+      <v-tab-item v-if="showJob">
+  <v-card class="card2" style="margin-bottom: 20px; font-size: 16px;">
+    <v-card-title style="font-size: 16px;">Skills:</v-card-title>
+    <v-card-text>
+      <template v-if="skills.length > 0">
+        <ul>
+          <li v-for="skill in skills" :key="skill.id">{{ skill.skill_name }}</li>
+        </ul>
+      </template>
+      <template v-else>
+        <p>No skills available</p>
+      </template>
+    </v-card-text>
+  </v-card>
+</v-tab-item>
     </v-card>
   
   </template>

@@ -52,22 +52,6 @@
       </DxDropDownBox>
     </template>
     <DxColumn caption="Qualification" data-field="qualifications" data-type="string" :visible="showcolumn"></DxColumn>
-    <!-- <DxColumn cell-template="buttondropdown"> </DxColumn>
-
-    <template #buttondropdown="{ data: rowData }">
-      <div>
-        <DxButton icon="edit" @click="edit(rowData.data)" style="
-                        background-color: #1976d2;
-                        color: white;
-                        margin-left: 3px;" />
-        <DxButton icon="trash" @click="deletejob(rowData.data)" style="
-                        background-color: #1976d2;
-                        color: white;
-                        margin-left: 3px;
-                    " />
-      </div>
-    </template> -->
-
     <template #dropDown2>
       <DxDropDownBox :accept-custom-value="true" @value-change="selectStatus" label="Select status" labelMode="floating"
         v-model:value="selectedStatus" v-model:opened="DropDown2">
@@ -85,11 +69,9 @@
         </template>
         <v-card>
           <v-list>
-            <v-list-item v-for="item in jobActions" class="dropdown"
+            <v-list-item :v-for="item in jobActions" class="dropdown"
               @click="duplicateJob(data.row.data.id, item.text)">{{
     item.text }}</v-list-item>
-            <!-- <v-list-item @click="duplicateJob(data.row.data.id)">Duplicate</v-list-item>
-            <v-list-item @click="postJob(data.row.data.id)">Post Job</v-list-item> -->
           </v-list>
         </v-card>
       </v-menu>
@@ -100,39 +82,6 @@
       <masterTemplate :application-info="cellInfo.data" />
     </template>
   </DxDataGrid>
-  <!-- <v-dialog max-width="500" v-model="dialog">
-    <v-card title="Dialog">
-      <v-card-text>
-        <v-text-field variant="outlined" v-model="job.title" label="Title" placeholder=" Enter Job Title"
-          density="compact"></v-text-field>
-        <v-select variant="outlined" v-model="job.category" :items="categories" item-title="name" item-value="id"
-          label="Select Category" density="compact"></v-select>
-        <v-select variant="outlined" :items="jobTypes" v-model="job.jobType" item-title="name" item-value="id"
-          label="Select JobType" density="compact"></v-select>
-        <v-select variant="outlined" v-model="job.jobSkill" :items="jobSkills" item-title="skill_name" item-value="id"
-          label="Select Skills" density="compact"></v-select>
-        <v-text-field variant="outlined" v-model="job.vacancy" type="number" min="1" label="Vacancy"
-          placeholder="Vacancy" density="compact"></v-text-field>
-        <v-text-field variant="outlined" v-model="job.salary" label="Salary" placeholder="Salary"
-          density="compact"></v-text-field>
-        <v-text-field variant="outlined" v-model="job.location" label="Location" placeholder="Location"
-          density="compact"></v-text-field>
-        <v-textarea variant="outlined" v-model="job.description" label="Description" placeholder="Description"
-          density="compact"></v-textarea>
-        <v-text-field variant="outlined" v-model="job.qualifications" label="Qualifications"
-          placeholder="Qualifications" density="compact"></v-text-field>
-        <v-select variant="outlined" :items="experienceOptions" v-model="job.experience" label="Experience"
-          placeholder="Select Experience" density="compact"></v-select>
-        <v-text-field variant="outlined" v-model="job.companywebsite" label=" Company Website" placeholder="Website"
-          density="compact"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text="Update" @click="update(job.id)"></v-btn>
-        <v-btn text="Close Dialog" @click="dialog = false"></v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog> -->
 </template>
 
 <script>
@@ -140,7 +89,6 @@ import axios from "axios";
 import dxGridStore from "../composition/dxGridStore";
 import masterTemplate from "./MasterdetailApplicant.vue";
 import { ref, onMounted } from "vue";
-import { DxDropDownBox } from "devextreme-vue";
 export default {
   name: "JobCrud",
   components: {
@@ -382,11 +330,6 @@ export default {
           refreshTable(dataGridRef);
         }
       })
-      // axios.delete(`/post/delete/${e.id}`).then((response) => {
-      //   console.log(response.data);
-      //   dialog.value = false;
-
-      // });
     };
     onMounted(() => {
       fetchCategories();
@@ -468,3 +411,4 @@ export default {
   border: 2px dashed #1976d2;
 }
 </style>
+\
