@@ -8,11 +8,11 @@
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
-            density="compact" outlined></v-text-field>
+            density="compact" outlined :readonly="disabledFields"></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.email" label="Representative Email" :rules="emailRules"
-            density="compact" outlined></v-text-field>
+            density="compact" outlined :readonly="disabledFields"></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
@@ -20,10 +20,10 @@
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules" type="phone"
-            density="compact" outlined></v-text-field>
+            density="compact" outlined :readonly="disabledFields"></v-text-field>
         </v-col>
       </v-row>
-
+      <div v-if="showCompanyDetails">
       <v-row>
         <v-col cols="12" sm="12">
           <p class="mb-4 form-title">Company Details:</p>
@@ -44,52 +44,39 @@
           <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined
             density="compact"></v-file-input>
         </v-col>
-        <v-col cols="6" sm="6">
-          <v-textarea variant="outlined" v-model="company.description" label="Description" outlined
-            density="compact"></v-textarea>
-        </v-col>
+       
       </v-row>
+      </div>
       <v-row>
-        <v-col cols="12">
-          <p class="mb-4 form-title">Company Address:</p>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.first_line_address" label="First Line Address"
-            density="compact" outlined></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.street" label="Street" outlined
-            density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.city" label="City" :rules="cityRules" outlined
-            density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.state" label="State" :rules="stateRules" density="compact"
-            outlined></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.postal_code" label="Postal Code" :rules="postalCodeRules"
-            density="compact" outlined></v-text-field>
-        </v-col>
+       
       </v-row>
       <v-row justify="center">
         <v-col cols="12" class="text-center">
-          <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
+          <v-btn type="submit" color="primary" class="custom-button" >Register Company</v-btn>
+        
         </v-col>
       </v-row>
     </v-form>
   </v-container>
 </template>
 <script>
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
+import { useUsersStore } from "../store/user";
 import axios from 'axios';
+
 export default {
   name: "CompanyRegister",
-  setup() {
+  props:{
+    data:{
+      type:Object,
+      default: () => ({}),
+    }
+  },
+  setup(props) {
+   
     const usersStore = useUsersStore();
     const form = ref(null);
+
     const company = ref({
       name: "",
       email: "",
@@ -97,13 +84,9 @@ export default {
       phone: "",
       company_name: "",
       company_email: "",
-      first_line_address: "",
-      street: "",
-      state: "",
-      city: "",
-      postal_code: "",
+     
       phone_number: "",
-      description: "",
+   
       status: "1",
       logo: [],
     });
@@ -125,6 +108,30 @@ export default {
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
     ];
+    const showCompanyDetails = ref(true); 
+    const disabledFields = ref(false); 
+    onMounted(() => {
+      const value =props.data ;
+      console.log(value);
+       company.value.name=props.data.name;
+       company.value.email=props.data.email;
+       company.value.phone=props.data.phone;
+
+       if (props.data) {
+        company.value.name = props.data.name;
+        company.value.email = props.data.email;
+        company.value.phone = props.data.phone;
+    
+        disabledFields.value = true;
+      }
+      if(window.location.pathname==="/company/register")
+      {
+        showCompanyDetails.value = true;
+      }
+      else{
+        showCompanyDetails.value = false;
+      }
+    });
     const submitForm = () => {
       form.value.validate().then((valid) => {
         // console.log(valid.errors);
@@ -151,6 +158,9 @@ export default {
               formData.append("logo", company.value[key][0]);
             }
           }
+          formData.append("company_Id", props.data.company);
+          formData.append("permission", props.data.permission);
+         console.log(props.data.permission)
           axios
             .post("/company/post", formData, {
               headers: {
@@ -188,8 +198,12 @@ export default {
       cityRules,
       stateRules,
       usersStore,
-    };
+      showCompanyDetails,
+      disabledFields
+     };
+    
   },
+
 };
 </script>
 <style scoped>

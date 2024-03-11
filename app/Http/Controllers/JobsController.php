@@ -24,32 +24,60 @@ class JobsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
             $user = auth()->user();
-
-            $companyId = 0;
-
-            if($user->hasRole('Company Admin')){
-                $companyId =  $user->company ? $user->company->id : 0;
-            }
+            $companyId = session('company_id'); 
             
-            $jobs = Job::with("company");
-
-            if($companyId != 0){
+            $jobs = Job::with("company")->where('is_draft', 0);
+            
+            if($companyId){
                 $jobs->where('company_id', $companyId);
             }
-            $jobs =   $jobs->get();
-
-            // $jobs = Job::all();
-          
-            return response()->json(['status' => true, 'data' => $jobs], 200);
+            
+            $response = [];
+            
+            if ($request->requireTotalCount) {
+                $response['totalCount'] = $jobs->count();
+            }
+            
+            if (isset($request->take)) {
+                $jobs->skip($request->skip)->take($request->take);
+            }
+            
+            if (isset($request->sort)) {
+                $sort = json_decode($request->sort, true);
+                if (count($sort)) {
+                    $jobs->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
+                }
+            } else {
+                $jobs->orderBy('created_at', 'DESC');
+            }
+            
+            if ($request->has('filter')) {
+                $filters = json_decode($request->filter, true);
+                if (count($filters)) {
+                    $filters = is_array($filters[0]) ? $filters[0] : $filters;
+                    $search = !blank($filters[2]) ? $filters[2] : false;
+    
+                    if ($search) {
+                        $jobs->where('name', 'like', "%$search%");
+                    }
+                }
+            }
+            
+            $jobList = $jobs->get();
+            $response['data'] =  $jobList;
+            $totalCount = $jobs->count();
+    
+            return response()->json(['status' => true, 'data' => $jobList, 'totalCount' => $totalCount], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -79,9 +107,7 @@ class JobsController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-
             'title' => 'required',
             'category' => 'required|exists:categories,id',
             'jobType' => 'required|exists:job_types,id',
@@ -90,20 +116,31 @@ class JobsController extends Controller
             'experience' => 'required|string',
             'companywebsite' => 'required|url',
         ]);
+        
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => $validator->errors()], 422);
         }
+        
         try {
-            $user = Auth::user();
-            if (!$user->company) {
-                return response()->json(['status' => false, 'message' => 'User does not have a company'], 422);
+            $companyId = session('company_id');
+            
+            if (!$companyId) {
+                return response()->json(['status' => false, 'message' => 'Company ID not found in session'], 422);
             }
-           
-            $company = $user->company;
+            
+            $company = Company::find($companyId);
+            
+            if (!$company) {
+                return response()->json(['status' => false, 'message' => 'Company not found'], 404);
+            }
+            
+            $user = $company->user;
+            
             $input = $request->all();
+            
             $job = Job::create([
                 'user_id' => $user->id,
-                'company_id' =>  $company->id,
+                'company_id' => $company->id,
                 'title' => $input['title'],
                 'category_id' => $input['category'],
                 'job_type_id' => $input['jobType'],
@@ -116,7 +153,7 @@ class JobsController extends Controller
                 'company_website' => $input['companywebsite'],
                 'skill_id' => $input['jobSkill'],
             ]);
-
+    
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',
@@ -129,6 +166,7 @@ class JobsController extends Controller
             ], 500);
         }
     }
+    
     /**
      * Display the specified resource.
      */
@@ -467,26 +505,10 @@ class JobsController extends Controller
     public function detail($id) {
         try {
             $originalJob = Job::find($id);
-            // $duplicatedJob = new Job;
-            // $duplicatedJob->user_id = auth()->id(); 
-            // $duplicatedJob->company_id = $originalJob->company_id; 
-            // $duplicatedJob->title = $originalJob->title;
-            // $duplicatedJob->category_id = $originalJob->category_id;
-            // $duplicatedJob->job_type_id = $originalJob->job_type_id;
-            // $duplicatedJob->vacancy = $originalJob->vacancy;
-            // $duplicatedJob->salary = $originalJob->salary;
-            // $duplicatedJob->location = $originalJob->location;
-            // $duplicatedJob->description = $originalJob->description;
-            // $duplicatedJob->qualifications = $originalJob->qualifications;
-            // $duplicatedJob->experience = $originalJob->experience;
-            // $duplicatedJob->company_website = $originalJob->company_website;
-            // $duplicatedJob->skill_id = $originalJob->skill_id;
-         
-            // $duplicatedJob->save();
-           
             $duplicatedJob=$originalJob->replicate();
          
             $duplicatedJob->created_at = Carbon::now()->format('Y-m-d');
+            $duplicatedJob->is_draft = 1;
         
             $duplicatedJob->save();
             
@@ -540,6 +562,29 @@ class JobsController extends Controller
             
         } catch (\Exception $e) {
             
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+    }
+    public function getapplicants($id)
+    {
+        try {
+            $job = Job::find($id);
+            if ($job == null) {
+                $message = 'No Job Found.';
+                return response()->json([
+                    'status' => false,
+                    'message' => $message,
+                ], 404);
+            }
+
+        $application = JobApply::where('job_id', $id)->with('user')->get()->map(function($item) {
+            return ($item->user);
+                     });
+        return response()->json([ 'status' => true,
+                'data' => $application,
+            ], 200);
+        } catch (\Exception $e) {
+
             return response()->view('error.view', ['error' => $e->getMessage()], 500);
         }
     }

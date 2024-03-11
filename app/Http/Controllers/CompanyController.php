@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\Plan;
+use App\Models\Permissionaccess;
 use App\Models\UserSubscription;
 use App\Http\Requests\CompanyRagistrationRequest;
 use App\Jobs\SendEmailJob;
@@ -37,12 +38,23 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        return view('companyregister');
+        if ($request) {
+           //dd(($request->permission));
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'permission' => $request->permission,
+            ];
+            return view('companyregister')->with('data', $data);
+        } else {
+            return view('companyregister');
+        }
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -198,7 +210,7 @@ class CompanyController extends Controller
         $params = ["session_token" => $request->session];
         $priceCents = $plan->price * 100;
         $redirectFlow = $this->gocardlessService->completeRedirectFlow($redirect_flow_id, $params);
-        $user->update(['mandate_id' => $redirectFlow->links->mandate, 'gc_customer_id' => $redirectFlow->links->customer, 'mandate_status' => 'pending', 'plan_id' => $request->planId]);
+        $user->update(['mandate_id' => $redirectFlow->links->mandate, 'gc_customer_id' => $redirectFlow->links->customer, 'plan_id' => $request->planId]);
         $data = [
             "amount" => $priceCents,
             "currency" => "USD",
@@ -220,36 +232,49 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
-        $request->validated();
+     // dd( $request);
+        // $request->validated();
         try {
             $input = $request->all();
-            $user = User::create([
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'password' => $input['password'],
-                'phone' => $input['phone'],
-            ]);
-            $user->assignRole('Company Admin');
-            $image = $request->file('logo');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/assest', $imageName);
-            $company =  Company::create([
-                'user_id' =>  $user->id,
-                'company_name' => $input['company_name'],
-                'company_email' => $input['company_email'],
-                'phone_number' => $input['phone_number'],
-                'description' => $input['description'],
-                'logo' => $imageName,
-            ]);
-            $company->address()->create([
-                'company_id' => $company->id,
-                'first_line_address' => $input['first_line_address'],
-                'street' => $input['street'],
-                'city' => $input['city'],
-                'state' => $input['state'],
-                'postal_code' => $input['postal_code'],
-            ]);
-            dispatch(new VerificationMail($user->email));
+            $existingUser = User::where('email', $input['email'])->first();
+            if ($existingUser) {
+                $user = $existingUser;
+            } else {
+                $user = User::create([
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => $input['password'],
+                    'phone' => $input['phone'],
+                    'company_id' => $request->company_Id,
+                ]);
+                $user->assignRole('Company Subadmin');
+            }
+            if ($request->has('permission') && !empty($request->permission)) {
+              
+                foreach (json_decode($request->permission) as $permission) {
+                   // dd($permission);
+                    Permissionaccess::create([
+                        'user_id' => $user->id,
+                        'company_id' => $request->company_Id,
+                        'permission_id' => $permission,
+                    ]);
+                }
+            }
+            if(!($request->company_Id)){
+                $user->assignRole('Company Admin');
+                $image = $request->file('logo');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/assest', $imageName);
+                $company =  Company::create([
+                    'user_id' =>  $user->id,
+                    'company_name' => $input['company_name'],
+                    'company_email' => $input['company_email'],
+                    'phone_number' => $input['phone_number'],
+    
+                    'logo' => $imageName,
+                ]);
+                dispatch(new VerificationMail($user->email));
+            }
             return response()->json([
                 'status' => true,
                 'message' => "Registation Successfully"
@@ -261,6 +286,59 @@ class CompanyController extends Controller
             ], 500);
         }
     }
+    //     public function store(CompanyRagistrationRequest $request)
+    // {
+    //     $request->validated();
+    //     try {
+    //         $input = $request->all();
+    //         $existingUser = User::where('email', $input['email'])->first();
+    //         if ($existingUser) {
+    //             $user = $existingUser;
+    //         } else {
+    //             $user = User::create([
+    //                 'name' => $input['name'],
+    //                 'email' => $input['email'],
+    //                 'password' => $input['password'],
+    //                 'phone' => $input['phone'],
+    //             ]);
+    //             $user->assignRole('Company Admin');
+    //         }
+
+
+    //         $existingCompany = Company::where('company_email', $input['company_email'])->first();
+    //         if ($existingCompany) {
+
+    //             $companyId = $existingCompany->id;
+    //         } else {
+
+    //             $image = $request->file('logo');
+    //             $imageName = time() . '.' . $image->getClientOriginalExtension();
+    //             $image->storeAs('public/assest', $imageName);
+    //             $company = Company::create([
+    //                 'user_id' => $user->id,
+    //                 'company_name' => $input['company_name'],
+    //                 'company_email' => $input['company_email'],
+    //                 'phone_number' => $input['phone_number'],
+    //                 'logo' => $imageName,
+    //             ]);
+
+    //             $companyId = $company->id;
+    //         }
+
+    //         dispatch(new VerificationMail($user->email));
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => "Registration Successful",
+    //             'company_id' => $companyId 
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     /**
      * function to find company representative
      */
@@ -425,34 +503,54 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
     public function check(Request $request)
     {
         try {
             $credentials = $request->validate([
                 'email' => 'required',
-                'password' => 'required|email',
+                'password' => 'required',
+                'company_name' => 'required',
             ]);
-
             if (Auth::attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password'],
-            ]))
+            ])) {
                 $user = Auth::user();
-            $roleName = $user->getRoleNames();
-            $user->role = $roleName; {
-                if (Auth::user()->hasRole('Company Admin')) {
+
+                if ($user->roles->contains('name', 'Company Subadmin')) {
+                   
+                    session(['company_id' => $user->company_id]);
+    
+                    $companyData = Company::where('id', $user->company_id)->first();
+    
                     return response()->json([
                         'status' => true,
                         'message' => 'Logged in Successfully!',
-                        'data' => $user,
+                        'user_data' => $user,
+                        'company_data' => $companyData
                     ], 200);
-                } else {
-                    Auth::logout();
+                }
+               
+                if ($user->companies->isNotEmpty()) {
+                    foreach ($user->companies as $company) {
+                        if ($company->company_name === $credentials['company_name']) {
+                            session(['company_id' => $company->id]);
+                           
+                             $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
+                             return response()->json([
+                                'status' => true,
+                                'message' => 'Logged in Successfully!',
+                                'user_data' => $user,
+                                 'company_data' => $companyData
+                            ], 200);
+                        }
+                    }
                 }
             }
             return response()->json([
                 'status' => false,
-                'message' => 'Fail',
+                'message' => 'Authentication failed',
             ], 401);
         } catch (\Exception $e) {
             return response()->json([
@@ -461,11 +559,106 @@ class CompanyController extends Controller
             ], 500);
         }
     }
+
+
     public function logout()
     {
         Auth::logout();
         return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
     }
-  
+    public function getCompanyNames(Request $request)
+    {   
+        
+        try {
+            $user = User::where('email', $request->email)->first();
+
+            
+            if($user->hasRole('Company Admin')){
+                $companies = Company::select('id', 'company_name')->where('user_id', $user->id)->get();
+            }
+            else{
+                 $companies = Company::select('id', 'company_name')->where('id', $user->company_id)->get();
+            }
+            
+            //$user = User::where('email', $request->email)->first();
+      
+
+            // dd($companies);
+            return response()->json([
+                'status' => true,
+                'companyNames' => $companies,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    // public function getCompanyNames(Request $request)
+    // {
+    //     try {
+    //         $user = User::where('email', $request->email)->first();
+
+    //         if (!$user) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'User not found',
+    //             ], 404);
+    //         }
+
+    //         // Fetch companies by user_id or company_id
+    //         $companies = Company::select('id', 'company_name')
+    //             ->where('user_id', $user->id)
+    //             ->orWhere('id', $user->company_id)
+    //             ->get();
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'companyNames' => $companies,
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'An error occurred: ' . $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
+
+
+    public function adduser()
+    {
+        return view('user');
+    }
+    public function users()
+    {
+        return view('companyusers');
+    }
+    public function fetchuser()
+    {
+        try {
+            $companyId = session('company_id');
+            $users = User::where('company_id', $companyId)->get();
+            return response()->json(['status' => true, 'data' => $users], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+   
+
+    public function userData()
+    {
+        $user = Auth::user();
+        $roles = $user->getRoleNames();
+        $permissions = $user->permissionaccesses()
+                            ->with( 'user.roles', 'permission')
+                            ->get()
+                            ->map(function($item) {
+                                return $item->permission->name;
+                            });
+        return response()->json( ['permissions' => $permissions, 'roles' => $roles]);
+    }
     
 }

@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Invitation extends Model
 {
     use HasFactory;
-
-    // public function users()
-    // {
-    //     return $this->belongsToMany(Role::class);
-    // }
+    protected $table = 'invitation';
+    protected $fillable = [
+        'user_email',
+        'status',
+    ];
 }

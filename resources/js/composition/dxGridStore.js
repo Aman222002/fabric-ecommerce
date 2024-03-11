@@ -33,8 +33,9 @@ export default function useDataSource(
                     paramsObject[i] = JSON.stringify(loadOptions[i]);
                 }
             });
-            if (!params) {
-                params = {};
+            console.log(params);
+            if (params) {
+                Object.assign(paramsObject, params.value);
             }
             // if (params) {
             //     user_id.value = params.value;
@@ -62,7 +63,7 @@ export default function useDataSource(
         },
         insert: (values) => {
             return axios
-                .post(insertURL, values)
+                .post(insertURL, values,{ params:params.value })
                 .then(() => {
                     return true;
                 })
@@ -83,8 +84,7 @@ export default function useDataSource(
                 });
         },
         remove: (key) => {
-            // console.log(deleteURL + "/" + key.id);
-            return window.axios
+            return axios
                 .delete(deleteURL + "/" + key.id)
                 .then(() => {
                     return true;

@@ -10,34 +10,42 @@
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props" prepend-icon="mdi-view-dashboard-outline" title="Jobs"></v-list-item>
         </template>
-        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/posted-jobs' }" href="/posted-jobs"
+        <v-list-item v-if=" hasPermission('Edit Job')|| hasrole('Company Admin')" :class="{ 'main': true, 'active': currentRoute === '/posted-jobs' }" href="/posted-jobs"
           title=" My Jobs">
         </v-list-item>
-        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
+        <v-list-item v-if=" hasPermission('Post Job')|| hasrole('Company Admin')" :class="{ 'main': true, 'active': currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
+        </v-list-item>
+        <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
         </v-list-item>
       </v-list-group>
-      <!-- <v-list-item :class="{ 'group': true, 'active': currentRoute === '/job' }" href="/job" v-if="!usersStore.isloggedin" prepend-icon="mdi-note" title="Post a Job">
-       
-      </v-list-item> -->
+      
       <v-list-item :class="{ 'group': true, 'active': currentRoute === '/findcv' }" href="/findcv"
         prepend-icon="mdi-magnify" title="Find CV">
       </v-list-item>
-      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product"
-        prepend-icon="mdi-format-list-bulleted" title="Products">
+      <v-list-item v-if="usersStore.isloggedin && hasPermission('Buy Subscription')|| hasrole('Company Admin')" :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product"
+        prepend-icon="mdi-format-list-bulleted" title="Plans">
       </v-list-item>
       <v-list-item v-if="usersStore.isloggedin" :class="{ 'group': true, 'active': currentRoute === '/company/profile' }"
         href="/company/profile" prepend-icon="mdi-account-circle" title="Profile">
       </v-list-item>
+
+
+      <v-list-item v-if="usersStore.isloggedin && hasPermission('create users')|| hasrole('Company Admin')" :class="{ 'group': true, 'active': currentRoute === '/add-user' }"
+        href="/add-user" prepend-icon="mdi-account-plus-outline" title="Add User">
+      </v-list-item>
+      <v-list-item v-if="usersStore.isloggedin && hasPermission('view users')|| hasrole('Company Admin') " :class="{ 'group': true, 'active': currentRoute === '/users' }"
+        href="/users" prepend-icon="mdi-account-plus-outline" title="Users">
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-app-bar height="70" id="header">
-    <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"></v-app-bar-nav-icon>
+  <v-app-bar height="46" id="header">
+    <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"  style="color: white;"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
 
     <v-menu transition="slide-y-transition">
       <template v-slot:activator="{ props }">
-        <v-icon v-bind="props" id="account" size="40">mdi-account-circle</v-icon>
-        <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
+        <v-icon v-bind="props" id="account" size="40" style="color: white;">mdi-account-circle</v-icon>
+        <v-icon v-bind="props" class="menu" size="35" style="color: white;"> mdi-menu-down</v-icon>
       </template>
       <v-list>
 
@@ -78,8 +86,33 @@ export default {
       axios.get("/company/logout");
       window.location.href = "/job";
     };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/user/data"); 
+        console.log(response.data);
+        users.value = response.data; 
+        console.log(users.value);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    const hasPermission = ( permission) => {
+  if (users.value && users.value.permissions) {
+    return users.value.permissions.includes(permission);
+  }
+  return false; 
+};
+const hasrole = (role) => {
+  console.log(role);
+  if (users.value && users.value.roles) {
+    console.log(users);
+    return users.value.roles.includes(role);
+  }
+  return false; 
+};
 
     onMounted(() => {
+      fetchUserData();
       window.addEventListener("popstate", updateRoute);
     });
 
@@ -92,6 +125,7 @@ export default {
       requests,
       updateRoute,
       logout,
+      hasPermission,hasrole
     };
   },
 };

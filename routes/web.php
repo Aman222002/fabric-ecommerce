@@ -28,7 +28,7 @@ use App\Models\User;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WebhookController;
-
+use App\Http\Controllers\DraftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
@@ -109,9 +109,17 @@ Route::get('/postjob', function () {
 Route::get('/posted-jobs', function () {
     return view('jobcrud');
 });
+Route::get('/draft', function () {
+    return view('draftjob');
+});
 Route::get('/findcv', function () {
     return view('findcv');
 });
+
+// Route::get('/add-user', function () {
+//     return view('user');
+// });
+
 
 
 Route::get('/jobs-detail', [SearchjobController::class, 'index']);
@@ -130,9 +138,10 @@ Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 Route::prefix('company')->group(function () {
-    Route::get('/register', [CompanyController::class, 'index']);
-    Route::post('/post', [CompanyController::class, 'store'])->name('companyregister');
+    Route::get('/register/{id?}/{name?}/{email?}/{phone?}/{company?}/{permission?}', [CompanyController::class, 'index']);
+    Route::post('/post/{permission?}', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
+    Route::get('/names/{email?}', [CompanyController::class, 'getCompanyNames']);
     Route::get('/buy/plans/view/{id?}', [CompanyController::class, 'buyplansview']);
     Route::post('/buy/plan', [CompanyController::class, 'buyplan']);
     Route::get('/logout', [CompanyController::class, 'logout']);
@@ -141,7 +150,7 @@ Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [CompanyControl
 Route::get('/create/mendate/form/{token}', [CompanyController::class, 'showForm']);
 Route::post('/submit/mandate/form', [CompanyController::class, 'submitForm']);
 
-
+Route::get('/user/data', [CompanyController::class, 'userdata']);
 
 
 
@@ -175,7 +184,8 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
         Route::get('/edit/{id}', [UserController::class, 'edit']);
-        Route::post('/store', [UserController::class, 'store']);
+        Route::post('/store/{permission?}', [UserController::class, 'store']);
+        Route::post('/addnewuser', [UserController::class, 'addnewuser']);
         Route::post('/update/{id}', [UserController::class, 'update']);
         Route::post('/update-profile/{id}', [UserController::class, 'updateProfile']);
         Route::post('/update-password', [UserController::class, 'updatePassword']);
@@ -194,21 +204,37 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
 Route::get('/skill', [SkillController::class, 'index']);
+Route::get('/permission', [SkillController::class, 'permission']);
 Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
     Route::post('/updateaddress', [ProfileController::class, 'updateaddress']);
+    Route::post('/updatedescription', [ProfileController::class, 'updatedescription']);
 });
 // Route::get('/jobs/applicants', [JobsController::class, 'getapplicants']);
-Route::post('/jobs/application/{id}', [JobsController::class, 'detail']);
+Route::post('/jobs/draft/{id}', [JobsController::class, 'detail']);
 Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
 Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
-
+Route::get('/jobs/application/{id}', [JobsController::class,'getapplicants']);
 
 Route::get('/generate-pdf', [PdfController::class, 'download']);
 
-Route::post('/update-status', [UserController::class, 'updatestatus']);
+Route::post('/update-status',[UserController::class,'updatestatus']);
+Route::get('/draft/jobs', [DraftController::class, 'index']);
+Route::get('/post/edit/{id}', [DraftController::class, 'edit']);
+Route::post('/post/jobs/{id}', [DraftController::class, 'update']);
+Route::delete('/post/delete/{id}', [DraftController::class, 'destroy']);
+Route::post('/draftjobs/{id}', [DraftController::class, 'draft']);
+
+
+
+Route::get('/add-user', [CompanyController::class, 'adduser']);
+Route::get('/fetch-user', [CompanyController::class, 'fetchuser']);
+Route::get('/accepted/{id}/{name}/{company}/{email}/{phone}/{permission}', [UserController::class, 'accept']);
+Route::get('/reject', [UserController::class, 'reject']);
+Route::get('/users', [CompanyController::class, 'users']);
+
 
 
 //users

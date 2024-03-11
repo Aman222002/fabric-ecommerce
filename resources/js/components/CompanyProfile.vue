@@ -4,19 +4,12 @@
     <v-icon @click="goToEditPage()" style="margin-left: 97%">mdi-pencil</v-icon>
     <v-row>
       <div style="align-items: center; display: flex; margin-left: 15px">
-        <!-- <v-avatar
-           size="130px"
-          class="avatar"
-          style="margin: 10px"
-          v-if="company.length > 0"
-          @click="openFileInput()" 
-        > -->
-          <!-- <span class="mdi mdi-pencil" id="icon"></span> -->
+       
           <v-avatar
           size="130px"
           class="avatar"
           style="margin: 10px"
-          v-if="company.length > 0"
+        
            >
           <input
             type="file"
@@ -26,7 +19,7 @@
             @change="handleImageChange()"
           />
           <img
-            :src="`/storage/assest/${company[0].logo}`"
+            :src="`/storage/assest/${company.logo}`"
             alt="Selected Image"
             width="150px"
             height="150px"
@@ -36,12 +29,12 @@
       <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
         <p style="font-size: 30px;">{{ user.name }}</p>
         <p style="font-size: 15px">Representative</p>
-        <p v-if="company.length > 0 && company[0].address">
+        <p v-if="address">
           <v-icon style="font-size: 15px; color: rgb(3, 3, 3)"
             >mdi-map-marker</v-icon
           >
-          {{ company[0].address.street }}, {{ company[0].address.city }},
-          {{ company[0].address.state }}
+          {{ address.street }}, {{ address.city }},
+          {{ address.state }}
         </p>
       </v-col>
     </v-row>
@@ -134,10 +127,11 @@
               class="ps-0"
               style="font-weight: 600; text-align: inherit"
               >Company Name</label
-            >
-            <span v-if="company.length > 0" style="margin-left: 25%">{{
-              company[0].company_name
-            }}</span
+            >  
+            <span  style="margin-left: 25%">{{
+              company.company_name
+           
+            }} </span
             ><br /><br />
             <label
               for="company name"
@@ -145,8 +139,8 @@
               style="font-weight: 600; text-align: inherit"
               >Phone Number</label
             >
-            <span v-if="company.length > 0" style="margin-left: 26%">{{
-              company[0].phone_number
+            <span style="margin-left: 26%">{{
+              company.phone_number
             }}</span
             ><br /><br />
             <label
@@ -155,8 +149,8 @@
               style="font-weight: 600; text-align: inherit"
               >Company Email</label
             >
-            <span v-if="company.length > 0" style="margin-left: 25%">{{
-              company[0].company_email
+            <span  style="margin-left: 25%">{{
+              company.company_email
             }}</span>
           </v-card-text>
         </v-card>
@@ -167,20 +161,36 @@
         v-if="showDescription && !showOverview && !showJob &&!showAddress"
         class="card2"
         style="margin-bottom: 20px"
+        
       >
+      <v-icon @click="openModal" style="margin-left: 97%">mdi-pencil</v-icon>
         <v-card-title style="font-family: Poppins, sans-serif"
           ><v-icon>mdi-domain</v-icon> Description:</v-card-title
         >
         <v-card-text>
-          <div style="font-family: sans-serif" v-if="company.length > 0">
-            {{ company[0].description }}
+          <div style="font-family: sans-serif" >
+            {{ company.description }}
           </div>
         </v-card-text>
       </v-card>
     </v-tab-item>
+    <v-dialog v-model="modalOpen" max-width="500">
+    <v-card>
+        <v-card-title>
+            <span class="headline">Edit Description</span>
+        </v-card-title>
+        <v-card-text>
+            <v-textarea  v-model="editedDescription.description" label="Description" outlined></v-textarea>
+        </v-card-text>
+        <v-card-actions>
+            <v-btn color="primary" @click="saveDescription">Save</v-btn>
+            <v-btn color="error" @click="closeModal">Close</v-btn>
+        </v-card-actions>
+    </v-card>
+</v-dialog>
     <v-tab-item>
       <v-card
-        v-if="showJob && company[0].jobs"
+        v-if="showJob"
         class="card2"
         style="margin-bottom: 20px; font-size: 16px"
       >
@@ -196,7 +206,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(job, index) in company[0].jobs" :key="index">
+              <tr v-for="(job, index) in company.jobs" :key="index">
                 <td>{{ job.title }}</td>
                 <td>{{ job.vacancy }}</td>
               </tr>
@@ -207,15 +217,16 @@
     </v-tab-item>
     <v-tab-item>
   <v-card
-    v-if="showAddress && company[0].address"
+  v-if="showAddress"
     class="card2"
     style="margin-bottom: 20px; font-size: 16px"
   >
   <v-icon @click="openEditAddressModal()"  style="margin-left: 97%">mdi-pencil</v-icon>
+  
     <v-card-title style="font-family: Poppins, sans-serif"
       >Address:</v-card-title
     >
-    <v-table>
+    <v-table  v-if="address">
       <template v-slot:default>
         <thead>
           <tr>
@@ -228,11 +239,11 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ company[0].address.first_line_address }}</td>
-            <td>{{ company[0].address.street }}</td>
-            <td>{{ company[0].address.city }}</td>
-            <td>{{ company[0].address.state }}</td>
-            <td>{{ company[0].address.postal_code }}</td>
+            <td>{{ address.first_line_address }}</td>
+            <td>{{ address.street }}</td>
+            <td>{{ address.city }}</td>
+            <td>{{ address.state }}</td>
+            <td>{{ address.postal_code }}</td>
           </tr>
         </tbody>
       </template>
@@ -317,7 +328,7 @@
           <v-file-input
             v-model="editedJob.logo"
             label="Company Logo"
-           
+        
             density="compact"
             variant="outlined"
             name="logo"
@@ -336,15 +347,28 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-
+import { useUsersStore } from "../store/user";
 export default {
   name: "CompanyProfile",
   setup() {
     const company = ref([]);
+    const address=ref({
+    first_line_address: "",
+      street: "",
+      city: "",
+      state: "",
+      postal_code: "",
+  });
+
+     const store = useUsersStore () ;
     const user = ref([]);
     const fileInput = ref();
     const image = ref(null);
     const isEditModalOpen = ref(false);
+    const modalOpen = ref(false);
+    const editedDescription = ref({
+      description:''
+    });
     const editedJob = ref({
       name: "",
       email: "",
@@ -359,7 +383,6 @@ export default {
       city: "",
       state: "",
       postal_code: "",
-      
     });
     const showOverview = ref(true);
     const showJob = ref(false);
@@ -370,19 +393,20 @@ export default {
       try {
         const response = await axios.get(`/company/list`);
         company.value = response.data.companydata;
+        // store.company.company_name
         user.value = response.data.user;
-       console.log(response.data.companydata)
+         address.value=response.data.companydata.address ;
+       console.log(response.data.companydata.address);
       } catch (error) {
         console.error("Error fetching company profile:", error);
       }
     };
-
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
       editedJob.value.phone = user.value.phone;
-      editedJob.value.company_name = company.value[0].company_name;
-      editedJob.value.company_email = company.value[0].company_email;
+      editedJob.value.company_name = company.value.company_name;
+      editedJob.value.company_email = company.value.company_email;
       editedJob.value.logo = null;
       isEditModalOpen.value = true;
     };
@@ -405,7 +429,8 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         });
-        isEditModalOpen.value = false;
+        closeEditAddressModal();
+        window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
@@ -429,19 +454,24 @@ export default {
     onMounted(() => {
       fetchCompanyProfile();
     });
-    const openEditAddressModal = () => {
-  if (company.value.length > 0 && company.value[0].address) {
-    editedAddress.value.first_line_address = company.value[0].address.first_line_address;
-    editedAddress.value.street = company.value[0].address.street;
-    editedAddress.value.city = company.value[0].address.city;
-    editedAddress.value.state = company.value[0].address.state;
-    editedAddress.value.postal_code = company.value[0].address.postal_code;
+const openEditAddressModal = () => {
     isEditAddressModalOpen.value = true;
-  } else {
-    console.error("Company data or address not available.");
-  }
-};
 
+    if (company.value?.address) {
+        editedAddress.value.first_line_address = company.value.address.first_line_address || '';
+        editedAddress.value.street = company.value.address.street || '';
+        editedAddress.value.city = company.value.address.city || '';
+        editedAddress.value.state = company.value.address.state || '';
+        editedAddress.value.postal_code = company.value.address.postal_code || '';
+    } else {
+        
+        editedAddress.value.first_line_address = '';
+        editedAddress.value.street = '';
+        editedAddress.value.city = '';
+        editedAddress.value.state = '';
+        editedAddress.value.postal_code = '';
+    }
+};
     const closeEditAddressModal = () => {
       isEditAddressModalOpen.value = false;
     };
@@ -460,11 +490,34 @@ export default {
           },
         });
         closeEditAddressModal();
+        window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
     };
+    const openModal = () => {
+      modalOpen.value = true;
+      editedDescription.value.description = company.value.description;
+    };
+    const closeModal = () => {
+      modalOpen.value = false;
+    };
 
+    const saveDescription = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("description", editedDescription.value.description);
+        const response = await axios.post("/company/updatedescription", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        closeModal();
+         window.location.reload();
+      } catch (error) {
+        console.error("Error updating company profile:", error);
+      }
+    };
     return {
       company,
       user,
@@ -487,7 +540,13 @@ export default {
       openEditAddressModal,
       closeEditAddressModal,
       saveEditedAddress,
-      editedAddress
+      editedAddress,
+      address,
+      modalOpen,
+      editedDescription,
+      store,
+      openModal,
+      saveDescription,closeModal
     };
   },
 };

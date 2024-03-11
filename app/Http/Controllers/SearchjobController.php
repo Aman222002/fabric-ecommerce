@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Job;
 use App\Models\UserSkill;
-
+use Carbon\Carbon;
 class SearchjobController extends Controller
 {
     /**
@@ -32,12 +32,12 @@ class SearchjobController extends Controller
         if($user->hasRole('User')){
             $companyId =  $user->company ? $user->company->id : 0;
         }
-        $jobs = Job::whereIn('skill_id', $skills)->with("company");
+        $jobs = Job::whereIn('skill_id', $skills) ->where('is_draft', 0)->with("company");
         if($companyId != 0){
             $jobs->where('company_id', $companyId);
         }
         $jobs =   $jobs->get();
-    
+       
         return response()->json(['status' => true, 'data' => $jobs], 200);
     } catch (\Exception $e) {
         Log::error($e->getMessage());

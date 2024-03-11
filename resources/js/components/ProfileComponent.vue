@@ -157,9 +157,17 @@ export default {
             }
         };
         const fetchProfile = () => {
-            userStore.fetchUser();
-            formData.value = userStore.user.user;
-            imageUrl.value = userStore.user.user.user_image;
+            axios.get(`/admin/profile/getProfile`
+            ).then((response) => {
+                console.log(response.data);
+                formData.value = response.data.user;
+                imageUrl.value = response.data.user.user_image;
+            }).catch((error) => {
+                console.log('here');
+            })
+            // console.log(response.data);
+            // formData.value = userStore.user.user;
+            
         };
         onMounted(async () => {
             await nextTick();
@@ -250,7 +258,6 @@ export default {
             handleImageChange,
         };
     }
-
 }
 </script>
   

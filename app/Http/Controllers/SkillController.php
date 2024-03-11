@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Skill;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 
 class SkillController extends Controller
@@ -74,5 +75,22 @@ class SkillController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function permission()
+    {
+        //
+        try {
+            $userpermission = Permission::all();
+    
+            
+            if ($userpermission->isEmpty()) {
+                return response()->json(['message' => 'No  types found'], 404);
+            }
+    
+            return response()->json( $userpermission);
+           
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error retrieving job types', 'error' => $e->getMessage()], 500);
+        }
     }
 }

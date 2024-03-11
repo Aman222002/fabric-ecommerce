@@ -77,6 +77,7 @@ import {
     DxRequiredRule,
     DxEmailRule,
     DxExport,
+    DxSelectBox,
 } from "devextreme-vue/data-grid";
 import {
     DxForm,
@@ -87,6 +88,8 @@ import {
 import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
+import { DxDropDownBox } from "devextreme-vue/drop-down-box";
+import DxList from "devextreme-vue/list";
 app.use(vuetify);
 app.use(VueSweetalert2);
 //app.use(VueTelInput, VueTelInputOptions);
@@ -168,6 +171,9 @@ const component = {
     DxItem,
     DxBox,
     DxBoxItem,
+    DxList,
+    DxDropDownBox,
+    DxSelectBox,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
@@ -197,6 +203,9 @@ app.component("postjob-component", postjob);
 import JobCrud from "./components/Jobcrud.vue";
 app.component("jobcrud-component", JobCrud);
 
+import draftjobs from "./components/draftjobs.vue";
+app.component("draftjob-component", draftjobs);
+
 import CompanyNav from "./components/CompanyNav.vue";
 app.component("companynav-component", CompanyNav);
 
@@ -225,6 +234,12 @@ app.component("savejob-component", SaveJob);
 
 import UserProfile from "./components/UserProfile.vue";
 app.component("user-profile", UserProfile);
+
+import user from "./components/user.vue";
+app.component("user-component",user);
+
+import CompanyUsers from "./components/CompanyUsers.vue";
+app.component("companyuser-component",CompanyUsers);
 
 /**
  * The following block of code may be used to automatically register your
