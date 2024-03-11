@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::table('userachievements', function (Blueprint $table) {
-            $table->unique(['user_id', 'certification_name']);
+        Schema::table('post_jobs', function (Blueprint $table) {
+            //
+            $table->string('post_status')->after('company_website')->nullable();
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-
-        Schema::table('userachievements', function (Blueprint $table) {
-            $table->dropUnique(['user_id', 'certification_name']);
+        Schema::table('post_jobs', function (Blueprint $table) {
+            //
+            $table->dropColumn('post_status');
         });
     }
 };

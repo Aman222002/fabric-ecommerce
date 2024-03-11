@@ -84,13 +84,12 @@ class CompanyController extends Controller
      */
     public function buyplan(Request $request)
     {
-
         try {
             $input = $request->all();
             if (!($request->input('user_name'))) {
                 $user = Auth::user();
                 $selected_plan = Plan::find($input['id']);
-                $user_plan = Plan::find($user->paln_id);
+                $user_plan = Plan::find($user->plan_id);
                 $priceCents = $selected_plan->price * 100;
                 if ($user->subscription_status == 'active') {
                     $data = [
@@ -103,10 +102,13 @@ class CompanyController extends Controller
                         "links" => ["mandate" => $user->mandate_id]
                     ];
                     if ($selected_plan->price > $user_plan->price) {
-                        $user_subscription = UserSubscription::where('user_id', $user->id)->get();
-                        $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
+                        // dd($selected_plan);
+                        $user_subscription = UserSubscription::where('user_id', $user->id)->first();
+                        // $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
                         $this->gocardlessService->createSubscription($data);
-                        $user->update(['plan_id' => $input['id']]);
+                        $user->update(['upgrade_plan_id' => $input['id'], 'upgrade_status' => 'initiated']);
+                        // $user_subscription->update(['plan_id' => $input['id']]);
+                        // dd($user);
                         return response()->json([
                             'status' => true,
                             'message' => "Subscription Will be added soon in your account"
@@ -121,7 +123,7 @@ class CompanyController extends Controller
                         // } 
                     } else {
                         //handling case to downgrade the subscription
-                        $users_subscription = UserSubscription::where('user_id', $user->id)->get();
+                        $users_subscription = UserSubscription::where('user_id', $user->id)->first();
                         $users_subscription->update(['next_plan_id' => $input['id']]);
                     }
                 } else {
@@ -521,9 +523,7 @@ class CompanyController extends Controller
                 if ($user->roles->contains('name', 'Company Subadmin')) {
                    
                     session(['company_id' => $user->company_id]);
-    
                     $companyData = Company::where('id', $user->company_id)->first();
-    
                     return response()->json([
                         'status' => true,
                         'message' => 'Logged in Successfully!',
@@ -547,6 +547,13 @@ class CompanyController extends Controller
                         }
                     }
                 }
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Logged in Successfully!',
+                    'data' => $user,
+                ], 200);
+            } else {
+                Auth::logout();
             }
             return response()->json([
                 'status' => false,
@@ -661,4 +668,68 @@ class CompanyController extends Controller
         return response()->json( ['permissions' => $permissions, 'roles' => $roles]);
     }
     
+    public function fetchPlan()
+    {
+        $company_id = session('company_id');
+        // dd($company_id);
+        try {
+            $user_Id = Company::where('id', $company_id)->value('user_id');
+            $user_subscription = UserSubscription::where('user_id', $user_Id)->first();
+            // dd($user_subscription);
+            //return $user->hasrole('Company Admin');
+            $user_plan = User::where('id', $user_Id)->get()->filter(function ($user) {
+                return $user;
+            })->value('plan_id');
+            $plan = Plan::where('id', $user_plan)->first();
+            return response()->json(['status' => true, 'data' => $plan, 'subscription' => $user_subscription], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    //return current plan view with all plan details
+    public function showCompanyPlan()
+    {
+        return view('subscriptiondetails');
+    }
+    //get all Plans 
+    public function getAllPlans()
+    {
+        try {
+            $plans = Plan::all();
+            return response()->json(['status' => true, 'data' => $plans], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    public function getCompanyAdmin()
+    {
+        try {
+            $company_id =  session('company_id');
+            $company = Company::where('id', $company_id)->first();
+            //return $user->hasrole('Company Admin')
+            $user = User::where('id', $company->user_id)->get()->filter(function ($user) {
+                return $user;
+            });
+            // dd($user);
+            return response()->json(['status' => true, 'data' => $user], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    public function cancelUpgradeRequest()
+    {
+        // dd('user');
+        try {
+            $user = Auth::user();
+            // dd($user);
+            // dd($user_subscription);
+            $user_subscription = UserSubscription::where('user_id', $user->id)->first();
+            $this->gocardlessService->removeSubscription($user_subscription->upgrade_subscription_id);
+            // $user->update(['upgrade_status' => null,]);
+            // $user_subscription->update(['upgrade_subscription_id' => null]);
+            return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
 }

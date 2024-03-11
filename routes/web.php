@@ -149,14 +149,9 @@ Route::prefix('company')->group(function () {
 Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [CompanyController::class, 'completeRedirectFlow']);
 Route::get('/create/mendate/form/{token}', [CompanyController::class, 'showForm']);
 Route::post('/submit/mandate/form', [CompanyController::class, 'submitForm']);
-
 Route::get('/user/data', [CompanyController::class, 'userdata']);
-
-
-
-
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/post/jobs', [JobsController::class, 'index']);
+    Route::get('/post/jobs/{type?}', [JobsController::class, 'index']);
     Route::post('/post', [JobsController::class, 'store']);
     Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
     Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
@@ -171,7 +166,8 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/get/plans', [DashboardController::class, 'getplans']);
-Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
+//Admin Routes;
+Route::group(["prefix" => "/admin", 'middleware' => ['role:Admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
@@ -180,6 +176,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
     Route::get('/plans', [DashboardController::class, 'plans']);
     Route::post('/update/plans/{planID?}', [DashboardController::class, 'updateplans']);
+    Route::get('/company/plan/{planID?}', [DashboardController::class, 'getDetails']);
 
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
@@ -201,6 +198,7 @@ Route::group(["prefix" => "/admin", 'middleware' => 'auth'], function () {
         Route::delete('/destroy/{id}', [CompanyController::class, 'destroy']);
     });
 });
+Route::get('/get/comapny-admin', [CompanyController::class, 'getCompanyAdmin']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/jobtypes', [JobTypesController::class, 'index']);
 Route::get('/skill', [SkillController::class, 'index']);
@@ -213,7 +211,7 @@ Route::prefix('company')->group(function () {
     Route::post('/updatedescription', [ProfileController::class, 'updatedescription']);
 });
 // Route::get('/jobs/applicants', [JobsController::class, 'getapplicants']);
-Route::post('/jobs/draft/{id}', [JobsController::class, 'detail']);
+Route::post('/jobs/draft/{id?}/{type?}', [JobsController::class, 'detail']);
 Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
 Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
 Route::get('/jobs/application/{id}', [JobsController::class,'getapplicants']);
@@ -234,7 +232,10 @@ Route::get('/fetch-user', [CompanyController::class, 'fetchuser']);
 Route::get('/accepted/{id}/{name}/{company}/{email}/{phone}/{permission}', [UserController::class, 'accept']);
 Route::get('/reject', [UserController::class, 'reject']);
 Route::get('/users', [CompanyController::class, 'users']);
-
+Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
+Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
+Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
+Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 
 
 //users

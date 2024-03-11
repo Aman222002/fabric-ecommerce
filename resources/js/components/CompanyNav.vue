@@ -1,6 +1,5 @@
 <template>
   <v-navigation-drawer location="left" id="div" v-model="drawer" :rail="rail">
-
     <h3 class="title" v-if="!rail">JOBS</h3>
     <v-avatar style="margin-left: 10%;" v-if="rail">
       <img src="/storage/assest/15.jpg" alt="" />
@@ -25,8 +24,12 @@
       <v-list-item v-if="usersStore.isloggedin && hasPermission('Buy Subscription')|| hasrole('Company Admin')" :class="{ 'group': true, 'active': currentRoute === '/product' }" href="/product"
         prepend-icon="mdi-format-list-bulleted" title="Plans">
       </v-list-item>
-      <v-list-item v-if="usersStore.isloggedin" :class="{ 'group': true, 'active': currentRoute === '/company/profile' }"
-        href="/company/profile" prepend-icon="mdi-account-circle" title="Profile">
+      <v-list-item :class="{ 'group': true, 'active': currentRoute === '/company/plan' }" href="/company/plan"
+        prepend-icon="mdi-cash-sync" title="Subscription details">
+      </v-list-item>
+      <v-list-item v-if="usersStore.isloggedin"
+        :class="{ 'group': true, 'active': currentRoute === '/company/profile' }" href="/company/profile"
+        prepend-icon="mdi-account-circle" title="Profile">
       </v-list-item>
 
 
@@ -41,17 +44,15 @@
   <v-app-bar height="46" id="header">
     <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"  style="color: white;"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-
     <v-menu transition="slide-y-transition">
+
       <template v-slot:activator="{ props }">
         <v-icon v-bind="props" id="account" size="40" style="color: white;">mdi-account-circle</v-icon>
         <v-icon v-bind="props" class="menu" size="35" style="color: white;"> mdi-menu-down</v-icon>
       </template>
       <v-list>
-
         <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"
           class="dropdown"></v-list-item>
-
         <v-list-item v-if="usersStore.isloggedin" class="dropdown" prepend-icon="mdi-logout" title="Logout"
           value="Dashboard" @click="logout()"></v-list-item>
       </v-list>
@@ -130,6 +131,7 @@ const hasrole = (role) => {
   },
 };
 </script>
+
 <style scoped>
 a {
   text-decoration: none;
@@ -165,7 +167,7 @@ a {
 }
 
 .dropdown:hover {
-  color: #175e56;
+  background-color: #1976D2;
 }
 
 .v-app-bar {
@@ -222,4 +224,3 @@ a {
   ;
 }
 </style>
-

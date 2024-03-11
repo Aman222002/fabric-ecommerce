@@ -226,14 +226,13 @@ export default {
                     });
                 }
             }).catch((error) => {
-                console.log('here');
                 window.Swal.fire({
                     toast: true,
                     position: 'top-end',
                     timer: 2000,
                     showConfirmButton: false,
                     icon: 'error',
-                    title: 'Incoreect Password!',
+                    title: 'Incorrect Password!',
                 });
             })
         }

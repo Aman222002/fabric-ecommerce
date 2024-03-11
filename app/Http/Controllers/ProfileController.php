@@ -161,13 +161,6 @@ class ProfileController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
-
-
-
-
-
-
     /**
      * Remove the specified resource from storage.
      */

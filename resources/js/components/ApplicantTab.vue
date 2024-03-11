@@ -2,7 +2,6 @@
     <div class="container">
         <DxDataGrid  :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
             :column-auto-width="true" :allow-column-resizing="true">
-            
             <DxSearchPanel :visible="true" />
             <DxColumn data-field="name" caption="Applicant Name" data-type="string" />
             <DxColumn data-field="email" caption="Email" data-type="string">
@@ -12,13 +11,12 @@
             <DxMasterDetail :enabled="true" template="masterTemplateTab" />
       <template #masterTemplateTab="{ data: cellInfo }">
                 <masterTemplateTab :qualification-info="cellInfo.data" >
-                
-                
                 </masterTemplateTab>
             </template>
         </DxDataGrid>
     </div>
 </template>
+
 <script>
 import dxGridStore from '../composition/dxGridStore';
 import masterTemplateTab from './Masterdetailinformation.vue'
@@ -26,10 +24,10 @@ import { ref } from "vue";
 export default {
     name: 'ApplicantTab',
     components: {
-   masterTemplateTab
-  },
+        masterTemplateTab
+    },
     props: {
-    jobId: {
+        jobId: {
             type: Number,
             default: 0,
         }
@@ -45,6 +43,7 @@ export default {
     },
 }
 </script>
+
 <style scoped>
 #grid {
     max-height: 200px;
@@ -117,4 +116,3 @@ export default {
     border-bottom: none;
 }
 </style>
-  

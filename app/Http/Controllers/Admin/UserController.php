@@ -55,7 +55,6 @@ class UserController extends Controller
                         $users->where('name', 'like', "%$search%");
                     }
                 }
-                // dd($users);
             }
             $userList = $users->get();
             $response['data'] = $userList;
@@ -286,9 +285,9 @@ class UserController extends Controller
         try {
             $data = $request->all();
             $userId = Auth::id();
-            $status = min($data['progressPercentage'], 100); 
+            $status = min($data['progressPercentage'], 100);
             User::where('id', $userId)->update(['status' => $status]);
-            return response()->json(['message' => 'Step updated successfully'],200);
+            return response()->json(['message' => 'Step updated successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to update step'], 500);
         }

@@ -2,25 +2,13 @@
   <v-container>
     <v-row style="margin-top: 10px; margin-left: 10%;">
       <v-col cols="12" md="4">
-        <v-text-field
-          v-model="jobTitle"
-          label="Job Title"
-          density="compact"
-          variant="outlined"
-          clearable
-          style="width: 100%"
-        ></v-text-field>
+        <v-text-field v-model="jobTitle" label="Job Title" density="compact" variant="outlined" clearable
+          style="width: 100%"></v-text-field>
       </v-col>
 
       <v-col cols="12" md="4">
-        <v-text-field
-          v-model="location"
-          label="Location"
-          density="compact"
-          variant="outlined"
-          clearable
-          style="width: 100%"
-        ></v-text-field>
+        <v-text-field v-model="location" label="Location" density="compact" variant="outlined" clearable
+          style="width: 100%"></v-text-field>
       </v-col>
 
       <v-col cols="10" md="3">
@@ -28,16 +16,14 @@
       </v-col>
     </v-row>
     <div class="card-container">
-      <v-card v-for="job in jobs" :key="job.id" class="custom-card" @click="openDetailPanel(job)">
-        <v-card-title
-          style="
+      <v-card v-for="job in jobs" class="custom-card" @click="openDetailPanel(job)">
+        <v-card-title style="
             font-size: 30px;
             font-weight: bolder;
             margin-left: 30px;
             color: rgb(44, 44, 151);
             font-family: sans-serif;
-          "
-        >{{ job.title }}</v-card-title>
+          ">{{ job.title }}</v-card-title>
         <v-card-text>
           <div style="display: flex; align-items: center;">
             <v-icon color="black">mdi-domain</v-icon>
@@ -60,21 +46,25 @@
         <v-card-actions style="margin-left: 20px;">
           <div style="display: flex; align-items: center;">
             <v-icon color="black">mdi-human</v-icon>
-            <span style="font-size: 18px;">{{ job.vacancy }} <v-icon color="black" style="margin-left: 530px; font-size: 20px;">mdi-desktop-classic</v-icon>{{ job.experience }}<v-icon color="black" style="margin-left: 280px; font-size: 20px;">mdi-map-marker</v-icon>{{ job.location }}</span>
+            <span style="font-size: 18px;">{{ job.vacancy }} <v-icon color="black"
+                style="margin-left: 530px; font-size: 20px;">mdi-desktop-classic</v-icon>{{ job.experience }}<v-icon
+                color="black" style="margin-left: 280px; font-size: 20px;">mdi-map-marker</v-icon>{{ job.location
+              }}</span>
           </div><br>
         </v-card-actions>
       </v-card>
-
       <v-navigation-drawer v-model="detailPanelVisible" location="right" style="width: 70%;">
         <v-card style="width: 100%;">
-          <v-icon style="margin-left: 20px; margin-top: 30px; " @click="detailPanelVisible = false">mdi-arrow-left-top</v-icon>
+          <v-icon style="margin-left: 20px; margin-top: 30px; "
+            @click="detailPanelVisible = false">mdi-arrow-left-top</v-icon>
           <v-card-title
-            style="font-size: 40px; font-weight: bolder; text-align: center; margin-top: 30px; color: rgb(139, 238, 144);"
-          >{{ detail.title }}</v-card-title>
+            style="font-size: 40px; font-weight: bolder; text-align: center; margin-top: 30px; color: rgb(139, 238, 144);">{{
+          detail.title }}</v-card-title>
           <v-card-text>
             <div style="font-size: 18px">
               <v-icon color="black" style="display: inline-block; vertical-align: middle;">mdi-domain</v-icon>
-              <span style="color: rgb(59, 145, 243); font-size: 25px; margin-left: 50px;">{{ detail.company_name }}</span>
+              <span style="color: rgb(59, 145, 243); font-size: 25px; margin-left: 50px;">{{ detail.company_name
+                }}</span>
             </div>
             <br />
             <div style="font-size: 18px">
@@ -147,16 +137,16 @@ export default {
         console.error(err);
       }
     };
-
+    //getting Jobs posted by company
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
+        console.log(response.data);
         jobs.value = response.data.data;
       } catch (err) {
         console.error(err);
       }
     };
-   
     const openDetailPanel = (job) => {
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
@@ -171,6 +161,7 @@ export default {
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
+    //For job apply
     const apply = async (id) => {
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
@@ -182,6 +173,7 @@ export default {
               text: "Applied successfully ",
               confirmButtonText: "OK",
             });
+            window.location.href = response.data.company_url;
           }
         });
       } catch (err) {
@@ -236,6 +228,7 @@ export default {
     };
 
     onMounted(() => {
+      // companypost();
       fetchJobs();
     });
     return {
@@ -243,6 +236,7 @@ export default {
       jobTitle,
       location,
       searchJobs,
+      // companypost,
       usersStore,
       closeDetailDialog,
       apply,
@@ -265,6 +259,7 @@ export default {
   gap: 60px;
   margin-top: 20px;
 }
+
 .custom-card {
   display: flex;
   flex-direction: column;
@@ -275,9 +270,11 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
+
 .v-icon:hover {
   transform: scale(1.2);
 }
+
 .read-more {
   color: blue;
   cursor: pointer;
