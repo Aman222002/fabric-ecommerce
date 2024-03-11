@@ -1,43 +1,47 @@
-
 <template>
   <v-btn color="success" class="new-job-btn">
-      <a href="/jobs-detail" class="new-job-link">Check New Job</a>
-    </v-btn>
-    <div class="card-container">
-      
-      <v-card v-for="jobApplication in jobApplications" :key="jobApplication.id" class="job-card">
-        <v-card-title
-          style="
+    <a href="/jobs-detail" class="new-job-link">Check New Job</a>
+  </v-btn>
+  <div class="card-container" v-for="jobApplication in jobApplications" :key="jobApplication.id">
+
+    <v-card class="job-card" v-if="jobApplication.job.post_status == 'Published'">
+      <v-card-title style="
             font-size: 30px;
             font-weight: bolder;
             color: rgb(44, 44, 151);
-          "
-          >{{ jobApplication.job.title }}</v-card-title
-        >
-        <v-card-text>
-  <div style="display: flex; align-items: center;">
-    <v-icon color="black">mdi-domain</v-icon>
-    <span style="font-size: 20px;">{{ jobApplication.company.company_name }}<v-icon color="black" style="margin-left: 200px;font-size: 20px;">mdi-map-marker</v-icon>{{ jobApplication.job.location }} </span>
-  </div><br><br>
-  <div style="display: flex; align-items: center;">
-    <v-icon color="black" >mdi-email-box</v-icon>
-  <span style="font-size: 20px;">{{ jobApplication.company.company_email }}<v-icon    color="black" style="margin-left: 85px;font-size: 20px;">mdi-school</v-icon>{{jobApplication.job.qualifications }}   </span>
-  </div><br><br>
-  <div style="display: flex; align-items: center;">
-   
-    <v-icon color="black" >mdi-currency-rupee</v-icon>
-  <span style="font-size: 20px;">{{ jobApplication.job.salary }}<v-icon color="black" style="margin-left: 270px;font-size: 20px;" >mdi-desktop-classic</v-icon>{{ jobApplication.job.experience}} </span>
+          ">{{ jobApplication.job.title }}</v-card-title>
+      <v-card-text>
+        <div style="display: flex; align-items: center;">
+          <v-icon color="black">mdi-domain</v-icon>
+          <span style="font-size: 20px;">{{ jobApplication.company.company_name }}<v-icon color="black"
+              style="margin-left: 200px;font-size: 20px;">mdi-map-marker</v-icon>{{ jobApplication.job.location }}
+          </span>
+        </div><br><br>
+        <div style="display: flex; align-items: center;">
+          <v-icon color="black">mdi-email-box</v-icon>
+          <span style="font-size: 20px;">{{ jobApplication.company.company_email }}<v-icon color="black"
+              style="margin-left: 85px;font-size: 20px;">mdi-school</v-icon>{{ jobApplication.job.qualifications }}
+          </span>
+        </div><br><br>
+        <div style="display: flex; align-items: center;">
+
+          <v-icon color="black">mdi-currency-rupee</v-icon>
+          <span style="font-size: 20px;">{{ jobApplication.job.salary }}<v-icon color="black"
+              style="margin-left: 270px;font-size: 20px;">mdi-desktop-classic</v-icon>{{ jobApplication.job.experience
+            }}
+          </span>
+        </div>
+
+
+      </v-card-text>
+      <v-card-actions>
+
+        <v-icon @click="deleteItem(jobApplication.id)" color="red" style="font-size: 40px;"
+          class="delete-icon">mdi-delete-outline </v-icon>
+      </v-card-actions>
+
+    </v-card>
   </div>
-  
-          
-</v-card-text>
-<v-card-actions>
-         
-          <v-icon @click="deleteItem(jobApplication.id)" color="red" style="font-size: 40px;"  class="delete-icon">mdi-delete-outline </v-icon>
-        </v-card-actions>
-      
-      </v-card>
-      </div>
 </template>
 
 <script>
@@ -54,7 +58,7 @@ export default {
   },
   setup(props) {
     const jobApplications = ref(props.data);
-
+    console.log(jobApplications.value);
     const deleteItem = (id) => {
       window.Swal.fire({
         title: "Are you sure?",
@@ -120,18 +124,21 @@ export default {
 .v-card__text {
   padding: 0;
 }
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
   gap: 60px;
   margin-top: 20px;
 }
+
 .delete-icon:hover {
   cursor: pointer;
   transform: scale(1.4);
- 
+
 }
-.v-icon:hover{
+
+.v-icon:hover {
   transform: scale(1.2);
 }
 </style>

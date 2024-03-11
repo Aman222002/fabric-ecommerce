@@ -17,7 +17,7 @@
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
-    <v-app-bar height="45" id="header">
+    <v-app-bar height="56" id="header">
         <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-menu transition="slide-y-transition">
@@ -41,8 +41,7 @@ import { useUsersStore } from "@/store/user";
 import axios from "axios";
 
 export default {
-    name: "CompanyNav",
-
+    name: "navbar-component",
     setup() {
         const usersStore = useUsersStore();
 
@@ -125,7 +124,7 @@ export default {
     },
 };
 </script>
-<style>
+<style scoped>
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
     padding-inline: 8px;
 }

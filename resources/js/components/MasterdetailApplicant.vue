@@ -1,13 +1,12 @@
 <template>
     <DxTabPanel>
-       
-        <DxItem title="Applicant" template="application" />
+
+        <DxGridItem title="Applicant" template="application" />
         <template #application>
             <ApplicantTab :job-Id="applicationInfo.id" />
         </template>
-       
+
     </DxTabPanel>
-   
 </template>
 <script>
 
@@ -22,10 +21,10 @@ export default {
         },
     },
     setup(props) {
-        console.log(props.applicationInfo,'here');
-      
+        console.log(props.applicationInfo, 'here');
+
     },
-    components: { ApplicantTab}
+    components: { ApplicantTab }
 }
 </script>
 <style scoped></style>

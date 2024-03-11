@@ -23,10 +23,9 @@
        <companynav-component></companynav-component>
      
         <v-main>
-            <v-container>
-           
+            <v-container fluid>
             @yield('content')
-            </v-container>
+            </v-container fluid>
         </v-main>
         <!-- <companyfooter-component></companyfooter-component> -->
        </v-app>

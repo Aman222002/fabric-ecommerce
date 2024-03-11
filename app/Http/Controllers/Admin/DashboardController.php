@@ -86,6 +86,20 @@ class DashboardController extends Controller
         }
     }
     /**
+     * function to view user who had buyed this plan
+     */
+    public function getDetails(Request $request)
+    {
+        // dd($request->planID);
+        try {
+            $users = User::where('plan_id', $request->planID)->where('subscription_status', 'active')->get();
+            // dd($users);
+            return response()->json(['status' => true, 'data' => $users], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    /**
      * funtion for admin logout
      */
     public function logout()

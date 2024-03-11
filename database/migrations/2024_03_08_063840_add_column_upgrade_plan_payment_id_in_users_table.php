@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('post_jobs', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropForeign(['skill_id', 'user_id', 'category_id', 'job_type_id']);
+            $table->string('upgrade_plan_payment_id')->after('upgrade_plan_id')->nullable();
         });
     }
 
@@ -22,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('post_jobs', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
+            $table->dropColumn('upgrade_plan_payment_id');
         });
     }
 };
