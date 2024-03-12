@@ -8,11 +8,11 @@
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
-            density="compact" outlined :readonly="disabledFields"></v-text-field>
+            density="compact" outlined :disabled="disabledFields"></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.email" label="Representative Email" :rules="emailRules"
-            density="compact" outlined :readonly="disabledFields"></v-text-field>
+            density="compact" outlined :disabled="disabledFields"></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
@@ -20,7 +20,7 @@
         </v-col>
         <v-col cols="3" sm="3">
           <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules" type="phone"
-            density="compact" outlined :readonly="disabledFields"></v-text-field>
+            density="compact" outlined :disabled="disabledFields"></v-text-field>
         </v-col>
       </v-row>
       <div v-if="showCompanyDetails">
@@ -53,7 +53,6 @@
       <v-row justify="center">
         <v-col cols="12" class="text-center">
           <v-btn type="submit" color="primary" class="custom-button" >Register Company</v-btn>
-        
         </v-col>
       </v-row>
     </v-form>
@@ -117,11 +116,10 @@ export default {
        company.value.email=props.data.email;
        company.value.phone=props.data.phone;
 
-       if (props.data) {
+       if (props.data.name) {
         company.value.name = props.data.name;
         company.value.email = props.data.email;
         company.value.phone = props.data.phone;
-    
         disabledFields.value = true;
       }
       if(window.location.pathname==="/company/register")
@@ -158,8 +156,10 @@ export default {
               formData.append("logo", company.value[key][0]);
             }
           }
-          formData.append("company_Id", props.data.company);
-          formData.append("permission", props.data.permission);
+          if (props.data.permission) {
+            formData.append("company_Id", props.data.company);
+            formData.append("permission", props.data.permission);
+          }
          console.log(props.data.permission)
           axios
             .post("/company/post", formData, {

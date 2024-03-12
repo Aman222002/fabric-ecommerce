@@ -21,6 +21,7 @@ use App\Http\Requests\CompanyRagistrationRequest;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
 use App\Jobs\PaymentJob;
+use App\Models\Invitation;
 
 use function PHPSTORM_META\map;
 
@@ -234,14 +235,12 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
-     // dd( $request);
-        // $request->validated();
         try {
             $input = $request->all();
             $existingUser = User::where('email', $input['email'])->first();
             if ($existingUser) {
                 $user = $existingUser;
-            } else {
+            } else if ($request->company_Id) {
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
@@ -252,9 +251,8 @@ class CompanyController extends Controller
                 $user->assignRole('Company Subadmin');
             }
             if ($request->has('permission') && !empty($request->permission)) {
-              
                 foreach (json_decode($request->permission) as $permission) {
-                   // dd($permission);
+                    // dd($permission);
                     Permissionaccess::create([
                         'user_id' => $user->id,
                         'company_id' => $request->company_Id,
@@ -262,17 +260,24 @@ class CompanyController extends Controller
                     ]);
                 }
             }
-            if(!($request->company_Id)){
-                $user->assignRole('Company Admin');
+            // dd(!($request->company_Id));
+            if (!($request->company_Id)) {
+                // dd($request->company_Id);
                 $image = $request->file('logo');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/assest', $imageName);
+                $user = User::create([
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => $input['password'],
+                    'phone' => $input['phone'],
+                ]);
+                $user->assignRole('Company Admin');
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
                     'company_email' => $input['company_email'],
                     'phone_number' => $input['phone_number'],
-    
                     'logo' => $imageName,
                 ]);
                 dispatch(new VerificationMail($user->email));
@@ -519,9 +524,7 @@ class CompanyController extends Controller
                 'password' => $credentials['password'],
             ])) {
                 $user = Auth::user();
-
                 if ($user->roles->contains('name', 'Company Subadmin')) {
-                   
                     session(['company_id' => $user->company_id]);
                     $companyData = Company::where('id', $user->company_id)->first();
                     return response()->json([
@@ -531,18 +534,16 @@ class CompanyController extends Controller
                         'company_data' => $companyData
                     ], 200);
                 }
-               
                 if ($user->companies->isNotEmpty()) {
                     foreach ($user->companies as $company) {
                         if ($company->company_name === $credentials['company_name']) {
                             session(['company_id' => $company->id]);
-                           
-                             $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
-                             return response()->json([
+                            $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
+                            return response()->json([
                                 'status' => true,
                                 'message' => 'Logged in Successfully!',
                                 'user_data' => $user,
-                                 'company_data' => $companyData
+                                'company_data' => $companyData
                             ], 200);
                         }
                     }
@@ -634,25 +635,58 @@ class CompanyController extends Controller
 
 
 
-    public function adduser()
+    public function adduser( )
     {
+
         return view('user');
     }
     public function users()
     {
         return view('companyusers');
     }
-    public function fetchuser()
-    {
-        try {
-            $companyId = session('company_id');
+    // public function fetchuser(Request $request)
+    // {
+  
+    //     try {
+    //         $companyId = session('company_id');
+    //         $users = User::where('company_id', $companyId)->get();
+    //         return response()->json(['status' => true, 'data' => $users], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
+    public function fetchuser(Request $request)
+{
+    try {
+        $companyId = session('company_id');
+        $type = $request->input('type');
+
+        switch ($type) {
+            case 'Invited':
+               
+                 $users = Invitation::where('company_id', $companyId)
+                              ->where('status', 'pending')
+                              ->get();
+                 break;
+
+            case 'Rejected':
+                $users = Invitation::where('company_id', $companyId)
+                             ->where('status', 'rejected')
+                             ->get();
+                break;
+            default:
             $users = User::where('company_id', $companyId)->get();
-            return response()->json(['status' => true, 'data' => $users], 200);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+                break;
         }
+
+        return response()->json(['status' => true, 'data' => $users], 200);
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
+}
+
    
 
     public function userData()

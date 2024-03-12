@@ -110,7 +110,7 @@ export default {
           // usersStore.company.company_email = response.data.company_data[0].company_email;
           // usersStore.company.phone = response.data.company_data[0].phone_number;
           console.log(response.data);
-          window.location.href = "/postjob";
+          window.location.href = "/findcv";
         }
       } catch (err) {
         console.error(err);

@@ -1,118 +1,4 @@
-<!-- 
-   <template>
-  <p style="text-align: center; font-size: 20px; margin-top: 20px">Add User</p>
-  <DxDataGrid
-    :show-borders="true"
-    :data-source="dataSource"
-    :repaint-changes-only="true"
-    :remote-operations="true"
-    @init-new-row="initNewRow"
-    @row-inserted="rowInserted"
-  >
-    <DxEditing
-      mode="row"
-      :allow-updating="true"
-      :allow-deleting="true"
-      :allow-adding="true"
-      :use-icons="true"
-    >
-    </DxEditing>
-    <DxSearchPanel :visible="true" />
 
-    <DxScrolling mode="virtual" row-rendering-mode="virtual" />
-
-    <DxColumn data-field="name" data-type="string"> </DxColumn>
-    <DxColumn data-field="email" data-type="string"></DxColumn>
-    
-    <DxColumn data-field="phone" data-type="string"> </DxColumn>
-    <DxColumn
-      data-field="permission"
-      data-type="string"
-      cell-template="demodropdown"
-      edit-cell-template="demodropdown"
-    >
-    </DxColumn>
-    <template #demodropdown>
-     
-      <DxDropDownBox
-        label="Permission"
-        labelMode="floating"
-        mode="multiple"
-        :accept-custom-value="true"
-        @value-change="selectStatus"
-
-      >
-        <DxList
-          :data-source="userpermission"
-          selection-mode="multiple"
-          @item-click="selectStatus"
-        >
-        
-        </DxList>
-      </DxDropDownBox> 
-    </template>
-   
-     
-  </DxDataGrid>
-</template>
-      <script >
-import axios from "axios";
-
-import dxGridStore from "../composition/dxGridStore";
-
-import { ref, onMounted } from "vue";
-
-export default {
-  name: "user",
-  components: {},
-  setup() {
-    const showColumn = ref(false);
-    const loadUrl = `/fetch-user`;
-    const params = ref({});
-    const insertURL = `/admin/user/addnewuser`;
-    const selectedStatus = ref([]);
-    const selectStatus = (e) => {
-      const value = e.itemData;
-      console.log(value);
-      params.value = { permision: value };
-      console.log(params.value);
-      selectedStatus.value = value;
-    };
-    const { dataSource } = dxGridStore(loadUrl, params, insertURL, null, null);
-    const userpermission = ref([]);
-    const fetchJobSkill = async () => {
-      try {
-        axios.get("/permission").then((response) => {
-          userpermission.value = response.data.map((data) => data.name);
-        });
-      } catch (error) {
-        console.error("Error fetching job types:", error);
-      }
-    };
-    const initNewRow = (e) => {
-      e.data.status = "1";
-      showColumn.value = true;
-    };
-    const rowInserted = (e) => {
-      showColumn.value = false;
-    };
-    onMounted(() => {
-      fetchJobSkill();
-    });
-    
-    return {
-      dataSource,
-      userpermission,
-      params,
-      initNewRow,
-      rowInserted,
-      showColumn,
-       selectStatus,
-      selectedStatus,
-    };
-  },
-};
-</script> -->
 <template>
   <v-container fluid style="margin-top: 30px;">
     <v-row justify="center">
@@ -120,13 +6,13 @@ export default {
         <v-form @submit.prevent="addUser">
           <v-row>
             <v-col cols="7">
-              <v-text-field v-model="userData.name" label="Name" variant="outlined" density="compact"></v-text-field>
+              <v-text-field v-model="userData.name" label="Name" variant="outlined" density="compact" :rules="nameRules"></v-text-field>
             </v-col>
             <v-col cols="7">
-              <v-text-field v-model="userData.email" label="Email" variant="outlined" density="compact"></v-text-field>
+              <v-text-field v-model="userData.email" label="Email" variant="outlined" density="compact" :rules="emailRules"></v-text-field>
             </v-col>
             <v-col cols="7">
-              <v-text-field v-model="userData.phone" label="Phone" variant="outlined" density="compact"></v-text-field>
+              <v-text-field v-model="userData.phone" label="Phone" variant="outlined" density="compact" :rules="phoneRules"></v-text-field>
             </v-col>
             <v-col cols="7">
               <v-select
@@ -166,6 +52,15 @@ export default {
       phone: "",
       permission:[]
     });
+    const nameRules = [(v) => !!v || "Name is required"];
+    const emailRules = [
+      (v) => !!v || "Email is required",
+      (v) => /.+@.+\..+/.test(v) || "Enter a valid email",
+    ];
+    const phoneRules = [
+      (v) => !!v || "Phone number is required",
+      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+    ];
 
     const userPermissions = ref([]);
 
@@ -188,14 +83,21 @@ export default {
       try {
         await axios.post("/admin/user/addnewuser", userData.value);
         userData.value.permission.forEach(permission => {
-      console.log(permission);
+      //console.log(permission);
     });
+    window.Swal.fire({
+                  icon: "success",
+                  title: "Invitation sent",
+                  text: "Invitation sent Successfully to the user Email",
+                  confirmButtonText: "OK",
+                });
         userData.value = {
           name: "",
           email: "",
           phone: "",
           permission: []
         };
+       
       } catch (error) {
         console.error("Error adding user:", error);
       }
@@ -204,7 +106,11 @@ export default {
     return {
       userData,
       userPermissions,
-      addUser,selectCategory 
+      addUser,selectCategory ,
+      nameRules,
+      emailRules,
+     
+      phoneRules,
     };
   }
 };
