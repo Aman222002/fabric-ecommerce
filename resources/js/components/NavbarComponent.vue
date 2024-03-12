@@ -233,7 +233,6 @@ nav.left_side_bar .group.active {
 .title {
   color: black;
   margin-top: 15px;
-  margin-left: 32%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 

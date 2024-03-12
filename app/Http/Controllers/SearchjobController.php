@@ -37,6 +37,7 @@ class SearchjobController extends Controller
             }
             $jobs = $jobs->get()->filter(function ($job) {
                 $user_id = $job->user_id;
+                // dd($job);
                 $subscription_status = User::where('id', $user_id)->value('subscription_status');
                 if ($subscription_status == 'active' && $job->post_status == 'Published') {
                     return $job;
@@ -44,6 +45,7 @@ class SearchjobController extends Controller
                     return false;
                 }
             });
+            // dd($jobs);
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

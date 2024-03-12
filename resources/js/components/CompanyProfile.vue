@@ -17,22 +17,22 @@
           v-if="company.length > 0"
           @click="openFileInput()" 
         > -->
-            <!-- <span class="mdi mdi-pencil" id="icon"></span> -->
+
             <v-avatar
               size="130px"
               class="avatar"
               style="margin: 10px"
               v-if="company.length > 0"
             >
-              <input
+              <!-- <input
                 type="file"
                 id="fileInput"
                 ref="fileInput"
                 style="display: none"
                 @change="handleImageChange()"
-              />
+              /> -->
               <img
-                :src="`/storage/assest/${company[0].logo}`"
+                :src="`/storage/assest/${company.logo}`"
                 alt="Selected Image"
                 width="150px"
                 height="150px"
@@ -42,31 +42,53 @@
           <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
             <p style="font-size: 30px">{{ user.name }}</p>
             <p style="font-size: 15px">Representative</p>
-            <p v-if="company.length > 0 && company[0].address">
+            <p v-if="company.length > 0 && company.address">
               <v-icon style="font-size: 15px; color: rgb(3, 3, 3)"
                 >mdi-map-marker</v-icon
               >
-              {{ company[0].address.street }}, {{ company[0].address.city }},
-              {{ company[0].address.state }}
+              {{ company.address.street }}, {{ company.address.city }},
+              {{ company.address.state }}
             </p>
           </v-col>
         </v-row>
       </v-container>
     </div>
+
     <v-container>
       <v-row class="company_profile_infor">
         <v-col sm="12" md="6" lg="8" xl="8" class="company_profile_infor_left">
           <!-- Description -->
           <v-card class="card2" style="margin-bottom: 20px">
+            <v-icon @click="openModal" style="margin-left: 97%"
+              >mdi-pencil</v-icon
+            >
             <v-card-title style="font-family: Poppins, sans-serif"
               ><v-icon>mdi-domain</v-icon> Description:</v-card-title
             >
             <v-card-text>
-              <div style="font-family: sans-serif" v-if="company.length > 0">
-                {{ company[0].description }}
+              <div>
+                {{ company.description }}
               </div>
             </v-card-text>
           </v-card>
+          <v-dialog v-model="modalOpen" max-width="500">
+            <v-card>
+              <v-card-title>
+                <span class="headline">Edit Description</span>
+              </v-card-title>
+              <v-card-text>
+                <v-textarea
+                  v-model="editedDescription.description"
+                  label="Description"
+                  outlined
+                ></v-textarea>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="primary" @click="saveDescription">Save</v-btn>
+                <v-btn color="error" @click="closeModal">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-col>
         <v-col sm="12" md="6" lg="4" xl="4" class="company_profile_infor_right">
           <v-card>
@@ -75,65 +97,29 @@
             > -->
             <v-card-text>
               <div>
-                <label
-                  for="name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Representative Name:</label
-                >
-                <span style="margin-left: 23%">{{ user.name }}</span>
+                <label for="name" class="ps-0">Representative Name:</label>
+                <span>{{ user.name }}</span>
               </div>
 
               <div>
-                <label
-                  for="email"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Email:</label
-                >
-                <span style="margin-left: 32%">{{ user.email }}</span>
+                <label for="email" class="ps-0">Email:</label>
+                <span>{{ user.email }}</span>
               </div>
               <div>
-                <label
-                  for="phone"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Contact No:</label
-                >
-                <span style="margin-left: 29%">{{ user.phone }}</span>
+                <label for="phone" class="ps-0">Contact No:</label>
+                <span>{{ user.phone }}</span>
               </div>
               <div>
-                <label
-                  for="company name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Company Name</label
-                >
-                <span v-if="company.length > 0" style="margin-left: 25%">{{
-                  company[0].company_name
-                }}</span>
+                <label for="company name" class="ps-0">Company Name:</label>
+                <span>{{ company.company_name }}</span>
               </div>
               <div>
-                <label
-                  for="company name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Phone Number</label
-                >
-                <span v-if="company.length > 0" style="margin-left: 26%"
-                  >{{}}</span
-                >
+                <label for="company name" class="ps-0">Phone Number:</label>
+                <span>{{ company.phone_number }}</span>
               </div>
               <div>
-                <label
-                  for="companyemail"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Company Email</label
-                >
-                <span v-if="company.length > 0" style="margin-left: 25%">{{
-                  company[0].company_email
-                }}</span>
+                <label for="companyemail" class="ps-0">Company Email:</label>
+                <span>{{ company.company_email }}</span>
               </div>
             </v-card-text>
           </v-card>
@@ -145,67 +131,33 @@
               Address:
             </v-card-title>
 
-            <v-card-text v-if="showAddress && company[0].address">
+            <v-card-text>
               <div>
-                <label
-                  for="name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >First line Address:</label
-                >
-                <span style="margin-left: 23%">{{
-                  company[0].address.first_line_address
-                }}</span>
+                <label for="name" class="ps-0">First line Address:</label>
+                <span>{{ address.first_line_address }}</span>
               </div>
               <div>
-                <label
-                  for="name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Street:</label
-                >
-                <span style="margin-left: 23%">{{
-                  company[0].address.street
-                }}</span>
+                <label for="name" class="ps-0">Street:</label>
+                <span>{{ address.street }}</span>
               </div>
               <div>
-                <label
-                  for="name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >City:</label
-                >
-                <span style="margin-left: 23%">{{
-                  company[0].address.city
-                }}</span>
+                <label for="name" class="ps-0">City:</label>
+                <span>{{ address.city }}</span>
               </div>
               <div>
-                <label
-                  for="name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >State:</label
-                >
-                <span style="margin-left: 23%">{{
-                  company[0].address.state
-                }}</span>
+                <label for="name" class="ps-0">State:</label>
+                <span>{{ address.state }}</span>
               </div>
               <div>
-                <label
-                  for="name"
-                  class="ps-0"
-                  style="font-weight: 600; text-align: inherit"
-                  >Postal Code:</label
-                >
-                <span style="margin-left: 23%">{{
-                  company[0].address.postal_code
-                }}</span>
+                <label for="name" class="ps-0">Postal Code:</label>
+                <span>{{ address.postal_code }}</span>
               </div>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
+
     <!-- <div style="display: flex; margin: 40px">
       <v-tabs>
         <v-tab
@@ -264,23 +216,23 @@
           <label
             for="name"
             class="ps-0"
-            style="font-weight: 600; text-align: inherit"
+            
             >Representative Name:</label
           >
-          <span style="margin-left: 23%">{{ user.name }}</span
+          <span >{{ user.name }}</span
           ><br /><br />
           <label
             for="email"
             class="ps-0"
-            style="font-weight: 600; text-align: inherit"
+            
             >Email:</label
           >
-          <span style="margin-left: 32%">{{ user.email }}</span
+          <span >{{ user.email }}</span
           ><br /><br />
           <label
             for="phone"
             class="ps-0"
-            style="font-weight: 600; text-align: inherit"
+            
             >Contact No:</label
           >
           <span style="margin-left: 29%">{{ user.phone }}</span>
@@ -294,29 +246,29 @@
           <label
             for="company name"
             class="ps-0"
-            style="font-weight: 600; text-align: inherit"
+            
             >Company Name</label
           >
-          <span v-if="company.length > 0" style="margin-left: 25%">{{
-            company[0].company_name
+          <span v-if="company.length > 0" >{{
+            company.company_name
           }}</span
           ><br /><br />
           <label
             for="company name"
             class="ps-0"
-            style="font-weight: 600; text-align: inherit"
+            
             >Phone Number</label
           >
-          <span v-if="company.length > 0" style="margin-left: 26%">{{}}</span
+          <span v-if="company.length > 0" >{{}}</span
           ><br /><br />
           <label
             for="companyemail"
             class="ps-0"
-            style="font-weight: 600; text-align: inherit"
+            
             >Company Email</label
           >
-          <span v-if="company.length > 0" style="margin-left: 25%">{{
-            company[0].company_email
+          <span v-if="company.length > 0" >{{
+            company.company_email
           }}</span>
         </v-card-text>
       </v-card>
@@ -329,8 +281,8 @@
         ><v-icon>mdi-domain</v-icon> Description:</v-card-title
       >
       <v-card-text>
-        <div style="font-family: sans-serif" v-if="company.length > 0">
-          {{ company[0].description }}
+        <div v-if="company.length > 0">
+          {{ company.description }}
         </div>
       </v-card-text>
     </v-card> -->
@@ -338,7 +290,7 @@
 
     <!--  -->
     <v-card
-      v-if="showJob && company[0].jobs"
+      v-if="showJob && company.jobs"
       class="card2"
       style="margin-bottom: 20px; font-size: 16px"
     >
@@ -354,7 +306,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(job, index) in company[0].jobs" :key="index">
+            <tr v-for="(job, index) in company.jobs" :key="index">
               <td>{{ job.title }}</td>
               <td>{{ job.vacancy }}</td>
             </tr>
@@ -366,13 +318,11 @@
 
     <!--  -->
     <v-card
-      v-if="showAddress && company[0].address"
+      v-if="showAddress && company.address"
       class="card2"
       style="margin-bottom: 20px; font-size: 16px"
     >
-      <v-icon @click="openEditAddressModal()" style="margin-left: 97%">
-        mdi-pencil
-      </v-icon>
+      <v-icon @click="openEditAddressModal()"> mdi-pencil </v-icon>
       <v-card-title style="font-family: Poppins, sans-serif">
         Address:
       </v-card-title>
@@ -389,11 +339,11 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ company[0].address.first_line_address }}</td>
-              <td>{{ company[0].address.street }}</td>
-              <td>{{ company[0].address.city }}</td>
-              <td>{{ company[0].address.state }}</td>
-              <td>{{ company[0].address.postal_code }}</td>
+              <td>{{ address.first_line_address }}</td>
+              <td>{{ address.street }}</td>
+              <td>{{ address.city }}</td>
+              <td>{{ address.state }}</td>
+              <td>{{ address.postal_code }}</td>
             </tr>
           </tbody>
         </template>
@@ -493,7 +443,6 @@
     </v-dialog>
   </v-card>
 </template>
-
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -502,22 +451,22 @@ export default {
   name: "CompanyProfile",
   setup() {
     const company = ref([]);
-    const address=ref({
-    first_line_address: "",
+    const address = ref({
+      first_line_address: "",
       street: "",
       city: "",
       state: "",
       postal_code: "",
-  });
+    });
 
-     const store = useUsersStore () ;
+    const store = useUsersStore();
     const user = ref([]);
     const fileInput = ref();
     const image = ref(null);
     const isEditModalOpen = ref(false);
     const modalOpen = ref(false);
     const editedDescription = ref({
-      description:''
+      description: "",
     });
     const editedJob = ref({
       name: "",
@@ -546,8 +495,8 @@ export default {
         company.value = response.data.companydata;
         // store.company.company_name
         user.value = response.data.user;
-         address.value=response.data.companydata.address ;
-       console.log(response.data.companydata.address);
+        address.value = response.data.companydata.address;
+        console.log(response.data.companydata.address);
       } catch (error) {
         console.error("Error fetching company profile:", error);
       }
@@ -610,24 +559,25 @@ export default {
     onMounted(() => {
       fetchCompanyProfile();
     });
-const openEditAddressModal = () => {
-    isEditAddressModalOpen.value = true;
+    const openEditAddressModal = () => {
+      isEditAddressModalOpen.value = true;
 
-    if (company.value?.address) {
-        editedAddress.value.first_line_address = company.value.address.first_line_address || '';
-        editedAddress.value.street = company.value.address.street || '';
-        editedAddress.value.city = company.value.address.city || '';
-        editedAddress.value.state = company.value.address.state || '';
-        editedAddress.value.postal_code = company.value.address.postal_code || '';
-    } else {
-        
-        editedAddress.value.first_line_address = '';
-        editedAddress.value.street = '';
-        editedAddress.value.city = '';
-        editedAddress.value.state = '';
-        editedAddress.value.postal_code = '';
-    }
-};
+      if (company.value?.address) {
+        editedAddress.value.first_line_address =
+          company.value.address.first_line_address || "";
+        editedAddress.value.street = company.value.address.street || "";
+        editedAddress.value.city = company.value.address.city || "";
+        editedAddress.value.state = company.value.address.state || "";
+        editedAddress.value.postal_code =
+          company.value.address.postal_code || "";
+      } else {
+        editedAddress.value.first_line_address = "";
+        editedAddress.value.street = "";
+        editedAddress.value.city = "";
+        editedAddress.value.state = "";
+        editedAddress.value.postal_code = "";
+      }
+    };
     const closeEditAddressModal = () => {
       isEditAddressModalOpen.value = false;
     };
@@ -635,7 +585,10 @@ const openEditAddressModal = () => {
     const saveEditedAddress = async () => {
       try {
         const formData = new FormData();
-        formData.append("first_line_address", editedAddress.value.first_line_address);
+        formData.append(
+          "first_line_address",
+          editedAddress.value.first_line_address
+        );
         formData.append("street", editedAddress.value.street);
         formData.append("city", editedAddress.value.city);
         formData.append("state", editedAddress.value.state);
@@ -663,13 +616,17 @@ const openEditAddressModal = () => {
       try {
         const formData = new FormData();
         formData.append("description", editedDescription.value.description);
-        const response = await axios.post("/company/updatedescription", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await axios.post(
+          "/company/updatedescription",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         closeModal();
-         window.location.reload();
+        window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
@@ -702,7 +659,8 @@ const openEditAddressModal = () => {
       editedDescription,
       store,
       openModal,
-      saveDescription,closeModal
+      saveDescription,
+      closeModal,
     };
   },
 };
@@ -739,5 +697,8 @@ const openEditAddressModal = () => {
 }
 .company_profile_infor_right .v-card .v-card-text {
   padding: 0;
+}
+.company_profile_infor_right .v-card-text div label {
+  font-weight: 600;
 }
 </style>

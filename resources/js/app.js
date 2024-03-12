@@ -123,6 +123,9 @@ app.component("expired-component", ExpiredComponent);
 import AddressTabComponent from "./components/AddressTab.vue";
 app.component("address-component", AddressTabComponent);
 
+import index from "./components/HomePage/index.vue"
+app.component("home-component",index);
+
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
 import NavbarComponent from "./components/NavbarComponent.vue";

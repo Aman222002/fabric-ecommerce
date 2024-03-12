@@ -10,7 +10,7 @@
       <v-container class="w-75 mb-6">
         <v-row align="center" justify="center">
           <v-col
-            cols="auto"
+            cols="12"
             class="job-applied_col job-card"
             sm="12"
             md="12"

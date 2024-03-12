@@ -208,6 +208,7 @@ export default {
   width: 95%;
   margin: 0 auto;
   border-radius: 15px;
+  margin-bottom: 15px;
 }
 .choose_your_plan .packages_price .v-card-title {
   text-align: center;

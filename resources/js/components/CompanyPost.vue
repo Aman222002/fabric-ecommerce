@@ -36,7 +36,7 @@
                 clearable
                 style="width: 100%"
               ></v-text-field>
-              <v-btn @click="searchJobs">Search</v-btn>
+              <v-btn class="search_btn" @click="searchJobs">Search</v-btn>
             </v-card>
           </v-col>
           <v-col
@@ -99,7 +99,6 @@
                       ><v-icon>mdi-format-title</v-icon>
                       <span>{{ detail.title }}</span></v-card-title
                     >
-
                     <v-icon color="black">mdi-domain</v-icon>
                     <span>{{ detail.company_name }}</span>
                     <v-icon color="black">mdi-map-marker</v-icon>
@@ -110,6 +109,11 @@
                     <span>{{ detail.vacancy }}</span>
                   </div>
                   <div class="compamy_infor_btn">
+                    <v-btn
+                      class="save_btn mr-3"
+                      @click="detailPanelVisible = false"
+                      ><v-icon>mdi-arrow-left-top</v-icon></v-btn
+                    >
                     <v-btn
                       class="apply_for_job"
                       v-if="usersStore.isloggedin"
@@ -424,5 +428,15 @@ button.save_btn {
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
+}
+.find_Job_list_left button.search_btn {
+  display: table;
+  margin: 0 auto;
+  color: #fff;
+  background-color: #1967d2;
+  font-size: 15px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 9px 32px 15px;
 }
 </style>

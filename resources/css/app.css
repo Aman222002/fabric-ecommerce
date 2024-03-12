@@ -1,3 +1,443 @@
+/* Global css */
+
+ul {
+    list-style: none;
+}
+
+
+/* Hello World Pushap */
+
 main.v-main {
     background: #f5f7fc;
+}
+
+/* home page banner section  */
+
+.home_page {
+    position: relative;
+}
+
+.banner_st {
+    width: 90%;
+    position: absolute;
+    top: 0;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    height: 100%;
+}
+
+.banner_st .v-row {
+    height: 100%;
+    display: flex;
+    align-content: center;
+}
+
+.banner_st .banner_left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.banner_right {
+    width: 50%;
+    position: absolute;
+    display: flex;
+    right: 2%;
+    top: 50%;
+    margin-top: -325px;
+    z-index: 0;
+}
+
+.banner_st h3 {
+    font-size: 50px;
+    line-height: 60px;
+    color: #202124;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.banner_st h3 span.colored {
+    color: #1967d2;
+}
+
+.banner_st .text {
+    font-size: 17px;
+    color: #696969;
+    line-height: 25px;
+    margin: 20px 0px;
+}
+
+form.job_search_form {
+    background: #fff;
+    padding: 15px 25px;
+    border-radius: 15px;
+}
+
+form.job_search_form .v-field__overlay {
+    background: transparent;
+}
+
+form.job_search_form button.v-btn {
+    width: 100%;
+    min-width: auto;
+    color: #fff;
+    background-color: #1967d2;
+    padding: 22px 0;
+}
+
+form.job_search_form .v-sheet {
+    position: relative;
+}
+
+form.job_search_form p.line {
+    width: 1px;
+    background: #bfbfbf;
+    margin: 0 10px;
+}
+
+.popular_searches {
+    margin-top: 15px;
+}
+
+.popular_searches a {
+    color: #696969;
+}
+
+.banner_right .bnt_img img {
+    border-top-left-radius: 40%;
+    border-top-right-radius: 34%;
+    border-bottom-right-radius: 40%;
+    border-bottom-left-radius: 24%;
+}
+
+form.job_search_form .v-input__details {
+    position: absolute;
+    width: 100%;
+    bottom: -12px;
+}
+
+form.job_search_form .v-input__control .v-field__outline {
+    display: none;
+}
+
+
+
+/* // Popular Job Categories only */
+.popular_job_categories {
+    padding: 115px 0 0;
+}
+
+.popular_job_categories .sec-title {
+    margin-bottom: 50px;
+}
+
+.popular_job_categories .sec-title h2 {
+    position: relative;
+    display: block;
+    font-size: 30px;
+    line-height: 1.2em;
+    color: #202124;
+    font-weight: 500;
+}
+
+.popular_job_categories .sec-title .text {
+    position: relative;
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 26px;
+    color: #696969;
+    font-weight: 400;
+}
+
+.popular_job_categories .v-card {
+    padding: 15px;
+    width: 100%;
+}
+
+
+.popular_job_categories .v-card .v-list-item__spacer {
+    display: none;
+}
+
+.popular_job_categories .popular_col .v-card-item__prepend {
+    background: #ecedf2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1967d2;
+    font-size: 25px;
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.popular_job_categories .popular_col:hover .v-card-item__prepend {
+    background: #1967db;
+    color: #ecedf2;
+}
+
+.popular_job_categories .popular_col .v-card-title {
+    font-size: 18px;
+    color: #202124;
+    font-weight: 500;
+    line-height: 29px;
+    margin-bottom: 4px;
+}
+
+.popular_job_categories .popular_col:hover .v-card-title {
+    color: #1967db;
+}
+
+
+
+/* // featured jobs only */
+.featured_jobs {
+    padding: 65px 0 85px;
+}
+
+.featured_jobs .sec-title {
+    margin-bottom: 50px;
+}
+
+.featured_jobs .sec-title h2 {
+    position: relative;
+    display: block;
+    font-size: 30px;
+    line-height: 1.2em;
+    color: #202124;
+    font-weight: 500;
+}
+
+.featured_jobs .sec-title .text {
+    position: relative;
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 26px;
+    color: #696969;
+    font-weight: 400;
+}
+
+.featured_jobs a.load_more {
+    font-size: 19px;
+    line-height: 20px;
+    border-radius: 8px;
+    font-weight: 400;
+    padding: 15px 28px;
+    background-color: #1967d2;
+    text-decoration: unset;
+    display: table;
+    color: #fff;
+}
+
+.featured_jobs .company_info {
+    padding: 15px;
+    width: 100%;
+    display: flex;
+}
+
+.company_logo,
+.company_logo .v-responsive {
+    width: 60px;
+    height: 100%;
+}
+
+.company_logo img {
+    display: block !important;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.job_info .v-card-title {
+    padding-top: 0;
+}
+
+.job_info ul {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 13px;
+}
+
+.job_info ul li {
+    font-size: 15px;
+    margin-right: 15px;
+}
+
+.job_info ul li i {
+    font-size: 19px;
+}
+
+.job_info ul.company_time {
+    margin-top: 8px;
+}
+
+.job_info ul.company_time li {
+    position: relative;
+    font-size: 13px;
+    line-height: 15px;
+    margin-right: 15px;
+    padding: 5px 20px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+    background: rgba(25, 103, 210, 0.15);
+    color: #1967db;
+}
+
+.job_info ul.company_time li:nth-child(2) {
+    background: #93faae;
+    color: #34a853;
+}
+
+.job_info ul.company_time li:nth-child(3) {
+    background: #fddb91;
+    color: #ffae00;
+}
+
+a.bookmark_fr {
+    position: absolute;
+    top: 5%;
+    right: 0%;
+}
+
+.job_info .v-card-title a {
+    color: #202124;
+    text-decoration: unset;
+}
+
+.v-card.job_info {
+    box-shadow: unset;
+}
+
+
+/* // Millions of Jobs*/
+.millions_of_jobs {
+    background: #fff;
+}
+
+.millions_of_jobs .sec-title {
+    margin-bottom: 30px;
+}
+
+.millions_of_jobs .sec-title h2 {
+    position: relative;
+    display: block;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.2em;
+    color: #202124;
+}
+
+.millions_of_jobs .sec-title .text {
+    position: relative;
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 26px;
+    color: #696969;
+    font-weight: 400;
+}
+
+.millions_of_jobs ul.list-style-one li {
+    position: relative;
+    font-size: 15px;
+    line-height: 26px;
+    color: #202124;
+    font-weight: 400;
+    cursor: default;
+    margin-bottom: 20px;
+}
+
+.millions_of_jobs a.theme-btn {
+    font-size: 19px;
+    line-height: 20px;
+    border-radius: 8px;
+    font-weight: 400;
+    padding: 15px 28px;
+    background-color: #1967d2;
+    text-decoration: unset;
+    display: table;
+    color: #fff;
+}
+
+
+
+
+
+
+@media screen and (max-width: 1400px) {
+    .banner_right {
+        margin-top: -242px;
+    }
+
+}
+
+
+@media screen and (max-width: 1300px) {
+    .banner_st h3 {
+        font-size: 40px;
+    }
+
+}
+
+@media screen and (max-width: 1200px) {
+    .popular_job_categories {
+        padding: 67px 0 0;
+    }
+
+    .popular_job_categories .sec-title h2 {
+        font-size: 25px;
+        line-height: 20px;
+    }
+
+    .featured_jobs {
+        padding: 10px 0 40px;
+    }
+
+    .featured_jobs a.load_more,
+    .millions_of_jobs a.theme-btn {
+        padding: 11px 28px;
+        height: 100%;
+    }
+
+    .millions_of_jobs .sec-title h2 {
+        font-size: 30px;
+    }
+
+}
+
+
+
+@media screen and (max-width: 961px) {
+
+    .banner_right,
+    .home_page .banner {
+        display: none;
+    }
+
+    .banner_st {
+        position: relative;
+    }
+
+    .banner_st h3 {
+        font-size: 25px;
+        line-height: 33px;
+        margin-top: 35px;
+    }
+
+    form.job_search_form {
+        background: #f5f7fc;
+    }
+
+    form.job_search_form .v-col-12 {
+        margin-bottom: 15px;
+    }
+
+
+    .w-75 {
+        width: 100% !important;
+    }
 }

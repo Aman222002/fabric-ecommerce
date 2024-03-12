@@ -65,29 +65,11 @@ export default {
 </script>
 
 <style>
-form.job_search_form {
-  background: #fff;
-  padding: 15px 25px;
-  border-radius: 15px;
-}
 form.job_search_form .v-field__overlay {
   background: transparent;
 }
-form.job_search_form button.v-btn {
-  width: 100%;
-  min-width: auto;
-  color: #fff;
-  background-color: #1967d2;
-  padding: 22px 0;
-  margin-left: 15px;
-}
+
 form.job_search_form .v-sheet {
   position: relative;
-}
-
-form.job_search_form p.line {
-  width: 1px;
-  background: #bfbfbf;
-  margin: 0 10px;
 }
 </style>
