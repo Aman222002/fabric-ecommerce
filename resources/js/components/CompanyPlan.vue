@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row justify="center">
             <v-col cols="12">
-                <v-card outlined class="pa-4">
+                <v-card outlined class="pa-4" v-if="currentplan.name !== 'No Plan'">
                     <v-row no-gutters>
                         <v-col cols="8">
                             <v-card-subtitle>
@@ -22,13 +22,31 @@
                         </v-col>
                     </v-row>
                     <v-row no-gutters>
-                        <v-col>
-                            <span
+                        <v-col cols="8">
+                            <span v-if="subscription_status == 'active'"
                                 :class="{ 'subtitle-1': true, 'font-weight-bold': true, 'text-red': subscriptionDetail.remainig_days < 5, 'text-green': subscriptionDetail.remainig_days >= 5 }">
                                 {{ subscriptionDetail.remainig_days >= 0 ? "Your plan will expire in " +
-                                subscriptionDetail.remainig_days + " days" : "You don't have an Active Plan" }}</span>
+                    subscriptionDetail.remainig_days + " days" : "You don't have an Active Plan" }}</span>
+                            <span v-else :class="{ 'subtitle-1': true, 'font-weight-bold': true, 'text-red': true }">
+                                Your Plan will be Activated Soon
+                            </span>
+                        </v-col>
+                        <v-col cols="4" class="d-flex justify-end align-center">
+                            <v-btn class="bg-error" @click="removeplan()">Remove
+                                Subscription</v-btn>
                         </v-col>
                     </v-row>
+                </v-card>
+                <v-card class="no-plan-card" outlined v-if="subscription_status !== 'active'">
+                    <v-card-title class=" text-center">No Plan</v-card-title>
+                    <v-card-text class="text-center">
+                        <v-icon size="64">mdi-emoticon-sad-outline</v-icon>
+                        <p>You don't have any plan yet.</p>
+                        <p>Please consider subscribing to a plan to unlock premium features.</p>
+                    </v-card-text>
+                    <v-card-actions class="justify-center">
+                        <v-btn color="primary" @click="redirectToPlansPage()">Subscribe Now</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
@@ -36,37 +54,6 @@
     <v-dialog v-model="changePlanModal" max-width="800px">
         <v-card width="mx auto">
             <v-card-title class="headline">Choose Your Plan</v-card-title>
-            <!-- <v-container fluid>
-                <v-row>
-                    <v-col v-for="plan in plans" :key="plan.id" cols="12">
-                        <v-card class="elevation-2 mb-6" v-if="plan.name !== currentplan.name">
-                            <v-card-text class="pa-4">
-                                <div class="d-flex justify-space-between align-center">
-                                    <div>
-                                        <v-icon color="primary" class="mr-2">mdi-bookmark-check</v-icon>
-                                        <span class="subtitle-1 font-weight-bold">{{ plan.name }}</span>
-                                    </div>
-                                    <div>
-                                        <span class="grey--text">Duration</span><br>
-                                        <span class="subtitle-2 font-weight-bold">{{ plan.duration }}</span>
-                                    </div>
-                                    <div>
-                                        <span class="grey--text">Posts Allowed</span><br>
-                                        <span class="subtitle-2 font-weight-bold">{{ plan.Posts_Allowed }}</span>
-                                    </div>
-                                    <div>
-                                        <span class="grey--text">Price</span><br>
-                                        <span class="subtitle-2 font-weight-bold">${{ plan.price }}</span>
-                                    </div>
-                                    <div>
-                                        <v-btn color="primary" @click="buyPlan(plan)" outlined>Buy Plan</v-btn>
-                                    </div>
-                                </div>
-                            </v-card-text>
-                        </v-card>
-                    </v-col>
-                </v-row>
-            </v-container> -->
             <v-container>
                 <v-row>
                     <v-col cols="3">
@@ -115,10 +102,12 @@ export default {
         const currentplan = ref({
             'name': 'No Plan',
         });
+        const subscription_status = ref();
         const changingPlan = ref(false);
         const changePlanModal = ref(false);
         const selectedPlanValue = ref([]);
         const features = ref([]);
+        const userId = ref();
         const disabledButton = ref(false);
         const upgrade_status = ref();
         const subscriptionDetail = ref({
@@ -164,6 +153,8 @@ export default {
             axios
                 .get("/get/comapny-admin")
                 .then((response) => {
+                    userId.value = response.data.data[0].id;
+                    subscription_status.value = response.data.data[0].subscription_status;
                     upgrade_status.value = response.data.data[0].upgrade_status;
                 })
                 .catch((error) => {
@@ -211,20 +202,20 @@ export default {
                 console.log(error);
             }
         }
+        const redirectToPlansPage = () => {
+            window.location.href = "http://127.0.0.1:8000/product";
+        }
         const getPlan = () => {
             try {
                 axios.get(`/find/plan`).then((response) => {
                     currentplan.value = response.data.data;
-                    // console.log(response.data);
                     subscriptionDetail.value.start_date = new Date(response.data.subscription.start_date).toLocaleDateString();
                     subscriptionDetail.value.end_date = new Date(response.data.subscription.end_date).toLocaleDateString();
                     const endDate = new Date(subscriptionDetail.value.end_date);
                     const today = new Date();
                     const differenceInTime = endDate.getTime() - today.getTime();
-                    // console.log(differenceInTime);
                     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
                     subscriptionDetail.value.remainig_days = differenceInDays;
-                    // console.log(subscriptionDetail.value);
                 })
             } catch (error) {
                 console.log(error);
@@ -235,9 +226,10 @@ export default {
             await getUser();
             setTimeout(() => {
                 handleUpgradeStatusChange();
-            }, 785);
+            }, 1200);
         });
         return {
+            userId,
             currentplan,
             plans,
             subscriptionDetail,
@@ -246,8 +238,8 @@ export default {
             changeplan,
             changePlanModal,
             selectedPlanValue,
-            buyPlan, removeplan, cancelupgrade,
-            features, changingPlan, getUser, upgrade_status, disabledButton, handleUpgradeStatusChange
+            buyPlan, removeplan, cancelupgrade, redirectToPlansPage,
+            features, changingPlan, getUser, upgrade_status, disabledButton, handleUpgradeStatusChange, subscription_status
         };
     }
 }
@@ -264,5 +256,11 @@ export default {
 
 .v-card-text {
     padding: 0rem;
+}
+
+.no-plan-card {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
 }
 </style>

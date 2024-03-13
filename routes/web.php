@@ -214,19 +214,14 @@ Route::prefix('company')->group(function () {
 Route::post('/jobs/draft/{id?}/{type?}', [JobsController::class, 'detail']);
 Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
 Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
-Route::get('/jobs/application/{id}', [JobsController::class,'getapplicants']);
-
+Route::get('/jobs/application/{id}', [JobsController::class, 'getapplicants']);
 Route::get('/generate-pdf', [PdfController::class, 'download']);
-
-Route::post('/update-status',[UserController::class,'updatestatus']);
+Route::post('/update-status', [UserController::class, 'updatestatus']);
 Route::get('/draft/jobs', [DraftController::class, 'index']);
 Route::get('/post/edit/{id}', [DraftController::class, 'edit']);
 Route::post('/post/jobs/{id}', [DraftController::class, 'update']);
 Route::delete('/post/delete/{id}', [DraftController::class, 'destroy']);
 Route::post('/draftjobs/{id}', [DraftController::class, 'draft']);
-
-
-
 Route::get('/add-user', [CompanyController::class, 'adduser']);
 Route::get('/fetch-user/{type?}', [CompanyController::class, 'fetchuser']);
 Route::get('/accepted/{id}/{name}/{company}/{email}/{phone}/{permission}', [UserController::class, 'accept']);
@@ -236,7 +231,6 @@ Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
 Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
 Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
 Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
-
-
+Route::post('remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
 //users
 //user/{id} function(Request $request, $id)
