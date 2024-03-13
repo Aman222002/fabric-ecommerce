@@ -19,5 +19,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'Post Job']);
         Permission::create(['name' => 'Edit Job']);
         Permission::create(['name' => 'Buy Subscription']);
+        Permission::create(['name'=> 'Change Plan']);
+        Permission::create(['name'=> 'Change Profile']);
     }
 }
