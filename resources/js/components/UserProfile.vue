@@ -18,28 +18,32 @@
               class="avatar"
               style="position: absolute; top: 10px; left: 10px;"
              >
-              <img
+              <!-- <img
             :src="`/storage/assest/${user.user_image}`"
-            alt="Selected Image"
+           
             width="150px"
             height="150px"
-          />
+          /> -->
+          <img
+        :src="user.user_image ? `/storage/assest/${user.user_image}` : '/storage/assest/img1.png'"
+        width="150px"
+        height="150px"
+    />
          
           
             </v-avatar>
             
          
           </div>
-         
-          
           <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
-              <p style="font-size: 30px;">{{ user.name }}</p>
-           
-          
+    <p style="font-size: 30px;">{{ user.name }}</p>
+    <template v-if="address.city || address.state || address.zip_code">
+        <div>
             <v-icon style="font-size: 15px;">mdi-map-marker</v-icon>
-             {{address.city }}, {{ address.state }},{{ address.zip_code }}
-          
-          </v-col>
+            {{ address.city }}, {{ address.state }}, {{ address.zip_code }}
+        </div>
+    </template>
+</v-col>
           
         </v-row>
 <div style="display: flex; margin: 20px">
@@ -151,7 +155,12 @@
     name: "UserProfile",
     setup() {
         const progressValue = ref(0);
-      const address = ref([]);
+      const address = ref({
+        city:'',
+        state:'',
+        zip_code:'',
+      }
+      );
       const user = ref([]);
       const educationDetails=ref([]);
   const experience =ref([]);
@@ -167,10 +176,20 @@
         
           const { data } = response.data;
            user.value = data.userDetails;
-            address.value = data.address;
-            educationDetails.value=data.educationDetails;
-            experience.value=data.experience;
-            skills.value=data.skills;
+           console.log(user.value);
+           if(data.address){
+             address.value = data.address;
+           }
+           if(data.educationDetails){
+             educationDetails.value=data.educationDetails;
+             console.log(educationDetails.value);
+           }
+           if(data.experience){
+             experience.value=data.experience;
+           }
+           if(data.skills){
+             skills.value=data.skills;
+           }
              progressValue.value = data.userDetails.status;
             console.log(progressValue.value);
         } catch (error) {

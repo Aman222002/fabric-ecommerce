@@ -21,6 +21,7 @@ use App\Http\Requests\CompanyRagistrationRequest;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
 use App\Jobs\PaymentJob;
+use App\Models\Invitation;
 
 use function PHPSTORM_META\map;
 
@@ -628,25 +629,55 @@ class CompanyController extends Controller
 
     public function adduser()
     {
+
         return view('user');
     }
     public function users()
     {
         return view('companyusers');
     }
-    public function fetchuser()
+    // public function fetchuser(Request $request)
+    // {
+
+    //     try {
+    //         $companyId = session('company_id');
+    //         $users = User::where('company_id', $companyId)->get();
+    //         return response()->json(['status' => true, 'data' => $users], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
+    public function fetchuser(Request $request)
     {
         try {
             $companyId = session('company_id');
-            $users = User::where('company_id', $companyId)->get();
+            $type = $request->input('type');
+
+            switch ($type) {
+                case 'Invited':
+
+                    $users = Invitation::where('company_id', $companyId)
+                        ->where('status', 'pending')
+                        ->get();
+                    break;
+
+                case 'Rejected':
+                    $users = Invitation::where('company_id', $companyId)
+                        ->where('status', 'rejected')
+                        ->get();
+                    break;
+                default:
+                    $users = User::where('company_id', $companyId)->get();
+                    break;
+            }
+
             return response()->json(['status' => true, 'data' => $users], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
-
     public function userData()
     {
         $user = Auth::user();

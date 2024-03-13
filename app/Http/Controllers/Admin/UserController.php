@@ -297,6 +297,7 @@ class UserController extends Controller
 
     public function addnewuser(Request $request)
     {
+
         try {
             $this->validate($request, [
                 'name' => 'required',
@@ -313,9 +314,11 @@ class UserController extends Controller
                 $permissionIds[] = $permission->id;
             }
             //dd($permissionIds);
+            $company_id = session('company_id');
             $invitedUser = Invitation::create([
                 'user_email' => $request->input('email'),
-                'status' => 'pending'
+                'status' => 'pending',
+                'company_id' => $company_id,
             ]);
             $input = $request->all();
             $company_id = session('company_id');
@@ -360,9 +363,15 @@ class UserController extends Controller
     public function reject(Request $request)
     {
         try {
-            $user = Invitation::find($request->invitation_id);
+            $user = Invitation::find($request->id);
+
+            if (!$user) {
+                return response()->json(['status' => false, 'message' => 'Invitation not found'], 404);
+            }
+
             $user->status = 'rejected';
-            $user->update();
+            $user->save();
+
             return response()->json(['status' => true, 'message' => 'Invitation rejected successfully'], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

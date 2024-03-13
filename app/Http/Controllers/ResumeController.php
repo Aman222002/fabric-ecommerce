@@ -21,7 +21,7 @@ class ResumeController extends Controller
 
     public function store(Request $request)
     {    
-//   dd($request);
+   //dd($request);
         try {
             $user = auth()->user();
    
@@ -96,24 +96,20 @@ class ResumeController extends Controller
                     ['skill_id']
                 );
             }
-
             UserProfile::updateOrInsert(
                 ['user_id' => $user->id],
                 [
                     'hobbies' => $request->userProfile['hobbies'],
                     'strengths' => $request->userProfile['strengths'],
                 ]
-
             );
-
             if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
-
                 $qualificationData = [];
                 foreach ($request->educationDetails as $educationDetail) {
                     $educationDetail['user_id'] = $user->id;
                     $qualificationData[] = $educationDetail;
                 }
-
+             
                 Qualification::upsert(
                     $qualificationData,
                     [
@@ -122,6 +118,7 @@ class ResumeController extends Controller
                     ],
                     ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
                 );
+                
             }
             if (is_array($request->experience) && count($request->experience) > 0 && is_array($request->experience[0])) {
                 $experienceData = [];
@@ -144,6 +141,7 @@ class ResumeController extends Controller
                     ],
                     ['company_name', 'position', 'description', 'start_date', 'end_date']
                 );
+                // dd($experienceData);
             }
 
             if (is_array($request->achievements) && count($request->achievements) > 0 && is_array($request->achievements[0])) {
@@ -178,7 +176,7 @@ class ResumeController extends Controller
             $userAchievment = UserAchievement::where('user_id', $user->id)->get();
             $userQualification = Qualification::where('user_id', $user->id)->get();
             $userAddress = UserAddress::where('user_id', auth()->id())->first();
-          
+          //dd( $userExperience);
         
             $response = [
                 "status" => true,
@@ -203,6 +201,7 @@ class ResumeController extends Controller
     {
         try {
             $user = auth()->user();
+            //dd($user);
             $userProfile = UserProfile::where('user_id', $user->id)->first();
             // $userSkill = UserSkill::where('user_id', $user->id)->get()->pluck('skill_id');
             $userSkillIds = UserSkill::where('user_id', $user->id)->pluck('skill_id');

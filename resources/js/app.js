@@ -21,6 +21,7 @@ const emitter = mitt();
 import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import "../css/app.css";
 
 import { createPinia } from "pinia";
 
@@ -244,6 +245,9 @@ app.component("user-component",user);
 
 import CompanyUsers from "./components/CompanyUsers.vue";
 app.component("companyuser-component",CompanyUsers);
+
+import index from "./components/HomePage/index.vue"
+app.component("home-component",index);
 
 /**
  * The following block of code may be used to automatically register your

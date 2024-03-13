@@ -167,7 +167,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/get/plans', [DashboardController::class, 'getplans']);
 //Admin Routes;
-Route::group(["prefix" => "/admin",], function () {
+Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
@@ -223,9 +223,9 @@ Route::post('/post/jobs/{id}', [DraftController::class, 'update']);
 Route::delete('/post/delete/{id}', [DraftController::class, 'destroy']);
 Route::post('/draftjobs/{id}', [DraftController::class, 'draft']);
 Route::get('/add-user', [CompanyController::class, 'adduser']);
-Route::get('/fetch-user', [CompanyController::class, 'fetchuser']);
+Route::get('/fetch-user/{type?}', [CompanyController::class, 'fetchuser']);
 Route::get('/accepted/{id}/{name}/{company}/{email}/{phone}/{permission}', [UserController::class, 'accept']);
-Route::get('/reject', [UserController::class, 'reject']);
+Route::get('/reject/{id}', [UserController::class, 'reject']);
 Route::get('/users', [CompanyController::class, 'users']);
 Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
 Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);

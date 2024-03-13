@@ -43,6 +43,7 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
+
   <v-app-bar height="46" id="header">
     <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail" style="color: white;"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
@@ -90,9 +91,9 @@ export default {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/user/data");
-        console.log(response.data);
-        console.log(users.value);
+
         users.value = response.data;
+
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -104,9 +105,9 @@ export default {
       return false;
     };
     const hasrole = (role) => {
-      // console.log(role);
+
       if (users.value && users.value.roles) {
-        // console.log(users);
+
         return users.value.roles.includes(role);
       }
       return false;
