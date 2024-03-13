@@ -56,7 +56,7 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -95,17 +95,24 @@ class JobsController extends Controller
             'experience' => 'required|string',
             'companywebsite' => 'required|url',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => $validator->errors()], 422);
         }
-        
+
         try {
             $companyId = session('company_id');
-            
             if (!$companyId) {
                 return response()->json(['status' => false, 'message' => 'Company ID not found in session'], 422);
             }
+            $user_Id = Company::where('id', $companyId)->value('user_id');
+            // $user = User::where('id', $user_Id)->get()->filter(function ($user) {
+            //     return $user->hasrole('Company Admin');
+            //     // return $user;
+            // });
+            $user = User::where('id', $user_Id)->whereHas('roles', function ($query) {
+                $query->where('name', 'Company Admin');
+            })->first();
             if (!($user->subscription_status == 'active')) {
                 return response()->json([
                     'status' => false,
@@ -122,7 +129,7 @@ class JobsController extends Controller
             }
             $company = $user->company;
             $input = $request->all();
-            
+
             $job = Job::create([
                 'user_id' => $user->id,
                 'company_id' => $company->id,
@@ -136,10 +143,9 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
-                'post_status' => 'active',
+                'post_status' => 'Published',
                 'skill_id' => $input['jobSkill'],
             ]);
-    
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',
@@ -152,7 +158,6 @@ class JobsController extends Controller
             ], 500);
         }
     }
-    
     /**
      * Display the specified resource.
      */
@@ -355,7 +360,6 @@ class JobsController extends Controller
                 'job_id' => $id,
                 'company_id' =>  $company_id,
             ])->count();
-
             if ($count > 0) {
                 $message = 'You already saved this job.';
                 return response()->json([
