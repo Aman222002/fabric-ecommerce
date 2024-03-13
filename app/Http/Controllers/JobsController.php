@@ -106,6 +106,14 @@ class JobsController extends Controller
             if (!$companyId) {
                 return response()->json(['status' => false, 'message' => 'Company ID not found in session'], 422);
             }
+            $user_Id = Company::where('id', $companyId)->value('user_id');
+            // $user = User::where('id', $user_Id)->get()->filter(function ($user) {
+            //     return $user->hasrole('Company Admin');
+            //     // return $user;
+            // });
+            $user = User::where('id', $user_Id)->whereHas('roles', function ($query) {
+                $query->where('name', 'Company Admin');
+            })->first();
             if (!($user->subscription_status == 'active')) {
                 return response()->json([
                     'status' => false,
@@ -136,7 +144,7 @@ class JobsController extends Controller
                 'qualifications' => $input['qualifications'],
                 'experience' => $input['experience'],
                 'company_website' => $input['companywebsite'],
-                'post_status' => 'active',
+                'post_status' => 'Published',
                 'skill_id' => $input['jobSkill'],
             ]);
     
