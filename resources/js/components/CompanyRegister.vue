@@ -13,6 +13,7 @@
             :rules="nameRules"
             density="compact"
             outlined
+            :disabled="disabledFields"
           ></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
@@ -23,6 +24,7 @@
             :rules="emailRules"
             density="compact"
             outlined
+            :disabled="disabledFields"
           ></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
@@ -45,63 +47,57 @@
             type="phone"
             density="compact"
             outlined
+            :disabled="disabledFields"
           ></v-text-field>
         </v-col>
       </v-row>
-
-      <v-row>
-        <v-col cols="12" sm="12">
-          <p class="mb-4 form-title">Company Details:</p>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.company_name"
-            label="Company Name"
-            :rules="nameRules"
-            density="compact"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.company_email"
-            label="Company Email"
-            :rules="emailRules"
-            density="compact"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.phone_number"
-            label="Phone Number"
-            :rules="phoneRules"
-            density="compact"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-file-input
-            variant="outlined"
-            v-model="company.logo"
-            label="Company Logo"
-            outlined
-            density="compact"
-          ></v-file-input>
-        </v-col>
-        <!-- <v-col cols="6" sm="6">
-          <v-textarea
-            variant="outlined"
-            v-model="company.description"
-            label="Description"
-            outlined
-            density="compact"
-          ></v-textarea>
-        </v-col> -->
-      </v-row>
+      <div v-if="showCompanyDetails">
+        <v-row>
+          <v-col cols="12" sm="12">
+            <p class="mb-4 form-title">Company Details:</p>
+          </v-col>
+          <v-col cols="3" sm="3">
+            <v-text-field
+              variant="outlined"
+              v-model="company.company_name"
+              label="Company Name"
+              :rules="nameRules"
+              density="compact"
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col cols="3" sm="3">
+            <v-text-field
+              variant="outlined"
+              v-model="company.company_email"
+              label="Company Email"
+              :rules="emailRules"
+              density="compact"
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col cols="3" sm="3">
+            <v-text-field
+              variant="outlined"
+              v-model="company.phone_number"
+              label="Phone Number"
+              :rules="phoneRules"
+              density="compact"
+              outlined
+            ></v-text-field>
+          </v-col>
+          <v-col cols="3" sm="3">
+            <v-file-input
+              variant="outlined"
+              v-model="company.logo"
+              label="Company Logo"
+              outlined
+              density="compact"
+            ></v-file-input>
+          </v-col>
+        </v-row>
+      </div>
+      <v-row> </v-row>
       <!-- <v-row>
         <v-col cols="12">
           <p class="mb-4 form-title">Company Address:</p>
@@ -166,12 +162,20 @@
   </v-container>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useUsersStore } from "../store/user";
 import axios from "axios";
+
 export default {
   name: "CompanyRegister",
-  setup() {
-    // const usersStore = useUsersStore();
+  props: {
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
+    const usersStore = useUsersStore();
     const form = ref(null);
     const company = ref({
       name: "",
@@ -212,11 +216,10 @@ export default {
       company.value.email = props.data.email;
       company.value.phone = props.data.phone;
 
-      if (props.data) {
+      if (props.data.name) {
         company.value.name = props.data.name;
         company.value.email = props.data.email;
         company.value.phone = props.data.phone;
-
         disabledFields.value = true;
       }
       if (window.location.pathname === "/company/register") {
@@ -250,8 +253,10 @@ export default {
               formData.append("logo", company.value[key][0]);
             }
           }
-          formData.append("company_Id", props.data.company);
-          formData.append("permission", props.data.permission);
+          if (props.data.permission) {
+            formData.append("company_Id", props.data.company);
+            formData.append("permission", props.data.permission);
+          }
           console.log(props.data.permission);
           axios
             .post("/company/post", formData, {
@@ -304,5 +309,3 @@ export default {
   text-align: center;
 }
 </style>
-
-

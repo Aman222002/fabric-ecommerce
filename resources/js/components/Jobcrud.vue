@@ -190,7 +190,7 @@ export default {
     const dialog = ref(false);
     const categories = ref([]);
     const params = ref({});
-    const selectedStatus = ref("Published");
+    const selectedStatus = ref("All");
     const selectStatus = (e) => {
       const value = e.itemData.text;
       params.value = { type: value };

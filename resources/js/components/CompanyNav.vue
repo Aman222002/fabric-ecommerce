@@ -35,7 +35,6 @@
         <!-- <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
         </v-list-item> -->
       </v-list-group>
-
       <v-list-item
         :class="{ group: true, active: currentRoute === '/findcv' }"
         href="/findcv"
@@ -76,7 +75,6 @@
         title="Profile"
       >
       </v-list-item>
-
       <v-list-item
         v-if="
           (usersStore.isloggedin && hasPermission('create users')) ||
@@ -101,13 +99,14 @@
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  <v-app-bar height="70" id="header" class="dah_header-bar">
+
+  <v-app-bar height="46" id="header">
     <v-app-bar-nav-icon
       variant="text"
       @click.stop="rail = !rail"
+      style="color: white"
     ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-
     <v-menu transition="slide-y-transition">
       <template v-slot:activator="{ props }">
         <v-icon v-bind="props" id="account" size="40"
@@ -136,7 +135,6 @@
     </v-menu>
   </v-app-bar>
 </template>
-
 <script>
 import { ref, onMounted } from "vue";
 import { useUsersStore } from "@/store/user";
@@ -167,9 +165,8 @@ export default {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/user/data");
-        console.log(response.data);
+
         users.value = response.data;
-        console.log(users.value);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -181,9 +178,7 @@ export default {
       return false;
     };
     const hasrole = (role) => {
-      console.log(role);
       if (users.value && users.value.roles) {
-        console.log(users);
         return users.value.roles.includes(role);
       }
       return false;

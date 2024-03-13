@@ -9,6 +9,7 @@ use App\Models\Job;
 use App\Models\User;
 use App\Models\UserSkill;
 use Carbon\Carbon;
+
 class SearchjobController extends Controller
 {
     /**
@@ -35,6 +36,7 @@ class SearchjobController extends Controller
             if ($companyId != 0) {
                 $jobs->where('company_id', $companyId);
             }
+            // dd($jobs);
             $jobs = $jobs->get()->filter(function ($job) {
                 $user_id = $job->user_id;
                 // dd($job);

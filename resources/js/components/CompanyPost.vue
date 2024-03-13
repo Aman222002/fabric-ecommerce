@@ -36,7 +36,7 @@
                 clearable
                 style="width: 100%"
               ></v-text-field>
-              <v-btn class="search_btn" @click="searchJobs">Search</v-btn>
+              <v-btn @click="searchJobs">Search</v-btn>
             </v-card>
           </v-col>
           <v-col
@@ -92,6 +92,11 @@
               location="right"
               class="single_job_search_page"
             >
+              <v-icon
+                style="margin-left: 20px; margin-top: 30px"
+                @click="detailPanelVisible = false"
+                >mdi-arrow-left-top</v-icon
+              >
               <v-card style="width: 100%">
                 <div class="compamy_infor">
                   <div class="compamy_infor_left">
@@ -99,6 +104,7 @@
                       ><v-icon>mdi-format-title</v-icon>
                       <span>{{ detail.title }}</span></v-card-title
                     >
+
                     <v-icon color="black">mdi-domain</v-icon>
                     <span>{{ detail.company_name }}</span>
                     <v-icon color="black">mdi-map-marker</v-icon>
@@ -109,11 +115,6 @@
                     <span>{{ detail.vacancy }}</span>
                   </div>
                   <div class="compamy_infor_btn">
-                    <v-btn
-                      class="save_btn mr-3"
-                      @click="detailPanelVisible = false"
-                      ><v-icon>mdi-arrow-left-top</v-icon></v-btn
-                    >
                     <v-btn
                       class="apply_for_job"
                       v-if="usersStore.isloggedin"
@@ -180,7 +181,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -437,6 +437,25 @@ button.save_btn {
   font-size: 15px;
   border-radius: 8px;
   font-weight: 400;
-  padding: 9px 32px 15px;
+  padding: 18px 35px;
+  height: 50px !important;
+}
+
+button.save_btn {
+  height: 50px !important;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  color: #1967d2;
+  border-radius: 7px;
+  background: #1967d212;
+  transition: all 0.3s ease;
+  margin-left: 20px;
+}
+
+.compamy_infor_description {
+  width: 90%;
+  margin: 2% auto;
 }
 </style>

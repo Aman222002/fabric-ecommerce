@@ -22,7 +22,7 @@
               329 Queensberry Street, North Melbourne VIC<br />
               3051, Australia. <br />
               <a href="mailto:support@superio.com" class="email">
-                support@superio.com
+                mailto:support@superio.com
               </a>
             </p>
           </div>

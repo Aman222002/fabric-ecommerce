@@ -26,20 +26,31 @@
               class="avatar"
               style="position: absolute; top: 10px; left: 10px"
             >
+              <!-- <img
+            :src="`/storage/assest/${user.user_image}`"
+           
+            width="150px"
+            height="150px"
+          /> -->
               <img
-                :src="`/storage/assest/${user.user_image}`"
-                alt="Selected Image"
+                :src="
+                  user.user_image
+                    ? `/storage/assest/${user.user_image}`
+                    : '/storage/assest/img1.png'
+                "
                 width="150px"
                 height="150px"
               />
             </v-avatar>
           </div>
-
           <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
             <p style="font-size: 30px">{{ user.name }}</p>
-
-            <v-icon style="font-size: 15px">mdi-map-marker</v-icon>
-            {{ address.city }}, {{ address.state }}, {{ address.zip_code }}
+            <template v-if="address.city || address.state || address.zip_code">
+              <div>
+                <v-icon style="font-size: 15px">mdi-map-marker</v-icon>
+                {{ address.city }}, {{ address.state }}, {{ address.zip_code }}
+              </div>
+            </template>
           </v-col>
         </v-row>
       </v-container>

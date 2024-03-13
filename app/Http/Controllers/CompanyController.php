@@ -21,6 +21,7 @@ use App\Http\Requests\CompanyRagistrationRequest;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
 use App\Jobs\PaymentJob;
+use App\Models\Invitation;
 
 use function PHPSTORM_META\map;
 
@@ -42,7 +43,7 @@ class CompanyController extends Controller
     {
         //
         if ($request) {
-           //dd(($request->permission));
+            //dd(($request->permission));
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
@@ -102,13 +103,9 @@ class CompanyController extends Controller
                         "links" => ["mandate" => $user->mandate_id]
                     ];
                     if ($selected_plan->price > $user_plan->price) {
-                        // dd($selected_plan);
                         $user_subscription = UserSubscription::where('user_id', $user->id)->first();
-                        // $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
                         $this->gocardlessService->createSubscription($data);
                         $user->update(['upgrade_plan_id' => $input['id'], 'upgrade_status' => 'initiated']);
-                        // $user_subscription->update(['plan_id' => $input['id']]);
-                        // dd($user);
                         return response()->json([
                             'status' => true,
                             'message' => "Subscription Will be added soon in your account"
@@ -122,7 +119,6 @@ class CompanyController extends Controller
                         //     ], 200);
                         // } 
                     } else {
-                        //handling case to downgrade the subscription
                         $users_subscription = UserSubscription::where('user_id', $user->id)->first();
                         $users_subscription->update(['next_plan_id' => $input['id']]);
                     }
@@ -234,14 +230,12 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
-     // dd( $request);
-        // $request->validated();
         try {
             $input = $request->all();
             $existingUser = User::where('email', $input['email'])->first();
             if ($existingUser) {
                 $user = $existingUser;
-            } else {
+            } else if ($request->company_Id) {
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
@@ -252,9 +246,8 @@ class CompanyController extends Controller
                 $user->assignRole('Company Subadmin');
             }
             if ($request->has('permission') && !empty($request->permission)) {
-              
                 foreach (json_decode($request->permission) as $permission) {
-                   // dd($permission);
+                    // dd($permission);
                     Permissionaccess::create([
                         'user_id' => $user->id,
                         'company_id' => $request->company_Id,
@@ -262,17 +255,24 @@ class CompanyController extends Controller
                     ]);
                 }
             }
-            if(!($request->company_Id)){
-                $user->assignRole('Company Admin');
+            // dd(!($request->company_Id));
+            if (!($request->company_Id)) {
+                // dd($request->company_Id);
                 $image = $request->file('logo');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/assest', $imageName);
+                $user = User::create([
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => $input['password'],
+                    'phone' => $input['phone'],
+                ]);
+                $user->assignRole('Company Admin');
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
                     'company_email' => $input['company_email'],
                     'phone_number' => $input['phone_number'],
-    
                     'logo' => $imageName,
                 ]);
                 dispatch(new VerificationMail($user->email));
@@ -518,9 +518,7 @@ class CompanyController extends Controller
                 'password' => $credentials['password'],
             ])) {
                 $user = Auth::user();
-
                 if ($user->roles->contains('name', 'Company Subadmin')) {
-                   
                     session(['company_id' => $user->company_id]);
                     $companyData = Company::where('id', $user->company_id)->first();
                     return response()->json([
@@ -530,18 +528,16 @@ class CompanyController extends Controller
                         'company_data' => $companyData
                     ], 200);
                 }
-               
                 if ($user->companies->isNotEmpty()) {
                     foreach ($user->companies as $company) {
                         if ($company->company_name === $credentials['company_name']) {
                             session(['company_id' => $company->id]);
-                           
-                             $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
-                             return response()->json([
+                            $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
+                            return response()->json([
                                 'status' => true,
                                 'message' => 'Logged in Successfully!',
                                 'user_data' => $user,
-                                 'company_data' => $companyData
+                                'company_data' => $companyData
                             ], 200);
                         }
                     }
@@ -573,21 +569,18 @@ class CompanyController extends Controller
         return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
     }
     public function getCompanyNames(Request $request)
-    {   
-        
+    {
+
         try {
             $user = User::where('email', $request->email)->first();
-
-            
-            if($user->hasRole('Company Admin')){
+            if ($user->hasRole('Company Admin')) {
                 $companies = Company::select('id', 'company_name')->where('user_id', $user->id)->get();
+            } else {
+                $companies = Company::select('id', 'company_name')->where('id', $user->company_id)->get();
             }
-            else{
-                 $companies = Company::select('id', 'company_name')->where('id', $user->company_id)->get();
-            }
-            
+
             //$user = User::where('email', $request->email)->first();
-      
+
 
             // dd($companies);
             return response()->json([
@@ -635,38 +628,69 @@ class CompanyController extends Controller
 
     public function adduser()
     {
+
         return view('user');
     }
     public function users()
     {
         return view('companyusers');
     }
-    public function fetchuser()
+    // public function fetchuser(Request $request)
+    // {
+
+    //     try {
+    //         $companyId = session('company_id');
+    //         $users = User::where('company_id', $companyId)->get();
+    //         return response()->json(['status' => true, 'data' => $users], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
+    public function fetchuser(Request $request)
     {
         try {
             $companyId = session('company_id');
-            $users = User::where('company_id', $companyId)->get();
+            $type = $request->input('type');
+
+            switch ($type) {
+                case 'Invited':
+
+                    $users = Invitation::where('company_id', $companyId)
+                        ->where('status', 'pending')
+                        ->get();
+                    break;
+
+                case 'Rejected':
+                    $users = Invitation::where('company_id', $companyId)
+                        ->where('status', 'rejected')
+                        ->get();
+                    break;
+                default:
+                    $users = User::where('company_id', $companyId)->get();
+                    break;
+            }
+
             return response()->json(['status' => true, 'data' => $users], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-   
-
     public function userData()
     {
         $user = Auth::user();
+        // dd($user);
         $roles = $user->getRoleNames();
         $permissions = $user->permissionaccesses()
-                            ->with( 'user.roles', 'permission')
-                            ->get()
-                            ->map(function($item) {
-                                return $item->permission->name;
-                            });
-        return response()->json( ['permissions' => $permissions, 'roles' => $roles]);
+            ->with('user.roles', 'permission')
+            ->get()
+            ->map(function ($item) {
+                return $item->permission->name;
+            });
+        return response()->json(['permissions' => $permissions, 'roles' => $roles]);
     }
-    
+
     public function fetchPlan()
     {
         $company_id = session('company_id');
@@ -675,9 +699,9 @@ class CompanyController extends Controller
             $user_Id = Company::where('id', $company_id)->value('user_id');
             $user_subscription = UserSubscription::where('user_id', $user_Id)->first();
             // dd($user_subscription);
-            //return $user->hasrole('Company Admin');
             $user_plan = User::where('id', $user_Id)->get()->filter(function ($user) {
-                return $user;
+                return $user->hasrole('Company Admin');
+                // return $user;
             })->value('plan_id');
             $plan = Plan::where('id', $user_plan)->first();
             return response()->json(['status' => true, 'data' => $plan, 'subscription' => $user_subscription], 200);
@@ -705,9 +729,9 @@ class CompanyController extends Controller
         try {
             $company_id =  session('company_id');
             $company = Company::where('id', $company_id)->first();
-            //return $user->hasrole('Company Admin')
+            // return $user;
             $user = User::where('id', $company->user_id)->get()->filter(function ($user) {
-                return $user;
+                return $user->hasrole('Company Admin');
             });
             // dd($user);
             return response()->json(['status' => true, 'data' => $user], 200);
@@ -717,15 +741,23 @@ class CompanyController extends Controller
     }
     public function cancelUpgradeRequest()
     {
-        // dd('user');
         try {
             $user = Auth::user();
-            // dd($user);
-            // dd($user_subscription);
             $user_subscription = UserSubscription::where('user_id', $user->id)->first();
             $this->gocardlessService->removeSubscription($user_subscription->upgrade_subscription_id);
-            // $user->update(['upgrade_status' => null,]);
-            // $user_subscription->update(['upgrade_subscription_id' => null]);
+            return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    /**
+     * function to remove users subscription 
+     */
+    public function removeSubscription(Request $request)
+    {
+        try {
+            $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
+            $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
             return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e], 500);

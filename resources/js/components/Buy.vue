@@ -95,6 +95,7 @@
               </v-col>
               <v-col cols="6" sm="6">
                 <v-text-field
+                  :disabled="isDisabled"
                   variant="outlined"
                   v-model="plan.name"
                   label="Plan Name"
@@ -104,6 +105,7 @@
               </v-col>
               <v-col cols="6" sm="6">
                 <v-text-field
+                  :disabled="isDisabled"
                   variant="outlined"
                   v-model="plan.price"
                   label="Price"
@@ -112,7 +114,16 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-btn type="submit" color="primary" class="button">Buy Now</v-btn>
+            <v-btn
+              v-if="currentPlanId == plan.id"
+              :disabled="true"
+              color="primary"
+              class="button"
+              >Buyed</v-btn
+            >
+            <v-btn v-else type="submit" color="primary" class="button"
+              >Buy Now</v-btn
+            >
           </v-form>
         </v-container>
       </v-card>
@@ -132,10 +143,10 @@ export default {
   },
   setup(props) {
     const plan = ref({});
-    console.log(props.data);
     const form = ref(null);
-    console.log(props.data);
+    const isDisabled = true;
     plan.value = props.data;
+    const currentPlanId = ref();
     const usersStore = useUsersStore();
     const cardHeight = computed(() => {
       return usersStore.isLoggedIN ? "175px" : "386px";
@@ -175,6 +186,17 @@ export default {
       (v) => !!v || "Phone number is required",
       (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
     ];
+    const getUser = () => {
+      axios
+        .get(`/find/plan`)
+        .then((response) => {
+          currentPlanId.value = response.data.data.id;
+          console.log(currentPlanId.value);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
     const submitForm = () => {
       form.value.validate().then((valid) => {
         if (!valid.valid) {
@@ -191,25 +213,21 @@ export default {
           for (let key in company.value) {
             {
               formData.append(key, company.value[key]);
-              console.log(key, company.value[key]);
             }
           }
           for (let key in user.value) {
             {
               formData.append(key, user.value[key]);
-              console.log(key, user.value[key]);
             }
           }
           for (let key in plan.value) {
             {
               formData.append(key, plan.value[key]);
-              console.log(key, plan.value[key]);
             }
           }
           axios
             .post("/company/buy/plan", formData)
             .then((response) => {
-              console.log(response);
               if (response.data.status == true) {
                 window.Swal.fire({
                   icon: "success",
@@ -225,9 +243,13 @@ export default {
         }
       });
     };
+    onMounted(() => {
+      getUser();
+    });
     return {
       usersStore,
       company,
+      getUser,
       user,
       nameRules,
       plan,
@@ -239,6 +261,8 @@ export default {
       companyNameRules,
       form,
       cardHeight,
+      isDisabled,
+      currentPlanId,
     };
   },
 };
