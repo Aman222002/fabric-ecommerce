@@ -13,17 +13,15 @@
           md="6"
           lg="4"
           xl="4"
-          v-for="popularJob in popularJob"
-          :key="popularJob.id"
+          v-for="(category, index) in categories"
+          :key="index"
+          v-model="job.category" 
         >
-          <v-card class="mx-auto" prepend-icon="mdi-home">
-            <template v-slot:prepend>
-              <v-icon>{{ popularJob.icon }}</v-icon>
+        <v-card class="mx-auto" prepend-icon="mdi-briefcase"> 
+          <template v-slot:title>
+              <a id="categoryName" @click="findJob(category.name)"> {{ category.name }}</a>
             </template>
-            <template v-slot:title>
-              <a href="#"> {{ popularJob.title }}</a>
-            </template>
-            <v-card-text> ({{ popularJob.subtitle }}) </v-card-text>
+            <!-- <v-card-text> ({{ popularJob.subtitle }}) </v-card-text> -->
           </v-card>
           <!-- 
           <v-card class="mx-auto">
@@ -42,7 +40,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 export default {
   data: () => ({
     popularJob: [
@@ -102,5 +100,44 @@ export default {
       },
     ],
   }),
+};
+</script> -->
+<script>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+export default {
+  name: "popularJobCategories",
+  setup() {
+    const job = ref({
+      category: "",
+    });
+    const categories = ref([]);
+    const findJob = (name) =>{
+      console.log(name);
+      window.location.href = "/jobs-detail?category=" + name;
+    }
+    const fetchCategories = async () => {
+      try {
+        axios.get("/categories").then((response) => {
+          categories.value = response.data;
+
+          console.log(response.data);
+        });
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    onMounted(() => {
+      fetchCategories();
+      
+    });
+  
+    return {
+      job,
+      categories,
+      findJob,
+    };
+  },
 };
 </script>

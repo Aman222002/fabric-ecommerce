@@ -1,7 +1,7 @@
 <template>
   <div class="job-applied">
     <div class="sec-title text-center">
-      <h2>Jobs Applied</h2>
+      <h2>Featured Jobs</h2>
       <div class="text">
         Know your worth and find the job that qualify your life
       </div>
@@ -76,8 +76,6 @@
     </div>
   </div>
 </template>
-
-
 <script>
 import { ref } from "vue";
 import axios from "axios";
@@ -142,7 +140,7 @@ export default {
   padding: 50px 0 100px;
 }
 .job-applied .sec-title {
-  margin: 50px 0;
+  margin-bottom: 50px;
 }
 .job-applied .sec-title h2 {
   position: relative;
@@ -152,39 +150,85 @@ export default {
   color: #202124;
   font-weight: 500;
 }
-
-.applied-text {
-  color: red;
+.job-applied .sec-title .text {
+  position: relative;
+  margin-top: 15px;
+  font-size: 15px;
+  line-height: 26px;
+  color: #696969;
+  font-weight: 400;
 }
-
-.job-card {
+.job-applied a.load_more {
+  font-size: 19px;
+  line-height: 20px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 15px 28px;
+  background-color: #1967d2;
+  text-decoration: unset;
+  display: table;
+  color: #fff;
+}
+.job-applied .company_info {
+  padding: 15px;
   width: 100%;
-  height: auto;
   display: flex;
-  flex-direction: column;
-
-  border: 1px solid rgb(86, 50, 250);
-  background-color: white;
+  background: #f5f7fc;
 }
 
-.v-card__title,
-.v-card__text {
-  padding: 0;
+.job_info .v-card-title {
+  padding-top: 0;
 }
-
-.card-container {
+.job_info ul {
   display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
   flex-wrap: wrap;
-  gap: 60px;
-  margin-top: 20px;
+  padding-left: 13px;
+  list-style: none;
 }
-
-.delete-icon:hover {
-  cursor: pointer;
-  transform: scale(1.4);
+.job_info ul li {
+  font-size: 15px;
+  margin-right: 15px;
 }
-
-.v-icon:hover {
-  transform: scale(1.2);
+.job_info ul li i {
+  font-size: 19px;
+}
+.job_info ul.company_time {
+  margin-top: 8px;
+}
+.job_info ul.company_time li {
+  position: relative;
+  font-size: 13px;
+  line-height: 15px;
+  margin-right: 15px;
+  padding: 5px 20px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  background: rgba(25, 103, 210, 0.15);
+  color: #1967db;
+}
+.job_info ul.company_time li:nth-child(2) {
+  background: #93faae;
+  color: #34a853;
+}
+.job_info ul.company_time li:nth-child(3) {
+  background: #fddb91;
+  color: #ffae00;
+}
+.bookmark_fr {
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  font-size: 25px;
+}
+.job_info .v-card-title a {
+  color: #202124;
+  text-decoration: unset;
+}
+.body_page_section .company_info .v-card-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 </style>

@@ -1,4 +1,10 @@
+
 @extends('layouts.app')
+
 @section('content')
-<company-post></company-post>
+    @if($data)
+        <company-post :data="{{ json_encode($data) }}"></company-post>
+    @else
+        <company-post></company-post>
+    @endif
 @endsection

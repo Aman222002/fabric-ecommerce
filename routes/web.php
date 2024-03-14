@@ -125,7 +125,7 @@ Route::get('/about', function () {
 
 
 
-Route::get('/jobs-detail', [SearchjobController::class, 'index']);
+Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -235,5 +235,7 @@ Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
 Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
 Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 Route::post('remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
+Route::get('contact/data', [DashboardController::class, 'viewContact']);
+Route::get('partner/data', [DashboardController::class, 'viewPartners']);
 //users
 //user/{id} function(Request $request, $id)

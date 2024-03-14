@@ -25,8 +25,8 @@
                         <v-col cols="8">
                             <span v-if="subscription_status == 'active'"
                                 :class="{ 'subtitle-1': true, 'font-weight-bold': true, 'text-red': subscriptionDetail.remainig_days < 5, 'text-green': subscriptionDetail.remainig_days >= 5 }">
-                                {{ subscriptionDetail.remainig_days >= 0 ? "Your plan will expire in " +
-                    subscriptionDetail.remainig_days + " days" : "You don't have an Active Plan" }}</span>
+                                {{ subscriptionDetail.remainig_days > 0 ? "Your plan will expire in " +
+                    subscriptionDetail.remainig_days + " days" : "Your plan is not active" }}</span>
                             <span v-else :class="{ 'subtitle-1': true, 'font-weight-bold': true, 'text-red': true }">
                                 Your Plan will be Activated Soon
                             </span>
@@ -226,7 +226,7 @@ export default {
             await getUser();
             setTimeout(() => {
                 handleUpgradeStatusChange();
-            }, 1200);
+            }, 1500);
         });
         return {
             userId,

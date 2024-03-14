@@ -4,7 +4,7 @@
       <v-col cols="auto" sm="12" md="12" lg="12" xl="12">
         <v-card class="mx-auto my-12 top_page_section">
           <div class="job_info" align="center" justify="center">
-            <v-card-title>Job Search </v-card-title>
+            <v-card-title>Companies </v-card-title>
             <v-breadcrumbs :items="items">
               <template v-slot:title="{ item }">
                 {{ item.title.toUpperCase() }}
@@ -72,7 +72,6 @@
                   </span>
                 </div>
               </v-card-text>
-
               <v-card-actions>
                 <div style="display: flex; align-items: center">
                   <v-icon color="black">mdi-human</v-icon>
@@ -86,7 +85,6 @@
                 </div>
               </v-card-actions>
             </v-card>
-
             <v-navigation-drawer
               v-model="detailPanelVisible"
               location="right"
@@ -104,7 +102,6 @@
                       ><v-icon>mdi-format-title</v-icon>
                       <span>{{ detail.title }}</span></v-card-title
                     >
-
                     <v-icon color="black">mdi-domain</v-icon>
                     <span>{{ detail.company_name }}</span>
                     <v-icon color="black">mdi-map-marker</v-icon>
@@ -187,8 +184,32 @@ import axios from "axios";
 import { useUsersStore } from "../store/user";
 export default {
   name: "CompanyPost",
-  setup() {
+  props: {
+    data: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  setup(props) {
+    console.log(props.data);
+    // if(props.data){
+    //     jobTitle.value = props.data.title,
+    //     location.value = props.data.location,
+    //   }else{
+
+    //   }
     const usersStore = useUsersStore();
+    const items = [
+      {
+        title: "Home",
+        disabled: false,
+        href: "/",
+      },
+      {
+        title: "Find Jobs",
+        disabled: true,
+      },
+    ];
     const jobs = ref({});
     const detail = ref({
       title: "",
@@ -202,7 +223,7 @@ export default {
 
     const jobTitle = ref("");
     const location = ref("");
-
+    const category = ref("");
     const detailPanelVisible = ref(false);
     const searchJobs = async () => {
       try {
@@ -210,6 +231,7 @@ export default {
           params: {
             jobTitle: jobTitle.value,
             location: location.value,
+            category: category.value,
           },
         });
 
@@ -244,6 +266,15 @@ export default {
     };
     //For job apply
     const apply = async (id) => {
+      if (!usersStore.isloggedin) {
+        window.Swal.fire({
+          title: "Login Required",
+          text: "Please log in to apply for this job.",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
           if (response.data.status == true) {
@@ -311,6 +342,21 @@ export default {
     onMounted(() => {
       // companypost();
       fetchJobs();
+      // const value =props.data ;
+      // console.log(value);
+      if (props.data.title || props.data.location) {
+        console.log(props.data.title || props.data.location);
+        jobTitle.value = props.data.title;
+        location.value = props.data.location;
+        searchJobs();
+      } else if (props.data.category) {
+        console.log(props.data.category);
+        category.value = props.data.category;
+        searchJobs();
+      }
+      //  else{
+      //   fetchJobs();
+      //  }
     });
     return {
       jobs,
@@ -327,6 +373,8 @@ export default {
       detail,
       truncateDescription,
       isDescriptionLong,
+      category,
+      items,
     };
   },
 };
@@ -427,4 +475,4 @@ button.save_btn {
   width: 90%;
   margin: 2% auto;
 }
-</style> 
+</style>
