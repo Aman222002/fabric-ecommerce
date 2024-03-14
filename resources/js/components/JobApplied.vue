@@ -77,24 +77,6 @@
   </div>
 </template>
 
-          <v-icon color="black">mdi-currency-rupee</v-icon>
-          <span style="font-size: 20px;">{{ jobApplication.job.salary }}<v-icon color="black"
-              style="margin-left: 270px;font-size: 20px;">mdi-desktop-classic</v-icon>{{ jobApplication.job.experience
-            }}
-          </span>
-        </div>
-
-
-      </v-card-text>
-      <v-card-actions>
-
-        <v-icon @click="deleteItem(jobApplication.id)" color="red" style="font-size: 40px;"
-          class="delete-icon">mdi-delete-outline </v-icon>
-      </v-card-actions>
-
-    </v-card>
-  </div>
-</template>
 
 <script>
 import { ref } from "vue";

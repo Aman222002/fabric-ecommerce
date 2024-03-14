@@ -1,81 +1,59 @@
 <template>
- 
-    <v-card style=" display: flex; flex-direction: column;">
-      <div class="background-image"></div>
-      <v-icon @click="goToEditPage()" style=" margin-left: 97%;">mdi-pencil</v-icon>
+  <v-card class="user_profile" style="display: flex; flex-direction: column">
+    <div class="user_profile_top_bar">
+      <v-container>
         <v-row>
-          <div style="align-items: center; display: flex; margin-left: 18px;position: relative;">
+          <v-icon @click="goToEditPage()" style="margin-left: 97%"
+            >mdi-pencil</v-icon
+          >
+          <div
+            style="
+              align-items: center;
+              display: flex;
+              margin-left: 18px;
+              position: relative;
+            "
+          >
             <v-progress-circular
-      :size="150"
-      :width="9"
-      v-model="progressValue" 
-      :color="progressColor"
-      
-    >
-   </v-progress-circular>
-              <v-avatar
+              :size="150"
+              :width="9"
+              v-model="progressValue"
+              :color="progressColor"
+            >
+            </v-progress-circular>
+            <v-avatar
               size="130px"
               class="avatar"
-              style="position: absolute; top: 10px; left: 10px;"
-             >
+              style="position: absolute; top: 10px; left: 10px"
+            >
               <!-- <img
             :src="`/storage/assest/${user.user_image}`"
            
             width="150px"
             height="150px"
           /> -->
-          <img
-        :src="user.user_image ? `/storage/assest/${user.user_image}` : '/storage/assest/img1.png'"
-        width="150px"
-        height="150px"
-    />
-         
-          
+              <img
+                :src="
+                  user.user_image
+                    ? `/storage/assest/${user.user_image}`
+                    : '/storage/assest/img1.png'
+                "
+                width="150px"
+                height="150px"
+              />
             </v-avatar>
-            
-         
           </div>
           <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
-    <p style="font-size: 30px;">{{ user.name }}</p>
-    <template v-if="address.city || address.state || address.zip_code">
-        <div>
-            <v-icon style="font-size: 15px;">mdi-map-marker</v-icon>
-            {{ address.city }}, {{ address.state }}, {{ address.zip_code }}
-        </div>
-    </template>
-</v-col>
-          
+            <p style="font-size: 30px">{{ user.name }}</p>
+            <template v-if="address.city || address.state || address.zip_code">
+              <div>
+                <v-icon style="font-size: 15px">mdi-map-marker</v-icon>
+                {{ address.city }}, {{ address.state }}, {{ address.zip_code }}
+              </div>
+            </template>
+          </v-col>
         </v-row>
-<div style="display: flex; margin: 20px">
-      <v-tabs>
-        <v-tab
-          :class="{ active: showOverview }"
-          @click="
-            showOverview = true;
-            showJob = false;
-            showDescription = false;
-          "
-          >Overview</v-tab
-        >
-        <v-tab
-          :class="{ active: showJob }"
-          @click="
-            showOverview = false;
-            showJob = true;
-            showDescription = false;
-          "
-          >Skills</v-tab
-        >
-        <v-tab
-          :class="{ active: showDescription }"
-          @click="
-            showOverview = false;
-            showJob = false;
-            showDescription = true;
-          "
-          >Qualifications</v-tab
-        >
-      </v-tabs>
+      </v-container>
     </div>
 
     <v-container>
@@ -83,8 +61,8 @@
         <v-col sm="12" md="6" lg="8" xl="8" class="user_profile_infor_left">
           <!-- Description -->
           <v-card class="card2" style="margin-bottom: 20px">
-            <v-card-title>
-              <v-icon>mdi-domain</v-icon> Candidates About:</v-card-title
+            <v-card-title
+              ><v-icon>mdi-domain</v-icon> Candidates About:</v-card-title
             >
             <v-card-text>
               <div style="font-family: sans-serif">
@@ -182,70 +160,172 @@
               ><v-icon>mdi-briefcase</v-icon> Candidates Skills:</v-card-title
             >
             <v-card-text>
-              <label for="name" class="ps-0" style="font-weight: bold;"> Name:</label>
-              <span style="margin-left: 32%">{{ user.name }}</span><br /><br />
-              <label for="email" class="ps-0" style="font-weight: bold;">Email:</label>
-              <span style="margin-left: 32%">{{ user.email }}</span><br /><br />
-              <label for="phone" class="ps-0" style="font-weight: bold;">Contact No:</label>
-              <span style="margin-left: 28%">{{ user.phone }}</span>
+              <div v-for="skill in skills" :key="skill.id">
+                <span> {{ skill.skill_name }}</span>
+              </div>
             </v-card-text>
           </v-card>
-          <v-card  style="margin-bottom: 20px;  width: 80%; margin-left: 40px;">
-          <v-card-title style="font-size: 16px;"><v-icon>mdi-map-marker</v-icon> Details:</v-card-title>
+
+          <!-- Qualifications  -->
+          <v-card>
+            <div
+              v-for="(educationDetails, index) in educationDetails"
+              :key="index"
+            >
+              <v-card-title
+                ><v-icon>mdi-school</v-icon> Candidates Qualifications:<br />
+                {{ educationDetails.education_type }}</v-card-title
+              >
+              <v-card-text>
+                <div>
+                  <label class="ps-0">School:</label>
+                  <span>{{ educationDetails.school_university }}</span>
+                </div>
+                <div>
+                  <label class="ps-0">Education:</label>
+                  <span>{{ educationDetails.education_type }}</span>
+                </div>
+                <div>
+                  <label class="ps-0">Starting Date:</label>
+                  <span>{{ educationDetails.starting_year }}</span>
+                </div>
+                <div>
+                  <label class="ps-0">End Date:</label>
+                  <span>{{ educationDetails.starting_year }}</span>
+                </div>
+              </v-card-text>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <!-- <v-tabs>
+      <v-tab
+        :class="{ active: showOverview }"
+        @click="
+          showOverview = true;
+          showJob = false;
+          showDescription = false;
+        "
+        >Overview</v-tab
+      >
+      <v-tab
+        :class="{ active: showJob }"
+        @click="
+          showOverview = false;
+          showJob = true;
+          showDescription = false;
+        "
+        >Skills</v-tab
+      >
+      <v-tab
+        :class="{ active: showDescription }"
+        @click="
+          showOverview = false;
+          showJob = false;
+          showDescription = true;
+        "
+        >Qualifications</v-tab
+      >
+    </v-tabs>
+
+    <v-tab-item v-if="!showJob && !showDescription && showOverview">
+      <div style="display: flex; margin-top: 20px">
+        <v-card style="margin-bottom: 20px; width: 80%">
+          <v-card-title style="font-size: 16px"
+            ><v-icon>mdi-account</v-icon>Details:</v-card-title
+          >
           <v-card-text>
-            <label for="company name" class="ps-0" style="font-weight: bold;">City</label>
-            <span style="margin-left: 25%">{{ address.city }}</span><br /><br />
-            <label for="company name" class="ps-0" style="font-weight: bold;">State</label>
-            <span  style="margin-left: 26%">{{ address.state }}</span><br /><br />
-            <label for="companyemail" class="ps-0" style="font-weight: bold;">Pin Code</label>
+            <label for="name" class="ps-0" style="font-weight: bold">
+              Name:</label
+            >
+            <span>{{ user.name }}</span
+            ><br /><br />
+            <label for="email" class="ps-0" style="font-weight: bold"
+              >Email:</label
+            >
+            <span>{{ user.email }}</span
+            ><br /><br />
+            <label for="phone" class="ps-0" style="font-weight: bold"
+              >Contact No:</label
+            >
+            <span style="margin-left: 28%">{{ user.phone }}</span>
+          </v-card-text>
+        </v-card>
+        <v-card style="margin-bottom: 20px; width: 80%; margin-left: 40px">
+          <v-card-title style="font-size: 16px"
+            ><v-icon>mdi-map-marker</v-icon> Details:</v-card-title
+          >
+          <v-card-text>
+            <label for="company name" class="ps-0" style="font-weight: bold"
+              >City</label
+            >
+            <span style="margin-left: 25%">{{ address.city }}</span
+            ><br /><br />
+            <label for="company name" class="ps-0" style="font-weight: bold"
+              >State</label
+            >
+            <span style="margin-left: 26%">{{ address.state }}</span
+            ><br /><br />
+            <label for="companyemail" class="ps-0" style="font-weight: bold"
+              >Pin Code</label
+            >
             <span style="margin-left: 25%">{{ address.zip_code }}</span>
           </v-card-text>
         </v-card>
-  </div>
-</v-tab-item>
-<v-tab-item  v-if="showDescription && !showOverview && !showJob">
-  <v-card  class="card2" style="margin-bottom: 20px; font-size: 16px;">
-          <v-card-title style="font-size: 16px;"><v-icon>mdi-school</v-icon>Qualifications:</v-card-title>
-          <v-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">School</th>
-                  <th class="text-left">Education</th>
-                  <th class="text-left">Starting Date</th>
-                  <th class="text-left">End Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(educationDetails, index) in educationDetails" :key="index">
-                  <td>{{ educationDetails.school_university }}</td>
-                  <td>{{ educationDetails.education_type }}</td>
-                  <td>{{ educationDetails.starting_year }}</td>
-                  <td>{{ educationDetails.passing_year }}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-table>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item v-if="showJob">
-  <v-card class="card2" style="margin-bottom: 20px; font-size: 16px;">
-    <v-card-title style="font-size: 16px;">Skills:</v-card-title>
-    <v-card-text>
-      <template v-if="skills.length > 0">
-        <ul>
-          <li v-for="skill in skills" :key="skill.id">{{ skill.skill_name }}</li>
-        </ul>
-      </template>
-      <template v-else>
-        <p>No skills available</p>
-      </template>
-    </v-card-text>
+      </div>
+    </v-tab-item>
+    <v-tab-item v-if="showDescription && !showOverview && !showJob">
+      <v-card class="card2" style="margin-bottom: 20px; font-size: 16px">
+        <v-card-title style="font-size: 16px"
+          ><v-icon>mdi-school</v-icon>Qualifications:</v-card-title
+        >
+        <v-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">School</th>
+                <th class="text-left">Education</th>
+                <th class="text-left">Starting Date</th>
+                <th class="text-left">End Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(educationDetails, index) in educationDetails"
+                :key="index"
+              >
+                <td>{{ educationDetails.school_university }}</td>
+                <td>{{ educationDetails.education_type }}</td>
+                <td>{{ educationDetails.starting_year }}</td>
+                <td>{{ educationDetails.starting_year }}000</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-table>
+      </v-card>
+    </v-tab-item>
+    <v-tab-item v-if="showJob">
+      <v-card class="card2" style="margin-bottom: 20px; font-size: 16px">
+        <v-card-title style="font-size: 16px">Skills:</v-card-title>
+        <v-card-text>
+          <template v-if="skills.length > 0">
+            <ul>
+              <li v-for="skill in skills" :key="skill.id">
+                {{ skill.skill_name }}
+              </li>
+            </ul>
+          </template>
+          <template v-else>
+            <p>No skills available</p>
+          </template>
+        </v-card-text>
+      </v-card>
+    </v-tab-item>
+     -->
   </v-card>
-</v-tab-item>
-    </v-card>
-  
-  </template>
+</template>
   
   <script>
 import { ref, onMounted, computed } from "vue";
@@ -255,11 +335,7 @@ export default {
   name: "UserProfile",
   setup() {
     const progressValue = ref(0);
-    const address = ref({
-      city: "",
-      state: "",
-      zip_code: "",
-    });
+    const address = ref([]);
     const user = ref([]);
     const educationDetails = ref([]);
     const experience = ref([]);
@@ -275,20 +351,10 @@ export default {
 
         const { data } = response.data;
         user.value = data.userDetails;
-        console.log(user.value);
-        if (data.address) {
-          address.value = data.address;
-        }
-        if (data.educationDetails) {
-          educationDetails.value = data.educationDetails;
-          console.log(educationDetails.value);
-        }
-        if (data.experience) {
-          experience.value = data.experience;
-        }
-        if (data.skills) {
-          skills.value = data.skills;
-        }
+        address.value = data.address;
+        educationDetails.value = data.educationDetails;
+        experience.value = data.experience;
+        skills.value = data.skills;
         progressValue.value = data.userDetails.status;
         console.log(progressValue.value);
       } catch (error) {
@@ -337,15 +403,44 @@ export default {
 };
 </script>
   
-  <style scoped>
-.background-image {
+<style >
+.active {
+  color: white;
+}
+
+.user-name {
+  color: white;
+  background-color: black;
+}
+.user_profile_infor_right .v-card-text div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.user_profile_top_bar {
+  background-image: linear-gradient(to right, #f3f6fb, #bfd1f1);
+  padding: 15px 0;
+}
+.user_profile_infor_right .v-card {
+  padding: 30px 27px;
+  background: #f5f7fc;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  width: 75%;
+}
+.right_side_edif_btn {
   position: absolute;
-  width: 100%;
-  height: 170px;
-  background-image: url("/storage/assest/6.jpg");
-  background-size: cover;
-  opacity: 0.6;
-  z-index: -2;
+  right: 25px;
+}
+.user_profile_infor_right .v-card .v-card-text {
+  padding: 0;
+}
+.user_profile_infor_right .v-card-title {
+  padding-left: 0;
+  font-weight: 600;
+}
+.user_profile_infor_right .v-card-text label {
+  font-weight: 600;
 }
 </style>
   
