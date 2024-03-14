@@ -60,7 +60,7 @@
     </v-container>
     <div class="text-center">
       <p class="centered-heading" style="font-family: sans-serif; font-size: 30px">
-        KEY <span style="color: red"> BENEFITS</span>
+        KEY <span style="color: red">BENEFITS</span>
       </p>
       <p style="margin-top: 10px">Why Choose Naukri Job Posting?</p>
     </div>

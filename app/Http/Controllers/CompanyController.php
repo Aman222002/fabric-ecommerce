@@ -224,6 +224,7 @@ class CompanyController extends Controller
         //  you can attach subscription to this account. Till that time, 
         //  save this info in table and once mandate received, update status.
         return redirect($redirectFlow->confirmation_url);
+        // dd($redirectFlow->status_code);
     }
     /**
      * Store a newly created resource in storage.
@@ -671,7 +672,6 @@ class CompanyController extends Controller
                     $users = User::where('company_id', $companyId)->get();
                     break;
             }
-
             return response()->json(['status' => true, 'data' => $users], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

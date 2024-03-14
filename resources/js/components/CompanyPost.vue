@@ -20,88 +20,47 @@
           <v-col cols="auto" sm="12" md="12" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
               <v-card-title>Search by Keywords </v-card-title>
-              <v-text-field
-                v-model="jobTitle"
-                label="Job Title"
-                density="compact"
-                variant="outlined"
-                clearable
-                style="width: 100%"
-              ></v-text-field>
-              <v-text-field
-                v-model="location"
-                label="Location"
-                density="compact"
-                variant="outlined"
-                clearable
-                style="width: 100%"
-              ></v-text-field>
+              <v-text-field v-model="jobTitle" label="Job Title" density="compact" variant="outlined" clearable
+                style="width: 100%"></v-text-field>
+              <v-text-field v-model="location" label="Location" density="compact" variant="outlined" clearable
+                style="width: 100%"></v-text-field>
               <v-btn @click="searchJobs">Search</v-btn>
             </v-card>
           </v-col>
-          <v-col
-            cols="auto"
-            sm="12"
-            md="12"
-            lg="9"
-            xl="9"
-            class="find_Job_list_right"
-          >
-            <v-card
-              v-for="job in jobs"
-              :key="job.id"
-              class="custom-card"
-              @click="openDetailPanel(job)"
-            >
+          <v-col cols="auto" sm="12" md="12" lg="9" xl="9" class="find_Job_list_right">
+            <v-card v-for="job in jobs" :key="job.id" class="custom-card" @click="openDetailPanel(job)">
               <v-card-title>{{ job.company.company_name }}</v-card-title>
               <v-card-text class="pa-0 ml-3">
                 <div style="display: flex; align-items: center">
                   <v-icon color="black">mdi-domain</v-icon>
                   <span>{{ job.title }}</span>
                 </div>
+
                 <div style="align-items: center">
                   <v-icon color="black">mdi-note</v-icon>
                   <span> {{ truncateDescription(job.description) }}</span>
-                  <span
-                    v-if="isDescriptionLong(job.description)"
-                    class="read-more"
-                    @click="openDetailPanel(job)"
-                  >
+                  <span v-if="isDescriptionLong(job.description)" class="read-more" @click="openDetailPanel(job)">
                     Read More
                   </span>
                 </div>
               </v-card-text>
-
               <v-card-actions>
                 <div style="display: flex; align-items: center">
                   <v-icon color="black">mdi-human</v-icon>
-                  <span
-                    >{{ job.vacancy }}
-                    <v-icon color="black">mdi-desktop-classic</v-icon
-                    >{{ job.experience
-                    }}<v-icon color="black">mdi-map-marker</v-icon
-                    >{{ job.location }}</span
-                  >
+                  <span>{{ job.vacancy }}
+                    <v-icon color="black">mdi-desktop-classic</v-icon>{{ job.experience
+                    }}<v-icon color="black">mdi-map-marker</v-icon>{{ job.location }}</span>
                 </div>
               </v-card-actions>
             </v-card>
-            <v-navigation-drawer
-              v-model="detailPanelVisible"
-              location="right"
-              class="single_job_search_page"
-            >
-              <v-icon
-                style="margin-left: 20px; margin-top: 30px"
-                @click="detailPanelVisible = false"
-                >mdi-arrow-left-top</v-icon
-              >
+            <v-navigation-drawer v-model="detailPanelVisible" location="right" class="single_job_search_page">
+              <v-icon style="margin-left: 20px; margin-top: 30px"
+                @click="detailPanelVisible = false">mdi-arrow-left-top</v-icon>
               <v-card style="width: 100%">
                 <div class="compamy_infor">
                   <div class="compamy_infor_left">
-                    <v-card-title
-                      ><v-icon>mdi-format-title</v-icon>
-                      <span>{{ detail.title }}</span></v-card-title
-                    >
+                    <v-card-title><v-icon>mdi-format-title</v-icon>
+                      <span>{{ detail.title }}</span></v-card-title>
                     <v-icon color="black">mdi-domain</v-icon>
                     <span>{{ detail.company_name }}</span>
                     <v-icon color="black">mdi-map-marker</v-icon>
@@ -112,19 +71,10 @@
                     <span>{{ detail.vacancy }}</span>
                   </div>
                   <div class="compamy_infor_btn">
-                    <v-btn
-                      class="apply_for_job"
-                      v-if="usersStore.isloggedin"
-                      @click="apply(detail.id)"
-                      >Apply For Job</v-btn
-                    >
-                    <v-btn
-                      class="save_btn"
-                      color="white"
-                      @click="save(detail.id)"
-                    >
-                      <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn
-                    >
+                    <v-btn class="apply_for_job" v-if="usersStore.isloggedin" @click="apply(detail.id)">Apply For
+                      Job</v-btn>
+                    <v-btn class="save_btn" color="white" @click="save(detail.id)">
+                      <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn>
                   </div>
                 </div>
                 <v-row class="compamy_infor_description">
@@ -184,9 +134,9 @@ import axios from "axios";
 import { useUsersStore } from "../store/user";
 export default {
   name: "CompanyPost",
-  props:{
-    data:{
-      type:Object,
+  props: {
+    data: {
+      type: Object,
       default: () => ({}),
     }
   },
@@ -220,6 +170,7 @@ export default {
       vacancy: "",
       id: "",
     });
+
     const jobTitle = ref("");
     const location = ref("");
     const category = ref("");
@@ -266,14 +217,14 @@ export default {
     //For job apply
     const apply = async (id) => {
       if (!usersStore.isloggedin) {
-    window.Swal.fire({
-      title: "Login Required",
-      text: "Please log in to apply for this job.",
-      icon: "warning",
-      confirmButtonText: "OK",
-    });
-    return; 
-  }
+        window.Swal.fire({
+          title: "Login Required",
+          text: "Please log in to apply for this job.",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
           if (response.data.status == true) {
@@ -343,13 +294,13 @@ export default {
       fetchJobs();
       // const value =props.data ;
       // console.log(value);
-       if (props.data.title||props.data.location) {
-        console.log(props.data.title||props.data.location);
+      if (props.data.title || props.data.location) {
+        console.log(props.data.title || props.data.location);
         jobTitle.value = props.data.title;
         location.value = props.data.location;
         searchJobs();
       }
-      else if(props.data.category){
+      else if (props.data.category) {
         console.log(props.data.category)
         category.value = props.data.category;
         searchJobs();
@@ -376,7 +327,8 @@ export default {
       category,
       items
     };
-  }}
+  }
+}
 </script>
 
 <style>
