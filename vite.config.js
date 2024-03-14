@@ -9,6 +9,7 @@ export default defineConfig({
     //         host: '192.168.1.21',
     //     },
     // },
+    
     plugins: [
         
         laravel({
