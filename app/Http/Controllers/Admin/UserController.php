@@ -348,7 +348,6 @@ class UserController extends Controller
 
             if (!$existingUser) {
                 //  $serializedPermissions = urlencode(serialize($permissions));
-
                 $url =  url('/company/register/' . $request->id . '/' . $request->name . '/' . $request->email . '/' . $request->phone . '/' . $request->company . '/' . $request->permission);
                 return redirect($url);
             } else {

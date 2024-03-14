@@ -26,7 +26,6 @@ class GocardlessController extends Controller
      */
     public function buyplan(Request $request)
     {
-
         try {
             $input = $request->all();
             if (!($request->input('user_name'))) {

@@ -101,15 +101,19 @@ class JobsController extends Controller
         }
 
         try {
-            $companyId = session('company_id');
-            if (!$companyId) {
-                return response()->json(['status' => false, 'message' => 'Company ID not found in session'], 422);
+            if ($request->userId) {
+                $user_Id = $request->userId;
+            } else {
+                $companyId = session('company_id');
+                if (!$companyId) {
+                    return response()->json(['status' => false, 'message' => 'Company ID not found in session'], 422);
+                }
+                $user_Id = Company::where('id', $companyId)->value('user_id');
+                // $user = User::where('id', $user_Id)->get()->filter(function ($user) {
+                //     return $user->hasrole('Company Admin');
+                //     // return $user;
+                // });
             }
-            $user_Id = Company::where('id', $companyId)->value('user_id');
-            // $user = User::where('id', $user_Id)->get()->filter(function ($user) {
-            //     return $user->hasrole('Company Admin');
-            //     // return $user;
-            // });
             $user = User::where('id', $user_Id)->whereHas('roles', function ($query) {
                 $query->where('name', 'Company Admin');
             })->first();
@@ -129,7 +133,6 @@ class JobsController extends Controller
             }
             $company = $user->company;
             $input = $request->all();
-
             $job = Job::create([
                 'user_id' => $user->id,
                 'company_id' => $company->id,
@@ -213,7 +216,6 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
-
             if ($job) {
                 $input = $request->all();
                 $job->update(['post_status', 'Published']);

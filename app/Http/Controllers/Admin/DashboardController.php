@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Feature;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Partner;
 use App\Models\Plan;
-
+use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -95,6 +96,30 @@ class DashboardController extends Controller
             $users = User::where('plan_id', $request->planID)->where('subscription_status', 'active')->get();
             // dd($users);
             return response()->json(['status' => true, 'data' => $users], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    /**
+     * function to get contact details on landing Page
+     */
+    public function viewContact()
+    {
+        try {
+            $details = Setting::all();
+            return response()->json(['status' => true, 'data' => $details], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    /**
+     * function to get Partners Logo
+     */
+    public function viewPartners()
+    {
+        try {
+            $details = Partner::all();
+            return response()->json(['status' => true, 'data' => $details], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e], 500);
         }

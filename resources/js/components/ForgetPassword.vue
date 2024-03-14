@@ -40,13 +40,13 @@
             <p class="mb-0">Enter registered email only</p>
         </div>
         <div class="mt-10 text-center">
-            <p class="mb-0">Wait, I remember my password... <a href="/login" class="text-primary "> Click here
+            <p class="mb-0">Wait, I remember my password... <a href="/job" class="text-primary "> Click here
                 </a> </p>
         </div>
     </v-container>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 export default {
     name: "ForgetPassword",
     setup() {
@@ -59,13 +59,20 @@ export default {
         ];
         const submitForm = async () => {
             try {
-                console.log(formData.value);
+                // console.log(formData.value);
                 const response = await axios.post("/get/forget/password/link", formData.value);
                 console.log(response.data);
             } catch (error) {
                 console.log(error);
             }
         }
+        // const logPreviousPageUrl = () => {
+        //     console.log("Previous page URL:", document.referrer);
+        // }
+        // Call the function when the component is mounted
+        // onMounted(() => {
+        //     logPreviousPageUrl();
+        // });
         return {
             emailRules,
             submitForm,
