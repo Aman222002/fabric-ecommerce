@@ -249,8 +249,15 @@ app.component("user-component",user);
 import CompanyUsers from "./components/CompanyUsers.vue";
 app.component("companyuser-component",CompanyUsers);
 
-import index from "./components/HomePage/index.vue"
-app.component("home-component",index);
+import About from "./components/About.vue";
+app.component("about-component",About);
+
+
+import Contact from "./components/Contact.vue";
+app.component("contact-component",Contact);
+
+// import index from "./components/HomePage/index.vue"
+// app.component("home-component",index);
 
 /**
  * The following block of code may be used to automatically register your

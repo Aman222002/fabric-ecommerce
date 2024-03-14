@@ -1,42 +1,57 @@
 
 <template>
-  <v-container fluid style="margin-top: 30px;">
-    <v-row justify="center">
-      <v-col cols="12" sm="8">
-        <v-form @submit.prevent="addUser">
-          <v-row>
-            <v-col cols="7">
-              <v-text-field v-model="userData.name" label="Name" variant="outlined" density="compact" :rules="nameRules"></v-text-field>
-            </v-col>
-            <v-col cols="7">
-              <v-text-field v-model="userData.email" label="Email" variant="outlined" density="compact" :rules="emailRules"></v-text-field>
-            </v-col>
-            <v-col cols="7">
-              <v-text-field v-model="userData.phone" label="Phone" variant="outlined" density="compact" :rules="phoneRules"></v-text-field>
-            </v-col>
-            <v-col cols="7">
-              <v-select
-                v-model="userData.permission"
-                :items="userPermissions"
-                item-value="id"
-                item-text="name"
-                label="Permission"
-                multiple
-                chips
-                variant="outlined"
-                density="compact"
-                small-chips
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12">
-              <v-btn type="submit" color="primary" style="text-align: center;">Send Invitation</v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
+  <v-container fluid>
+    <v-form @submit.prevent="addUser" class="form_fild_com">
+      <v-row>
+        <v-col cols="12">
+          <h2 class="mb-4 form_fild_title">User add:</h2>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            v-model="userData.name"
+            label="Name"
+            variant="outlined"
+            density="compact"
+            :rules="nameRules"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            v-model="userData.email"
+            label="Email"
+            variant="outlined"
+            density="compact"
+            :rules="emailRules"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            v-model="userData.phone"
+            label="Phone"
+            variant="outlined"
+            density="compact"
+            :rules="phoneRules"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-select
+            v-model="userData.permission"
+            :items="userPermissions"
+            item-value="id"
+            item-text="name"
+            label="Permission"
+            multiple
+            chips
+            variant="outlined"
+            density="compact"
+            small-chips
+          ></v-select>
+        </v-col>
+        <v-col cols="12" class="text-center">
+          <v-btn type="submit" class="form_fild_btn">Send Invitation</v-btn>
+        </v-col>
+      </v-row>
+    </v-form>
   </v-container>
 </template>
 <script>
@@ -50,7 +65,7 @@ export default {
       name: "",
       email: "",
       phone: "",
-      permission:[]
+      permission: [],
     });
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
@@ -67,14 +82,14 @@ export default {
     const fetchPermissions = async () => {
       try {
         const response = await axios.get("/permission");
-        userPermissions.value = response.data.map(data => data.name);
-        console.log( userPermissions.value)
+        userPermissions.value = response.data.map((data) => data.name);
+        console.log(userPermissions.value);
       } catch (error) {
         console.error("Error fetching permissions:", error);
       }
     };
     const selectCategory = (selectedCategory) => {
-      userData.permission = selectedCategory.name; 
+      userData.permission = selectedCategory.name;
     };
 
     onMounted(fetchPermissions);
@@ -82,22 +97,21 @@ export default {
     const addUser = async () => {
       try {
         await axios.post("/admin/user/addnewuser", userData.value);
-        userData.value.permission.forEach(permission => {
-      //console.log(permission);
-    });
-    window.Swal.fire({
-                  icon: "success",
-                  title: "Invitation sent",
-                  text: "Invitation sent Successfully to the user Email",
-                  confirmButtonText: "OK",
-                });
+        userData.value.permission.forEach((permission) => {
+          //console.log(permission);
+        });
+        window.Swal.fire({
+          icon: "success",
+          title: "Invitation sent",
+          text: "Invitation sent Successfully to the user Email",
+          confirmButtonText: "OK",
+        });
         userData.value = {
           name: "",
           email: "",
           phone: "",
-          permission: []
+          permission: [],
         };
-       
       } catch (error) {
         console.error("Error adding user:", error);
       }
@@ -106,12 +120,13 @@ export default {
     return {
       userData,
       userPermissions,
-      addUser,selectCategory ,
+      addUser,
+      selectCategory,
       nameRules,
       emailRules,
-     
+
       phoneRules,
     };
-  }
+  },
 };
 </script>

@@ -1,6 +1,9 @@
 <template>
   <form class="job_search_form">
     <v-row no-gutters>
+      <v-col cols="12">
+        <h3>Find candidates:</h3>
+      </v-col>
       <v-col sm="12" md="12" lg="5" xl="5">
         <v-sheet>
           <v-text-field

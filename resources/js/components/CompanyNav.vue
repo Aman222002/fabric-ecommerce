@@ -93,7 +93,7 @@
         "
         :class="{ group: true, active: currentRoute === '/users' }"
         href="/users"
-        prepend-icon="mdi-account-plus-outline"
+        prepend-icon="mdi-account"
         title="Users"
       >
       </v-list-item>
@@ -107,21 +107,29 @@
       style="color: white"
     ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-    <v-menu transition="slide-y-transition">
+    <v-menu class="log_and_reg_drop" transition="slide-y-transition">
       <template v-slot:activator="{ props }">
-        <v-icon v-bind="props" id="account" size="40"
+        <!-- <v-icon v-bind="props" id="account" size="40"
           >mdi-account-circle</v-icon
         >
-        <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
+        <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon> -->
+
+        <v-icon v-bind="props" id="account" size="40" style="color: white"
+          >mdi-account-circle</v-icon
+        >
+        <v-icon v-bind="props" class="menu" size="35" style="color: white">
+          mdi-menu-down</v-icon
+        >
       </template>
+
       <v-list>
-        <v-list-item
+        <!-- <v-list-item
           prepend-icon="mdi-account"
           title="Login as User"
           value="Login as User"
           href="/login"
           class="dropdown"
-        ></v-list-item>
+        ></v-list-item> -->
 
         <v-list-item
           v-if="usersStore.isloggedin"
@@ -254,7 +262,7 @@ nav.left_side_bar {
 }
 
 .dropdown:hover {
-  color: #175e56;
+  background-color: #1976d2;
 }
 
 .v-app-bar {
@@ -263,6 +271,10 @@ nav.left_side_bar {
 
 .menu {
   color: #030303;
+}
+
+#header {
+  background-color: #1976d2;
 }
 
 .links {
@@ -291,7 +303,15 @@ nav.left_side_bar {
   margin-left: 32%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
-
-/* padding: 0 25px; */
+.log_and_reg_drop .v-list {
+  width: 150px;
+}
+#div {
+  background-color: white;
+}
+.log_and_reg_drop .v-list .v-list-item:hover {
+  background-color: #1976d2;
+  color: #fff;
+}
 </style>
 

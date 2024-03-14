@@ -115,6 +115,12 @@ Route::get('/draft', function () {
 Route::get('/findcv', function () {
     return view('findcv');
 });
+Route::get('/about', function () {
+    return view('about');
+});
+Route::get('/contact', function () {
+    return view('contact');
+});
 
 // Route::get('/add-user', function () {
 //     return view('user');

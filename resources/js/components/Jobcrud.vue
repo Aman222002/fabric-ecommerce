@@ -138,7 +138,8 @@
         <v-card>
           <v-list>
             <v-list-item
-              :v-for="item in jobActions"
+              v-for="item in jobActions"
+              :key="item.text"
               class="dropdown"
               @click="duplicateJob(data.row.data.id, item.text)"
               >{{ item.text }}</v-list-item

@@ -1,17 +1,24 @@
 <template>
-  <v-container class="background">
+  <v-container>
     <v-row align="center" justify="center">
-      <v-col cols="12" sm="10">
+      <v-col sm="12" md="10" lg="12" xl="10" cols="12">
         <v-card class="elevation-12 mt-3" style="margin-bottom: 10px">
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-card-text class="mt-12">
+          <v-row class="form_page">
+            <v-col
+              class="form_page_left"
+              sm="12"
+              md="12"
+              lg="6"
+              xl="6"
+              cols="12"
+            >
+              <v-card-text>
                 <v-form ref="form" @submit.prevent="submitForm">
                   <p
                     class="text-center"
                     style="font-size: 20px; font-style: sans-serif"
                   >
-                    Company Login
+                    Employers Login
                   </p>
                   <v-row align="center" justify="center">
                     <v-col cols="12" sm="10">
@@ -54,7 +61,7 @@
                             href="/forget/password"
                             class="register-link"
                             style="text-decoration: none"
-                            >forgot password?</a
+                            >Forgot password?</a
                           >
                         </v-col>
                       </v-row>
@@ -72,25 +79,30 @@
                 </v-form>
               </v-card-text>
             </v-col>
-            <v-col cols="12" md="6" class="blue rounded-bl-xl">
-              <div class="text-center py-8" style="margin-top: 110px">
-                <v-card-text class="white--text">
-                  <p style="font-size: 20px">Don't Have an Account Yet?</p>
-                  <p style="font-size: 13px; margin-top: 10px">
-                    Let's get you all set up so you can start creating your
-                    first onboarding experience
-                  </p>
-                  <v-btn
-                    color="primary"
-                    tile
-                    outlined
-                    dark
-                    @click="signup()"
-                    style="margin-top: 20px"
-                    >Register Now</v-btn
-                  >
-                </v-card-text>
-              </div>
+            <v-col
+              class="blue form_page_right"
+              sm="12"
+              md="12"
+              lg="6"
+              xl="6"
+              cols="12"
+            >
+              <v-card-text class="white--text">
+                <p style="font-size: 20px">Don't Have an Account Yet?</p>
+                <p style="font-size: 13px; margin-top: 10px">
+                  Let's get you all set up so you can start creating your first
+                  onboarding experience
+                </p>
+                <v-btn
+                  color="primary"
+                  tile
+                  outlined
+                  dark
+                  @click="signup()"
+                  style="margin-top: 20px"
+                  >SIGN UP</v-btn
+                >
+              </v-card-text>
             </v-col>
           </v-row>
         </v-card>
@@ -214,24 +226,33 @@ export default {
 };
 </script>
 
+   
 <style scoped>
 .blue {
   background-color: rgb(54, 194, 250);
 }
-
-.rounded-bl-xl {
+.form_page {
+  margin: 25px;
+}
+.form_page_right {
   border-bottom-left-radius: 250px;
+  display: flex;
+  align-items: center;
+  text-align: center;
 }
-.background {
-  background-image: url("/storage/assest/1.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.v-list-item:hover {
-  background-color: rgb(54, 194, 250);
+.form_page_left button.v-btn,
+.form_page_right button.v-btn {
+  min-width: 150px;
+  margin: 0 auto;
+  background-color: #1967d2;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 11px 0;
+  height: 100%;
+  border-radius: 15px;
+  color: #fff;
 }
 </style>
- 
  
 
