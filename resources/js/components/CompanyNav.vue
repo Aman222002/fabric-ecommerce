@@ -55,8 +55,8 @@
       <v-list>
         <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"
           class="dropdown"></v-list-item>
-        <v-list-item v-if="usersStore.isloggedin" class="dropdown" prepend-icon="mdi-logout" title="Logout"
-          value="Dashboard" @click="logout()"></v-list-item>
+        <v-list-item v-if="usersStore.isloggedin || employerStore.isloggedin" class="dropdown" prepend-icon="mdi-logout"
+          title="Logout" value="Dashboard" @click="logout()"></v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -64,6 +64,8 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useUsersStore } from "@/store/user";
+import { useEmployerStore } from "../store/employer";
+
 import axios from "axios";
 
 export default {
@@ -71,7 +73,7 @@ export default {
 
   setup() {
     const usersStore = useUsersStore();
-
+    const employerStore = useEmployerStore();
     const users = ref([]);
     const currentRoute = ref(window.location.pathname);
     const drawer = ref(true);
@@ -82,11 +84,14 @@ export default {
     const updateRoute = () => {
       currentRoute.value = window.location.pathname;
     };
-
     const logout = () => {
-      usersStore.isLogOut();
+      if (usersStore.isloggedin) {
+        usersStore.isLogOut();
+      } else {
+        employerStore.isLogOut();
+      }
       axios.get("/company/logout");
-      window.location.href = "/job";
+      window.location.href = "/";
     };
     const fetchUserData = async () => {
       try {
@@ -127,7 +132,7 @@ export default {
       requests,
       updateRoute,
       logout,
-      hasPermission, hasrole
+      hasPermission, hasrole, employerStore
     };
   },
 };

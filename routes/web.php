@@ -232,5 +232,7 @@ Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
 Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
 Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 Route::post('remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
+Route::get('contact/data', [DashboardController::class, 'viewContact']);
+Route::get('partner/data', [DashboardController::class, 'viewPartners']);
 //users
 //user/{id} function(Request $request, $id)
