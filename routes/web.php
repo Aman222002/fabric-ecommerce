@@ -115,6 +115,9 @@ Route::get('/draft', function () {
 Route::get('/findcv', function () {
     return view('findcv');
 });
+Route::get('/about', function () {
+    return view('about');
+});
 
 // Route::get('/add-user', function () {
 //     return view('user');

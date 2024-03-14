@@ -40,10 +40,21 @@
                   ></v-text-field>
                 </v-sheet>
               </v-col>
+              <!-- <v-col cols="12" sm="12" md="2" lg="2" xl="2">
+                <v-sheet>
+                  <v-btn type="submit" block class="mt-2 " @click="signup"
+                    >Submit</v-btn
+                  ></v-sheet
+                >
+              </v-col> -->
               <v-col cols="12" sm="12" md="2" lg="2" xl="2">
                 <v-sheet>
-                  <v-btn type="submit" block class="mt-2"
-                    >Submit</v-btn
+                  <a
+                    href="http://127.0.0.1:8000/jobs-detail"
+                    class="mt-2 btn_search"
+                    type="submit"
+                    block
+                    >Submit</a
                   ></v-sheet
                 >
               </v-col>
@@ -68,6 +79,14 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  name: "HomePage",
+  setup() {
+    return {};
+  },
+};
+</script>
 
 
 

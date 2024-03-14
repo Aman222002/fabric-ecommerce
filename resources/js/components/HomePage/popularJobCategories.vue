@@ -23,7 +23,6 @@
             <template v-slot:title>
               <a href="#"> {{ popularJob.title }}</a>
             </template>
-
             <v-card-text> ({{ popularJob.subtitle }}) </v-card-text>
           </v-card>
           <!-- 
