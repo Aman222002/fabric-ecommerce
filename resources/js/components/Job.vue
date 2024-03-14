@@ -12,29 +12,71 @@
                   </p>
                   <v-row align="center" justify="center">
                     <v-col cols="12" sm="10">
-                      <v-text-field label="Email" variant="outlined" v-model="formData.email" :rules="emailRules" dense
-                        density="compact" color="blue" autocomplete="false" class="mt-8" style="font-size: 10px" />
+                      <v-text-field
+                        label="Email"
+                        variant="outlined"
+                        v-model="formData.email"
+                        :rules="emailRules"
+                        dense
+                        density="compact"
+                        color="blue"
+                        autocomplete="false"
+                        class="mt-8"
+                        style="font-size: 10px"
+                      />
 
-                      <v-text-field label="Password" variant="outlined" v-model="formData.password" :rules="passRules"
-                        dense density="compact" color="blue" autocomplete="false" type="password"
-                        style="margin-top: 10px; font-size: 10px" />
+                      <v-text-field
+                        label="Password"
+                        variant="outlined"
+                        v-model="formData.password"
+                        :rules="passRules"
+                        dense
+                        density="compact"
+                        color="blue"
+                        autocomplete="false"
+                        type="password"
+                        style="margin-top: 10px; font-size: 10px"
+                      />
                       <v-row>
                         <v-col cols="12" sm="7">
-                          <v-checkbox label="Remember Me" class="mt-n1" color="blue">
+                          <v-checkbox
+                            label="Remember Me"
+                            class="mt-n1"
+                            color="blue"
+                          >
                           </v-checkbox>
                         </v-col>
                         <v-col cols="12" sm="5" class="mt-3">
-                          <a href="/forget/password" class="register-link" style="text-decoration: none">Forgot
-                            password?</a>
+                          <a
+                            href="/forget/password"
+                            class="register-link"
+                            style="text-decoration: none"
+                            >Forgot password?</a
+                          >
                         </v-col>
                       </v-row>
-                      <v-btn type="submit" dark block tile color="primary" @click="showCompanyListDialog">Login</v-btn>
+                      <v-btn
+                        type="submit"
+                        dark
+                        block
+                        tile
+                        color="primary"
+                        @click="showCompanyListDialog"
+                        >Login</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-form>
               </v-card-text>
             </v-col>
-            <v-col class="blue form_page_right" sm="12" md="12" lg="6" xl="6" cols="12">
+            <v-col
+              class="blue form_page_right"
+              sm="12"
+              md="12"
+              lg="6"
+              xl="6"
+              cols="12"
+            >
               <v-card-text class="white--text">
                 <p style="font-size: 20px">Don't Have an Account Yet?</p>
                 <p style="font-size: 13px; margin-top: 10px">
@@ -157,7 +199,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .blue {
   background-color: rgb(54, 194, 250);
@@ -173,7 +214,6 @@ export default {
   align-items: center;
   text-align: center;
 }
-
 .form_page_left button.v-btn,
 .form_page_right button.v-btn {
   min-width: 150px;

@@ -1,26 +1,54 @@
 <template>
   <v-container>
     <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
-
-      <v-row style="margin-top: 20px;">
+      <v-row style="margin-top: 20px">
         <v-col cols="12">
           <p class="mb-4 form-title">User Detail:</p>
         </v-col>
         <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
-            density="compact" outlined :disabled="disabledFields"></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="company.name"
+            label="Representative Name"
+            :rules="nameRules"
+            density="compact"
+            outlined
+            :disabled="disabledFields"
+          ></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.email" label="Representative Email" :rules="emailRules"
-            density="compact" outlined :disabled="disabledFields"></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="company.email"
+            label="Representative Email"
+            :rules="emailRules"
+            density="compact"
+            outlined
+            :disabled="disabledFields"
+          ></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
-            density="compact" type="password" outlined></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="company.password"
+            label="Password"
+            :rules="passwordRules"
+            density="compact"
+            type="password"
+            outlined
+          ></v-text-field>
         </v-col>
         <v-col cols="3" sm="3">
-          <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules" type="phone"
-            density="compact" outlined :disabled="disabledFields"></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="company.phone"
+            label="Phone"
+            :rules="phoneRules"
+            type="phone"
+            density="compact"
+            outlined
+            :disabled="disabledFields"
+          ></v-text-field>
         </v-col>
       </v-row>
       <div v-if="showCompanyDetails">
@@ -29,30 +57,105 @@
             <p class="mb-4 form-title">Company Details:</p>
           </v-col>
           <v-col cols="3" sm="3">
-            <v-text-field variant="outlined" v-model="company.company_name" label="Company Name" :rules="nameRules"
-              density="compact" outlined></v-text-field>
+            <v-text-field
+              variant="outlined"
+              v-model="company.company_name"
+              label="Company Name"
+              :rules="nameRules"
+              density="compact"
+              outlined
+            ></v-text-field>
           </v-col>
           <v-col cols="3" sm="3">
-            <v-text-field variant="outlined" v-model="company.company_email" label="Company Email" :rules="emailRules"
-              density="compact" outlined></v-text-field>
+            <v-text-field
+              variant="outlined"
+              v-model="company.company_email"
+              label="Company Email"
+              :rules="emailRules"
+              density="compact"
+              outlined
+            ></v-text-field>
           </v-col>
           <v-col cols="3" sm="3">
-            <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number" :rules="phoneRules"
-              density="compact" outlined></v-text-field>
+            <v-text-field
+              variant="outlined"
+              v-model="company.phone_number"
+              label="Phone Number"
+              :rules="phoneRules"
+              density="compact"
+              outlined
+            ></v-text-field>
           </v-col>
           <v-col cols="3" sm="3">
-            <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined
-              density="compact"></v-file-input>
+            <v-file-input
+              variant="outlined"
+              v-model="company.logo"
+              label="Company Logo"
+              outlined
+              density="compact"
+            ></v-file-input>
           </v-col>
-
         </v-row>
       </div>
-      <v-row>
-
-      </v-row>
+      <v-row> </v-row>
+      <!-- <v-row>
+        <v-col cols="12">
+          <p class="mb-4 form-title">Company Address:</p>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field
+            variant="outlined"
+            v-model="company.first_line_address"
+            label="First Line Address"
+            density="compact"
+            outlined
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field
+            variant="outlined"
+            v-model="company.street"
+            label="Street"
+            outlined
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field
+            variant="outlined"
+            v-model="company.city"
+            label="City"
+            :rules="cityRules"
+            outlined
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field
+            variant="outlined"
+            v-model="company.state"
+            label="State"
+            :rules="stateRules"
+            density="compact"
+            outlined
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3" sm="3">
+          <v-text-field
+            variant="outlined"
+            v-model="company.postal_code"
+            label="Postal Code"
+            :rules="postalCodeRules"
+            density="compact"
+            outlined
+          ></v-text-field>
+        </v-col>
+      </v-row> -->
       <v-row justify="center">
         <v-col cols="12" class="text-center">
-          <v-btn type="submit" color="primary" class="custom-button">Register Company</v-btn>
+          <v-btn type="submit" color="primary" class="custom-button"
+            >Register Company</v-btn
+          >
         </v-col>
       </v-row>
     </v-form>
@@ -61,7 +164,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useUsersStore } from "../store/user";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "CompanyRegister",
@@ -69,13 +172,11 @@ export default {
     data: {
       type: Object,
       default: () => ({}),
-    }
+    },
   },
   setup(props) {
-
     const usersStore = useUsersStore();
     const form = ref(null);
-
     const company = ref({
       name: "",
       email: "",
@@ -102,7 +203,6 @@ export default {
     const stateRules = [(v) => !!v || "State is required"];
     const cityRules = [(v) => !!v || "city is required"];
 
-
     const postalCodeRules = [
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
@@ -124,8 +224,7 @@ export default {
       }
       if (window.location.pathname === "/company/register") {
         showCompanyDetails.value = true;
-      }
-      else {
+      } else {
         showCompanyDetails.value = false;
       }
     });
@@ -141,9 +240,8 @@ export default {
           errorField.scrollIntoView({
             behavior: "smooth",
             block: "center",
-            inline: "center"
+            inline: "center",
           });
-
         } else {
           const formData = new FormData();
           for (let key in company.value) {
@@ -159,7 +257,7 @@ export default {
             formData.append("company_Id", props.data.company);
             formData.append("permission", props.data.permission);
           }
-          console.log(props.data.permission)
+          console.log(props.data.permission);
           axios
             .post("/company/post", formData, {
               headers: {
@@ -181,7 +279,6 @@ export default {
             .catch((error) => {
               console.error("Error:", error);
             });
-
         }
       });
     };
@@ -198,11 +295,9 @@ export default {
       stateRules,
       usersStore,
       showCompanyDetails,
-      disabledFields
+      disabledFields,
     };
-
   },
-
 };
 </script>
 <style scoped>

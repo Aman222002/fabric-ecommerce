@@ -276,7 +276,6 @@ class JobsController extends Controller
                 'user_id' => Auth::user()->id,
                 'job_id' => $id
             ])->count();
-
             if ($jobApplicationCount > 0) {
                 $message = 'You already applied on this job.';
                 return response()->json([
@@ -430,7 +429,6 @@ class JobsController extends Controller
     }
     //     public function removeAppliedJob($id){
     //         try {
-
     //             $jobApplication = JobApply::where('job_id', $id);
 
     //             //if() // check

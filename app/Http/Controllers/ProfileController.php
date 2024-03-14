@@ -178,7 +178,6 @@ class ProfileController extends Controller
     //         if($user->hasRole('Company Admin')){
     //             $companyId =  $user->company ? $user->company->id : 0;
     //         }
-
     //         $jobs = Job::with("company");
 
     //         if($companyId != 0){
@@ -187,7 +186,6 @@ class ProfileController extends Controller
     //         $jobs =   $jobs->get();
 
     //         // $jobs = Job::all();
-
     //         return response()->json(['status' => true, 'data' => $jobs], 200);
     //     } catch (\Exception $e) {
     //         Log::error($e->getMessage());

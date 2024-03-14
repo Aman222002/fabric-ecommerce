@@ -380,7 +380,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 .find_Job_list_left {
   position: relative;
   background: #f5f7fc;
@@ -388,21 +388,18 @@ export default {
   margin-bottom: 30px;
   padding: 7% 7% 10px;
 }
-
 .find_Job_list .top_page_section {
   background: transparent;
   box-shadow: unset;
   display: flex;
   justify-content: center;
 }
-
 .find_Job_list .top_page_section .v-card-title {
   font-weight: 500;
   font-size: 30px;
   text-align: center;
   color: #202124;
 }
-
 .find_Job_list .body_page_section {
   background: #fff;
   padding: 50px 0 100px;
@@ -417,7 +414,6 @@ export default {
   transition: all 0.3s ease;
   margin-bottom: 15px;
 }
-
 .find_Job_list_right .v-card-title {
   font-size: 30px;
   font-weight: bolder;
@@ -425,19 +421,15 @@ export default {
   font-family: sans-serif;
   text-transform: capitalize;
 }
-
 .find_Job_list_right .custom-card:hover .v-card-title {
   color: #1967d2;
 }
-
 .single_job_search_page {
   width: 70% !important;
 }
-
 .compamy_infor .compamy_infor_left i.mdi {
   margin-right: 5px;
 }
-
 .compamy_infor {
   display: flex;
   justify-content: space-between;
@@ -446,9 +438,35 @@ export default {
   padding: 1% 15px;
   align-items: center;
 }
-
 button.apply_for_job {
   text-align: center;
+  color: #fff;
+  background-color: #1967d2;
+  font-size: 15px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 18px 35px;
+  height: 50px !important;
+}
+button.save_btn {
+  height: 50px !important;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  color: #1967d2;
+  border-radius: 7px;
+  background: #1967d212;
+  transition: all 0.3s ease;
+  margin-left: 20px;
+}
+.compamy_infor_description {
+  width: 90%;
+  margin: 2% auto;
+}
+.find_Job_list_left button.search_btn {
+  display: table;
+  margin: 0 auto;
   color: #fff;
   background-color: #1967d2;
   font-size: 15px;

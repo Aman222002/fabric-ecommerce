@@ -77,6 +77,10 @@
   </div>
 </template>
 
+
+
+
+
 <script>
 import { ref } from "vue";
 import axios from "axios";
@@ -167,7 +171,7 @@ export default {
   padding: 50px 0 100px;
 }
 .save_Jobs .sec-title {
-  margin: 50px 0;
+  margin-bottom: 50px;
 }
 .save_Jobs .sec-title h2 {
   position: relative;
@@ -185,36 +189,77 @@ export default {
   color: #696969;
   font-weight: 400;
 }
-
-.saved-text {
-  color: red;
+.save_Jobs a.load_more {
+  font-size: 19px;
+  line-height: 20px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 15px 28px;
+  background-color: #1967d2;
+  text-decoration: unset;
+  display: table;
+  color: #fff;
 }
-
-.new-job-btn {
-  margin-top: 20px;
-}
-
-.new-job-link {
-  text-decoration: none;
-}
-
-.card-container {
+.save_Jobs .company_info {
+  padding: 15px;
+  width: 100%;
   display: flex;
+  background: #f5f7fc;
+}
+
+.job_info .v-card-title {
+  padding-top: 0;
+}
+.job_info ul {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  padding-left: 13px;
+  list-style: none;
+}
+.job_info ul li {
+  font-size: 15px;
+  margin-right: 15px;
+}
+.job_info ul li i {
+  font-size: 19px;
+}
+.job_info ul.company_time {
+  margin-top: 8px;
+}
+.job_info ul.company_time li {
+  position: relative;
+  font-size: 13px;
+  line-height: 15px;
+  margin-right: 15px;
+  padding: 5px 20px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  background: rgba(25, 103, 210, 0.15);
+  color: #1967db;
+}
+.job_info ul.company_time li:nth-child(2) {
+  background: #93faae;
+  color: #34a853;
+}
+.job_info ul.company_time li:nth-child(3) {
+  background: #fddb91;
+  color: #ffae00;
 }
 
-.job-card {
-  width: 600px;
-  margin: 20px;
+.job_info .v-card-title a {
+  color: #202124;
+  text-decoration: unset;
 }
-
-.job-info {
-  display: flex;
-  justify-content: space-between;
-}
-
-.info-label {
-  font-weight: bold;
+.body_page_section .company_info .v-card-actions button.v-btn {
+  color: #fff;
+  background-color: #1967d2;
+  font-size: 15px;
+  border-radius: 8px;
+  font-weight: 400;
+  height: 100% !important;
+  padding: 5px 11px;
+  margin-right: 5px;
 }
 </style>

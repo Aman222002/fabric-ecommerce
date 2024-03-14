@@ -4,8 +4,14 @@
       <v-row no-gutters>
         <v-col class="footer_col" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
-            <router-link class="logo" to="/" style="cursor: pointer" width="200">
-              {{ appName }}</router-link>
+            <router-link
+              class="logo"
+              to="/"
+              style="cursor: pointer"
+              width="200"
+            >
+              {{ appName }}</router-link
+            >
           </v-toolbar-title>
           <div class="footer-column about-widget">
             <p class="phone-num">
@@ -42,10 +48,20 @@
             <ul class="list">
               <!-- <li><a href="/jobs-detail">Browse Candidates</a></li> -->
               <li>
-                <a :href="employerStore.isloggedin ? '/posted-jobs' : '/job'">Employer Dashboard</a>
+                <a :href="employerStore.isloggedin ? '/posted-jobs' : '/job'"
+                  >Employer Dashboard</a
+                >
               </li>
-              <li><a :href="employerStore.isloggedin ? '/postjob' : '/job'">Add Job</a></li>
-              <li><a :href="employerStore.isloggedin ? '/product' : '/job'">Job Packages</a></li>
+              <li>
+                <a :href="employerStore.isloggedin ? '/postjob' : '/job'"
+                  >Add Job</a
+                >
+              </li>
+              <li>
+                <a :href="employerStore.isloggedin ? '/product' : '/job'"
+                  >Job Packages</a
+                >
+              </li>
             </ul>
           </div>
         </v-col>
@@ -93,23 +109,23 @@ export default {
     const contactDetails = ref({});
     const sendEmail = () => {
       window.location.href = `mailto:${contactDetails.value.email}`;
-    }
+    };
     const makeCall = () => {
       window.location.href = `tel:${contactDetails.value.contact}`;
-    }
+    };
     const fetchData = () => {
       try {
-        axios.get('contact/data').then((response) => {
+        axios.get("contact/data").then((response) => {
           contactDetails.value = response.data.data[0];
           // console.log(contactDetails.value);
-        })
+        });
       } catch (error) {
         console.log(error);
       }
-    }
+    };
     onMounted(() => {
       fetchData();
-    })
+    });
     return {
       appName,
       fetchData,
@@ -117,7 +133,7 @@ export default {
       sendEmail,
       makeCall,
       usersStore,
-      employerStore
+      employerStore,
     };
     // methods: {
     //   sendEmail() {
@@ -130,6 +146,7 @@ export default {
 </script>
 
 <style scoped>
+/* footer css Only  */
 .footer p.phone-num {
   font-size: 18px;
   line-height: 28px;

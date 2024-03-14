@@ -1,64 +1,144 @@
 
 <template>
   <v-container>
-    <v-form @submit.prevent="saveJob" name="createJobForm" ref="form" class="custom-form" style="margin-left: 10%;">
-      <v-row style="margin-top: 20px">
-        <v-col cols="10">
-          <p class="mb-4 form-title" style="text-align: center; font-size: 20px;"> Post Detail:</p>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" v-model="job.title" label="Title" placeholder=" Enter Job Title"
-            :rules="rules.title" density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-select variant="outlined" v-model="job.category" :items="categories" item-title="name" item-value="id"
-            label="Select Category" :rules="rules.category" density="compact"></v-select>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-select variant="outlined" v-model="job.jobType" :items="jobTypes" item-title="name" item-value="id"
-            label="Select JobType" :rules="rules.jobType" density="compact"></v-select>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-select variant="outlined" v-model="job.jobSkill" :items="jobSkills" item-title="skill_name" item-value="id"
-            label="Select Skills" :rules="rules.jobSkill" density="compact"></v-select>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" v-model="job.vacancy" type="number" min="1" label="Vacancy"
-            :rules="rules.vacancy" placeholder="Vacancy" density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" v-model="job.salary" label="Salary" placeholder="Salary" :rules="rules.salary"
-            density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" v-model="job.location" label="Location" placeholder="Location"
-            :rules="rules.location" density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="10">
-          <v-textarea variant="outlined" v-model="job.description" label="Description" placeholder="Description"
-            :rules="rules.description" density="compact"></v-textarea>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" v-model="job.qualifications" label="Qualifications"
-            placeholder="Qualifications" :rules="rules.qualifications" density="compact"></v-text-field>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-select variant="outlined" v-model="job.experience" :items="experienceOptions" label="Experience"
-            placeholder="Select Experience" density="compact" :rules="rules.experience"></v-select>
-        </v-col>
-        <v-col cols="4" sm="5">
-          <v-text-field variant="outlined" type="url" required v-model="job.companywebsite" label=" Company Website"
-            :rules="companywebsite" placeholder="Website" density="compact"></v-text-field>
-        </v-col>
-      </v-row>
+    <v-form
+      @submit.prevent="saveJob"
+      name="createJobForm"
+      ref="form"
+      class="custom-form form_fild_com"
+    >
       <v-row>
-        <v-col cols="10" class="text-center">
-          <v-btn type="submit" color="primary" class="custom-button">Save Job</v-btn>
+        <v-col cols="12">
+          <h2 class="mb-4 form_fild_title">Post Detail:</h2>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            variant="outlined"
+            v-model="job.title"
+            label="Title"
+            placeholder=" Enter Job Title"
+            :rules="rules.title"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-select
+            variant="outlined"
+            v-model="job.category"
+            :items="categories"
+            item-title="name"
+            item-value="id"
+            label="Select Category"
+            :rules="rules.category"
+            density="compact"
+          ></v-select>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-select
+            variant="outlined"
+            v-model="job.jobType"
+            :items="jobTypes"
+            item-title="name"
+            item-value="id"
+            label="Select JobType"
+            :rules="rules.jobType"
+            density="compact"
+          ></v-select>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-select
+            variant="outlined"
+            v-model="job.jobSkill"
+            :items="jobSkills"
+            item-title="skill_name"
+            item-value="id"
+            label="Select Skills"
+            :rules="rules.jobSkill"
+            density="compact"
+          ></v-select>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            variant="outlined"
+            v-model="job.vacancy"
+            type="number"
+            min="1"
+            label="Vacancy"
+            :rules="rules.vacancy"
+            placeholder="Vacancy"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            variant="outlined"
+            v-model="job.salary"
+            label="Salary"
+            placeholder="Salary"
+            :rules="rules.salary"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            variant="outlined"
+            v-model="job.location"
+            label="Location"
+            placeholder="Location"
+            :rules="rules.location"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            variant="outlined"
+            v-model="job.qualifications"
+            label="Qualifications"
+            placeholder="Qualifications"
+            :rules="rules.qualifications"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-select
+            variant="outlined"
+            v-model="job.experience"
+            :items="experienceOptions"
+            label="Experience"
+            placeholder="Select Experience"
+            density="compact"
+            :rules="rules.experience"
+          ></v-select>
+        </v-col>
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+          <v-text-field
+            variant="outlined"
+            type="url"
+            required
+            v-model="job.companywebsite"
+            label=" Company Website"
+            :rules="companywebsite"
+            placeholder="Website"
+            density="compact"
+          ></v-text-field>
+        </v-col>
+        <v-col sm="12" md="12" lg="12" xl="12" cols="12">
+          <v-textarea
+            variant="outlined"
+            v-model="job.description"
+            label="Description"
+            placeholder="Description"
+            :rules="rules.description"
+            density="compact"
+          ></v-textarea>
+        </v-col>
+        <v-col cols="12" class="text-center">
+          <v-btn type="submit" class="custom-button form_fild_btn"
+            >Save Job</v-btn
+          >
         </v-col>
       </v-row>
     </v-form>
-
-
   </v-container>
 </template>
   
@@ -95,8 +175,10 @@ export default {
       jobSkill: [(v) => !!v || "Job Skill is required"],
     };
     const companywebsite = [
-      v => !!v || 'URL is required',
-      v => /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v) || 'Invalid URL'
+      (v) => !!v || "URL is required",
+      (v) =>
+        /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v) ||
+        "Invalid URL",
     ];
     const categories = ref([]);
 
@@ -174,48 +256,50 @@ export default {
           });
         } else {
           try {
-            axios.post("/post", job.value).then((response) => {
-              if (response.data.status === true) {
-                window.Swal.fire({
-                  toast: true,
-                  position: 'top-end',
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: 'success',
-                  title: 'Job posted successfully!',
-                });
-              }
-              form.value.reset();
-            }).catch((error) => {
-              console.log(error);
-              if (error.response.status == '402') {
-                window.Swal.fire({
-                  toast: true,
-                  position: 'top-end',
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: 'error',
-                  title: `You don't have a active plan buy a plan or renew your plan`,
-                });
-              }
-              else if (error.response.status = '403') {
-                window.Swal.fire({
-                  toast: true,
-                  position: 'top-end',
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: 'error',
-                  title: `You have posted number of allowed post can't post more`,
-                });
-              }
-            });
+            axios
+              .post("/post", job.value)
+              .then((response) => {
+                if (response.data.status === true) {
+                  window.Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    icon: "success",
+                    title: "Job posted successfully!",
+                  });
+                }
+                form.value.reset();
+              })
+              .catch((error) => {
+                console.log(error);
+                if (error.response.status == "402") {
+                  window.Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    icon: "error",
+                    title: `You don't have a active plan buy a plan or renew your plan`,
+                  });
+                } else if ((error.response.status = "403")) {
+                  window.Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    icon: "error",
+                    title: `You have posted number of allowed post can't post more`,
+                  });
+                }
+              });
           } catch (err) {
             window.Swal.fire({
               toast: true,
-              position: 'top-end',
+              position: "top-end",
               timer: 2000,
               showConfirmButton: false,
-              icon: 'error',
+              icon: "error",
               title: `Something went Wrong`,
             });
           }
@@ -240,53 +324,3 @@ export default {
 };
 </script>
   
-<style scoped>
-#createJobForm {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.card-form {
-  padding: 20px;
-}
-
-.v-text-field,
-.v-select,
-.v-textarea {
-  margin-bottom: 20px;
-}
-
-.border-top {
-  border-top: 1px solid #ccc;
-}
-
-.fs-4 {
-  font-size: 1.5rem;
-}
-
-.mt-5 {
-  margin-top: 20px;
-}
-
-.pt-5 {
-  padding-top: 20px;
-}
-
-.v-card-actions {
-  text-align: right;
-}
-
-.custom-card {
-  width: auto;
-}
-
-.v-text-field,
-.v-select,
-.v-textarea {
-  margin-bottom: 0;
-}
-
-.custom-card {
-  width: auto;
-}
-</style>
