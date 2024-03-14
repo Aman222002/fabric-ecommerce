@@ -117,7 +117,7 @@
                   <div class="compamy_infor_btn">
                     <v-btn
                       class="apply_for_job"
-                      v-if="usersStore.isloggedin"
+                    
                       @click="apply(detail.id)"
                       >Apply For Job</v-btn
                     >
@@ -187,7 +187,20 @@ import axios from "axios";
 import { useUsersStore } from "../store/user";
 export default {
   name: "CompanyPost",
-  setup() {
+  props:{
+    data:{
+      type:Object,
+      default: () => ({}),
+    }
+  },
+  setup(props) {
+    console.log(props.data);
+    // if(props.data){
+    //     jobTitle.value = props.data.title,
+    //     location.value = props.data.location,
+    //   }else{
+
+    //   }
     const usersStore = useUsersStore();
     const jobs = ref({});
     const detail = ref({
@@ -199,10 +212,9 @@ export default {
       vacancy: "",
       id: "",
     });
-
     const jobTitle = ref("");
     const location = ref("");
-
+    const category = ref("");
     const detailPanelVisible = ref(false);
     const searchJobs = async () => {
       try {
@@ -210,6 +222,7 @@ export default {
           params: {
             jobTitle: jobTitle.value,
             location: location.value,
+            category: category.value,
           },
         });
 
@@ -244,6 +257,15 @@ export default {
     };
     //For job apply
     const apply = async (id) => {
+      if (!usersStore.isloggedin) {
+    window.Swal.fire({
+      title: "Login Required",
+      text: "Please log in to apply for this job.",
+      icon: "warning",
+      confirmButtonText: "OK",
+    });
+    return; 
+  }
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
           if (response.data.status == true) {
@@ -311,6 +333,22 @@ export default {
     onMounted(() => {
       // companypost();
       fetchJobs();
+      // const value =props.data ;
+      // console.log(value);
+       if (props.data.title||props.data.location) {
+        console.log(props.data.title||props.data.location);
+        jobTitle.value = props.data.title;
+        location.value = props.data.location;
+        searchJobs();
+      }
+      else if(props.data.category){
+        console.log(props.data.category)
+        category.value = props.data.category;
+        searchJobs();
+      }
+      //  else{
+      //   fetchJobs();
+      //  }
     });
     return {
       jobs,
@@ -327,6 +365,7 @@ export default {
       detail,
       truncateDescription,
       isDescriptionLong,
+      category,
     };
   }
 </script>

@@ -26,12 +26,6 @@
                   >Home</a
                 >
                 <a
-                  href="/about"
-                  class="nav-link"
-                  :class="{ active: isActive('/about') }"
-                  >About</a
-                >
-                <a
                   href="/job-apply"
                   v-if="usersStore.isloggedin"
                   class="nav-link"
@@ -87,6 +81,9 @@
           </v-list>
         </v-menu>
 
+
+
+
         <v-menu class="profile" v-if="!usersStore.isloggedin">
           <template v-slot:activator="{ props }">
             <a
@@ -117,6 +114,7 @@
           </v-list>
         </v-menu>
 
+       
         <v-menu
           class="profile user_drop_down"
           v-if="usersStore.isloggedin"
@@ -219,7 +217,8 @@ export default {
       user,
       loginItems,
       showMenu: false,
-      registerItems,
+      registerItems
+      
     };
   },
 

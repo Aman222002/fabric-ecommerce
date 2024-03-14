@@ -125,7 +125,7 @@ Route::get('/about', function () {
 
 
 
-Route::get('/jobs-detail', [SearchjobController::class, 'index']);
+Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');

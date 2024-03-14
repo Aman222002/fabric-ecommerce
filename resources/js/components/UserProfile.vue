@@ -18,12 +18,6 @@
               class="avatar"
               style="position: absolute; top: 10px; left: 10px;"
              >
-              <!-- <img
-            :src="`/storage/assest/${user.user_image}`"
-           
-            width="150px"
-            height="150px"
-          /> -->
           <img
         :src="user.user_image ? `/storage/assest/${user.user_image}` : '/storage/assest/img1.png'"
         width="150px"
