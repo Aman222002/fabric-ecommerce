@@ -115,6 +115,9 @@ Route::get('/draft', function () {
 Route::get('/findcv', function () {
     return view('findcv');
 });
+Route::get('/about', function () {
+    return view('about');
+});
 
 // Route::get('/add-user', function () {
 //     return view('user');
@@ -122,7 +125,7 @@ Route::get('/findcv', function () {
 
 
 
-Route::get('/jobs-detail', [SearchjobController::class, 'index']);
+Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');

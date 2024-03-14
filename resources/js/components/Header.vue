@@ -50,8 +50,30 @@
           </v-list>
         </v-menu>
 
-        <a href="/registration" v-if="!usersStore.isloggedin && !employerStore.isloggedin" class="nav-link"
-          :class="{ active: isActive('/registration') }">Register <v-icon color="white">mdi-account-plus</v-icon></a>
+
+
+
+        <v-menu class="profile" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+          <template v-slot:activator="{ props }">
+            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
+              style="margin-right: 40px">Register <v-icon color="white">mdi-account-plus</v-icon></a>
+          </template>
+
+          <v-list>
+            <v-list-item v-for="(item, i) in registerItems" :key="i" style="display: inline">
+              <a :href="item.href" style="text-decoration: none; color: black">
+                <span>
+                  <v-list-item>
+                    <v-icon>{{ item.icon }}</v-icon>
+                    {{ item.title }}
+                  </v-list-item>
+                </span>
+              </a>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+
         <v-menu class="profile user_drop_down" v-if="usersStore.isloggedin || employerStore.isloggedin"
           transition="slide-x-transition">
           <template v-slot:activator="{ props }">
@@ -99,6 +121,18 @@ export default {
         href: "/job",
       },
     ]);
+    const registerItems = ref([
+      {
+        title: "Register as User",
+        icon: "mdi-account-plus",
+        href: "/registration",
+      },
+      {
+        title: "Register as Company",
+        icon: "mdi-account-plus",
+        href: "/company/register",
+      },
+    ]);
     const usersStore = useUsersStore();
     const employerStore = useEmployerStore();
     const state = reactive({
@@ -138,7 +172,10 @@ export default {
       items,
       user,
       loginItems,
-      employerStore
+      employerStore,
+      showMenu: false,
+      registerItems
+
     };
   },
 

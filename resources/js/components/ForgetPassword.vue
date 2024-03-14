@@ -43,10 +43,12 @@
             <p class="mb-0">Wait, I remember my password... <a href="/job" class="text-primary "> Click here
                 </a> </p>
         </div>
+
+
     </v-container>
 </template>
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 export default {
     name: "ForgetPassword",
     setup() {
@@ -66,17 +68,11 @@ export default {
                 console.log(error);
             }
         }
-        // const logPreviousPageUrl = () => {
-        //     console.log("Previous page URL:", document.referrer);
-        // }
-        // Call the function when the component is mounted
-        // onMounted(() => {
-        //     logPreviousPageUrl();
-        // });
         return {
             emailRules,
             submitForm,
             formData,
+
         };
 
     }

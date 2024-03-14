@@ -80,12 +80,15 @@ form.job_search_form .v-field__overlay {
     background: transparent;
 }
 
-form.job_search_form button.v-btn {
+form.job_search_form a.btn_search {
     width: 100%;
     min-width: auto;
     color: #fff;
     background-color: #1967d2;
-    padding: 22px 0;
+    padding: 10px 0;
+    text-align: center;
+    text-decoration: unset;
+    border-bottom: 15px;
 }
 
 form.job_search_form .v-sheet {
