@@ -43,10 +43,12 @@
             <p class="mb-0">Wait, I remember my password... <a href="/login" class="text-primary "> Click here
                 </a> </p>
         </div>
+      
+        
     </v-container>
 </template>
 <script>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 export default {
     name: "ForgetPassword",
     setup() {
@@ -66,10 +68,12 @@ export default {
                 console.log(error);
             }
         }
+       
         return {
             emailRules,
             submitForm,
             formData,
+            
         };
 
     }
