@@ -56,7 +56,7 @@ class JobsController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -95,14 +95,13 @@ class JobsController extends Controller
             'experience' => 'required|string',
             'companywebsite' => 'required|url',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => $validator->errors()], 422);
         }
-        
+
         try {
             $companyId = session('company_id');
-            
             if (!$companyId) {
                 return response()->json(['status' => false, 'message' => 'Company ID not found in session'], 422);
             }
@@ -130,7 +129,7 @@ class JobsController extends Controller
             }
             $company = $user->company;
             $input = $request->all();
-            
+
             $job = Job::create([
                 'user_id' => $user->id,
                 'company_id' => $company->id,
@@ -147,7 +146,6 @@ class JobsController extends Controller
                 'post_status' => 'Published',
                 'skill_id' => $input['jobSkill'],
             ]);
-    
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',
@@ -160,7 +158,6 @@ class JobsController extends Controller
             ], 500);
         }
     }
-    
     /**
      * Display the specified resource.
      */
@@ -363,7 +360,6 @@ class JobsController extends Controller
                 'job_id' => $id,
                 'company_id' =>  $company_id,
             ])->count();
-
             if ($count > 0) {
                 $message = 'You already saved this job.';
                 return response()->json([

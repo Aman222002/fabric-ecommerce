@@ -1,12 +1,7 @@
 <template>
   <v-container fluid class="ma-16">
     <v-row justify="space-around">
-      <v-card
-        width="1000"
-        height="365"
-        class="ml-0"
-        :style="{ height: cardHeight }"
-      >
+      <v-card width="1000" height="365" class="ml-0" :style="{ height: cardHeight }">
         <v-container>
           <v-form ref="form" @submit.prevent="submitForm()">
             <v-row v-if="!usersStore.isLoggedIN">
@@ -16,46 +11,20 @@
                 </v-col>
                 <v-row>
                   <v-col col="6">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="user.user_name"
-                      label="Representative Name"
-                      :rules="nameRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="user.user_name" label="Representative Name"
+                      :rules="nameRules" density="compact" outlined></v-text-field>
                   </v-col>
                   <v-col cols="6" sm="6">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="user.email"
-                      label="Representative Email"
-                      :rules="emailRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="user.email" label="Representative Email"
+                      :rules="emailRules" density="compact" outlined></v-text-field>
                   </v-col>
                   <v-col cols="6" sm="6">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="user.password"
-                      label="Password"
-                      :rules="passwordRules"
-                      type="password"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="user.password" label="Password" :rules="passwordRules"
+                      type="password" density="compact" outlined></v-text-field>
                   </v-col>
                   <v-col cols="6" sm="6">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="user.phone"
-                      label="Phone"
-                      :rules="phoneRules"
-                      type="phone"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="user.phone" label="Phone" :rules="phoneRules" type="phone"
+                      density="compact" outlined></v-text-field>
                   </v-col>
                 </v-row>
               </v-col>
@@ -65,26 +34,14 @@
                 </v-col>
                 <v-row>
                   <v-col col="12">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="company.company_name"
-                      label="Company Name"
-                      :rules="companyNameRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="company.company_name" label="Company Name"
+                      :rules="companyNameRules" density="compact" outlined></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col col="12" class="mt-3">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="company.company_email"
-                      label="Company Email"
-                      :rules="companyEmailRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="company.company_email" label="Company Email"
+                      :rules="companyEmailRules" density="compact" outlined></v-text-field>
                   </v-col>
                 </v-row>
               </v-col>
@@ -94,27 +51,16 @@
                 <h3>Plan Details:</h3>
               </v-col>
               <v-col cols="6" sm="6">
-                <v-text-field
-                  disabled="isDisabled"
-                  variant="outlined"
-                  v-model="plan.name"
-                  label="Plan Name"
-                  density="compact"
-                  outlined
-                ></v-text-field>
+                <v-text-field :disabled="isDisabled" variant="outlined" v-model="plan.name" label="Plan Name"
+                  density="compact" outlined></v-text-field>
               </v-col>
               <v-col cols="6" sm="6">
-                <v-text-field
-                  disabled="isDisabled"
-                  variant="outlined"
-                  v-model="plan.price"
-                  label="Price"
-                  density="compact"
-                  outlined
-                ></v-text-field>
+                <v-text-field :disabled="isDisabled" variant="outlined" v-model="plan.price" label="Price"
+                  density="compact" outlined></v-text-field>
               </v-col>
             </v-row>
-            <v-btn type="submit" color="primary" class="button">Buy Now</v-btn>
+            <v-btn v-if="currentPlanId == plan.id" :disabled="true" color="primary" class="button">Buyed</v-btn>
+            <v-btn v-else type="submit" color="primary" class="button">Buy Now</v-btn>
           </v-form>
         </v-container>
       </v-card>
@@ -134,11 +80,10 @@ export default {
   },
   setup(props) {
     const plan = ref({});
-    console.log(props.data);
     const form = ref(null);
     const isDisabled = true;
-    console.log(props.data);
     plan.value = props.data;
+    const currentPlanId = ref();
     const usersStore = useUsersStore();
     const cardHeight = computed(() => {
       return usersStore.isLoggedIN ? "175px" : "386px";
@@ -178,6 +123,14 @@ export default {
       (v) => !!v || "Phone number is required",
       (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
     ];
+    const getUser = () => {
+      axios.get(`/find/plan`).then((response) => {
+        currentPlanId.value = response.data.data.id;
+        console.log(currentPlanId.value);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
     const submitForm = () => {
       form.value.validate().then((valid) => {
         if (!valid.valid) {
@@ -194,25 +147,21 @@ export default {
           for (let key in company.value) {
             {
               formData.append(key, company.value[key]);
-              console.log(key, company.value[key]);
             }
           }
           for (let key in user.value) {
             {
               formData.append(key, user.value[key]);
-              console.log(key, user.value[key]);
             }
           }
           for (let key in plan.value) {
             {
               formData.append(key, plan.value[key]);
-              console.log(key, plan.value[key]);
             }
           }
           axios
             .post("/company/buy/plan", formData)
             .then((response) => {
-              console.log(response);
               if (response.data.status == true) {
                 window.Swal.fire({
                   icon: "success",
@@ -228,9 +177,13 @@ export default {
         }
       });
     };
+    onMounted(() => {
+      getUser();
+    });
     return {
       usersStore,
       company,
+      getUser,
       user,
       nameRules,
       plan,
@@ -243,6 +196,7 @@ export default {
       form,
       cardHeight,
       isDisabled,
+      currentPlanId,
     };
   },
 };
@@ -259,7 +213,7 @@ export default {
   margin-bottom: 50px;
 }
 
-.v-row + .v-row {
+.v-row+.v-row {
   margin-top: 0px;
 }
 </style>

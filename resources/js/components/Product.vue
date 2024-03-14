@@ -44,13 +44,15 @@
               <v-card-text class="border-right border-left">
                 <v-list>
                   <v-list-item v-for="(item, key) in plan.details" :key="key">
-                    <v-list-item-title>{{ key }}={{ item }}</v-list-item-title>
+                    <v-list-item-title>{{ item }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-card-text>
-              <v-btn class="bg-primary" height="40" width="273" style="margin-top: -100px;"
-                @click="buySubs(plan.id)">Buy
+              <v-btn v-if="currentPlanId !== plan.id" class="bg-primary" height="40" width="273"
+                style="margin-top: -100px;" @click="buySubs(plan.id)">Buy
                 Now</v-btn>
+              <v-btn v-else :disabled="true" class="bg-primary" height="40" width="273"
+                style="margin-top: -100px;">Current Plan</v-btn>
             </v-card>
           </v-col>
         </v-row>
@@ -109,6 +111,7 @@ export default {
     const plans = ref([]);
     const plan = ref([]);
     const features = ref([]);
+    const currentPlanId = ref();
     const usersStore = useUsersStore();
     const additem = (item, quant) => {
       usersStore.addToCart(item, quant);
@@ -116,18 +119,27 @@ export default {
     const buySubs = (id) => {
       window.location.href = `/company/buy/plans/view/${id}`;
     };
+    const getCurrentPlan = () => {
+      axios.get(`/find/plan`).then((response) => {
+        // console.log(response.data);
+        currentPlanId.value = response.data.data.id;
+        // console.log(currentPlanId.value);
+      }).catch((error) => {
+        console.log(error);
+      })
+    };
     const fetchPlans = () => {
       axios
         .get(`/get/plans`)
         .then((response) => {
-          console.log(response.data.data)
+          // console.log(response.data.data)
           const Plans = response.data.data.map((item) => {
             const { id, Name, ...filteredItem } = item;
             return { id, Name, details: filteredItem };
           });
           plans.value = Plans;
-          console.log(plans.value);
-          console.log(plan.value);
+          // console.log(plans.value);
+          // console.log(plan.value);
           features.value = Object.keys(response.data.data[0]);
           features.value.splice(0, 1);
           features.value.splice(0, 1);
@@ -138,6 +150,7 @@ export default {
     };
     onMounted(() => {
       fetchPlans();
+      getCurrentPlan();
     });
     return {
       plans,
@@ -145,7 +158,9 @@ export default {
       additem,
       features,
       buySubs,
-      plan
+      plan,
+      getCurrentPlan,
+      currentPlanId
     };
   },
 };
