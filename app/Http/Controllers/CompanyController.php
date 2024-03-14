@@ -506,7 +506,6 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
     public function check(Request $request)
     {
         try {

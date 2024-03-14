@@ -1,23 +1,26 @@
 <template>
-  <v-footer color="primary"  style="margin-top: auto;" class="v-footer" >
-    
+  <v-footer color="primary" style="margin-top: auto" class="v-footer">
     <v-row>
-      <v-col md="6" sm="12" style="margin-top: 20px; margin-left: 20px;">
-        <p class="white--text company-name" style="font-size: 60px;">{{ appName }}</p>
-        <p style="font-size:15px;">BBSTEM Limited | Registered in England and Wales | Company No: 11127036</p>
-      </v-col> </v-row> 
-
- 
+      <v-col md="12" sm="12">
+        <p class="white--text company-name" style="font-size: 60px">
+          {{ appName }}
+        </p>
+        <p style="font-size: 15px">
+          BBSTEM Limited | Registered in England and Wales | Company No:
+          11127036
+        </p>
+      </v-col>
+    </v-row>
   </v-footer>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 export default {
   name: "CompanyFooter",
   setup() {
-    const appName = ref('𝘽𝘽𝙎𝙏𝙀𝙈');
+    const appName = ref("𝘽𝘽𝙎𝙏𝙀𝙈");
 
     return {
       appName,
@@ -43,6 +46,5 @@ export default {
 
 .second-row {
   margin-top: 40px;
-  
 }
 </style>

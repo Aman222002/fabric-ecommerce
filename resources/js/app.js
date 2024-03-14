@@ -123,6 +123,9 @@ app.component("expired-component", ExpiredComponent);
 import AddressTabComponent from "./components/AddressTab.vue";
 app.component("address-component", AddressTabComponent);
 
+import index from "./components/HomePage/index.vue"
+app.component("home-component",index);
+
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
 import NavbarComponent from "./components/NavbarComponent.vue";
@@ -246,12 +249,15 @@ app.component("user-component",user);
 import CompanyUsers from "./components/CompanyUsers.vue";
 app.component("companyuser-component",CompanyUsers);
 
-import HomePage from "./components/HomePage/index.vue"
-app.component("home-component",HomePage);
+import About from "./components/About.vue";
+app.component("about-component",About);
 
 
-import About from "./components/About.vue"
-app.component("about-component" ,About);
+import Contact from "./components/Contact.vue";
+app.component("contact-component",Contact);
+
+// import index from "./components/HomePage/index.vue"
+// app.component("home-component",index);
 
 /**
  * The following block of code may be used to automatically register your

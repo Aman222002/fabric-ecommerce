@@ -5,80 +5,122 @@
         <v-col class="nab_burger_menu">
           <button class="burger_menu" @click="showSection()">
             <v-icon @click="showMenu = !showMenu" icon>{{
-            !showMenu ? "mdi-menu" : "mdi-menu"
-          }}</v-icon>
+              !showMenu ? "mdi-menu" : "mdi-menu"
+            }}</v-icon>
             <!-- {/ !show ? "mdi-menu" : "mdi-close" /} -->
           </button>
           <mySection class="NavBar" v-show="isOpen">
             <button class="close_btn" @click="showSection()">
               <v-icon @click="showMenu = !showMenu" icon>{{
-            !showMenu ? "mdi-close" : "mdi-close"
-          }}</v-icon>
+                !showMenu ? "mdi-close" : "mdi-close"
+              }}</v-icon>
               <!-- {/ !show ? "mdi-menu" : "mdi-close" /} -->
             </button>
             <v-row>
               <v-col class="nav-links">
-                <a href="/jobs-detail" class="nav-link" :class="{ active: isActive('/jobs-detail') }">Home</a>
-                <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/job-apply') }">Jobs Applied</a>
-                <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/savedjobs') }">Jobs Saved</a>
-                <a href="/userprofile" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/userprofile') }">Profile</a>
+                <a
+                  href="/jobs-detail"
+                  class="nav-link"
+                  :class="{ active: isActive('/jobs-detail') }"
+                  >Home</a
+                >
+                <a
+                  href="/about"
+                  class="nav-link"
+                  :class="{ active: isActive('/about') }"
+                  >About</a
+                >
+                <a
+                  href="/contact"
+                  class="nav-link"
+                  :class="{ active: isActive('/contact') }"
+                  >Contact</a
+                >
+                <a
+                  href="/job-apply"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/job-apply') }"
+                  >Jobs Applied</a
+                >
+                <a
+                  href="/savedjobs"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/savedjobs') }"
+                  >Jobs Saved</a
+                >
+                <a
+                  href="/userprofile"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/userprofile') }"
+                  >Profile</a
+                >
               </v-col>
             </v-row>
           </mySection>
         </v-col>
 
-        <v-menu class="profile" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+        <v-menu
+          class="log_and_reg"
+          v-if="!usersStore.isloggedin && !employerStore.isloggedin"
+        >
           <template v-slot:activator="{ props }">
-            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
-              style="margin-right: 40px">Login <v-icon color="white">mdi-login</v-icon></a>
+            <a
+              href="#"
+              class="nav-link"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              style="margin-right: 40px"
+              >Login <v-icon color="white">mdi-login</v-icon></a
+            >
           </template>
 
-          <v-list>
-            <v-list-item v-for="(item, i) in loginItems" :key="i" style="display: inline">
-              <a :href="item.href" style="text-decoration: none; color: black">
-                <span>
-                  <v-list-item>
-                    <v-icon>{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-list-item>
-                </span>
+          <ul>
+            <li v-for="(item, i) in loginItems" :key="i">
+              <a :href="item.href" style="text-decoration: none">
+                <v-icon>{{ item.icon }}</v-icon>
+                {{ item.title }}
               </a>
-            </v-list-item>
-          </v-list>
+            </li>
+          </ul>
         </v-menu>
 
-
-
-
-        <v-menu class="profile" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+        <v-menu
+          class="log_and_reg"
+          v-if="!usersStore.isloggedin && !employerStore.isloggedin"
+        >
           <template v-slot:activator="{ props }">
-            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
-              style="margin-right: 40px">Register <v-icon color="white">mdi-account-plus</v-icon></a>
+            <a
+              href="#"
+              class="nav-link"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              style="margin-right: 40px"
+              >Register <v-icon color="white">mdi-account-plus</v-icon></a
+            >
           </template>
 
-          <v-list>
-            <v-list-item v-for="(item, i) in registerItems" :key="i" style="display: inline">
-              <a :href="item.href" style="text-decoration: none; color: black">
-                <span>
-                  <v-list-item>
-                    <v-icon>{{ item.icon }}</v-icon>
-                    {{ item.title }}
-                  </v-list-item>
-                </span>
+          <ul>
+            <li v-for="(item, i) in registerItems" :key="i">
+              <a :href="item.href" style="text-decoration: none">
+                <v-icon>{{ item.icon }}</v-icon>
+                {{ item.title }}
               </a>
-            </v-list-item>
-          </v-list>
+            </li>
+          </ul>
         </v-menu>
 
-
-        <v-menu class="profile user_drop_down" v-if="usersStore.isloggedin || employerStore.isloggedin"
-          transition="slide-x-transition">
+        <v-menu
+          class="profile user_drop_down"
+          v-if="usersStore.isloggedin || employerStore.isloggedin"
+          transition="slide-x-transition"
+        >
           <template v-slot:activator="{ props }">
             <span style="margin-right: 20px">
-              <v-btn icon="mdi-account" v-bind="props"></v-btn></span>
+              <v-btn icon="mdi-account" v-bind="props"></v-btn
+            ></span>
           </template>
 
           <v-list>
@@ -115,6 +157,11 @@ export default {
       },
     ]);
     const loginItems = ref([
+      // {
+      //   title: "Login as User",
+      //   icon: "mdi-login",
+      //   href: "/login",
+      // },
       {
         title: "Login as Company",
         icon: "mdi-office-building",
@@ -174,8 +221,7 @@ export default {
       loginItems,
       employerStore,
       showMenu: false,
-      registerItems
-
+      registerItems,
     };
   },
 
@@ -231,11 +277,6 @@ export default {
   border-bottom: 1px solid #161414;
 }
 
-.nav-link:hover,
-.active {
-  color: #1967d2;
-}
-
 header.header_bar a.nav-link:hover i {
   color: #1967d2 !important;
 }
@@ -251,6 +292,27 @@ header.header_bar a.nav-link:hover i {
 
 header.header_bar a.nav-link i {
   color: #000 !important;
+}
+.log_and_reg ul {
+  width: 230px;
+  background: #fff;
+  margin: 5px 0;
+}
+.log_and_reg ul li {
+  margin: 5px 5px;
+}
+
+.log_and_reg ul li a {
+  width: 100%;
+  height: 100%;
+  display: table;
+  padding: 15px 15px;
+  background: #e2eaf8;
+  color: #1967d2;
+}
+.log_and_reg ul li:hover a {
+  background: #1967d2;
+  color: #fff;
 }
 
 @media screen and (min-width: 1201px) {

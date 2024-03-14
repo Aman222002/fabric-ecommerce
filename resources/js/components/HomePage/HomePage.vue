@@ -58,10 +58,10 @@
             </v-row>
           </form>
           <div class="popular_searches">
-            <span class="title">Popular Searches : </span
-            ><a href="#">Designer</a>, <a href="#">Developer</a>,
-            <a href="#">Web</a>,<a href="#"> IOS</a>, <a href="#">PHP</a>,
-            <a href="#">Senior</a>,<a href="#"> Engineer</a>,
+            <span>Popular Searches : </span><a href="#">Designer</a>,
+            <a href="#">Developer</a>, <a href="#">Web</a>,<a href="#"> IOS</a>,
+            <a href="#">PHP</a>, <a href="#">Senior</a>,<a href="#"> Engineer</a
+            >,
           </div>
         </v-col>
         <div class="banner_right">
