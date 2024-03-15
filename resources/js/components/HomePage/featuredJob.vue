@@ -157,9 +157,6 @@ export default {
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
-
-
-
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
