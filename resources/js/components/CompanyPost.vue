@@ -47,6 +47,8 @@
             xl="9"
             class="find_Job_list_right"
           >
+         
+         
             <v-card
               v-for="job in jobs"
               :key="job.id"
@@ -492,5 +494,11 @@ button.save_btn {
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
+}
+.no-jobs-message {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+  color: #ff0000; 
 }
 </style>

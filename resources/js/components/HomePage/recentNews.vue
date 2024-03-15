@@ -15,7 +15,7 @@
           md="6"
           lg="4"
           xl="4"
-          v-for="recentNews in recentNews"
+          v-for="recentNews in recentNewsList"
           :key="recentNews.id"
         >
           <v-card class="mx-auto my-4">
@@ -23,7 +23,7 @@
               <v-progress-linear color="deep-purple" height="4" indeterminate>
               </v-progress-linear>
             </template>
-            <v-img cover height="250" :src="`${recentNews.img}`"> </v-img>
+            <v-img cover height="250" :src="recentNews.img"> </v-img>
             <div class="Cmt_time">
               <v-card-subtitle class="pt-4">
                 {{ recentNews.date }}
@@ -51,9 +51,12 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
-  data: () => ({
-    recentNews: [
+  name: "recentNews",
+  setup() {
+    const recentNewsList = ref([
       {
         id: "1",
         img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
@@ -61,7 +64,7 @@ export default {
         date: "August 31, 2021 ",
         icon: "mdi-circle-small",
         comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
+        text: "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
       },
       {
         id: "2",
@@ -70,7 +73,7 @@ export default {
         date: "August 31, 2021 ",
         icon: "mdi-circle-small",
         comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
+        text: "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
       },
       {
         id: "3",
@@ -79,12 +82,16 @@ export default {
         date: "August 31, 2021 ",
         icon: "mdi-circle-small",
         comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
+        text: "Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.",
       },
-    ],
-  }),
+    ]);
+    return {
+      recentNewsList,
+    };
+  },
 };
 </script>
+
 <style >
 /* // recent_news_articlesonly */
 .recent_news_articles {

@@ -53,3 +53,11 @@
     </v-container>
   </div>
 </template>
+<script>
+
+export default {
+  name: "millionsOfJob",
+  
+}
+</script>
+

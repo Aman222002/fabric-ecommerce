@@ -7,22 +7,27 @@
             <v-icon @click="showMenu = !showMenu" icon>{{
               !showMenu ? "mdi-menu" : "mdi-menu"
             }}</v-icon>
-            <!-- {/ !show ? "mdi-menu" : "mdi-close" /} -->
           </button>
           <mySection class="NavBar" v-show="isOpen">
             <button class="close_btn" @click="showSection()">
               <v-icon @click="showMenu = !showMenu" icon>{{
                 !showMenu ? "mdi-close" : "mdi-close"
               }}</v-icon>
-              <!-- {/ !show ? "mdi-menu" : "mdi-close" /} -->
+             
             </button>
             <v-row>
               <v-col class="nav-links">
                 <a
+                  href="/"
+                  class="nav-link"
+                  :class="{ active: isActive('/') }"
+                  >Home</a
+                >
+                <a
                   href="/jobs-detail"
                   class="nav-link"
                   :class="{ active: isActive('/jobs-detail') }"
-                  >Home</a
+                  >Jobs</a
                 >
                 <a
                   href="/about"
@@ -142,7 +147,7 @@
 import { ref } from "vue";
 import { reactive, onMounted } from "vue";
 import { useUsersStore } from "../store/user";
-// import { useEmployerStore } from "../store/employer";
+
 import axios from "axios";
 import { useEmployerStore } from "../store/employer";
 

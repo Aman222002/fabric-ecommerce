@@ -20,26 +20,26 @@
           </v-card>
 
           <div class="content">
-            <!-- Info-1 -->
+    
             <v-card class="mx-auto" prepend-icon="mdi-cellphone-basic">
               <template v-slot:title> PHONE :</template>
 
-              <v-card-text> 12457836913 , +12457836913</v-card-text>
+              <v-card-text>{{ contactDetails.contact }}</v-card-text>
             </v-card>
-            <!-- Info-2 -->
+
 
             <v-card class="mx-auto" prepend-icon="mdi-mail">
               <template v-slot:title> EMAIL :</template>
 
-              <v-card-text> example@info.com</v-card-text>
+              <v-card-text>{{ contactDetails.email }}</v-card-text>
             </v-card>
 
-            <!-- Info-3 -->
+          
 
             <v-card class="mx-auto" prepend-icon="mdi-map-marker">
               <template v-slot:title> ADDRESS :</template>
 
-              <v-card-text> 6743 last street , Abcd, Xyz</v-card-text>
+              <v-card-text> {{ contactDetails.address }}</v-card-text>
             </v-card>
           </div>
         </v-col>
@@ -48,34 +48,88 @@
           <v-form fast-fail @submit.prevent>
             <v-text-field
               v-model="fullName"
-              :rules="fullName"
+             
               label="Full Name"
             ></v-text-field>
             <v-text-field
+
               v-model="Email"
-              :rules="Email"
+             
               label="Email"
             ></v-text-field>
             <v-text-field
               v-model="Subject"
-              :rules="Subject"
+             
               label="Subject"
             ></v-text-field>
             <v-textarea
               label="Message"
+              v-model="Message"
               name="input-7-1"
               variant="filled"
               auto-grow
             ></v-textarea>
 
-            <v-btn class="mt-2" block>Send Now!</v-btn>
+            <v-btn class="mt-2" block  @click="sendEmail">Send Now!</v-btn>
           </v-form>
         </v-col>
       </v-row>
     </div>
   </section>
 </template>
+<script>
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
+export default {
+  name: "Contact",
+  setup() {
+   
+    const contactDetails = ref({});
+    const fullName = ref('');
+  
+    const Email = ref('');
+    const Subject = ref('');
+    const Message = ref('');
+    const fetchData = () => {
+      try {
+        axios.get("contact/data").then((response) => {
+          contactDetails.value = response.data.data[0];
+      
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    onMounted(() => {
+      fetchData();
+    });
+    const sendEmail = async () => {
+            try {
+                const response = await axios.post('/send-email', {
+                    fullName: fullName.value,
+                    Email: Email.value,
+                    Subject: Subject.value,
+                    Message: Message.value,
+                    recipientEmail: contactDetails.value.email
+                   
+                });
+                fullName.value = '';
+                Email.value = '';
+                Subject.value = '';
+                 Message.value = '';
+               
+                console.log(response.data.message); 
+            } catch (error) {
+                console.error(error); 
+            }
+        };
+    return {
+      fetchData,contactDetails,fullName,Email,Subject,Message,sendEmail
+    };
+  }
+}
+</script>
 <style>
 .contact {
   padding: 130px 0;

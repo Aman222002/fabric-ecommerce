@@ -22,7 +22,7 @@
               size="130px"
               class="avatar"
               style="margin: 10px"
-              v-if="company.length > 0"
+             
             >
               <!-- <input
                 type="file"
@@ -33,7 +33,7 @@
               /> -->
               <img
                 :src="`/storage/assest/${company.logo}`"
-                alt="Selected Image"
+               
                 width="150px"
                 height="150px"
               />
@@ -360,30 +360,50 @@
             label="First_line_address"
             variant="outlined"
             density="compact"
+            :rules="[
+    (value) => !!value || 'First line address is required',
+   
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedAddress.street"
             label="Street"
             variant="outlined"
             density="compact"
+            :rules="[
+    (value) => !!value || 'Street is required',
+  
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedAddress.city"
             label="City"
             variant="outlined"
             density="compact"
+            :rules="[
+    (value) => !!value || 'City is required',
+   
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedAddress.state"
             label="State"
             density="compact"
             variant="outlined"
+            :rules="[
+    (value) => !!value || 'State is required',
+  
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedAddress.postal_code"
             label="postal_code"
             density="compact"
             variant="outlined"
+            :rules="[
+    (value) => !!value || 'Postal code is required',
+   
+  ]"
           ></v-text-field>
         </v-card-text>
         <v-card-actions>
@@ -401,30 +421,50 @@
             label="User Name"
             variant="outlined"
             density="compact"
+            :rules="[
+    (value) => !!value || 'User name is required',
+    
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedJob.email"
             label="User Email"
             variant="outlined"
             density="compact"
+            :rules="[
+    (value) => !!value || 'User email is required',
+  
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedJob.phone"
             label="User Phone"
             variant="outlined"
             density="compact"
+            :rules="[
+    (value) => !!value || 'User phone is required',
+   
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedJob.company_name"
             label="Company Name"
             density="compact"
             variant="outlined"
+            :rules="[
+    (value) => !!value || 'Company Name is required',
+   
+  ]"
           ></v-text-field>
           <v-text-field
             v-model="editedJob.company_email"
             label="Company Email"
             density="compact"
             variant="outlined"
+            :rules="[
+    (value) => !!value || 'Company Email is required',
+   
+  ]"
           ></v-text-field>
           <v-file-input
             v-model="editedJob.logo"
@@ -433,6 +473,10 @@
             variant="outlined"
             name="logo"
             @change="handleImage"
+            :rules="[
+    (value) => !!value || 'Company Logo is required',
+   
+  ]"
           ></v-file-input>
         </v-card-text>
         <v-card-actions>
@@ -495,7 +539,10 @@ export default {
         company.value = response.data.companydata;
         // store.company.company_name
         user.value = response.data.user;
-        address.value = response.data.companydata.address;
+        if(response.data.companydata.address)
+        {
+          address.value = response.data.companydata.address;
+        }
         console.log(response.data.companydata.address);
       } catch (error) {
         console.error("Error fetching company profile:", error);
@@ -521,6 +568,7 @@ export default {
     //   console.log(currentplan.value);
     // };
     const saveEditedJob = async () => {
+      
       try {
         const formData = new FormData();
         formData.append("name", editedJob.value.name);
@@ -583,6 +631,7 @@ export default {
     };
 
     const saveEditedAddress = async () => {
+      
       try {
         const formData = new FormData();
         formData.append(

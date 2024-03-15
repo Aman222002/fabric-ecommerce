@@ -4,13 +4,13 @@
       <v-row no-gutters>
         <v-col class="footer_col" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
-            <router-link
+            <a
               class="logo"
               to="/"
               style="cursor: pointer"
               width="200"
             >
-              {{ appName }}</router-link
+              {{ appName }}</a
             >
           </v-toolbar-title>
           <div class="footer-column about-widget">
@@ -73,7 +73,7 @@
               <!-- <li><a href="#">Job Page Invoice</a></li> -->
               <!-- <li><a href="#">Terms Page</a></li> -->
               <li><a href="#">Blog</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><a href="/contact">Contact</a></li>
             </ul>
           </div>
         </v-col>

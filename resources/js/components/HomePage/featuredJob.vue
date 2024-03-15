@@ -115,7 +115,7 @@
             </v-row>
           </v-card>
         </v-navigation-drawer>
-        <v-btn size="x-large" class="load_more" to="#">
+        <v-btn size="x-large" class="load_more" to="#"  @click="searchJob">
           Load More Listing
         </v-btn>
       </v-row>
@@ -126,7 +126,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useUsersStore } from ".././../store/user";
+import { useUsersStore } from ".././../store/user"
 export default {
   name: "featuredJob",
   setup() {
@@ -157,6 +157,10 @@ export default {
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
+    const searchJob = () => {
+     
+     window.location.href = "/jobs-detail";
+   };
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
@@ -243,7 +247,7 @@ export default {
       save,
       openDetailPanel,
       detailPanelVisible,
-      detail, usersStore
+      detail, usersStore,searchJob
     };
   },
 };
