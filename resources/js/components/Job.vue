@@ -149,7 +149,6 @@ export default {
         console.error(err);
       }
     };
-
     const showCompanyListDialog = async () => {
       try {
         const response = await axios.get("/company/names", {

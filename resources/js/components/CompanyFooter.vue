@@ -93,13 +93,11 @@
     </v-container>
   </v-footer>
 </template>
-
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useUsersStore } from "../store/user";
 import { useEmployerStore } from "../store/employer";
-
 export default {
   name: "CompanyFooter",
   setup() {
@@ -144,7 +142,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* footer css Only  */
 .footer p.phone-num {

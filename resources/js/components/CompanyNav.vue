@@ -10,7 +10,7 @@
       <img src="/storage/assest/15.jpg" alt="" />
     </v-avatar>
     <v-list>
-      <v-list-group value="Jobs" class="group" v-if="usersStore.isloggedin">
+      <v-list-group value="Jobs" class="group" v-if="!usersStore.isloggedin">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
