@@ -47,7 +47,12 @@
             xl="9"
             class="find_Job_list_right"
           >
+        <v-alert  v-if="showAlert" type="error">
+          No job Found.
+        </v-alert>
+
             <v-card
+         v-else
               v-for="job in jobs"
               :key="job.id"
               class="custom-card"
@@ -85,6 +90,7 @@
                 </div>
               </v-card-actions>
             </v-card>
+          
             <v-navigation-drawer
               v-model="detailPanelVisible"
               location="right"
@@ -114,7 +120,7 @@
                   <div class="compamy_infor_btn">
                     <v-btn
                       class="apply_for_job"
-                      v-if="usersStore.isloggedin"
+                    
                       @click="apply(detail.id)"
                       >Apply For Job</v-btn
                     >
@@ -225,8 +231,10 @@ export default {
     const location = ref("");
     const category = ref("");
     const detailPanelVisible = ref(false);
+    const showAlert = ref(false);
     const searchJobs = async () => {
       try {
+        showAlert.value = false;
         const response = await axios.get("/search-jobs", {
           params: {
             jobTitle: jobTitle.value,
@@ -234,20 +242,29 @@ export default {
             category: category.value,
           },
         });
-
-        jobs.value = response.data.data;
+         jobs.value = response.data.data;
+         console.log(jobs.value);
+        
+      
       } catch (err) {
         console.error(err);
+        if(err.response.status == 404){
+          showAlert.value = true;
+        }
       }
     };
+ 
+
     //getting Jobs posted by company
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
         console.log(response.data);
         jobs.value = response.data.data;
+        
       } catch (err) {
         console.error(err);
+  
       }
     };
     const openDetailPanel = (job) => {
@@ -325,15 +342,15 @@ export default {
     };
 
     const truncateDescription = (description) => {
-      if (description.length > 90) {
-        return description.substring(0, 90) + "...";
-      }
-      return description;
-    };
+  if (description && description.length > 90) {
+    return description.substring(0, 90) + "...";
+  }
+  return description;
+};
 
-    const isDescriptionLong = (description) => {
-      return description.length > 90;
-    };
+const isDescriptionLong = (description) => {
+  return description && description.length > 90;
+};
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
@@ -351,7 +368,7 @@ export default {
         searchJobs();
       } else if (props.data.category) {
         console.log(props.data.category);
-        category.value = props.data.category;
+        category.value =props.data.category;
         searchJobs();
       }
       //  else{
@@ -374,7 +391,8 @@ export default {
       truncateDescription,
       isDescriptionLong,
       category,
-      items,
+      items, 
+      showAlert,
     };
   },
 };
@@ -492,5 +510,11 @@ button.save_btn {
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
+}
+.no-jobs-message {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+  color: #ff0000; 
 }
 </style>

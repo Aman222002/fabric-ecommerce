@@ -21,6 +21,7 @@ use App\Http\Controllers\QualificationsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CompanyLoginController;
 
 use App\Models\Company;
@@ -118,7 +119,9 @@ Route::get('/findcv', function () {
 Route::get('/about', function () {
     return view('about');
 });
-
+Route::get('/contact', function () {
+    return view('contact');
+});
 // Route::get('/add-user', function () {
 //     return view('user');
 // });
@@ -239,3 +242,4 @@ Route::get('contact/data', [DashboardController::class, 'viewContact']);
 Route::get('partner/data', [DashboardController::class, 'viewPartners']);
 //users
 //user/{id} function(Request $request, $id)
+Route::post('/send-email', [ContactController::class,'sendEmail']);

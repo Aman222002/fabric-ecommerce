@@ -114,7 +114,9 @@ export default {
     const categories = ref([]);
     const findJob = (name) =>{
       console.log(name);
-      window.location.href = "/jobs-detail?category=" + name;
+      var newName = name.trim(); 
+window.location.href = "/jobs-detail?category=" + encodeURIComponent(newName);
+     // window.location.href = "/jobs-detail?category=" + name;
     }
     const fetchCategories = async () => {
       try {
