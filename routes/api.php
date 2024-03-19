@@ -28,7 +28,7 @@ Route::group(['middleware' =>'auth:api'],function(){
     Route::get('/my-profile', [UserController::class, 'getUserData']);
    
     Route::post('/post', [UserController::class, 'store']);
-    Route::post('/post/jobs/{id}', [UserController::class, 'update']);
-    Route::delete('/post/delete/{id}', [UserController::class, 'destroy']);
+    Route::post('/post/jobs/{slug}', [UserController::class, 'update']);
+    Route::delete('/post/delete/{slug}', [UserController::class, 'destroy']);
 });
 

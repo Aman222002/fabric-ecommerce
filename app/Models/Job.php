@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 class Job extends Model
 {
     use HasFactory;
+    use Sluggable;
     protected $table = 'post_jobs';
     // protected $primaryKey='id';
     protected $fillable = [
@@ -25,9 +26,17 @@ class Job extends Model
         'company_website',
         'post_status',
         'skill_id',
+        'slug',
     ];
 
-
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
     public function category()
     {
         return $this->belongsTo(Category::class);

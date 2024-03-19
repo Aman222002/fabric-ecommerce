@@ -19,6 +19,7 @@ use App\Models\Category;
 use App\Models\JobType;
 use App\Models\Qualification;
 use App\Models\Permissionaccess;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
@@ -158,15 +159,29 @@ class UserController extends Controller
                 return response()->json(['status' => false, 'message' => 'Unauthenticated'], 401);
             }
             $user = auth()->user();
-        //     $permission = Permissionaccess::where('user_id', $user->id)
-        //     ->whereHas('permission', function ($query) {
-        //         $query->where('name', 'Post Job');
-        //     })->exists();
-
-        // if (!$permission) {
-        //     return response()->json(['status' => false, 'message' => 'You do not have permission to post jobs'], 403);
-        // }
-    
+            $company = $user->company->id;
+           if(!($user->hasRole('Company Admin'))){
+            dd($user);
+            $company = $user->company_id;
+            if (!$company) {
+                return response()->json(['status' => false, 'message' => 'User does not belong to a company'], 404);
+            }
+            $permission = Permission::where('name', 'Post Job')->first();
+        
+            if (!$permission) {
+                return response()->json(['status' => false, 'message' => 'Permission not found'], 404);
+            }
+            
+            $permissionAccess = PermissionAccess::where('company_id', $company)
+                                ->where('user_id', $user->id)
+                                ->where('permission_id', $permission->id)
+                                ->first();
+                            
+            if (!$permissionAccess) {
+                return response()->json(['status' => false, 'message' => 'User does not have permission to post a job'], 403);
+            }
+            
+           }
             $validator = Validator::make($request->all(), [
                 'title' => 'required',
                 'category' => 'required',
@@ -184,6 +199,7 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return response()->json(['status' => false, 'message' => $validator->errors()], 422);
             }
+        
             $category = Category::where('name', $request->input('category'))->first();
         if (!$category) {
             return response()->json(['status' => false, 'message' => 'Category not found'], 404);
@@ -199,27 +215,26 @@ class UserController extends Controller
         }
             $userId = $request->userId ?? $user->id;
     
-            $input = $request->only(['title', 'category', 'jobType', 'vacancy', 'location', 'experience', 'companywebsite', 'description', 'salary', 'jobSkill']);
-    
+            $input = $request->only(['title', 'category', 'jobType', 'vacancy', 'location', 'experience', 'companywebsite', 'description', 'salary', 'jobSkill','qualifications']);
+       
           
-            $company = $user->company;
             $job = Job::create([
                 'user_id' => $user->id,
-                'company_id' => $company->id,
-                'title' => $input['title'],
+                'company_id' => $company,
+                'title' => $request->input('title'),
                 'category_id' => $category->id,
                 'job_type_id' => $jobtype->id,
-                'vacancy' => $input['vacancy'],
-                'location' => $input['location'],
-                'experience' => $input['experience'],
-                'company_website' => $input['companywebsite'],
-                'description' => $input['description'] ,
-                'salary' => $input['salary'], 
+                'vacancy' => $request->input('vacancy'),
+                'location' => $request->input('location'),
+                'experience' => $request->input('experience'),
+                'company_website' => $request->input('companywebsite'),
+                'description' => $request->input('description'),
+                'salary' => $request->input('salary'), 
                 'post_status' => 'Published',
-                'skill_id' =>$skill->id,
-                'qualifications'=>$input['qualifications'],
+                'skill_id' => $skill->id,
+                'qualifications' => $request->input('qualifications'),
             ]);
-      
+            // dd($company_id);
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',
@@ -237,53 +252,132 @@ class UserController extends Controller
        
     }
 
-    public function update(Request $request,$id)
-    {
-        try {
-            $job = Job::find($id);
-            if ($job) {
-                $input = $request->all();
-                $job->update(['post_status', 'Published']);
-                $job->update($input);
-                $response = [
-                    'status' => true,
-                    'data' => $job,
-                ];
-                return response()->json($response, 200);
-            } else {
-                $response = [
-                    'status' => false,
-                    'message' => 'No data found',
-                ];
-                return response()->json($response, 404);
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+
+public function update(Request $request, $slug)
+{
+    try {
+        $job = Job::where('slug', $slug)->first(); 
+
+        if (!$job) {
+            return response()->json(['status' => false, 'message' => 'No job found with the provided slug'], 404);
         }
-    }
-    public function destroy($id)
-    {
-        try {
-            $job = Job::find($id);
-            if ($job) {
-                $job->delete();
-                $response = [
-                    'status' => true,
-                    'message' => 'Job deleted successfully',
-                ];
-                return response()->json($response, 200);
-            } else {
-                $response = [
-                    'status' => false,
-                    'message' => 'No data found',
-                ];
-                return response()->json($response, 404);
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+
+       
+        if (!Auth::check()) {
+            return response()->json(['status' => false, 'message' => 'Unauthenticated'], 401);
         }
+        
+       
+        $user = auth()->user();
+
+        
+        if (!$user->hasRole('Company Admin')) {
+            
+            if ($job->user_id != $user->id) {
+                return response()->json(['status' => false, 'message' => 'Unauthorized to edit this job'], 403);
+            }
+        }
+
+        if (!$user->hasRole('Company Admin')) {
+          
+            $company = $user->company_id;
+            
+            if (!$company) {
+                return response()->json(['status' => false, 'message' => 'User does not belong to a company'], 404);
+            }
+            
+            $permission = Permission::where('name', 'Edit Job')->first();
+            
+            if (!$permission) {
+                return response()->json(['status' => false, 'message' => 'Permission not found'], 404);
+            }
+            
+          
+            $permissionAccess = PermissionAccess::where('company_id', $company)
+                ->where('user_id', $user->id)
+                ->where('permission_id', $permission->id)
+                ->first();
+                            
+            if (!$permissionAccess) {
+                return response()->json(['status' => false, 'message' => 'User does not have permission to edit a job'], 403);
+            }
+        }
+
+        $input = $request->all();
+        $job->update($input);
+
+        $response = [
+            'status' => true,
+            'data' => $job,
+        ];
+        return response()->json($response, 200);
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
- 
+}
+
+    
+public function destroy($slug)
+{
+    try {
+        $job = Job::where('slug', $slug)->first();
+
+        if (!$job) {
+            return response()->json(['status' => false, 'message' => 'No job found with the provided slug'], 404);
+        }
+
+        if (!Auth::check()) {
+            return response()->json(['status' => false, 'message' => 'Unauthenticated'], 401);
+        }
+        
+        $user = auth()->user();
+
+        if (!$user->hasRole('Company Admin')) {
+           
+            if ($job->user_id != $user->id) {
+                return response()->json(['status' => false, 'message' => 'Unauthorized to delete this job'], 403);
+            }
+        }
+
+        if (!$user->hasRole('Company Admin')) {
+           
+            $company = $user->company_id;
+            
+            if (!$company) {
+                return response()->json(['status' => false, 'message' => 'User does not belong to a company'], 404);
+            }
+            
+            $permission = Permission::where('name', 'Edit Job')->first();
+            
+            if (!$permission) {
+                return response()->json(['status' => false, 'message' => 'Permission not found'], 404);
+            }
+            
+          
+            $permissionAccess = PermissionAccess::where('company_id', $company)
+                ->where('user_id', $user->id)
+                ->where('permission_id', $permission->id)
+                ->first();
+                            
+            if (!$permissionAccess) {
+                return response()->json(['status' => false, 'message' => 'User does not have permission to delete a job'], 403);
+            }
+        }
+
+       
+        $job->delete();
+
+        $response = [
+            'status' => true,
+            'message' => 'Job deleted successfully',
+        ];
+        return response()->json($response, 200);
+
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    }
+}
+
 }
