@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Setting;
 class ContactController extends Controller
-{
-    
+{  
     public function sendEmail(Request $request)
 {
     try {
@@ -18,17 +17,15 @@ class ContactController extends Controller
         $recipientEmail = Setting::value('email');
         if (!$recipientEmail) {
             return response()->json(['message' => 'Recipient email not found in settings'], 500);
-        }
+        } 
+        $senderEmail = config('mail.from.address');
      
-        $senderEmail = $request->input('Email');
         $data = $request->all();
         Mail::send('email.contact', $data, function ($message) use ($senderEmail, $recipientEmail) {
             $message->from($senderEmail);
             $message->to($recipientEmail);
-       
             $message->subject('Contact Form Submission');
-        });
-        
+        });  
         return response()->json(['message' => 'Email sent successfully']);
     } catch (\Exception $e) {
         Log::debug('Failed to send email: ' . $e);

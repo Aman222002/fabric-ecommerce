@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="">
     <v-form ref="form" @submit.prevent="submitForm()" class="form_fild_com">
-      <v-row v-if="!usersStore.isLoggedIN">
+      <v-row v-if="!employerStore.isLoggedIN">
         <v-col sm="12" md="12" lg="12" xl="12" cols="12">
           <v-col cols="12">
             <h2 class="form_fild_title">Users Details:</h2>
@@ -120,6 +120,7 @@
 <script>
 import axios from "axios";
 import { useUsersStore } from "../store/user.js";
+import { useEmployerStore } from "../store/employer.js";
 import { ref, computed, onMounted } from "vue";
 export default {
   props: {
@@ -135,6 +136,7 @@ export default {
     plan.value = props.data;
     const currentPlanId = ref();
     const usersStore = useUsersStore();
+    const employerStore = useEmployerStore();
     const user = ref({
       user_name: "",
       email: "",
@@ -245,7 +247,7 @@ export default {
       companyNameRules,
       form,
       isDisabled,
-      currentPlanId,
+      currentPlanId,employerStore
     };
   },
 };

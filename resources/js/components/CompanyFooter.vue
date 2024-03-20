@@ -113,7 +113,7 @@ export default {
     };
     const fetchData = () => {
       try {
-        axios.get("contact/data").then((response) => {
+        axios.get("http://127.0.0.1:8000/contact/data").then((response) => {
           contactDetails.value = response.data.data[0];
           // console.log(contactDetails.value);
         });

@@ -199,9 +199,12 @@ export default {
       }
     };
     const fetchProfile = () => {
-      userStore.fetchUser();
-      formData.value = userStore.user.user;
-      imageUrl.value = userStore.user.user.user_image;
+      axios.get('profile/getProfile').then((response)=>{
+        formData.value = response.data.user;
+        imageUrl.value = response.data.user.user_image;
+      }).catch((err)=>{
+        console.log(err);
+      });
     };
     onMounted(async () => {
       await nextTick();

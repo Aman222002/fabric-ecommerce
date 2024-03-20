@@ -12,7 +12,6 @@
       </v-avatar>
     </span>
     <v-list>
-      <a :href="item.href" style="text-decoration: none; color: black">
         <v-list-item
           :class="{ 'v-list-item--active': isActiveItem(item) }"
           @mouseover="setHoverItem(item)"
@@ -20,10 +19,11 @@
           :prepend-icon="item.icon"
           v-for="item in items"
           :key="item.title"
-        >
+        > 
+       <a :href="item.href" style="text-decoration: none; color: black">
           <v-list-item-title v-if="!rail">{{ item.title }}</v-list-item-title>
-        </v-list-item>
       </a>
+    </v-list-item>
     </v-list>
   </v-navigation-drawer>
   <v-app-bar height="45" id="header" class="dah_header-bar">

@@ -67,7 +67,7 @@
         <v-card
           class="no-plan-card"
           outlined
-          v-if="subscription_status !== 'active'"
+          v-if="!plan_id"
         >
           <v-card-title class="text-center">No Plan</v-card-title>
           <v-card-text class="text-center">
@@ -160,6 +160,7 @@ export default {
     const userId = ref();
     const disabledButton = ref(false);
     const upgrade_status = ref();
+    const plan_id=ref('');
     const subscriptionDetail = ref({
       start_date: "",
       end_date: "",
@@ -203,6 +204,7 @@ export default {
         .then((response) => {
           userId.value = response.data.data[0].id;
           subscription_status.value = response.data.data[0].subscription_status;
+          plan_id.value = response.data.data[0].plan_id;
           upgrade_status.value = response.data.data[0].upgrade_status;
         })
         .catch((error) => {
@@ -302,7 +304,7 @@ export default {
       upgrade_status,
       disabledButton,
       handleUpgradeStatusChange,
-      subscription_status,
+      subscription_status,plan_id
     };
   },
 };

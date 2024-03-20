@@ -90,8 +90,7 @@
                 </div>
               </v-card-actions>
             </v-card>
-          
-            <v-navigation-drawer
+            <!-- <v-navigation-drawer
               v-model="detailPanelVisible"
               location="right"
               class="single_job_search_page"
@@ -177,7 +176,8 @@
                   </v-col>
                 </v-row>
               </v-card>
-            </v-navigation-drawer>
+            </v-navigation-drawer> -->
+          
           </v-col>
         </v-row>
       </v-container>
@@ -257,6 +257,7 @@ export default {
 
     //getting Jobs posted by company
     const fetchJobs = async () => {
+
       try {
         const response = await axios.get("/company/post");
         console.log(response.data);
@@ -267,7 +268,21 @@ export default {
   
       }
     };
+    const fetchpost = async () => {
+try {
+  const response = await axios.get("/company/job");
+  console.log(response.data);
+  jobs.value = response.data.data;
+  
+} catch (err) {
+  console.error(err);
+
+}
+};
+
     const openDetailPanel = (job) => {
+   console.log(job);
+      window.location.href=`/view/${job.id}`
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
       detail.value.location = job.location;
@@ -358,7 +373,15 @@ const isDescriptionLong = (description) => {
 
     onMounted(() => {
       // companypost();
-      fetchJobs();
+      if(!usersStore.isloggedin)
+      {
+        fetchJobs();
+      }
+      else{
+        fetchpost();
+      }
+      
+      
       // const value =props.data ;
       // console.log(value);
       if (props.data.title || props.data.location) {
