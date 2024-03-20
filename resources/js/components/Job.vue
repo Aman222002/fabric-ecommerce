@@ -4,10 +4,20 @@
       <v-col sm="12" md="10" lg="12" xl="10" cols="12">
         <v-card class="elevation-12 mt-3" style="margin-bottom: 10px">
           <v-row class="form_page">
-            <v-col class="form_page_left" sm="12" md="12" lg="6" xl="6" cols="12">
+            <v-col
+              class="form_page_left"
+              sm="12"
+              md="12"
+              lg="6"
+              xl="6"
+              cols="12"
+            >
               <v-card-text>
                 <v-form ref="form" @submit.prevent="submitForm">
-                  <p class="text-center" style="font-size: 20px; font-style: sans-serif">
+                  <p
+                    class="text-center"
+                    style="font-size: 20px; font-style: sans-serif"
+                  >
                     Employers Login
                   </p>
                   <v-row align="center" justify="center">
@@ -83,7 +93,15 @@
                   Let's get you all set up so you can start creating your first
                   onboarding experience
                 </p>
-                <v-btn color="primary" tile outlined dark @click="signup()" style="margin-top: 20px">SIGN UP</v-btn>
+                <v-btn
+                  color="primary"
+                  tile
+                  outlined
+                  dark
+                  @click="signup()"
+                  style="margin-top: 20px"
+                  >SIGN UP</v-btn
+                >
               </v-card-text>
             </v-col>
           </v-row>
@@ -92,11 +110,15 @@
     </v-row>
 
     <v-dialog v-model="companyListDialog" max-width="500">
-      <v-card>
+      <v-card class="which_company">
         <v-card-title>Which Company You Want To Login ?</v-card-title>
         <v-card-text>
           <v-list>
-            <v-list-item v-for="(company, index) in companyNames" :key="index" @click="selectedCompany = company">
+            <v-list-item
+              v-for="(company, index) in companyNames"
+              :key="index"
+              @click="selectedCompany = company"
+            >
               <v-list-item-title>{{ company.company_name }}</v-list-item-title>
             </v-list-item>
           </v-list>
@@ -193,7 +215,9 @@ export default {
       showCompanyListDialog,
       closeCompanyListDialog,
       companyListDialog,
-      signup, selectedCompany, employerStore
+      signup,
+      selectedCompany,
+      employerStore,
     };
   },
 };
@@ -226,5 +250,22 @@ export default {
   height: 100%;
   border-radius: 15px;
   color: #fff;
+}
+.v-list-item--density-default.v-list-item--one-line .v-list-item-title {
+  text-transform: capitalize;
+}
+.which_company .v-list .v-list-item {
+  color: #1967d2;
+  background-color: #e2eaf8;
+  font-size: 15px;
+  line-height: 20px;
+  border-radius: 8px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+.which_company .v-list .v-list-item:hover {
+  color: #e2eaf8;
+  background-color: #1967d2;
+  padding-left: 20px;
 }
 </style>

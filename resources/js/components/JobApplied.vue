@@ -1,12 +1,12 @@
 <template>
   <div class="job-applied">
     <div class="sec-title text-center">
-      <h2>Featured Jobs</h2>
+      <h2>Job Applied</h2>
       <div class="text">
         Know your worth and find the job that qualify your life
       </div>
     </div>
-    <div class="body_page_section">
+    <div class="job_applied_body_page_section">
       <v-container class="w-75 mb-6">
         <v-row align="center" justify="center">
           <v-col
@@ -135,7 +135,7 @@ export default {
 
 <style >
 /* // job applied only */
-.body_page_section {
+.job_applied_body_page_section {
   background: #fff;
   padding: 50px 0 100px;
 }
@@ -226,7 +226,7 @@ export default {
   color: #202124;
   text-decoration: unset;
 }
-.body_page_section .company_info .v-card-actions {
+.job_applied_body_page_section .company_info .v-card-actions {
   position: absolute;
   right: 0;
   top: 0;

@@ -6,7 +6,7 @@
         Know your worth and find the job that qualify your life
       </div>
     </div>
-    <div class="body_page_section">
+    <div class="save_job_body_page_section">
       <v-container class="w-75 mb-6">
         <v-row align="center" justify="center">
           <v-col
@@ -166,7 +166,7 @@ export default {
 
 <style >
 /* // save Jobs only */
-.body_page_section {
+.save_job_body_page_section {
   background: #fff;
   padding: 50px 0 100px;
 }
@@ -252,7 +252,7 @@ export default {
   color: #202124;
   text-decoration: unset;
 }
-.body_page_section .company_info .v-card-actions button.v-btn {
+.save_job_body_page_section .company_info .v-card-actions button.v-btn {
   color: #fff;
   background-color: #1967d2;
   font-size: 15px;

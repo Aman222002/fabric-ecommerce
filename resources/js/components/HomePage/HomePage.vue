@@ -51,9 +51,15 @@
               </v-col> -->
               <v-col cols="12" sm="12" md="2" lg="2" xl="2">
                 <v-sheet>
-                <!-- <a href="http://127.0.0.1:8000/jobs-detail" class="mt-2 btn_search" type="submit" block >Submit</a> -->
-                <v-btn class="mt-2 btn_search" @click="redirectToJobsDetail" block>Submit</v-btn>
-              </v-sheet>
+                  <a
+                    href="http://127.0.0.1:8000/jobs-detail"
+                    class="mt-2 btn_search"
+                    type="submit"
+                    block
+                    >Submit</a
+                  >
+                  <!-- <v-btn class="mt-2 btn_search" @click="redirectToJobsDetail" block>Submit</v-btn> -->
+                </v-sheet>
               </v-col>
             </v-row>
           </form>
@@ -77,17 +83,23 @@
   </div>
 </template>
 <script>
-import {ref} from "vue";
+import { ref } from "vue";
 export default {
   name: "HomePage",
   setup() {
     const jobTitle = ref("");
     const location = ref("");
     const redirectToJobsDetail = () => {
-     window.location.href="/jobs-detail?jobTitle=" + jobTitle.value + "&location=" + location.value;
+      window.location.href =
+        "/jobs-detail?jobTitle=" +
+        jobTitle.value +
+        "&location=" +
+        location.value;
     };
     return {
-      redirectToJobsDetail,jobTitle,location
+      redirectToJobsDetail,
+      jobTitle,
+      location,
     };
   },
 };

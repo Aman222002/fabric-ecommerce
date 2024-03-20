@@ -62,8 +62,8 @@
           <!-- Description -->
           <v-card class="card2" style="margin-bottom: 20px">
             <v-card-title
-              ><v-icon>mdi-domain</v-icon> Candidates About:</v-card-title
-            >
+              ><v-icon>mdi-domain</v-icon> Candidates About:
+            </v-card-title>
             <v-card-text>
               <div style="font-family: sans-serif">
                 Hello my name is Nicole Wells and web developer from Portland.
@@ -82,7 +82,7 @@
               </div>
             </v-card-text>
           </v-card>
-          <div class="featured_jobs">
+          <div class="user_profile_featured_jobs">
             <div class="sec-title">
               <h2>Experience Jobs</h2>
               <div class="text">

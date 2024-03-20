@@ -18,11 +18,14 @@
             </button>
             <v-row>
               <v-col class="nav-links">
+                <a href="/" class="nav-link" :class="{ active: isActive('/') }"
+                  >Home</a
+                >
                 <a
                   href="/jobs-detail"
                   class="nav-link"
                   :class="{ active: isActive('/jobs-detail') }"
-                  >Home</a
+                  >Jobs</a
                 >
                 <a
                   href="/about"
@@ -244,6 +247,9 @@ export default {
 <style scoped>
 .custom-app-bar {
   height: 65px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .nav-links {

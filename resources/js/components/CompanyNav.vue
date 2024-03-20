@@ -123,13 +123,13 @@
       </template>
 
       <v-list>
-        <v-list-item
+        <!-- <v-list-item
           prepend-icon="mdi-account"
           title="Login as User"
           value="Login as User"
           href="/login"
           class="dropdown"
-        ></v-list-item>
+        ></v-list-item> -->
         <v-list-item
           v-if="usersStore.isloggedin || employerStore.isloggedin"
           class="dropdown"
@@ -218,13 +218,6 @@ export default {
 };
 </script>
 <style >
-header.dah_header-bar {
-  box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
-  border-bottom: 1px solid #ecedf2;
-}
-a {
-  text-decoration: none;
-}
 nav.left_side_bar .v-list-group--open {
   margin-bottom: 10px;
 }
@@ -309,7 +302,7 @@ nav.left_side_bar {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 .log_and_reg_drop .v-list {
-  width: 150px;
+  width: 160px;
 }
 #div {
   background-color: white;

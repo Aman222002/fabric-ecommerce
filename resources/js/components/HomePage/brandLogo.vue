@@ -2,10 +2,21 @@
   <div class="brand_Logo">
     <v-container class="w-75">
       <v-sheet class="mx-auto">
-        <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
-          <v-slide-group-item v-for="brandLogo in brandLogo" :key="brandLogo.id">
+        <v-slide-group
+          v-model="model"
+          class="pa-4"
+          selected-class="bg-success"
+          show-arrows
+        >
+          <v-slide-group-item
+            v-for="brandLogo in brandLogo"
+            :key="brandLogo.id"
+          >
             <div class="brand_logo_slide">
-              <v-img aspect-ratio="16/9" :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"></v-img>
+              <v-img
+                aspect-ratio="16/9"
+                :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"
+              ></v-img>
             </div>
           </v-slide-group-item>
         </v-slide-group>
@@ -21,20 +32,20 @@ export default {
     const brandLogo = ref([]);
     const partnerData = () => {
       try {
-        axios.get('partner/data').then((response) => {
+        axios.get("partner/data").then((response) => {
           brandLogo.value = response.data.data;
           // console.log(brandLogo.value);
-        })
+        });
       } catch (error) {
         console.log(error);
       }
-    }
+    };
     onMounted(() => {
       partnerData();
-    })
+    });
     return {
       brandLogo,
-      partnerData
+      partnerData,
     };
   },
 };

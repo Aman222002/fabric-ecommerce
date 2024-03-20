@@ -8,18 +8,20 @@
       <v-row align="center" justify="center">
         <v-col
           cols="12"
-          class="popular_col mb-5"
+          class="popular_col"
           sm="12"
           md="6"
           lg="4"
           xl="4"
           v-for="(category, index) in categories"
           :key="index"
-          v-model="job.category" 
+          v-model="job.category"
         >
-        <v-card class="mx-auto" prepend-icon="mdi-briefcase"> 
-          <template v-slot:title>
-              <a id="categoryName" @click="findJob(category.name)"> {{ category.name }}</a>
+          <v-card class="mx-auto" prepend-icon="mdi-briefcase">
+            <template v-slot:title>
+              <a id="categoryName" @click="findJob(category.name)">
+                {{ category.name }}</a
+              >
             </template>
             <!-- <v-card-text> ({{ popularJob.subtitle }}) </v-card-text> -->
           </v-card>
@@ -112,10 +114,10 @@ export default {
       category: "",
     });
     const categories = ref([]);
-    const findJob = (name) =>{
+    const findJob = (name) => {
       console.log(name);
       window.location.href = "/jobs-detail?category=" + name;
-    }
+    };
     const fetchCategories = async () => {
       try {
         axios.get("/categories").then((response) => {
@@ -130,9 +132,8 @@ export default {
 
     onMounted(() => {
       fetchCategories();
-      
     });
-  
+
     return {
       job,
       categories,

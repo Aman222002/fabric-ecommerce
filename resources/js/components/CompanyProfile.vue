@@ -289,7 +289,7 @@
     <!-- Description end -->
 
     <!--  -->
-    <v-card
+    <!-- <v-card
       v-if="showJob && company.jobs"
       class="card2"
       style="margin-bottom: 20px; font-size: 16px"
@@ -313,11 +313,11 @@
           </tbody>
         </template>
       </v-table>
-    </v-card>
+    </v-card> -->
     <!--  -->
 
     <!--  -->
-    <v-card
+    <!-- <v-card
       v-if="showAddress && company.address"
       class="card2"
       style="margin-bottom: 20px; font-size: 16px"
@@ -348,7 +348,7 @@
           </tbody>
         </template>
       </v-table>
-    </v-card>
+    </v-card> -->
     <!--  -->
 
     <v-dialog v-model="isEditAddressModalOpen" max-width="600px">

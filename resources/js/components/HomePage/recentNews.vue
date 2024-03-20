@@ -23,7 +23,12 @@
               <v-progress-linear color="deep-purple" height="4" indeterminate>
               </v-progress-linear>
             </template>
-            <v-img cover height="250" :src="`${recentNews.img}`"> </v-img>
+            <v-img
+              cover
+              height="250"
+              :src="`http://127.0.0.1:8000/${recentNews.img}`"
+            >
+            </v-img>
             <div class="Cmt_time">
               <v-card-subtitle class="pt-4">
                 {{ recentNews.date }}
@@ -56,68 +61,33 @@ export default {
     recentNews: [
       {
         id: "1",
-        img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-        title: "Cafe Badilico",
+        img: "assest/img/RecentNewsArticles/1.webp",
+        title: "Attract Sales And Profits",
         date: "August 31, 2021 ",
         icon: "mdi-circle-small",
         comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
+        text: "A job ravenously while Far much that one rank beheld after outside",
       },
       {
         id: "2",
-        img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-        title: "Cafe Badilico",
+        img: "assest/img/RecentNewsArticles/2.webp",
+        title: "5 Tips For Your Job Interviews",
         date: "August 31, 2021 ",
         icon: "mdi-circle-small",
         comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
+        text: "A job ravenously while Far much that one rank beheld after outside",
       },
       {
         id: "3",
-        img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-        title: "Cafe Badilico",
+        img: "assest/img/RecentNewsArticles/3.webp",
+        title: "Overworked Newspaper Editor",
         date: "August 31, 2021 ",
         icon: "mdi-circle-small",
         comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
+        text: "A job ravenously while Far much that one rank beheld after outside",
       },
     ],
   }),
 };
 </script>
-<style >
-/* // recent_news_articlesonly */
-.recent_news_articles {
-  padding: 65px 0 0;
-  background: #fff;
-}
 
-.recent_news_articles .sec-title h2 {
-  position: relative;
-  display: block;
-  font-weight: 500;
-  font-size: 40px;
-  line-height: 1.2em;
-  color: #202124;
-}
-.recent_news_articles .sec-title .text {
-  position: relative;
-  margin-top: 15px;
-  font-size: 15px;
-  line-height: 26px;
-  color: #696969;
-  font-weight: 400;
-}
-
-.featured_jobs .company_info {
-  padding: 15px;
-  width: 100%;
-  display: flex;
-}
-.Cmt_time {
-  display: flex;
-}
-.recent_news_articles .v-card .v-img {
-  margin-top: 15px;
-}
-</style>

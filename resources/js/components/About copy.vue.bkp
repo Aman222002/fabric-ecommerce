@@ -1,8 +1,5 @@
 <template>
   <div class="about_us_page">
-    <div class="about_us">
-      <v-img src="./assest/img/about-us.jpg" />
-    </div>
     <div class="popular_job_categories">
       <div class="sec-title text-center">
         <h2>About Us</h2>
@@ -133,7 +130,7 @@ export default {
         href: "/",
       },
       {
-        title: "About Us",
+        title: "Find Jobs",
         disabled: true,
       },
     ];
