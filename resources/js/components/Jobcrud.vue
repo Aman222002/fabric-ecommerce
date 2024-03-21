@@ -226,7 +226,7 @@ export default {
       updateURL,
       deleteUrl
     );
-    console.log("datasource", dataSource);
+    // console.log("datasource", dataSource);
     const edit = async (data) => {
       console.log(data);
       const transformedData = {

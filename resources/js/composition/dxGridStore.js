@@ -33,7 +33,7 @@ export default function useDataSource(
                     paramsObject[i] = JSON.stringify(loadOptions[i]);
                 }
             });
-            console.log(params);
+            // console.log(params);
             if (params) {
                 Object.assign(paramsObject, params.value);
             }
@@ -58,8 +58,9 @@ export default function useDataSource(
                 });
         },
         insert: (values) => {
+            // console.log(values);
             return axios
-                .post(insertURL, values,{ params:params.value })
+                .post(insertURL, values, { params: params.value })
                 .then(() => {
                     return true;
                 })
@@ -69,6 +70,7 @@ export default function useDataSource(
                 });
         },
         update: (key, values) => {
+            // console.log(updateURL + "/" + key.id, values);
             return axios
                 .post(updateURL + "/" + key.id, values)
                 .then(() => {
