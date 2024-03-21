@@ -442,32 +442,49 @@ export default {
             })
         };
         const addPost = (data) => {
-            console.log(data[0]);
-            const formData = new FormData();
-            formData.append('featured_image', data[0]);
-            // console.log('featured_image', data[0]);
-            formData.append('title', title.value);
-            formData.append('htmlContent', content.value);
-            // console.log('htmlContent', content.value);
-            axios.post('/admin/save-blog/post',
-                formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }).then((response) => {
-                if (response.data.status == true) {
-                    showAddDialog.value = false;
-                    window.Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        timer: 2000,
-                        showConfirmButton: false,
-                        icon: 'success',
-                        title: `Blog Posted Successfully`,
+            form.value.validate().then((valid) => {
+                // console.log(valid.errors);
+                if (!valid.valid) {
+                    const errors = JSON.parse(JSON.stringify(valid.errors));
+
+                    let errorField = form.value[errors[0].id];
+
+                    errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+                    errorField.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center",
                     });
-                    refreshTable(dataGridRef);
+                } else {
+                    console.log(data[0]);
+                    const formData = new FormData();
+                    formData.append('featured_image', data[0]);
+                    // console.log('featured_image', data[0]);
+                    formData.append('title', title.value);
+                    formData.append('htmlContent', content.value);
+                    // console.log('htmlContent', content.value);
+                    axios.post('/admin/save-blog/post',
+                        formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }).then((response) => {
+                        if (response.data.status == true) {
+                            showAddDialog.value = false;
+                            window.Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                timer: 2000,
+                                showConfirmButton: false,
+                                icon: 'success',
+                                title: `Blog Posted Successfully`,
+                            });
+                            refreshTable(dataGridRef);
+                        }
+                    })
                 }
             })
+
         }
         const { dataSource, refreshTable } = dxGridStore(
             loadUrl,

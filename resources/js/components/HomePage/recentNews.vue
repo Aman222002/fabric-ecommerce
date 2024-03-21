@@ -8,7 +8,7 @@
         </div>
       </div>
       <v-row align="center" justify="center">
-        <v-col cols="12" class="recent_news_col" sm="12" md="6" lg="4" xl="4" v-for="recentNews in recentNewsList"
+        <v-col cols="12" class="recent_news_col" sm="12" md="6" lg="4" xl="4" v-for="recentNews in recentNews"
           :key="recentNews.id">
           <v-card class="mx-auto my-4">
             <template>

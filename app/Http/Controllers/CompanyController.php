@@ -744,6 +744,7 @@ class CompanyController extends Controller
         try {
             $user = Auth::user();
             $user_subscription = UserSubscription::where('user_id', $user->id)->first();
+            $user->update(['upgrade_status' => null]);
             $this->gocardlessService->removeSubscription($user_subscription->upgrade_subscription_id);
             return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
         } catch (\Exception $e) {

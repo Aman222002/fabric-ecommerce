@@ -4,8 +4,8 @@
       <v-row no-gutters>
         <v-col class="footer_col" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
-            <a class="logo" to="/" style="cursor: pointer" width="200">
-              {{ appName }}</a>
+            <router-link class="logo" to="/" style="cursor: pointer" width="200">
+              {{ appName }}</router-link>
           </v-toolbar-title>
           <div class="footer-column about-widget">
             <p class="phone-num">
@@ -61,9 +61,7 @@
           <div class="widget-content">
             <ul class="list">
               <li><a href="/about">About Us</a></li>
-              <!-- <li><a href="#">Job Page Invoice</a></li> -->
-              <!-- <li><a href="#">Terms Page</a></li> -->
-              <li><a href="#">Blog</a></li>
+              <li><a @click="checkAdress">Blog</a></li>
               <li><a href="/contact">Contact</a></li>
             </ul>
           </div>

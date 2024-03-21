@@ -119,7 +119,7 @@ export default {
     const changingPlan = ref(false);
     const changePlanModal = ref(false);
     const selectedPlanValue = ref([]);
-    const plan_id = ref('');
+    // const plan_id = ref('');
     const features = ref([]);
     const userId = ref();
     const disabledButton = ref(false);
