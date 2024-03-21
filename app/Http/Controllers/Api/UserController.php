@@ -234,12 +234,13 @@ class UserController extends Controller
                 'skill_id' => $skill->id,
                 'qualifications' => $request->input('qualifications'),
             ]);
-            // dd($company_id);
+            $jobUrl = url('/view/' . $job->id); 
             return response()->json([
                 'status' => true,
                 'message' => 'Posted successfully',
                 'data' => $job,
-            ], 201);
+                'job_url' => $jobUrl,
+            ], 201,[], JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -364,8 +365,6 @@ public function destroy($slug)
                 return response()->json(['status' => false, 'message' => 'User does not have permission to delete a job'], 403);
             }
         }
-
-       
         $job->delete();
 
         $response = [

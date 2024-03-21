@@ -173,24 +173,26 @@ class SearchjobController extends Controller
     public function viewjob($jobid)
     {
         
-        return view('viewjob',['jobid' => $jobid]); 
+        return view('viewjob')->with('jobid', $jobid); 
     }
     public function fetchJobDetails($jobid)
     {
      
         try {
-            $job = Job::with('company', 'jobType', 'category','jobskill')->find($jobid);
- 
+            $job = Job::with('company.socialMediaAccounts','company.address', 'jobType', 'category')->find($jobid);
+
             if (!$job) {
                 return response()->json(['status' => false, 'message' => 'Job not found.'], 404);
             }
-          
+        
             $user_id = $job->user_id;
             $subscription_status = User::where('id', $user_id)->value('subscription_status');
             if ($subscription_status != 'active' || $job->post_status != 'Published') {
                 return response()->json(['status' => false, 'message' => 'Job is not available.'], 404);
             }
-          
+            $skillName = Skill::where('id', $job->skill_id)->value('skill_name');
+            
+            $job->skill_name = $skillName;
             
             return response()->json(['status' => true, 'data' => $job], 200);
          

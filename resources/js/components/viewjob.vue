@@ -12,23 +12,16 @@
               xl="8"
             >
               <v-card class="mx-auto my-12 company_info">
-                <div class="company_logo">
+                <!-- <div class="company_logo">
                     <v-img v-if="featuredJob && featuredJob.company && featuredJob.company.logo" :src="`/storage/assest/${featuredJob.company.logo}`"></v-img>
-                </div>
+                </div> -->
                 <div class="job_info">
                   <v-card-title
                     ><a href="#"> {{ featuredJob.title }}</a>
                   </v-card-title>
                   <ul class="company_seat">
-                    <li v-if="featuredJob && featuredJob.company && featuredJob.company.company_name">
-                      <v-icon  >mdi-compare</v-icon >{{featuredJob.company.company_name }}
-                    </li>
                     <li>
-                      <v-icon>mdi-map-marker-outline </v-icon
-                      >{{ featuredJob.location }}
-                    </li>
-                    <li v-if="featuredJob && featuredJob.company && featuredJob.company.created_at">
-                        <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(featuredJob.company.created_at) }}
+                        <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(featuredJob.created_at) }}
                     </li>
                   
                   </ul>
@@ -103,6 +96,30 @@
                     </li>
                   </ul>
                 </v-card-item>
+                <v-card-item>
+                  <div class="text-h6 mb-1">Skill</div>
+                  <ul>
+                    <li>
+                     {{ featuredJob.skill_name }}
+                    </li>
+                  </ul>
+                </v-card-item>
+                <v-card-item>
+                  <div class="text-h6 mb-1">Salary</div>
+                  <ul>
+                    <li>
+                     {{ featuredJob.salary }}
+                    </li>
+                  </ul>
+                </v-card-item>
+                <v-card-item>
+                  <div class="text-h6 mb-1">Qualification</div>
+                  <ul>
+                    <li>
+                     {{ featuredJob.qualifications}}
+                    </li>
+                  </ul>
+                </v-card-item>
               </v-card>
             </v-col>
             <v-col
@@ -115,23 +132,42 @@
             >
               <v-card-item>
                 <v-row>
+                  
                   <v-col cols="auto" sm="12" md="12" lg="12" xl="12">
-                    <v-list-item>
+                    
+                <v-list-item>
                       <template v-slot:prepend>
-                        <v-card-title class="p-0">
-                          Primary industry:
-                        </v-card-title>
+                       
                       </template>
-                      <template v-slot:append>
-                        <v-card-text class="pb-0">Software </v-card-text>
+                      <template v-slot:append v-if="featuredJob && featuredJob.company && featuredJob.company.logo">
+                        <v-card-text class="pb-0">
+                        <img  :src="`/storage/assest/${featuredJob.company.logo}`" class="company_logo"></v-card-text>
                       </template>
                     </v-list-item>
                     <v-list-item>
                       <template v-slot:prepend>
-                        <v-card-title class="p-0"> Company size: </v-card-title>
+                        <v-card-title class="p-0" >
+                        Company Name
+                        </v-card-title>
                       </template>
-                      <template v-slot:append>
-                        <v-card-text class="pb-0"> 501-1,000 </v-card-text>
+                      <template v-slot:append v-if="featuredJob && featuredJob.company && featuredJob.company.company_name">
+                        <v-card-text class="pb-0"> {{featuredJob.company.company_name }} </v-card-text>
+                      </template>
+                    </v-list-item>
+                    <v-list-item>
+                      <template v-slot:prepend>
+                        <v-card-title class="p-0"> Company Email: </v-card-title>
+                      </template>
+                      <template v-slot:append  v-if="featuredJob && featuredJob.company && featuredJob.company.company_email">
+                        <v-card-text class="pb-0"> {{featuredJob.company.company_email }} </v-card-text>
+                      </template>
+                    </v-list-item>
+                    <v-list-item>
+                      <template v-slot:prepend>
+                        <v-card-title class="p-0"> Company Created: </v-card-title>
+                      </template>
+                      <template v-slot:append  v-if="featuredJob && featuredJob.company && featuredJob.company.created_at">
+                        <v-card-text class="pb-0"> {{ formatCreatedAt(featuredJob.company.created_at) }} </v-card-text>
                       </template>
                     </v-list-item>
                     <!-- <v-btn size="x-large" class="" to="#">
@@ -141,7 +177,22 @@
                 </v-row>
               </v-card-item>
               <v-card-item>
-                <div class="text-h6 mb-1">Job Location:{{ featuredJob.location  }}</div>
+                <div class="text-h6 mb-1" v-if="featuredJob && featuredJob.company && featuredJob.company.address">CompanyLocation:{{ featuredJob.company.address.city  }}</div>
+                <div class="social-media-icons"  v-if="featuredJob && featuredJob.company && featuredJob.company.social_media_accounts[0]">
+        <a :href="featuredJob.company.social_media_accounts[0].facebook_url" target="_blank">
+          <v-icon class="mdi mdi-facebook" style="color: 	#1877F2;"></v-icon>
+          
+        </a>
+        <a :href="featuredJob.company.social_media_accounts[0].twitter_url" target="_blank">
+          <v-icon class="mdi mdi-twitter" style="color: 	#1DA1F2;"></v-icon>
+        </a>
+        <a  :href="featuredJob.company.social_media_accounts[0].linkedin_url" target="_blank">
+          <v-icon class="mdi mdi-linkedin"  style="color: 	#0A66C2;"></v-icon>
+        </a>
+        <a :href="featuredJob.company.social_media_accounts[0].instagram_url" target="_blank">
+          <v-icon class="mdi mdi-instagram"  style="color: 	#fa7e1e;"></v-icon>
+        </a>
+      </div>
                 <!-- <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.5022673812873!2d76.73736487619195!3d30.676141388364538!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec06bceb7def%3A0x1931f58b31410a85!2sBetasoft%20Solutions%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1709537050814!5m2!1sen!2sin"
                   width="100%"
@@ -159,6 +210,7 @@
     </div>
   </template>
   <script>
+ 
   import { ref,onMounted } from 'vue';
   import { useUsersStore } from "../store/user";
   import axios from "axios";
@@ -206,7 +258,7 @@ const formatCreatedAt = (createdAt) => {
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
       onMounted(() => {
-        fetchJobs(props.data);
+        fetchJobs(jobid);
     });
     const apply = async () => {
 
@@ -274,7 +326,7 @@ const formatCreatedAt = (createdAt) => {
     }
   };
   </script>
-  
+
   <style>
   .employers_search_single .company_info {
     box-shadow: unset;
@@ -285,5 +337,15 @@ const formatCreatedAt = (createdAt) => {
   .employers_search_single_right a.v-btn--variant-elevated {
     background: #e2eaf8;
     color: #1967d2;
+  }
+  .social-media-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .social-media-icons a {
+    margin-right: 10px;
+    color: #000; 
   }
   </style>

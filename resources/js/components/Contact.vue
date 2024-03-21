@@ -45,32 +45,33 @@
         </v-col>
 
         <v-col sm="12" md="7" lg="7" xl="7" cols="12">
-          <v-form fast-fail @submit.prevent>
+          <v-form fast-fail @submit.prevent="sendEmail()" ref="form">
             <v-text-field
               v-model="fullName"
-             
+              :rules="fullNameRules"
               label="Full Name"
             ></v-text-field>
             <v-text-field
 
               v-model="Email"
-             
+              :rules="emailRules"
               label="Email"
             ></v-text-field>
             <v-text-field
               v-model="Subject"
-             
+              :rules="subjectRules"
               label="Subject"
             ></v-text-field>
             <v-textarea
               label="Message"
               v-model="Message"
+              :rules="messageRules"
               name="input-7-1"
               variant="filled"
               auto-grow
             ></v-textarea>
 
-            <v-btn class="mt-2" block  @click="sendEmail">Send Now!</v-btn>
+            <v-btn class="mt-2" block  type="submit">Send Now!</v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -87,10 +88,24 @@ export default {
    
     const contactDetails = ref({});
     const fullName = ref('');
-  
+    const form = ref(null);
     const Email = ref('');
     const Subject = ref('');
     const Message = ref('');
+    const fullNameRules = [
+      value => !!value || 'Full Name is required',
+      value => (value && value.length <= 50) || 'Max 50 characters'
+    ];
+    const emailRules = [
+      value => !!value || 'Email is required',
+      value => /.+@.+\..+/.test(value) || 'Email must be valid'
+    ];
+    const subjectRules = [
+      value => !!value || 'Subject is required'
+    ];
+    const messageRules = [
+      value => !!value || 'Message is required'
+    ];
     const fetchData = () => {
       try {
         axios.get("contact/data").then((response) => {
@@ -105,27 +120,42 @@ export default {
       fetchData();
     });
     const sendEmail = async () => {
-            try {
-                const response = await axios.post('/send-email', {
-                    fullName: fullName.value,
-                    Email: Email.value,
-                    Subject: Subject.value,
-                    Message: Message.value,
-                    recipientEmail: contactDetails.value.email
-                   
-                });
-                fullName.value = '';
-                Email.value = '';
-                Subject.value = '';
-                 Message.value = '';
-               
-                console.log(response.data.message); 
-            } catch (error) {
-                console.error(error); 
-            }
-        };
+  try {
+    const valid = await form.value.validate();
+    if (!valid.valid) {
+      const errors = JSON.parse(JSON.stringify(valid.errors));
+      let errorField = form.value[errors[0].id];
+      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+      errorField.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    } else {
+      const response = await axios.post('/send-email', {
+        fullName: fullName.value,
+        Email: Email.value,
+        Subject: Subject.value,
+        Message: Message.value,
+        recipientEmail: contactDetails.value.email
+      });
+      fullName.value = '';
+      Email.value = '';
+      Subject.value = '';
+      Message.value = '';
+      console.log(response.data.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
     return {
-      fetchData,contactDetails,fullName,Email,Subject,Message,sendEmail
+      fetchData,contactDetails,fullName,Email,Subject,Message,sendEmail,
+      fullNameRules,
+      emailRules,
+      subjectRules,
+      messageRules,form
     };
   }
 }
