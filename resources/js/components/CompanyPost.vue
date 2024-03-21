@@ -25,6 +25,7 @@
                 label="Job Title"
                 density="compact"
                 variant="outlined"
+                :rules="fullNameRules"
                 clearable
                 style="width: 100%"
               ></v-text-field>
@@ -33,6 +34,7 @@
                 label="Location"
                 density="compact"
                 variant="outlined"
+                :rules="subjectRules"
                 clearable
                 style="width: 100%"
               ></v-text-field>
@@ -90,94 +92,8 @@
                 </div>
               </v-card-actions>
             </v-card>
+            
           
-            <v-navigation-drawer
-              v-model="detailPanelVisible"
-              location="right"
-              class="single_job_search_page"
-            >
-              <v-icon
-                style="margin-left: 20px; margin-top: 30px"
-                @click="detailPanelVisible = false"
-                >mdi-arrow-left-top</v-icon
-              >
-              <v-card style="width: 100%">
-                <div class="compamy_infor">
-                  <div class="compamy_infor_left">
-                    <v-card-title
-                      ><v-icon>mdi-format-title</v-icon>
-                      <span>{{ detail.title }}</span></v-card-title
-                    >
-                    <v-icon color="black">mdi-domain</v-icon>
-                    <span>{{ detail.company_name }}</span>
-                    <v-icon color="black">mdi-map-marker</v-icon>
-                    <span>{{ detail.location }}</span>
-                    <v-icon color="black">mdi-desktop-classic</v-icon>
-                    <span>{{ detail.experience }}</span>
-                    <v-icon color="black">mdi-human</v-icon>
-                    <span>{{ detail.vacancy }}</span>
-                  </div>
-                  <div class="compamy_infor_btn">
-                    <v-btn
-                      class="apply_for_job"
-                    
-                      @click="apply(detail.id)"
-                      >Apply For Job</v-btn
-                    >
-                    <v-btn
-                      class="save_btn"
-                      color="white"
-                      @click="save(detail.id)"
-                    >
-                      <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn
-                    >
-                  </div>
-                </div>
-                <v-row class="compamy_infor_description">
-                  <v-col cols="auto" sm="12" md="12" lg="8" xl="8">
-                    <span style="display: block">{{ detail.description }}</span>
-                  </v-col>
-                  <v-col cols="auto" sm="12" md="12" lg="4" xl="4">
-                    <div>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0">
-                            Primary industry:
-                          </v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0">Software </v-card-text>
-                        </template>
-                      </v-list-item>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0"> Company size: </v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0"> 501-1,000 </v-card-text>
-                        </template>
-                      </v-list-item>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0"> Founded in: </v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0"> 2011</v-card-text>
-                        </template>
-                      </v-list-item>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0"> Phone:</v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0"> 123 456 7890</v-card-text>
-                        </template>
-                      </v-list-item>
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-navigation-drawer>
           </v-col>
         </v-row>
       </v-container>
@@ -204,6 +120,13 @@ export default {
     //   }else{
 
     //   }
+    const fullNameRules = [
+      value => !!value || 'Full Name is required',
+      value => (value && value.length <= 50) || 'Max 50 characters'
+    ];
+    const subjectRules = [
+      value => !!value || 'Subject is required'
+    ];
     const usersStore = useUsersStore();
     const items = [
       {
@@ -257,6 +180,7 @@ export default {
 
     //getting Jobs posted by company
     const fetchJobs = async () => {
+
       try {
         const response = await axios.get("/company/post");
         console.log(response.data);
@@ -267,7 +191,21 @@ export default {
   
       }
     };
+    const fetchpost = async () => {
+try {
+  const response = await axios.get("/company/job");
+  console.log(response.data);
+  jobs.value = response.data.data;
+  
+} catch (err) {
+  console.error(err);
+
+}
+};
+
     const openDetailPanel = (job) => {
+   console.log(job);
+      window.location.href=`http://127.0.0.1:8000/view/${job.id}`
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
       detail.value.location = job.location;
@@ -358,7 +296,15 @@ const isDescriptionLong = (description) => {
 
     onMounted(() => {
       // companypost();
-      fetchJobs();
+      if(!usersStore.isloggedin)
+      {
+        fetchJobs();
+      }
+      else{
+        fetchpost();
+      }
+      
+      
       // const value =props.data ;
       // console.log(value);
       if (props.data.title || props.data.location) {
@@ -392,7 +338,7 @@ const isDescriptionLong = (description) => {
       isDescriptionLong,
       category,
       items, 
-      showAlert,
+      showAlert,subjectRules,fullNameRules
     };
   },
 };

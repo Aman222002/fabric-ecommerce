@@ -19,7 +19,8 @@
               Find Jobs, Employment &amp; Career Opportunities
             </div>
           </div>
-          <form class="job_search_form">
+          <!-- <form class="job_search_form"> -->
+            <form fast-fail @submit.prevent="searchJobs()" ref="form">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="5" lg="5" xl="5">
                 <v-sheet>

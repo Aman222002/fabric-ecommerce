@@ -125,6 +125,8 @@ app.component("address-component", AddressTabComponent);
 
 import index from "./components/HomePage/index.vue"
 app.component("home-component",index);
+import viewjob from "./components/viewjob.vue"
+app.component("view-job",viewjob);
 
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
