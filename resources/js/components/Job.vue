@@ -12,71 +12,29 @@
                   </p>
                   <v-row align="center" justify="center">
                     <v-col cols="12" sm="10">
-                      <v-text-field
-                        label="Email"
-                        variant="outlined"
-                        v-model="formData.email"
-                        :rules="emailRules"
-                        dense
-                        density="compact"
-                        color="blue"
-                        autocomplete="false"
-                        class="mt-8"
-                        style="font-size: 10px"
-                      />
+                      <v-text-field label="Email" variant="outlined" v-model="formData.email" :rules="emailRules" dense
+                        density="compact" color="blue" autocomplete="false" class="mt-8" style="font-size: 10px" />
 
-                      <v-text-field
-                        label="Password"
-                        variant="outlined"
-                        v-model="formData.password"
-                        :rules="passRules"
-                        dense
-                        density="compact"
-                        color="blue"
-                        autocomplete="false"
-                        type="password"
-                        style="margin-top: 10px; font-size: 10px"
-                      />
+                      <v-text-field label="Password" variant="outlined" v-model="formData.password" :rules="passRules"
+                        dense density="compact" color="blue" autocomplete="false" type="password"
+                        style="margin-top: 10px; font-size: 10px" />
                       <v-row>
                         <v-col cols="12" sm="7">
-                          <v-checkbox
-                            label="Remember Me"
-                            class="mt-n1"
-                            color="blue"
-                          >
+                          <v-checkbox label="Remember Me" class="mt-n1" color="blue">
                           </v-checkbox>
                         </v-col>
                         <v-col cols="12" sm="5" class="mt-3">
-                          <a
-                            href="/forget/password"
-                            class="register-link"
-                            style="text-decoration: none"
-                            >Forgot password?</a
-                          >
+                          <a href="/forget/password" class="register-link" style="text-decoration: none">Forgot
+                            password?</a>
                         </v-col>
                       </v-row>
-                      <v-btn
-                        type="submit"
-                        dark
-                        block
-                        tile
-                        color="primary"
-                        @click="showCompanyListDialog"
-                        >Login</v-btn
-                      >
+                      <v-btn type="submit" dark block tile color="primary" @click="showCompanyListDialog">Login</v-btn>
                     </v-col>
                   </v-row>
                 </v-form>
               </v-card-text>
             </v-col>
-            <v-col
-              class="blue form_page_right"
-              sm="12"
-              md="12"
-              lg="6"
-              xl="6"
-              cols="12"
-            >
+            <v-col class="blue form_page_right" sm="12" md="12" lg="6" xl="6" cols="12">
               <v-card-text class="white--text">
                 <p style="font-size: 20px">Don't Have an Account Yet?</p>
                 <p style="font-size: 13px; margin-top: 10px">
@@ -116,6 +74,7 @@ export default {
   setup() {
     const employerStore = useEmployerStore();
     const jobDialog = ref(false);
+    const users = ref([]);
     const companyListDialog = ref(false);
     const selectedCompany = ref(null);
     const email = ref("");
@@ -132,7 +91,6 @@ export default {
       (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",
     ];
     const companyNames = ref([]);
-
     const submitForm = async () => {
       if (!formData.value.company_name) {
         return;
@@ -142,8 +100,43 @@ export default {
         if (response.data.status == true) {
           companyListDialog.value = false;
           employerStore.isLogIn();
-          // console.log(response.data);
-          window.location.href = "/findcv";
+          // window.location.href = "/findcv";
+          if (employerStore.isloggedin) {
+            const selectedRoute = employerStore.getPreviousRoute;
+            console.log(selectedRoute);
+            await fetchUserData();
+            if (selectedRoute == '/findcv') {
+              window.location.href = "/findcv";
+              employerStore.removePreviousRoute();
+            }
+            if (selectedRoute == '/postjob') {
+              // console.log('hello');
+              if (hasPermission('create users') || hasrole('Company Admin')) {
+                window.location.href = "/postjob";
+                employerStore.removePreviousRoute();
+              } else {
+                window.location.href = "/findcv";
+                employerStore.removePreviousRoute();
+                alert(`You don't have permissions for this action`);
+              }
+            }
+            if (selectedRoute == '/company/plan') {
+              if (hasPermission('Change Plan') ||
+                hasrole('Company Admin')) {
+                window.location.href = "/company/plan";
+                employerStore.removePreviousRoute();
+              } else {
+                window.location.href = "/findcv";
+                employerStore.removePreviousRoute();
+                alert(`You don't have permissions for this action`);
+              }
+            }
+            else if (!selectedRoute) {
+              window.location.href = "/findcv";
+              employerStore.removePreviousRoute();
+            }
+            // employerStore.removePreviousRoute();
+          }
         }
       } catch (err) {
         console.error(err);
@@ -165,13 +158,32 @@ export default {
         console.error(err);
       }
     };
-
     const closeCompanyListDialog = () => {
       companyListDialog.value = false;
     };
-
     const signup = async () => {
       window.location.href = "/company/register";
+    };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/user/data");
+        users.value = response.data;
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    const hasPermission = (permission) => {
+      if (users.value && users.value.permissions) {
+        return users.value.permissions.includes(permission);
+      }
+      return false;
+    };
+    const hasrole = (role) => {
+      if (users.value && users.value.roles) {
+        return users.value.roles.includes(role);
+      }
+      return false;
     };
     watch(selectedCompany, () => {
       if (selectedCompany.value) {
@@ -179,7 +191,6 @@ export default {
         submitForm();
       }
     });
-
     return {
       password,
       email,
@@ -192,7 +203,7 @@ export default {
       showCompanyListDialog,
       closeCompanyListDialog,
       companyListDialog,
-      signup, selectedCompany, employerStore
+      signup, selectedCompany, employerStore, fetchUserData, users
     };
   },
 };
@@ -213,6 +224,7 @@ export default {
   align-items: center;
   text-align: center;
 }
+
 .form_page_left button.v-btn,
 .form_page_right button.v-btn {
   min-width: 150px;

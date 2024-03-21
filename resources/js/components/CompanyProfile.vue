@@ -1,14 +1,9 @@
 <template>
-  <v-card
-    class="company_profile"
-    style="margin-top: 10px; display: flex; flex-direction: column"
-  >
+  <v-card class="company_profile" style="margin-top: 10px; display: flex; flex-direction: column">
     <div class="company_profile_top_bar">
       <v-container>
         <v-row>
-          <v-icon @click="goToEditPage()" class="right_side_edif_btn"
-            >mdi-pencil</v-icon
-          >
+          <v-icon @click="goToEditPage()" class="right_side_edif_btn">mdi-pencil</v-icon>
           <div style="align-items: center; display: flex; margin-left: 15px">
             <!-- <v-avatar
            size="130px"
@@ -18,12 +13,7 @@
           @click="openFileInput()" 
         > -->
 
-            <v-avatar
-              size="130px"
-              class="avatar"
-              style="margin: 10px"
-              v-if="company.length > 0"
-            >
+            <v-avatar size="130px" class="avatar" style="margin: 10px">
               <!-- <input
                 type="file"
                 id="fileInput"
@@ -31,21 +21,14 @@
                 style="display: none"
                 @change="handleImageChange()"
               /> -->
-              <img
-                :src="`/storage/assest/${company.logo}`"
-                alt="Selected Image"
-                width="150px"
-                height="150px"
-              />
+              <img :src="`/storage/assest/${company.logo}`" width="150px" height="150px" />
             </v-avatar>
           </div>
           <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
             <p style="font-size: 30px">{{ user.name }}</p>
             <p style="font-size: 15px">Representative</p>
             <p v-if="company.length > 0 && company.address">
-              <v-icon style="font-size: 15px; color: rgb(3, 3, 3)"
-                >mdi-map-marker</v-icon
-              >
+              <v-icon style="font-size: 15px; color: rgb(3, 3, 3)">mdi-map-marker</v-icon>
               {{ company.address.street }}, {{ company.address.city }},
               {{ company.address.state }}
             </p>
@@ -59,12 +42,9 @@
         <v-col sm="12" md="6" lg="8" xl="8" class="company_profile_infor_left">
           <!-- Description -->
           <v-card class="card2" style="margin-bottom: 20px">
-            <v-icon @click="openModal" style="margin-left: 97%"
-              >mdi-pencil</v-icon
-            >
-            <v-card-title style="font-family: Poppins, sans-serif"
-              ><v-icon>mdi-domain</v-icon> Description:</v-card-title
-            >
+            <v-icon @click="openModal" style="margin-left: 97%">mdi-pencil</v-icon>
+            <v-card-title style="font-family: Poppins, sans-serif"><v-icon>mdi-domain</v-icon>
+              Description:</v-card-title>
             <v-card-text>
               <div>
                 {{ company.description }}
@@ -77,11 +57,7 @@
                 <span class="headline">Edit Description</span>
               </v-card-title>
               <v-card-text>
-                <v-textarea
-                  v-model="editedDescription.description"
-                  label="Description"
-                  outlined
-                ></v-textarea>
+                <v-textarea v-model="editedDescription.description" label="Description" outlined></v-textarea>
               </v-card-text>
               <v-card-actions>
                 <v-btn color="primary" @click="saveDescription">Save</v-btn>
@@ -289,14 +265,9 @@
     <!-- Description end -->
 
     <!--  -->
-    <v-card
-      v-if="showJob && company.jobs"
-      class="card2"
-      style="margin-bottom: 20px; font-size: 16px"
-    >
-      <v-card-title style="font-family: Poppins, sans-serif"
-        ><v-icon>mdi-note</v-icon>Recently Posted Jobs:</v-card-title
-      >
+    <v-card v-if="showJob && company.jobs" class="card2" style="margin-bottom: 20px; font-size: 16px">
+      <v-card-title style="font-family: Poppins, sans-serif"><v-icon>mdi-note</v-icon>Recently Posted
+        Jobs:</v-card-title>
       <v-table>
         <template v-slot:default>
           <thead>
@@ -317,11 +288,7 @@
     <!--  -->
 
     <!--  -->
-    <v-card
-      v-if="showAddress && company.address"
-      class="card2"
-      style="margin-bottom: 20px; font-size: 16px"
-    >
+    <v-card v-if="showAddress && company.address" class="card2" style="margin-bottom: 20px; font-size: 16px">
       <v-icon @click="openEditAddressModal()"> mdi-pencil </v-icon>
       <v-card-title style="font-family: Poppins, sans-serif">
         Address:
@@ -355,36 +322,28 @@
       <v-card>
         <v-card-title>Edit Address</v-card-title>
         <v-card-text>
-          <v-text-field
-            v-model="editedAddress.first_line_address"
-            label="First_line_address"
-            variant="outlined"
-            density="compact"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedAddress.street"
-            label="Street"
-            variant="outlined"
-            density="compact"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedAddress.city"
-            label="City"
-            variant="outlined"
-            density="compact"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedAddress.state"
-            label="State"
-            density="compact"
-            variant="outlined"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedAddress.postal_code"
-            label="postal_code"
-            density="compact"
-            variant="outlined"
-          ></v-text-field>
+          <v-text-field v-model="editedAddress.first_line_address" label="First_line_address" variant="outlined"
+            density="compact" :rules="[
+            (value) => !!value || 'First line address is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedAddress.street" label="Street" variant="outlined" density="compact" :rules="[
+            (value) => !!value || 'Street is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedAddress.city" label="City" variant="outlined" density="compact" :rules="[
+            (value) => !!value || 'City is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedAddress.state" label="State" density="compact" variant="outlined" :rules="[
+            (value) => !!value || 'State is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedAddress.postal_code" label="postal_code" density="compact" variant="outlined"
+            :rules="[
+            (value) => !!value || 'Postal code is required',
+
+          ]"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedAddress">Save</v-btn>
@@ -396,44 +355,33 @@
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
         <v-card-text>
-          <v-text-field
-            v-model="editedJob.name"
-            label="User Name"
-            variant="outlined"
-            density="compact"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedJob.email"
-            label="User Email"
-            variant="outlined"
-            density="compact"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedJob.phone"
-            label="User Phone"
-            variant="outlined"
-            density="compact"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedJob.company_name"
-            label="Company Name"
-            density="compact"
-            variant="outlined"
-          ></v-text-field>
-          <v-text-field
-            v-model="editedJob.company_email"
-            label="Company Email"
-            density="compact"
-            variant="outlined"
-          ></v-text-field>
-          <v-file-input
-            v-model="editedJob.logo"
-            label="Company Logo"
-            density="compact"
-            variant="outlined"
-            name="logo"
-            @change="handleImage"
-          ></v-file-input>
+          <v-text-field v-model="editedJob.name" label="User Name" variant="outlined" density="compact" :rules="[
+            (value) => !!value || 'User name is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedJob.email" label="User Email" variant="outlined" density="compact" :rules="[
+            (value) => !!value || 'User email is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedJob.phone" label="User Phone" variant="outlined" density="compact" :rules="[
+            (value) => !!value || 'User phone is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedJob.company_name" label="Company Name" density="compact" variant="outlined"
+            :rules="[
+            (value) => !!value || 'Company Name is required',
+
+          ]"></v-text-field>
+          <v-text-field v-model="editedJob.company_email" label="Company Email" density="compact" variant="outlined"
+            :rules="[
+            (value) => !!value || 'Company Email is required',
+
+          ]"></v-text-field>
+          <v-file-input v-model="editedJob.logo" label="Company Logo" density="compact" variant="outlined" name="logo"
+            @change="handleImage" :rules="[
+            (value) => !!value || 'Company Logo is required',
+
+          ]"></v-file-input>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedJob">Save</v-btn>
@@ -495,7 +443,9 @@ export default {
         company.value = response.data.companydata;
         // store.company.company_name
         user.value = response.data.user;
-        address.value = response.data.companydata.address;
+        if (response.data.companydata.address) {
+          address.value = response.data.companydata.address;
+        }
         console.log(response.data.companydata.address);
       } catch (error) {
         console.error("Error fetching company profile:", error);
@@ -521,6 +471,10 @@ export default {
     //   console.log(currentplan.value);
     // };
     const saveEditedJob = async () => {
+      const isValid = await validate();
+      if (!isValid) {
+        return;
+      }
       try {
         const formData = new FormData();
         formData.append("name", editedJob.value.name);
@@ -583,6 +537,10 @@ export default {
     };
 
     const saveEditedAddress = async () => {
+      const isValid = await validate();
+      if (!isValid) {
+        return;
+      }
       try {
         const formData = new FormData();
         formData.append(
@@ -666,20 +624,23 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .user-name {
   color: white;
   background-color: black;
 }
+
 .company_profile_infor_right .v-card-text div {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
 }
+
 .company_profile_top_bar {
   background-image: linear-gradient(to right, #f3f6fb, #bfd1f1);
   padding: 15px 0;
 }
+
 .company_profile_infor_right .v-card {
   padding: 30px 27px;
   background: #f5f7fc;
@@ -687,13 +648,16 @@ export default {
   margin-bottom: 40px;
   width: 75%;
 }
+
 .right_side_edif_btn {
   position: absolute;
   right: 25px;
 }
+
 .company_profile_infor_right .v-card .v-card-text {
   padding: 0;
 }
+
 .company_profile_infor_right .v-card-text div label {
   font-weight: 600;
 }

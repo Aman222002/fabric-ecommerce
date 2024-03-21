@@ -8,39 +8,33 @@
         </div>
       </div>
       <v-row align="center" justify="center">
-        <v-col
-          cols="12"
-          class="recent_news_col"
-          sm="12"
-          md="6"
-          lg="4"
-          xl="4"
-          v-for="recentNews in recentNews"
-          :key="recentNews.id"
-        >
+        <v-col cols="12" class="recent_news_col" sm="12" md="6" lg="4" xl="4" v-for="recentNews in recentNews"
+          :key="recentNews.id">
           <v-card class="mx-auto my-4">
             <template>
               <v-progress-linear color="deep-purple" height="4" indeterminate>
               </v-progress-linear>
             </template>
-            <v-img cover height="250" :src="`${recentNews.img}`"> </v-img>
+            <v-img cover height="200" :src="`/storage/assets/${recentNews.featured_image}`"> </v-img>
             <div class="Cmt_time">
               <v-card-subtitle class="pt-4">
-                {{ recentNews.date }}
+                {{ formatCreatedAt(recentNews.created_at) }}
               </v-card-subtitle>
               <v-card-subtitle class="pt-4">
-                <v-icon>{{ recentNews.icon }}</v-icon
-                >{{ recentNews.comment }}
+                <v-icon>{{ icon }}</v-icon>{{ comment }}
               </v-card-subtitle>
             </div>
-
             <v-card-item>
               <v-card-title>{{ recentNews.title }}</v-card-title>
             </v-card-item>
-
             <v-card-text>
-              <div>
-                {{ recentNews.text }}
+
+              <!-- <div v-html="recentNews.content">
+              </div> -->
+              <div>{{ recentNews.contentText }}<span v-if="recentNews.contentText" class="read-more"
+                  @click="openDetailPage(recentNews.id)">
+                  Read More
+                </span>
               </div>
             </v-card-text>
           </v-card>
@@ -51,42 +45,57 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import axios from "axios";
 export default {
-  data: () => ({
-    recentNews: [
-      {
-        id: "1",
-        img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-        title: "Cafe Badilico",
-        date: "August 31, 2021 ",
-        icon: "mdi-circle-small",
-        comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
-      },
-      {
-        id: "2",
-        img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-        title: "Cafe Badilico",
-        date: "August 31, 2021 ",
-        icon: "mdi-circle-small",
-        comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
-      },
-      {
-        id: "3",
-        img: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
-        title: "Cafe Badilico",
-        date: "August 31, 2021 ",
-        icon: "mdi-circle-small",
-        comment: "comment",
-        text: "Small plates, salads & sandwiches - an intimate setting with 12               indoor seats plus patio seating.",
-      },
-    ],
-  }),
+  setup() {
+    const icon = ref('mdi-circle-small');
+    const comment = ref('comment');
+    const recentNews = ref([
+    ]);
+    const formatCreatedAt = (createdAt) => {
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      return new Date(createdAt).toLocaleDateString(undefined, options);
+    };
+    const openDetailPage = (id) => {
+      window.location.href = `/view/blog/single/${id}`;
+      // axios.get(`view/blog/single/${id}`).then((response) => {
+      // }).catch((error) => {
+      //   console.log(error);
+      // })
+    }
+    const fecthBlog = () => {
+      axios.get('get/blog').then((response) => {
+        console.log(response.data.data);
+        recentNews.value = response.data.data.map(blog => {
+          const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
+          const paragraphs = blog.content.match(paragraphRegex);
+          const contentText = paragraphs ? paragraphs
+            .map(p => p.replace(/<[^>]+>/g, ''))
+            .join(' ')
+            .split(/\s+/)
+            .slice(0, 24)
+            .join(' ') : '';
+          return {
+            ...blog,
+            contentText
+          };
+        })
+      }).catch((err) => {
+        console.log(err);
+      })
+    };
+    onMounted(() => {
+      fecthBlog();
+    })
+    return {
+      recentNews, fecthBlog, formatCreatedAt, icon, comment, openDetailPage
+    }
+  },
 };
 </script>
-<style >
-/* // recent_news_articlesonly */
+<style>
+/* recent_news_articles only */
 .recent_news_articles {
   padding: 65px 0 0;
   background: #fff;
@@ -100,6 +109,7 @@ export default {
   line-height: 1.2em;
   color: #202124;
 }
+
 .recent_news_articles .sec-title .text {
   position: relative;
   margin-top: 15px;
@@ -114,9 +124,16 @@ export default {
   width: 100%;
   display: flex;
 }
+
 .Cmt_time {
   display: flex;
 }
+
+.read-more {
+  color: #1967d2;
+  cursor: pointer;
+}
+
 .recent_news_articles .v-card .v-img {
   margin-top: 15px;
 }

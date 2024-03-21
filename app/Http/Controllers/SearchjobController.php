@@ -10,6 +10,7 @@ use App\Models\Job;
 use App\Models\User;
 use App\Models\UserSkill;
 use Carbon\Carbon;
+
 class SearchjobController extends Controller
 {
     /**
@@ -18,54 +19,18 @@ class SearchjobController extends Controller
     public function index(Request $request)
     {
         // dd($request);
-        if($request->jobTitle || $request->location|| $request->category){
+        if ($request->jobTitle || $request->location || $request->category) {
             $data = [
-                'title'=>$request->jobTitle,
-                'location'=> $request->location,
+                'title' => $request->jobTitle,
+                'location' => $request->location,
                 'category' => $request->category,
             ];
             //
-        }
-        else{
-            $data=[];
+        } else {
+            $data = [];
         }
         // eturn view('companypost');
-        return view('companypost')->with('data',$data);
-    }
-
-
-    public function fetchData()
-    {
-        try {
-            // $jobs = Job::all();
-            $user = auth()->user();
-            $skills = UserSkill::where('user_id', $user->id)->pluck('skill_id');
-            $companyId = 0;
-            if ($user->hasRole('User')) {
-                $companyId =  $user->company ? $user->company->id : 0;
-            }
-            $jobs = Job::whereIn('skill_id', $skills)->with("company");
-            if ($companyId != 0) {
-                $jobs->where('company_id', $companyId);
-            }
-            // dd($jobs);
-            $jobs = $jobs->get()->filter(function ($job) {
-                $user_id = $job->user_id;
-                // dd($job);
-                $subscription_status = User::where('id', $user_id)->value('subscription_status');
-                if ($subscription_status == 'active' && $job->post_status == 'Published') {
-                    return $job;
-                } else {
-                    return false;
-                }
-            });
-            // dd($jobs);
-            return response()->json(['status' => true, 'data' => $jobs], 200);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
-        }
-        
+        return view('companypost')->with('data', $data);
     }
 
 
@@ -83,8 +48,10 @@ class SearchjobController extends Controller
     //         if ($companyId != 0) {
     //             $jobs->where('company_id', $companyId);
     //         }
+    //         // dd($jobs);
     //         $jobs = $jobs->get()->filter(function ($job) {
     //             $user_id = $job->user_id;
+    //             // dd($job);
     //             $subscription_status = User::where('id', $user_id)->value('subscription_status');
     //             if ($subscription_status == 'active' && $job->post_status == 'Published') {
     //                 return $job;
@@ -92,37 +59,40 @@ class SearchjobController extends Controller
     //                 return false;
     //             }
     //         });
+    //         // dd($jobs);
     //         return response()->json(['status' => true, 'data' => $jobs], 200);
     //     } catch (\Exception $e) {
     //         Log::error($e->getMessage());
     //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     //     }
+
     // }
-//     public function fetchData()
-// {
-//     try {
-    
-//         $jobs = Job::with('company', 'jobType','category')->get();
-//         $jobs = $jobs->filter(function ($job) {
-//                         $user_id = $job->user_id;
-//                         $subscription_status = User::where('id', $user_id)->value('subscription_status');
-//                         if ($subscription_status == 'active' && $job->post_status == 'Published' ) {
-//                             return $job;
-//                         } else {
-//                             return false;
-//                         }
-//                     });
-                   
-//         return response()->json(['status' => true, 'data' => $jobs], 200);
-//     } catch (\Exception $e) {
-//         Log::error($e->getMessage());
-//         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
-//     }
-// }
+
+    public function fetchData()
+    {
+        try {
+
+            $jobs = Job::with('company', 'jobType', 'category')->get();
+            $jobs = $jobs->filter(function ($job) {
+                $user_id = $job->user_id;
+                $subscription_status = User::where('id', $user_id)->value('subscription_status');
+                if ($subscription_status == 'active' && $job->post_status == 'Published') {
+                    return $job;
+                } else {
+                    return false;
+                }
+            });
+
+            return response()->json(['status' => true, 'data' => $jobs], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 
     public function searchJobs(Request $request)
     {
-    
+
         try {
             $jobs = Job::with("company");
             if ($request->has('jobTitle')) {
@@ -131,7 +101,7 @@ class SearchjobController extends Controller
                         $query->where('subscription_status', 'active');
                     })->where('post_status', 'Published');
                 })
-                ->get();
+                    ->get();
                 // $jobs = $jobs->filter(function ($job) {
                 //     $user_id = $job->user_id;
                 //     $subscription_status = User::where('id', $user_id)->value('subscription_status');
@@ -143,25 +113,25 @@ class SearchjobController extends Controller
                 // });
             }
             if ($request->has('location')) {
-                $jobs->where('location', 'like', '%' . $request->input('location') . '%') ->where(function ($query) {
+                $jobs->where('location', 'like', '%' . $request->input('location') . '%')->where(function ($query) {
                     $query->whereHas('user', function ($query) {
                         $query->where('subscription_status', 'active');
                     })->where('post_status', 'Published');
                 })
-                ->get();;
+                    ->get();;
             }
             if ($request->has('category')) {
-                $category_id = Category::where('name',$request->category)->value('id') ;
+                $category_id = Category::where('name', $request->category)->value('id');
                 $jobs = $jobs->where('category_id', 'like', '%' . $category_id . '%')
-             ->where(function ($query) {
-                 $query->whereHas('user', function ($query) {
-                     $query->where('subscription_status', 'active');
-                 })->where('post_status', 'Published');
-             })
-             ->get();
+                    ->where(function ($query) {
+                        $query->whereHas('user', function ($query) {
+                            $query->where('subscription_status', 'active');
+                        })->where('post_status', 'Published');
+                    })
+                    ->get();
             }
-           
-           
+
+
             // $jobs = $jobs->get();
             if ($jobs->isEmpty()) {
                 return response()->json(['status' => false, 'message' => 'No jobs found.'], 404);
@@ -172,11 +142,11 @@ class SearchjobController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-   
 
 
-   
-    
+
+
+
 
     /**
      * Show the form for creating a new resource.

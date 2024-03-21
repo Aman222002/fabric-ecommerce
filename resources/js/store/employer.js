@@ -11,6 +11,7 @@ export const useEmployerStore = defineStore({
                 company_email: "",
                 phone: "",
             },
+            previousRoute: null,
         };
     },
     actions: {
@@ -20,11 +21,17 @@ export const useEmployerStore = defineStore({
         isLogOut() {
             this.isLoggedIN = false;
         },
+        setPreviousRoute(route) {
+            this.previousRoute = route;
+        },
+        removePreviousRoute() {
+            this.previousRoute = null;
+        },
     },
     getters: {
         Company: (state) => state.company,
         isloggedin: (state) => state.isLoggedIN,
-        countCartItems: (state) => state.cart_item.length,
+        getPreviousRoute: (state) => state.previousRoute,
     },
     persist: true,
 });

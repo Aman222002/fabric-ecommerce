@@ -2,23 +2,14 @@
   <div class="popular_job_categories">
     <div class="sec-title text-center">
       <h2>Popular Job Categories</h2>
-      <div class="text">2020 jobs live - 293 added today.</div>
+      <div class="text">2024 jobs live - 293 added today.</div>
     </div>
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
-        <v-col
-          cols="12"
-          class="popular_col mb-5"
-          sm="12"
-          md="6"
-          lg="4"
-          xl="4"
-          v-for="(category, index) in categories"
-          :key="index"
-          v-model="job.category" 
-        >
-        <v-card class="mx-auto" prepend-icon="mdi-briefcase"> 
-          <template v-slot:title>
+        <v-col cols="12" class="popular_col mb-5" sm="12" md="6" lg="4" xl="4" v-for="(category, index) in categories"
+          :key="index" v-model="job.category">
+          <v-card class="mx-auto" prepend-icon="mdi-briefcase">
+            <template v-slot:title>
               <a id="categoryName" @click="findJob(category.name)"> {{ category.name }}</a>
             </template>
             <!-- <v-card-text> ({{ popularJob.subtitle }}) </v-card-text> -->
@@ -112,8 +103,8 @@ export default {
       category: "",
     });
     const categories = ref([]);
-    const findJob = (name) =>{
-      console.log(name);
+    const findJob = (name) => {
+      // console.log(name);
       window.location.href = "/jobs-detail?category=" + name;
     }
     const fetchCategories = async () => {
@@ -121,7 +112,7 @@ export default {
         axios.get("/categories").then((response) => {
           categories.value = response.data;
 
-          console.log(response.data);
+          // console.log(response.data);
         });
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -130,9 +121,9 @@ export default {
 
     onMounted(() => {
       fetchCategories();
-      
+
     });
-  
+
     return {
       job,
       categories,

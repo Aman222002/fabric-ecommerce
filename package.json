@@ -17,6 +17,10 @@
                 "vue": "^3.4.5"
         },
         "dependencies": {
+                "@ckeditor/ckeditor5-build-classic": "^41.2.0",
+                "@ckeditor/ckeditor5-ckbox": "^41.2.1",
+                "@ckeditor/ckeditor5-upload": "^41.2.0",
+                "@ckeditor/ckeditor5-vue": "^5.1.0",
                 "@mdi/font": "^7.4.47",
                 "@vuepic/vue-datepicker": "^7.4.1",
                 "devextreme-vue": "^23.2.4",
