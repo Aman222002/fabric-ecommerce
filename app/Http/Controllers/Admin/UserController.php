@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Company;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvitationEmail;
+use App\Models\BlogPost;
 use App\Models\Invitation;
 use App\Models\Permission;
 use App\Providers\RouteServiceProvider;
@@ -375,6 +376,38 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+    /**
+     * function to fetch blog data on home Page
+     */
+    public function fetchBlogs()
+    {
+        try {
+            $blogs = BlogPost::select('id', 'title', 'status', 'created_at', 'published_by', 'content', 'featured_image')->get();
+            return response()->json(['status' => true, 'data' => $blogs], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * return blog single page view 
+     */
+    public function viewSingleBlog($blogId)
+    {
+        return view('singleblog')->with('blogId', $blogId);
+    }
+    /**
+     * function to fetch single blog
+     */
+    public function fetchSingleBlog($blogId)
+    {
+        try {
+            $blog = BlogPost::select('id', 'title', 'created_at', 'published_by', 'featured_image', 'content')->where('id', $blogId)->first();
+            // dd($blog);
+            return response()->json(['status' => true, 'data' => $blog], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

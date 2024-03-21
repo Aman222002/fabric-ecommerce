@@ -19,7 +19,8 @@
               Find Jobs, Employment &amp; Career Opportunities
             </div>
           </div>
-          <form class="job_search_form">
+          <!-- <form class="job_search_form"> -->
+            <form fast-fail @submit.prevent="searchJobs()" ref="form">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="5" lg="5" xl="5">
                 <v-sheet>
@@ -42,13 +43,6 @@
                   ></v-text-field>
                 </v-sheet>
               </v-col>
-              <!-- <v-col cols="12" sm="12" md="2" lg="2" xl="2">
-                <v-sheet>
-                  <v-btn type="submit" block class="mt-2 " @click="signup"
-                    >Submit</v-btn
-                  ></v-sheet
-                >
-              </v-col> -->
               <v-col cols="12" sm="12" md="2" lg="2" xl="2">
                 <v-sheet>
                 <!-- <a href="http://127.0.0.1:8000/jobs-detail" class="mt-2 btn_search" type="submit" block >Submit</a> -->

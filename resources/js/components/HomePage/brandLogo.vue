@@ -2,7 +2,7 @@
   <div class="brand_Logo">
     <v-container class="w-75">
       <v-sheet class="mx-auto">
-        <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
+        <v-slide-group  class="pa-4" selected-class="bg-success" show-arrows>
           <v-slide-group-item v-for="brandLogo in brandLogo" :key="brandLogo.id">
             <div class="brand_logo_slide">
               <v-img aspect-ratio="16/9" :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"></v-img>
@@ -32,6 +32,7 @@ export default {
     onMounted(() => {
       partnerData();
     })
+    
     return {
       brandLogo,
       partnerData
@@ -40,7 +41,7 @@ export default {
 };
 </script>
 <style>
-/* // brand Logo From only */
+
 .brand_Logo {
   padding: 49px 0;
   background: #fff;

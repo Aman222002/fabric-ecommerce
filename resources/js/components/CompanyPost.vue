@@ -20,39 +20,19 @@
           <v-col cols="auto" sm="12" md="12" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
               <v-card-title>Search by Keywords </v-card-title>
-              <v-text-field
-                v-model="jobTitle"
-                label="Job Title"
-                density="compact"
-                variant="outlined"
-                clearable
-                style="width: 100%"
-              ></v-text-field>
-              <v-text-field
-                v-model="location"
-                label="Location"
-                density="compact"
-                variant="outlined"
-                clearable
-                style="width: 100%"
-              ></v-text-field>
+              <v-text-field v-model="jobTitle" label="Job Title" density="compact" variant="outlined"
+                :rules="fullNameRules" clearable style="width: 100%"></v-text-field>
+              <v-text-field v-model="location" label="Location" density="compact" variant="outlined"
+                :rules="subjectRules" clearable style="width: 100%"></v-text-field>
               <v-btn @click="searchJobs">Search</v-btn>
             </v-card>
           </v-col>
-          <v-col
-            cols="auto"
-            sm="12"
-            md="12"
-            lg="9"
-            xl="9"
-            class="find_Job_list_right"
-          >
-            <v-card
-              v-for="job in jobs"
-              :key="job.id"
-              class="custom-card"
-              @click="openDetailPanel(job)"
-            >
+          <v-col cols="auto" sm="12" md="12" lg="9" xl="9" class="find_Job_list_right">
+            <v-alert v-if="showAlert" type="error">
+              No job Found.
+            </v-alert>
+
+            <v-card v-else v-for="job in jobs" :key="job.id" class="custom-card" @click="openDetailPanel(job)">
               <v-card-title>{{ job.company.company_name }}</v-card-title>
               <v-card-text class="pa-0 ml-3">
                 <div style="display: flex; align-items: center">
@@ -63,11 +43,7 @@
                 <div style="align-items: center">
                   <v-icon color="black">mdi-note</v-icon>
                   <span> {{ truncateDescription(job.description) }}</span>
-                  <span
-                    v-if="isDescriptionLong(job.description)"
-                    class="read-more"
-                    @click="openDetailPanel(job)"
-                  >
+                  <span v-if="isDescriptionLong(job.description)" class="read-more" @click="openDetailPanel(job)">
                     Read More
                   </span>
                 </div>
@@ -75,103 +51,14 @@
               <v-card-actions>
                 <div style="display: flex; align-items: center">
                   <v-icon color="black">mdi-human</v-icon>
-                  <span
-                    >{{ job.vacancy }}
-                    <v-icon color="black">mdi-desktop-classic</v-icon
-                    >{{ job.experience
-                    }}<v-icon color="black">mdi-map-marker</v-icon
-                    >{{ job.location }}</span
-                  >
+                  <span>{{ job.vacancy }}
+                    <v-icon color="black">mdi-desktop-classic</v-icon>{{ job.experience
+                    }}<v-icon color="black">mdi-map-marker</v-icon>{{ job.location }}</span>
                 </div>
               </v-card-actions>
             </v-card>
-            <v-navigation-drawer
-              v-model="detailPanelVisible"
-              location="right"
-              class="single_job_search_page"
-            >
-              <v-icon
-                style="margin-left: 20px; margin-top: 30px"
-                @click="detailPanelVisible = false"
-                >mdi-arrow-left-top</v-icon
-              >
-              <v-card style="width: 100%">
-                <div class="compamy_infor">
-                  <div class="compamy_infor_left">
-                    <v-card-title
-                      ><v-icon>mdi-format-title</v-icon>
-                      <span>{{ detail.title }}</span></v-card-title
-                    >
-                    <v-icon color="black">mdi-domain</v-icon>
-                    <span>{{ detail.company_name }}</span>
-                    <v-icon color="black">mdi-map-marker</v-icon>
-                    <span>{{ detail.location }}</span>
-                    <v-icon color="black">mdi-desktop-classic</v-icon>
-                    <span>{{ detail.experience }}</span>
-                    <v-icon color="black">mdi-human</v-icon>
-                    <span>{{ detail.vacancy }}</span>
-                  </div>
-                  <div class="compamy_infor_btn">
-                    <v-btn
-                      class="apply_for_job"
-                      v-if="usersStore.isloggedin"
-                      @click="apply(detail.id)"
-                      >Apply For Job</v-btn
-                    >
-                    <v-btn
-                      class="save_btn"
-                      color="white"
-                      @click="save(detail.id)"
-                    >
-                      <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn
-                    >
-                  </div>
-                </div>
-                <v-row class="compamy_infor_description">
-                  <v-col cols="auto" sm="12" md="12" lg="8" xl="8">
-                    <span style="display: block">{{ detail.description }}</span>
-                  </v-col>
-                  <v-col cols="auto" sm="12" md="12" lg="4" xl="4">
-                    <div>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0">
-                            Primary industry:
-                          </v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0">Software </v-card-text>
-                        </template>
-                      </v-list-item>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0"> Company size: </v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0"> 501-1,000 </v-card-text>
-                        </template>
-                      </v-list-item>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0"> Founded in: </v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0"> 2011</v-card-text>
-                        </template>
-                      </v-list-item>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0"> Phone:</v-card-text>
-                        </template>
-                        <template v-slot:append>
-                          <v-card-text class="pb-0"> 123 456 7890</v-card-text>
-                        </template>
-                      </v-list-item>
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-navigation-drawer>
+
+
           </v-col>
         </v-row>
       </v-container>
@@ -191,13 +78,20 @@ export default {
     },
   },
   setup(props) {
-    console.log(props.data);
+    // console.log(props.data);
     // if(props.data){
     //     jobTitle.value = props.data.title,
     //     location.value = props.data.location,
     //   }else{
 
     //   }
+    const fullNameRules = [
+      value => !!value || 'Full Name is required',
+      value => (value && value.length <= 50) || 'Max 50 characters'
+    ];
+    const subjectRules = [
+      value => !!value || 'Subject is required'
+    ];
     const usersStore = useUsersStore();
     const items = [
       {
@@ -225,8 +119,10 @@ export default {
     const location = ref("");
     const category = ref("");
     const detailPanelVisible = ref(false);
+    const showAlert = ref(false);
     const searchJobs = async () => {
       try {
+        showAlert.value = false;
         const response = await axios.get("/search-jobs", {
           params: {
             jobTitle: jobTitle.value,
@@ -234,23 +130,47 @@ export default {
             category: category.value,
           },
         });
-
         jobs.value = response.data.data;
+        console.log(jobs.value);
+
+
       } catch (err) {
         console.error(err);
+        if (err.response.status == 404) {
+          showAlert.value = true;
+        }
       }
     };
+
+
     //getting Jobs posted by company
     const fetchJobs = async () => {
+
       try {
         const response = await axios.get("/company/post");
-        console.log(response.data);
+        // console.log(response.data);
         jobs.value = response.data.data;
+
       } catch (err) {
         console.error(err);
+
       }
     };
+    const fetchpost = async () => {
+      try {
+        const response = await axios.get("/company/job");
+        console.log(response.data);
+        jobs.value = response.data.data;
+
+      } catch (err) {
+        console.error(err);
+
+      }
+    };
+
     const openDetailPanel = (job) => {
+      console.log(job);
+      window.location.href = `http://127.0.0.1:8000/view/${job.id}`
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
       detail.value.location = job.location;
@@ -325,14 +245,14 @@ export default {
     };
 
     const truncateDescription = (description) => {
-      if (description.length > 90) {
+      if (description && description.length > 90) {
         return description.substring(0, 90) + "...";
       }
       return description;
     };
 
     const isDescriptionLong = (description) => {
-      return description.length > 90;
+      return description && description.length > 90;
     };
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
@@ -341,7 +261,14 @@ export default {
 
     onMounted(() => {
       // companypost();
-      fetchJobs();
+      if (!usersStore.isloggedin) {
+        fetchJobs();
+      }
+      else {
+        fetchpost();
+      }
+
+
       // const value =props.data ;
       // console.log(value);
       if (props.data.title || props.data.location) {
@@ -375,12 +302,13 @@ export default {
       isDescriptionLong,
       category,
       items,
+      showAlert, subjectRules, fullNameRules
     };
   },
 };
 </script>
 
-<style >
+<style>
 .find_Job_list_left {
   position: relative;
   background: #f5f7fc;
@@ -388,18 +316,21 @@ export default {
   margin-bottom: 30px;
   padding: 7% 7% 10px;
 }
+
 .find_Job_list .top_page_section {
   background: transparent;
   box-shadow: unset;
   display: flex;
   justify-content: center;
 }
+
 .find_Job_list .top_page_section .v-card-title {
   font-weight: 500;
   font-size: 30px;
   text-align: center;
   color: #202124;
 }
+
 .find_Job_list .body_page_section {
   background: #fff;
   padding: 50px 0 100px;
@@ -414,6 +345,7 @@ export default {
   transition: all 0.3s ease;
   margin-bottom: 15px;
 }
+
 .find_Job_list_right .v-card-title {
   font-size: 30px;
   font-weight: bolder;
@@ -421,15 +353,19 @@ export default {
   font-family: sans-serif;
   text-transform: capitalize;
 }
+
 .find_Job_list_right .custom-card:hover .v-card-title {
   color: #1967d2;
 }
+
 .single_job_search_page {
   width: 70% !important;
 }
+
 .compamy_infor .compamy_infor_left i.mdi {
   margin-right: 5px;
 }
+
 .compamy_infor {
   display: flex;
   justify-content: space-between;
@@ -438,6 +374,7 @@ export default {
   padding: 1% 15px;
   align-items: center;
 }
+
 button.apply_for_job {
   text-align: center;
   color: #fff;
@@ -448,6 +385,7 @@ button.apply_for_job {
   padding: 18px 35px;
   height: 50px !important;
 }
+
 button.save_btn {
   height: 50px !important;
   line-height: 50px;
@@ -460,10 +398,12 @@ button.save_btn {
   transition: all 0.3s ease;
   margin-left: 20px;
 }
+
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
 }
+
 .find_Job_list_left button.search_btn {
   display: table;
   margin: 0 auto;
@@ -492,5 +432,12 @@ button.save_btn {
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
+}
+
+.no-jobs-message {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+  color: #ff0000;
 }
 </style>

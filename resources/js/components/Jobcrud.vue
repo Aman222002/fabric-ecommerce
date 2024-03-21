@@ -60,7 +60,6 @@
         </DxList>
       </DxDropDownBox>
     </template>
-
     <template #customButtonTemplate="{ data }">
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -71,7 +70,8 @@
         <v-card>
           <v-list>
             <v-list-item v-for="item in jobActions" :key="item.text" class="dropdown"
-              @click="duplicateJob(data.row.data.id, item.text)">{{ item.text }}</v-list-item>
+          @click="duplicateJob(data.row.data.id, item.text)">{{
+    item.text }}</v-list-item>
           </v-list>
         </v-card>
       </v-menu>
@@ -226,7 +226,7 @@ export default {
       updateURL,
       deleteUrl
     );
-    console.log("datasource", dataSource);
+    // console.log("datasource", dataSource);
     const edit = async (data) => {
       console.log(data);
       const transformedData = {
