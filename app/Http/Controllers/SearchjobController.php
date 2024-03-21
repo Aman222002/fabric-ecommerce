@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Job;
 use App\Models\User;
+use App\Models\Skill;
 use App\Models\UserSkill;
 use Carbon\Carbon;
 
@@ -31,6 +32,40 @@ class SearchjobController extends Controller
         }
         // eturn view('companypost');
         return view('companypost')->with('data', $data);
+    }
+
+
+    public function fetchJob()
+    {
+        try {
+            // $jobs = Job::all();
+            $user = auth()->user();
+            $skills = UserSkill::where('user_id', $user->id)->pluck('skill_id');
+            $companyId = 0;
+            if ($user->hasRole('User')) {
+                $companyId =  $user->company ? $user->company->id : 0;
+            }
+            $jobs = Job::whereIn('skill_id', $skills)->with("company");
+            if ($companyId != 0) {
+                $jobs->where('company_id', $companyId);
+            }
+            // dd($jobs);
+            $jobs = $jobs->get()->filter(function ($job) {
+                $user_id = $job->user_id;
+                // dd($job);
+                $subscription_status = User::where('id', $user_id)->value('subscription_status');
+                if ($subscription_status == 'active' && $job->post_status == 'Published') {
+                    return $job;
+                } else {
+                    return false;
+                }
+            });
+            // dd($jobs);
+            return response()->json(['status' => true, 'data' => $jobs], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
 
@@ -67,7 +102,6 @@ class SearchjobController extends Controller
     //     }
 
     // }
-
     public function fetchData()
     {
         try {
@@ -102,15 +136,6 @@ class SearchjobController extends Controller
                     })->where('post_status', 'Published');
                 })
                     ->get();
-                // $jobs = $jobs->filter(function ($job) {
-                //     $user_id = $job->user_id;
-                //     $subscription_status = User::where('id', $user_id)->value('subscription_status');
-                //     if ($subscription_status == 'active' && $job->post_status == 'Published' ) {
-                //         return $job;
-                //     } else {
-                //         return false;
-                //     }
-                // });
             }
             if ($request->has('location')) {
                 $jobs->where('location', 'like', '%' . $request->input('location') . '%')->where(function ($query) {
@@ -130,9 +155,6 @@ class SearchjobController extends Controller
                     })
                     ->get();
             }
-
-
-            // $jobs = $jobs->get();
             if ($jobs->isEmpty()) {
                 return response()->json(['status' => false, 'message' => 'No jobs found.'], 404);
             }
@@ -151,9 +173,35 @@ class SearchjobController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function viewjob($jobid)
     {
-        //
+
+        return view('viewjob')->with('jobid', $jobid);
+    }
+    public function fetchJobDetails($jobid)
+    {
+
+        try {
+            $job = Job::with('company.socialMediaAccounts', 'company.address', 'jobType', 'category')->find($jobid);
+
+            if (!$job) {
+                return response()->json(['status' => false, 'message' => 'Job not found.'], 404);
+            }
+
+            $user_id = $job->user_id;
+            $subscription_status = User::where('id', $user_id)->value('subscription_status');
+            if ($subscription_status != 'active' || $job->post_status != 'Published') {
+                return response()->json(['status' => false, 'message' => 'Job is not available.'], 404);
+            }
+            $skillName = Skill::where('id', $job->skill_id)->value('skill_name');
+
+            $job->skill_name = $skillName;
+
+            return response()->json(['status' => true, 'data' => $job], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**

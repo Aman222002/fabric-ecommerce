@@ -41,12 +41,12 @@
       <h2>Your Dream Jobs Are Waiting</h2>
       <p>Over 1 million interactions, 50,000 success stories Make yours now.</p>
       <div class="search_and_apply">
-        <v-btn size="x-large" class="load_more" to="#">Search Job</v-btn>
-        <v-btn size="x-large" class="load_more" to="#">Apply Job Now</v-btn>
+        <v-btn size="x-large" class="load_more" to="#" @click="searchJob">Search Job</v-btn>
+        <v-btn size="x-large" class="load_more" to="#" @click="searchJob">Apply Job Now</v-btn>
       </div>
     </div>
 
-    <!-- How It Works? -->
+   
     <div class="recent_news_articles how_it_works">
       <v-container class="w-75 mb-6">
         <div class="sec-title text-center">
@@ -87,12 +87,12 @@
         </v-row>
       </v-container>
     </div>
-    <!-- brand_Logo -->
+   
     <div class="brand_Logo">
       <v-container class="w-75">
         <v-sheet class="mx-auto">
           <v-slide-group
-            v-model="model"
+           
             class="pa-4"
             selected-class="bg-success"
             show-arrows
@@ -104,7 +104,7 @@
               <div class="brand_logo_slide">
                 <v-img
                   aspect-ratio="16/9"
-                  :src="`http://127.0.0.1:8000/assest/${brandLogo.img}`"
+                  :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"
                 ></v-img>
               </div>
             </v-slide-group-item>
@@ -116,6 +116,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import { ref, onMounted } from "vue";
 export default {
   setup() {
     const items = [
@@ -129,107 +131,65 @@ export default {
         disabled: true,
       },
     ];
-    return {
-      items,
-      value: 1151.71,
-      myOption: {
-        duration: 3000,
-        characterWidth: 12,
-        // addCharacter: ['♪', '€', '£', '$', '¥', ','],
-        decimals: 2,
-        thousandsSeparatorFlag: true,
-        //
-      },
-    };
-  },
-  data: () => ({
-    brandLogo: [
-      {
-        id: "1",
-        img: "img/brand-logo/1-1.webp",
-      },
-      {
-        id: "2",
-        img: "img/brand-logo/1-2.webp",
-      },
-      {
-        id: "3",
-        img: "img/brand-logo/1-3.webp",
-      },
-      {
-        id: "4",
-        img: "img/brand-logo/1-4.webp",
-      },
-      {
-        id: "5",
-        img: "img/brand-logo/1-5.webp",
-      },
-      {
-        id: "6",
-        img: "img/brand-logo/1-1.webp",
-      },
-      {
-        id: "7",
-        img: "img/brand-logo/1-2.webp",
-      },
-      {
-        id: "8",
-        img: "img/brand-logo/1-3.webp",
-      },
-      {
-        id: "9",
-        img: "img/brand-logo/1-4.webp",
-      },
-      {
-        id: "10",
-        img: "img/brand-logo/1-5.webp",
-      },
-      {
-        id: "11",
-        img: "img/brand-logo/1-1.webp",
-      },
-      {
-        id: "12",
-        img: "img/brand-logo/1-2.webp",
-      },
-      {
-        id: "13",
-        img: "img/brand-logo/1-3.webp",
-      },
-      {
-        id: "14",
-        img: "img/brand-logo/1-4.webp",
-      },
-    ],
-    recentNews: [
+   const recentNews= ref ([
       {
         id: "1",
         img: "img/about/work-1.webp",
         title: "Free Resume Assessments",
-        // date: "August 31, 2021 ",
-        // icon: "mdi-circle-small",
-        // comment: "comment",
+       
         text: "Employers on average spend 31 seconds scanning resumes to identify potential matches.",
       },
       {
         id: "2",
         img: "img/about/work-2.webp",
         title: "Job Fit Scoring",
-        // date: "August 31, 2021 ",
-        // icon: "mdi-circle-small",
-        // comment: "comment",
+      
         text: "Employers on average spend 31 seconds scanning resumes to identify potential matches.",
       },
       {
         id: "3",
         img: "img/about/work-3.webp",
         title: "Help Every Step of the Way",
-        // date: "August 31, 2021 ",
-        // icon: "mdi-circle-small",
-        // comment: "comment",
+       
         text: "Employers on average spend 31 seconds scanning resumes to identify potential matches.",
       },
-    ],
-  }),
+    ]);
+    const searchJob = () => {
+     
+      window.location.href = "/jobs-detail";
+    };
+    const brandLogo = ref([]);
+    
+    const partnerData = () => {
+      try {
+        axios.get('partner/data').then((response) => {
+          brandLogo.value = response.data.data;
+         
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    onMounted(() => {
+      partnerData();
+
+    })
+    return {
+      items,
+      value: 1151.71,
+      brandLogo,
+      partnerData,
+      searchJob,
+      recentNews,
+      myOption: {
+        duration: 3000,
+        characterWidth: 12,
+        
+        decimals: 2,
+        thousandsSeparatorFlag: true,
+        //
+      },
+    };
+  },
 };
 </script>

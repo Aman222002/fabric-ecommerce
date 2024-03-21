@@ -66,7 +66,7 @@
 <script>
 import axios from "axios";
 import { useUsersStore } from "../store/user.js";
-// import { useEmployersStore } from "../store/employer.js";
+import { useEmployerStore } from "../store/employer.js";
 import { ref, computed, onMounted } from "vue";
 export default {
   props: {
@@ -82,7 +82,7 @@ export default {
     plan.value = props.data;
     const currentPlanId = ref();
     const usersStore = useUsersStore();
-    const employerStore = useEmployersStore();
+    const employerStore = useEmployerStore();
     const user = ref({
       user_name: "",
       email: "",
@@ -193,8 +193,7 @@ export default {
       companyNameRules,
       form,
       isDisabled,
-      currentPlanId,
-      employerStore
+      currentPlanId, employerStore
     };
   },
 };

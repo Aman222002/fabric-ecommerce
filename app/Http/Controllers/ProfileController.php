@@ -68,7 +68,7 @@ class ProfileController extends Controller
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
     
-            $company = Company::with(['address', 'jobs' => function ($query) {
+            $company = Company::with(['address','socialMediaAccounts', 'jobs' => function ($query) {
                 $query->where('is_draft', 0);
             }])->find($companyId);
     

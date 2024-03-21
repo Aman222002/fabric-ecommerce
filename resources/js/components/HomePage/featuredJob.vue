@@ -46,7 +46,7 @@
 
           </v-card>
         </v-col>
-        <v-navigation-drawer v-model="detailPanelVisible" location="right" class="single_job_search_page">
+        <!-- <v-navigation-drawer v-model="detailPanelVisible" location="right" class="single_job_search_page">
           <v-icon style="margin-left: 20px; margin-top: 30px; "
             @click="detailPanelVisible = false">mdi-arrow-left-top</v-icon>
           <v-card style="width: 100%">
@@ -75,47 +75,12 @@
                 <span style="display: block">{{ detail.description }}</span>
               </v-col>
               <v-col cols="auto" sm="12" md="12" lg="4" xl="4">
-                <!-- <div>
-                      <v-list-item>
-                        <template v-slot:prepend>
-                          <v-card-text class="p-0">
-                            Primary industry:
-                          </v-card-text>
-                        </template>
-<template v-slot:append>
-                          <v-card-text class="pb-0">Software </v-card-text>
-                        </template>
-</v-list-item>
-<v-list-item>
-  <template v-slot:prepend>
-                          <v-card-text class="p-0"> Company size: </v-card-text>
-                        </template>
-  <template v-slot:append>
-                          <v-card-text class="pb-0"> 501-1,000 </v-card-text>
-                        </template>
-</v-list-item>
-<v-list-item>
-  <template v-slot:prepend>
-                          <v-card-text class="p-0"> Founded in: </v-card-text>
-                        </template>
-  <template v-slot:append>
-                          <v-card-text class="pb-0"> 2011</v-card-text>
-                        </template>
-</v-list-item>
-<v-list-item>
-  <template v-slot:prepend>
-                          <v-card-text class="p-0"> Phone:</v-card-text>
-                        </template>
-  <template v-slot:append>
-                          <v-card-text class="pb-0"> 123 456 7890</v-card-text>
-                        </template>
-</v-list-item>
-</div> -->
+              
               </v-col>
             </v-row>
           </v-card>
-        </v-navigation-drawer>
-        <v-btn size="x-large" class="load_more" to="#">
+        </v-navigation-drawer> -->
+        <v-btn size="x-large" class="load_more" to="#"  @click="searchJob">
           Load More Listing
         </v-btn>
       </v-row>
@@ -126,7 +91,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useUsersStore } from ".././../store/user";
+import { useUsersStore } from ".././../store/user"
 export default {
   name: "featuredJob",
   setup() {
@@ -157,6 +122,10 @@ export default {
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
+    const searchJob = () => {
+     
+     window.location.href = "/jobs-detail";
+   };
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
@@ -243,7 +212,7 @@ export default {
       save,
       openDetailPanel,
       detailPanelVisible,
-      detail, usersStore
+      detail, usersStore,searchJob
     };
   },
 };

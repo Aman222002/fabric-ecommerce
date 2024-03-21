@@ -29,5 +29,8 @@ class Company extends Model
     {
         return $this->hasOne(Address::class);
     }
-   
+    public function socialMediaAccounts()
+    {
+        return $this->hasMany(SocialMediaAccount::class);
+    }
 }

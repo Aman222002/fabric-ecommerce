@@ -5,22 +5,10 @@
         <v-row>
           <v-icon @click="goToEditPage()" class="right_side_edif_btn">mdi-pencil</v-icon>
           <div style="align-items: center; display: flex; margin-left: 15px">
-            <!-- <v-avatar
-           size="130px"
-          class="avatar"
-          style="margin: 10px"
-          v-if="company.length > 0"
-          @click="openFileInput()" 
-        > -->
+
 
             <v-avatar size="130px" class="avatar" style="margin: 10px">
-              <!-- <input
-                type="file"
-                id="fileInput"
-                ref="fileInput"
-                style="display: none"
-                @change="handleImageChange()"
-              /> -->
+
               <img :src="`/storage/assest/${company.logo}`" width="150px" height="150px" />
             </v-avatar>
           </div>
@@ -40,7 +28,7 @@
     <v-container>
       <v-row class="company_profile_infor">
         <v-col sm="12" md="6" lg="8" xl="8" class="company_profile_infor_left">
-          <!-- Description -->
+
           <v-card class="card2" style="margin-bottom: 20px">
             <v-icon @click="openModal" style="margin-left: 97%">mdi-pencil</v-icon>
             <v-card-title style="font-family: Poppins, sans-serif"><v-icon>mdi-domain</v-icon>
@@ -51,6 +39,31 @@
               </div>
             </v-card-text>
           </v-card>
+          <v-card class="card2" style="margin-bottom: 20px; font-size: 16px">
+            <v-card-title style="font-family: Poppins, sans-serif">
+              Social Media Accounts:
+            </v-card-title>
+            <v-card-text>
+              <div>
+                <v-icon>mdi-facebook</v-icon>
+                <v-text-field v-model="facebook" outlined placeholder="Facebook"></v-text-field>
+              </div>
+              <div>
+                <v-icon>mdi-twitter</v-icon>
+                <v-text-field v-model="twitter" outlined placeholder="Twitter"></v-text-field>
+              </div>
+              <div>
+                <v-icon>mdi-linkedin</v-icon>
+                <v-text-field v-model="linkedin" outlined placeholder="LinkedIn"></v-text-field>
+              </div>
+              <div>
+                <v-icon>mdi-instagram</v-icon>
+                <v-text-field v-model="instagram" outlined placeholder="Instagram"></v-text-field>
+              </div>
+              <v-btn color="primary" @click="saveSocialMedia()">Save</v-btn>
+            </v-card-text>
+          </v-card>
+
           <v-dialog v-model="modalOpen" max-width="500">
             <v-card>
               <v-card-title>
@@ -68,9 +81,7 @@
         </v-col>
         <v-col sm="12" md="6" lg="4" xl="4" class="company_profile_infor_right">
           <v-card>
-            <!-- <v-card-title style="font-family: Poppins, sans-serif"
-              ><v-icon>mdi-account</v-icon> Details:</v-card-title
-            > -->
+
             <v-card-text>
               <div>
                 <label for="name" class="ps-0">Representative Name:</label>
@@ -133,138 +144,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <!-- <div style="display: flex; margin: 40px">
-      <v-tabs>
-        <v-tab
-          :class="{ active: showOverview }"
-          @click="
-            showOverview = true;
-            showJob = false;
-            showDescription = false;
-            showAddress = false;
-          "
-          >Overview</v-tab
-        >
-        <v-tab
-          :class="{ active: showJob }"
-          @click="
-            showOverview = false;
-            showJob = true;
-            showDescription = false;
-            showAddress = false;
-          "
-          >Activities</v-tab
-        >
-        <v-tab
-          :class="{ active: showDescription }"
-          @click="
-            showOverview = false;
-            showJob = false;
-            showDescription = true;
-            showAddress = false;
-          "
-          >Description</v-tab
-        >
-        <v-tab
-          :class="{ active: showAddress }"
-          @click="
-            showOverview = false;
-            showJob = false;
-            showDescription = false;
-            showAddress = true;
-          "
-          >Address</v-tab
-        >
-      </v-tabs>
-    </div> -->
-
-    <!-- Overview start -->
-    <!-- <div
-      v-if="!showJob && !showDescription && showOverview && !showAddress"
-      style="display: flex; margin-top: 70px"
-    >
-      <v-card style="margin-bottom: 20px; width: 80%">
-        <v-card-title style="font-family: Poppins, sans-serif"
-          ><v-icon>mdi-account</v-icon> Details:</v-card-title
-        >
-        <v-card-text>
-          <label
-            for="name"
-            class="ps-0"
-            
-            >Representative Name:</label
-          >
-          <span >{{ user.name }}</span
-          ><br /><br />
-          <label
-            for="email"
-            class="ps-0"
-            
-            >Email:</label
-          >
-          <span >{{ user.email }}</span
-          ><br /><br />
-          <label
-            for="phone"
-            class="ps-0"
-            
-            >Contact No:</label
-          >
-          <span style="margin-left: 29%">{{ user.phone }}</span>
-        </v-card-text>
-      </v-card>
-      <v-card style="margin-bottom: 20px; width: 80%; margin-left: 40px">
-        <v-card-title style="font-family: Poppins, sans-serif"
-          ><v-icon>mdi-domain</v-icon> Details:</v-card-title
-        >
-        <v-card-text>
-          <label
-            for="company name"
-            class="ps-0"
-            
-            >Company Name</label
-          >
-          <span v-if="company.length > 0" >{{
-            company.company_name
-          }}</span
-          ><br /><br />
-          <label
-            for="company name"
-            class="ps-0"
-            
-            >Phone Number</label
-          >
-          <span v-if="company.length > 0" >{{}}</span
-          ><br /><br />
-          <label
-            for="companyemail"
-            class="ps-0"
-            
-            >Company Email</label
-          >
-          <span v-if="company.length > 0" >{{
-            company.company_email
-          }}</span>
-        </v-card-text>
-      </v-card>
-    </div> -->
-    <!--  -->
-
-    <!-- Description start -->
-    <!-- <v-card class="card2" style="margin-bottom: 20px">
-      <v-card-title style="font-family: Poppins, sans-serif"
-        ><v-icon>mdi-domain</v-icon> Description:</v-card-title
-      >
-      <v-card-text>
-        <div v-if="company.length > 0">
-          {{ company.description }}
-        </div>
-      </v-card-text>
-    </v-card> -->
-    <!-- Description end -->
-
-    <!--  -->
     <v-card v-if="showJob && company.jobs" class="card2" style="margin-bottom: 20px; font-size: 16px">
       <v-card-title style="font-family: Poppins, sans-serif"><v-icon>mdi-note</v-icon>Recently Posted
         Jobs:</v-card-title>
@@ -406,7 +285,10 @@ export default {
       state: "",
       postal_code: "",
     });
-
+    const facebook = ref('');
+    const twitter = ref('');
+    const linkedin = ref('');
+    const instagram = ref('');
     const store = useUsersStore();
     const user = ref([]);
     const fileInput = ref();
@@ -441,7 +323,10 @@ export default {
         const response = await axios.get(`/company/list`);
         console.log(response.data);
         company.value = response.data.companydata;
-        // store.company.company_name
+        facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
+        twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
+        linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
+        instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
         user.value = response.data.user;
         if (response.data.companydata.address) {
           address.value = response.data.companydata.address;
@@ -471,10 +356,7 @@ export default {
     //   console.log(currentplan.value);
     // };
     const saveEditedJob = async () => {
-      const isValid = await validate();
-      if (!isValid) {
-        return;
-      }
+
       try {
         const formData = new FormData();
         formData.append("name", editedJob.value.name);
@@ -537,10 +419,7 @@ export default {
     };
 
     const saveEditedAddress = async () => {
-      const isValid = await validate();
-      if (!isValid) {
-        return;
-      }
+
       try {
         const formData = new FormData();
         formData.append(
@@ -589,6 +468,19 @@ export default {
         console.error("Error updating company profile:", error);
       }
     };
+    const saveSocialMedia = async () => {
+      try {
+        const response = await axios.post("/company/updateSocialMedia", {
+          facebook: facebook.value,
+          twitter: twitter.value,
+          linkedin: linkedin.value,
+          instagram: instagram.value
+        });
+        // Handle successful response
+      } catch (error) {
+        console.error("Error updating social media accounts:", error);
+      }
+    };
     return {
       company,
       user,
@@ -619,6 +511,11 @@ export default {
       openModal,
       saveDescription,
       closeModal,
+      facebook,
+      twitter,
+      linkedin,
+      instagram,
+      saveSocialMedia
     };
   },
 };

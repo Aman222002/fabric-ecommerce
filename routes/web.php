@@ -21,6 +21,7 @@ use App\Http\Controllers\QualificationsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CompanyLoginController;
 
 use App\Models\Company;
@@ -33,6 +34,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
+use App\Http\Controllers\SocialMediaAccountController;
 use App\Http\Controllers\webhookHandler;
 use App\Models\Job;
 use App\Models\Skill;
@@ -121,15 +123,19 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
-
+// Route::get('/viewjob{}', function () {
+//     return view('viewjob');
+// });
 // Route::get('/add-user', function () {
 //     return view('user');
 // });
 
 
-
+Route::get('/view/{jobid}', [SearchjobController::class, 'viewjob']);
+Route::get('/fetchjob/{jobid}', [SearchjobController::class, 'fetchJobDetails']);
 Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
+Route::get('/company/job', [SearchjobController::class, 'fetchJob']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
@@ -261,3 +267,5 @@ Route::get('/view/blog/single/{blogId?}', [UserController::class, 'viewSingleBlo
 Route::get('/fetch/single/blog/{blogId?}', [UserController::class, 'fetchSingleBlog']);
 //users
 //user/{id} function(Request $request, $id)
+Route::post('/send-email', [ContactController::class, 'sendEmail']);
+Route::post('/company/updateSocialMedia', [SocialMediaAccountController::class, 'updateSocialMedia']);

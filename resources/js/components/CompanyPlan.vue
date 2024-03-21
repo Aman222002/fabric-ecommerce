@@ -124,6 +124,7 @@ export default {
     const userId = ref();
     const disabledButton = ref(false);
     const upgrade_status = ref();
+    const plan_id = ref('');
     const subscriptionDetail = ref({
       start_date: "",
       end_date: "",
@@ -267,8 +268,7 @@ export default {
       upgrade_status,
       disabledButton,
       handleUpgradeStatusChange,
-      subscription_status,
-      plan_id,
+      subscription_status, plan_id
     };
   },
 };

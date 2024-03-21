@@ -126,6 +126,10 @@ app.component("address-component", AddressTabComponent);
 
 import BlogPosts from "./components/BlogPost.vue";
 app.component("blog-posts", BlogPosts);
+import index from "./components/HomePage/index.vue";
+app.component("home-component", index);
+import viewjob from "./components/viewjob.vue";
+app.component("view-job", viewjob);
 
 import index from "./components/HomePage/index.vue";
 app.component("home-component", index);
