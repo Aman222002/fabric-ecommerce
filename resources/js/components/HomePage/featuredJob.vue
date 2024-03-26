@@ -9,18 +9,9 @@
 
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
-        <v-col
-          cols="12"
-          class="featured_jobs_col"
-          sm="12"
-          md="12"
-          lg="6"
-          xl="6"
-          v-for="job in displayedJobs"
-          :key="job.id"
-          @click="openDetailPanel(job)"
-        >
-          <v-card class="mx-auto company_info">
+        <v-col cols="12" class="featured_jobs_col mb-5" sm="12" md="12" lg="6" xl="6" v-for="job in displayedJobs"
+          :key="job.id" @click="openDetailPanel(job)">
+          <v-card class="mx-auto company_info" @click="openDetailPage(job.id)">
             <div class="company_logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
             </div>
@@ -36,8 +27,7 @@
                   <v-icon>mdi-map-marker-outline</v-icon>{{ job.location }}
                 </li>
                 <li>
-                  <v-icon>mdi-clock-time-two-outline</v-icon
-                  >{{ formatCreatedAt(job.company.created_at) }}
+                  <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(job.company.created_at) }}
                 </li>
                 <!-- <li><v-icon>mdi-cash</v-icon>{{ job.price }}</li> -->
               </ul>
@@ -147,7 +137,11 @@ export default {
         console.error(err);
       }
     };
-
+    const openDetailPage = (id) => {
+      // console.log(id);
+      // window.lo
+      window.location.href = `http://127.0.0.1:8000/view/${id}`
+    }
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
@@ -223,9 +217,7 @@ export default {
       save,
       openDetailPanel,
       detailPanelVisible,
-      detail,
-      usersStore,
-      searchJob,
+      detail, usersStore, searchJob, openDetailPage
     };
   },
 };

@@ -68,10 +68,17 @@
           </v-btn>
         </template>
         <v-card>
-          <v-list>
-            <v-list-item v-for="item in jobActions" :key="item.text" class="dropdown"
-          @click="duplicateJob(data.row.data.id, item.text)">{{
-    item.text }}</v-list-item>
+          <v-list v-for="item in jobActions" :key="item.text">
+            <template v-if="selectedStatus === 'Draft'">
+              <v-list-item class="dropdown" @click="duplicateJob(data.row.data.id, item.text)">
+                {{ item.text }}
+              </v-list-item>
+            </template>
+            <template v-else>
+              <v-list-item v-if="item.text !== 'Post Job'" class="dropdown">
+                {{ item.text }}
+              </v-list-item>
+            </template>
           </v-list>
         </v-card>
       </v-menu>
@@ -252,7 +259,7 @@ export default {
     const checkItem = async (id) => {
       try {
         const response = await axios.post(`/jobs/application/${id}`);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error duplicating item:", error);
       }
@@ -261,7 +268,7 @@ export default {
       try {
         axios.get("/categories").then((response) => {
           categories.value = response.data.map((category) => category.name);
-          console.log("categories", categories.value);
+          // console.log("categories", categories.value);
         });
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -276,7 +283,7 @@ export default {
       try {
         axios.get("/jobtypes").then((response) => {
           jobTypes.value = response.data.map((job) => job.name);
-          console.log("jobtype", jobTypes.value);
+          // console.log("jobtype", jobTypes.value);
         });
       } catch (error) {
         console.error("Error fetching job types:", error);
@@ -411,4 +418,3 @@ export default {
   border: 2px dashed #1976d2;
 }
 </style>
-\

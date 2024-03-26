@@ -1,5 +1,5 @@
 <template>
-    <!-- <div>User Subscribed to this plan will be shown here</div> -->
+
     <DxDataGrid :show-borders="true" :data-source="dataSource" :repaint-changes-only="true">
         <DxColumn data-field="name" data-type="string">
             <DxRequiredRule />
@@ -23,7 +23,7 @@ export default {
         },
     },
     setup(props) {
-        console.log(props.planId);
+        // console.log(props.planId);
         const loadURL = `/admin/company/plan/${props.planId}`;
         // const updateURL = `/admin/user/update`;
         const { dataSource } = dxGridStore(loadURL);
