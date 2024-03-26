@@ -139,10 +139,13 @@ export default {
         Message: Message.value,
         recipientEmail: contactDetails.value.email
       });
-      fullName.value = '';
-      Email.value = '';
-      Subject.value = '';
-      Message.value = '';
+      window.Swal.fire({
+          icon: "success",
+          title: " Email sent to Admin",
+        
+          confirmButtonText: "OK",
+        });
+     
       console.log(response.data.message);
     }
   } catch (error) {

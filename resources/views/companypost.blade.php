@@ -7,4 +7,5 @@
     @else
         <company-post></company-post>
     @endif
+  
 @endsection

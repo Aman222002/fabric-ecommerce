@@ -21,30 +21,60 @@
       <v-list-item :class="{ group: true, active: currentRoute === '/findcv' }" href="/findcv"
         prepend-icon="mdi-magnify" title="Find CV">
       </v-list-item>
-      <v-list-item v-if="(usersStore.isloggedin && hasPermission('Buy Subscription')) ||
-    hasrole('Company Admin')
-    " :class="{ group: true, active: currentRoute === '/product' }" href="/product"
-        prepend-icon="mdi-format-list-bulleted" title="Plans">
+      <v-list-item
+        v-if="
+           hasPermission('Buy Subscription') ||
+          hasrole('Company Admin')
+        "
+        :class="{ group: true, active: currentRoute === '/product' }"
+        href="/product"
+        prepend-icon="mdi-format-list-bulleted"
+        title="Plans"
+      >
       </v-list-item>
-      <v-list-item v-if="(usersStore.isloggedin && hasPermission('Change Plan')) ||
-    hasrole('Company Admin')
-    " :class="{ group: true, active: currentRoute === '/company/plan' }" href="/company/plan"
-        prepend-icon="mdi-cash-sync" title="Subscription details">
+      <v-list-item
+        v-if="
+           hasPermission('Change Plan') ||
+          hasrole('Company Admin')
+        "
+        :class="{ group: true, active: currentRoute === '/company/plan' }"
+        href="/company/plan"
+        prepend-icon="mdi-cash-sync"
+        title="Subscription details"
+      >
       </v-list-item>
-      <v-list-item v-if="(usersStore.isloggedin && hasPermission('Change Profile')) ||
-    hasrole('Company Admin')
-    " :class="{ group: true, active: currentRoute === '/company/profile' }" href="/company/profile"
-        prepend-icon="mdi-account-circle" title="Profile">
+      <v-list-item
+        v-if="
+       hasPermission('Change Profile') ||
+          hasrole('Company Admin')
+        "
+        :class="{ group: true, active: currentRoute === '/company/profile' }"
+        href="/company/profile"
+        prepend-icon="mdi-account-circle"
+        title="Profile"
+      >
       </v-list-item>
-      <v-list-item v-if="(usersStore.isloggedin && hasPermission('create users')) ||
-    hasrole('Company Admin')
-    " :class="{ group: true, active: currentRoute === '/add-user' }" href="/add-user"
-        prepend-icon="mdi-account-plus-outline" title="Add User">
+      <v-list-item
+        v-if="
+         hasPermission('create users') ||
+          hasrole('Company Admin')
+        "
+        :class="{ group: true, active: currentRoute === '/add-user' }"
+        href="/add-user"
+        prepend-icon="mdi-account-plus-outline"
+        title="Add User"
+      >
       </v-list-item>
-      <v-list-item v-if="(usersStore.isloggedin && hasPermission('view users')) ||
-    hasrole('Company Admin')
-    " :class="{ group: true, active: currentRoute === '/users' }" href="/users" prepend-icon="mdi-account"
-        title="Users">
+      <v-list-item
+        v-if="
+          hasPermission('view users') ||
+          hasrole('Company Admin')
+        "
+        :class="{ group: true, active: currentRoute === '/users' }"
+        href="/users"
+        prepend-icon="mdi-account"
+        title="Users"
+      >
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
