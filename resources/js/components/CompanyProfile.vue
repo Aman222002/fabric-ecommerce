@@ -18,12 +18,7 @@
           @click="openFileInput()" 
         > -->
 
-            <v-avatar
-              size="130px"
-              class="avatar"
-              style="margin: 10px"
-              v-if="company.length > 0"
-            >
+            <v-avatar size="130px" class="avatar" style="margin: 10px">
               <!-- <input
                 type="file"
                 id="fileInput"

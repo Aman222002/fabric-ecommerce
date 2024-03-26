@@ -10,10 +10,11 @@
         </v-breadcrumbs>
       </div>
     </v-card>
-    <!--    <v-row>
-   
-     <v-col cols="12" sm="12" md="12" lg="12" xl="12"> </v-col> 
-    </v-row>-->
+    <!--
+    <v-row>
+     <v-col cols="12" sm="12" md="12" lg="12" xl="12"></v-col> 
+    </v-row>
+    -->
     <div class="body_page_section">
       <v-container class="w-75">
         <v-row>

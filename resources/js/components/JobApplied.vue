@@ -140,7 +140,7 @@ export default {
   padding: 50px 0 100px;
 }
 .job-applied .sec-title {
-  margin-bottom: 50px;
+  margin: 50px 0;
 }
 .job-applied .sec-title h2 {
   position: relative;
