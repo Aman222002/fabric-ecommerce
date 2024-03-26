@@ -30,9 +30,9 @@
                 <a href="#">Candidate Dashboard</a>
               </li> -->
               <!-- <li><a href="#">Job Alerts</a></li> -->
-              <li>
+              <!-- <li>
                 <a href="#">My Bookmarks</a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </v-col>
@@ -83,6 +83,7 @@ export default {
     const employerStore = useEmployerStore();
     const users = ref([]);
     const contactDetails = ref({});
+    const currentRoute = ref();
     const updateRoute = () => {
       currentRoute.value = window.location.pathname;
     };
@@ -181,6 +182,7 @@ export default {
       handleLinks,
       updateRoute,
       checkAdress,
+      currentRoute,
     };
   },
 };

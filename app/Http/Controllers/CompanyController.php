@@ -260,7 +260,7 @@ class CompanyController extends Controller
             if (!($request->company_Id)) {
                 // dd($request->company_Id);
                 $imageName = null;
-                if( $request->hasfile('logo')){
+                if ($request->hasfile('logo')) {
                     $image = $request->file('logo');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assest', $imageName);
@@ -577,6 +577,7 @@ class CompanyController extends Controller
 
         try {
             $user = User::where('email', $request->email)->first();
+            // dd($user->hasRole('Company Admin'));
             if ($user->hasRole('Company Admin')) {
                 $companies = Company::select('id', 'company_name')->where('user_id', $user->id)->get();
             } else {

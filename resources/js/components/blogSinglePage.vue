@@ -7,16 +7,12 @@
           <v-chip-group v-model="selection">
             <v-chip> {{ recentNews.published_by }}</v-chip>
             <v-chip>{{ formatCreatedAt(recentNews.created_at) }}</v-chip>
-            <v-chip>Comment</v-chip>
+            <!-- <v-chip>Comment</v-chip> -->
           </v-chip-group>
         </div>
       </v-card-item>
 
-      <v-img
-        :src="`/storage/assets/${recentNews.featured_image}`"
-        height="450"
-        cover
-      ></v-img>
+      <v-img :src="`/storage/assets/${recentNews.featured_image}`" height="450" cover></v-img>
       <v-container fluid>
         <v-card>
           <v-card-text class="pb-0">
@@ -93,14 +89,12 @@ export default {
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
     const fetchBlog = () => {
-      axios
-        .get(`/fetch/single/blog/${blogId}`)
-        .then((response) => {
-          recentNews.value = response.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      axios.get(`/fetch/single/blog/${blogId}`).then((response) => {
+        console.log(response.data.data);
+        recentNews.value = response.data.data;
+      }).catch((err) => {
+        console.log(err);
+      })
     };
     onMounted(() => {
       fetchBlog();
@@ -146,6 +140,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
+
 .single_blog_page .v-card .v-list .v-list-item {
   width: 50%;
 }

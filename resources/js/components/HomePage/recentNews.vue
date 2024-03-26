@@ -5,37 +5,25 @@
         <h2>Recent News Articles</h2>
         <div class="text">
           Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
+          <!-- Read recent news articles here -->
         </div>
       </div>
       <v-row align="center" justify="center">
-        <v-col
-          cols="12"
-          class="recent_news_col"
-          sm="12"
-          md="6"
-          lg="4"
-          xl="4"
-          v-for="recentNews in recentNews"
-          :key="recentNews.id"
-        >
+        <v-col cols="12" class="recent_news_col" sm="12" md="6" lg="4" xl="4" v-for="recentNews in recentNews"
+          :key="recentNews.id">
           <v-card class="mx-auto my-4">
             <template>
               <v-progress-linear color="deep-purple" height="4" indeterminate>
               </v-progress-linear>
             </template>
-            <v-img
-              cover
-              height="200"
-              :src="`/storage/assets/${recentNews.featured_image}`"
-            >
+            <v-img cover height="200" :src="`/storage/assets/${recentNews.featured_image}`">
             </v-img>
             <div class="Cmt_time">
               <v-card-subtitle class="pt-4">
                 {{ formatCreatedAt(recentNews.created_at) }}
               </v-card-subtitle>
               <v-card-subtitle class="pt-4">
-                <v-icon>{{ icon }}</v-icon
-                >{{ comment }}
+                <!-- <v-icon>{{ icon }}</v-icon>{{ comment }} -->
               </v-card-subtitle>
             </div>
             <v-card-item>
@@ -46,11 +34,7 @@
               </div> -->
               <div>
                 {{ recentNews.contentText
-                }}<span
-                  v-if="recentNews.contentText"
-                  class="read-more"
-                  @click="openDetailPage(recentNews.id)"
-                >
+                }}<span v-if="recentNews.contentText" class="read-more" @click="openDetailPage(recentNews.id)">
                   Read More
                 </span>
               </div>
@@ -82,27 +66,23 @@ export default {
       // })
     };
     const fecthBlog = () => {
-      axios
-        .get("get/blog")
-        .then((response) => {
-          console.log(response.data.data);
-          recentNews.value = response.data.data.map((blog) => {
-            const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
-            const paragraphs = blog.content.match(paragraphRegex);
-            const contentText = paragraphs
-              ? paragraphs
-                  .map((p) => p.replace(/<[^>]+>/g, ""))
-                  .join(" ")
-                  .split(/\s+/)
-                  .slice(0, 24)
-                  .join(" ")
-              : "";
-            return {
-              ...blog,
-              contentText,
-            };
-          });
+      axios.get('get/blog').then((response) => {
+        // console.log(response.data.data);
+        recentNews.value = response.data.data.map(blog => {
+          const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
+          const paragraphs = blog.content.match(paragraphRegex);
+          const contentText = paragraphs ? paragraphs
+            .map(p => p.replace(/<[^>]+>/g, ''))
+            .join(' ')
+            .split(/\s+/)
+            .slice(0, 24)
+            .join(' ') : '';
+          return {
+            ...blog,
+            contentText
+          };
         })
+      })
         .catch((err) => {
           console.log(err);
         });

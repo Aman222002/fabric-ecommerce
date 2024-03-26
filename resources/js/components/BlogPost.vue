@@ -50,9 +50,19 @@
                     </v-btn>
                 </template>
                 <v-card>
-                    <v-list>
-                        <v-list-item v-for="item in blogActions" :key="item.text" class="dropdown"
-                            @click="duplicateBlog(data.row.data.id, item.text)">{{ item.text }}</v-list-item>
+                    <v-list v-for="item in blogActions" :key="item.text">
+                        <template v-if="selectedStatus === 'Draft'">
+                            <v-list-item class="dropdown" @click="duplicateJob(data.row.data.id, item.text)">
+                                {{ item.text }}
+                            </v-list-item>
+                        </template>
+                        <template v-else>
+                            <v-list-item v-if="item.text !== 'Post Blog'" class="dropdown">
+                                {{ item.text }}
+                            </v-list-item>
+                        </template>
+                        <!-- <v-list-item v-for="item in blogActions" :key="item.text" class="dropdown"
+                            @click="duplicateBlog(data.row.data.id, item.text)">{{ item.text }}</v-list-item> -->
                     </v-list>
                 </v-card>
             </v-menu>
@@ -68,7 +78,7 @@
                         <v-text-field v-model="title" variant="outlined" label="Title" density="compact" outlined
                             :rules="titleRules"></v-text-field>
                         <v-file-input label="Select new featured Image" v-model="selectedImage" @change="previewImage"
-                            accept="image/*" required></v-file-input>
+                            accept="image/*" variant="outlined" density="compact" outlined></v-file-input>
                         <v-row class="mb-2" v-if="imagePreview">
                             <p style="font:bold;margin-left: 11px;">Selected Featured Image</p>
                             <v-col cols="12">

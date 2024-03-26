@@ -44,7 +44,7 @@ class ProfileController extends Controller
     // {
     //     $user = auth()->user();
     //     $userId =  $user->id;
-        
+
     //     $company = Company::where("user_id", $userId)
     //         ->with(['address', 'jobs' => function ($query) {
     //             $query->where('is_draft', 0);
@@ -63,21 +63,21 @@ class ProfileController extends Controller
     {
         try {
             $companyId = session('company_id');
-    
+
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-    
-            $company = Company::with(['address','socialMediaAccounts', 'jobs' => function ($query) {
+
+            $company = Company::with(['address', 'socialMediaAccounts', 'jobs' => function ($query) {
                 $query->where('is_draft', 0);
             }])->find($companyId);
-    
+
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }
-    
+
             $user = auth()->user();
-    
+            // dd($user);
             return response()->json([
                 'companydata' => $company,
                 'user' => $user
@@ -93,25 +93,21 @@ class ProfileController extends Controller
     {
         try {
             $companyId = session('company_id');
-    
+
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-    
             $user = auth()->user();
-    
             $company = Company::where("id", $companyId)->first();
-    
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }
-    
             return response()->json(['companydata' => $company, 'user' => $user]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -120,30 +116,30 @@ class ProfileController extends Controller
     {
         try {
             $companyId = session('company_id');
-    
+
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-    
+
             $user = auth()->user();
-    
+
             $user->update([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'phone' => $request->input('phone'),
             ]);
-    
+
             $company = Company::find($companyId);
-    
+
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }
-    
+
             if ($request->hasFile('logo')) {
                 $image = $request->file('logo');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/assest', $imageName);
-    
+
                 $company->update([
                     'company_name' => $request->input('company_name'),
                     'company_email' => $request->input('company_email'),
@@ -155,7 +151,7 @@ class ProfileController extends Controller
                     'company_email' => $request->input('company_email'),
                 ]);
             }
-    
+
             return response()->json(['message' => 'User and company profiles updated successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -196,11 +192,11 @@ class ProfileController extends Controller
     {
         try {
             $companyId = session('company_id');
-    
+
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-    
+
             Address::updateOrCreate(
                 ['company_id' => $companyId],
                 [
@@ -211,36 +207,35 @@ class ProfileController extends Controller
                     'postal_code' => $request->input('postal_code'),
                 ]
             );
-    
+
             return response()->json(['message' => 'Address updated successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
+
     public function updatedescription(Request $request)
     {
         try {
             $companyId = session('company_id');
-    
+
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-    
+
             $company = Company::find($companyId);
-    
+
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }
-    
+
             $company->update([
                 'description' => $request->input('description'),
             ]);
-    
+
             return response()->json(['message' => 'Description updated successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
 }
