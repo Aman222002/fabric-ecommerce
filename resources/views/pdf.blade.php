@@ -48,6 +48,7 @@
             <p><strong>Name:</strong> {{ $userdata['name'] }}</p>
             <p><strong>Email:</strong> {{ $userdata['email'] }}</p>
             <p><strong>Phone:</strong> {{ $userdata['phone'] }}</p>
+            <img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}">
         </div>
         <div class="section">
             <h2>Qualifications</h2>
@@ -152,5 +153,6 @@
             </ul>
         </div>
     </div>
+   
 </body>
 </html>
