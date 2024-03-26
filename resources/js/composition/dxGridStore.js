@@ -58,9 +58,13 @@ export default function useDataSource(
                 });
         },
         insert: (values) => {
+            let paramsObject = {};
+            if (params) {
+                Object.assign(paramsObject, params.value);
+            }
             // console.log(values);
             return axios
-                .post(insertURL, values, { params: params.value })
+                .post(insertURL, values, { params: paramsObject })
                 .then(() => {
                     return true;
                 })

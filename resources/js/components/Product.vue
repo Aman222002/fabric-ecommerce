@@ -32,11 +32,12 @@
         <v-col
           cols="3"
           sm="12"
-          md="4"
+          md="5"
           lg="3"
           xl="3"
           v-for="(plan, key) in plans"
           :key="key"
+          class="plan_choose"
         >
           <v-card>
             <v-card-title style="font-size: 20px">{{ plan.Name }}</v-card-title>
@@ -211,11 +212,8 @@ export default {
 .choose_your_plan .packages_price {
   justify-content: center;
 }
-.choose_your_plan .packages_price .v-col-3:nth-child(2) {
-  padding: 0;
-  margin: 0 12px;
-}
-.choose_your_plan .packages_price .v-col-3 {
+
+.choose_your_plan .packages_price .plan_choose {
   background: #1967d2;
   margin: 12px;
   border-radius: 10px;
@@ -252,5 +250,12 @@ export default {
 .choose_your_plan .packages_price .v-card-text {
   padding: 15px 0;
   text-align: center;
+}
+
+@media screen and (min-width: 1280px) {
+  .choose_your_plan .packages_price .plan_choose:nth-child(2) {
+    padding: 0;
+    margin: 0 12px;
+  }
 }
 </style>

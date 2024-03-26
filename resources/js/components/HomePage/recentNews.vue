@@ -5,6 +5,7 @@
         <h2>Recent News Articles</h2>
         <div class="text">
           Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
+          <!-- Read recent news articles here -->
         </div>
       </div>
       <v-row align="center" justify="center">
@@ -15,24 +16,25 @@
               <v-progress-linear color="deep-purple" height="4" indeterminate>
               </v-progress-linear>
             </template>
-            <v-img cover height="200" :src="`/storage/assets/${recentNews.featured_image}`"> </v-img>
+            <v-img cover height="200" :src="`/storage/assets/${recentNews.featured_image}`">
+            </v-img>
             <div class="Cmt_time">
               <v-card-subtitle class="pt-4">
                 {{ formatCreatedAt(recentNews.created_at) }}
               </v-card-subtitle>
               <v-card-subtitle class="pt-4">
-                <v-icon>{{ icon }}</v-icon>{{ comment }}
+                <!-- <v-icon>{{ icon }}</v-icon>{{ comment }} -->
               </v-card-subtitle>
             </div>
             <v-card-item>
               <v-card-title>{{ recentNews.title }}</v-card-title>
             </v-card-item>
             <v-card-text>
-
               <!-- <div v-html="recentNews.content">
               </div> -->
-              <div>{{ recentNews.contentText }}<span v-if="recentNews.contentText" class="read-more"
-                  @click="openDetailPage(recentNews.id)">
+              <div>
+                {{ recentNews.contentText
+                }}<span v-if="recentNews.contentText" class="read-more" @click="openDetailPage(recentNews.id)">
                   Read More
                 </span>
               </div>
@@ -49,12 +51,11 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 export default {
   setup() {
-    const icon = ref('mdi-circle-small');
-    const comment = ref('comment');
-    const recentNews = ref([
-    ]);
+    const icon = ref("mdi-circle-small");
+    const comment = ref("comment");
+    const recentNews = ref([]);
     const formatCreatedAt = (createdAt) => {
-      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
     const openDetailPage = (id) => {
@@ -63,10 +64,10 @@ export default {
       // }).catch((error) => {
       //   console.log(error);
       // })
-    }
+    };
     const fecthBlog = () => {
       axios.get('get/blog').then((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         recentNews.value = response.data.data.map(blog => {
           const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
           const paragraphs = blog.content.match(paragraphRegex);
@@ -81,16 +82,22 @@ export default {
             contentText
           };
         })
-      }).catch((err) => {
-        console.log(err);
       })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     onMounted(() => {
       fecthBlog();
-    })
+    });
     return {
-      recentNews, fecthBlog, formatCreatedAt, icon, comment, openDetailPage
-    }
+      recentNews,
+      fecthBlog,
+      formatCreatedAt,
+      icon,
+      comment,
+      openDetailPage,
+    };
   },
 };
 </script>

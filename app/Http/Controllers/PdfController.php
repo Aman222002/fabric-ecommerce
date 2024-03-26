@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Models\UserSkill;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,10 +36,12 @@ class PdfController extends Controller
                         return $data->skill_name; 
                 });
         }); 
+        
         $userdata = [
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'user_image'=> $user->user_image,
             'qualifications' => $user->qualifications,
             'achievements' => $user->userAchievements,
             'skill_name' => $skill_name,
@@ -45,10 +49,15 @@ class PdfController extends Controller
             'profile' => $user->userProfile,
             'address'=>$user->address
         ];
- 
-    
+        
+        
+    try{
         $pdf = Pdf::loadView('pdf', ['userdata' => $userdata]);
         return $pdf->download();
+    }catch(\Exception $e){
+        Log::debug($e);
     }
+    }
+       
    
 }

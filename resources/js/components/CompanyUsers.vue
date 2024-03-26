@@ -1,5 +1,5 @@
 <template>
-  <p style="text-align: center; font-size: 20px; margin-top: 20px">Add User</p>
+  <p style="text-align: center; font-size: 20px; margin-top: 20px"> Users</p>
   <DxDataGrid
     :show-borders="true"
     :data-source="dataSource"

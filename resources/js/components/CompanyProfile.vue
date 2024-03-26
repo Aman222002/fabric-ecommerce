@@ -5,10 +5,7 @@
         <v-row>
           <v-icon @click="goToEditPage()" class="right_side_edif_btn">mdi-pencil</v-icon>
           <div style="align-items: center; display: flex; margin-left: 15px">
-
-
             <v-avatar size="130px" class="avatar" style="margin: 10px">
-
               <img :src="`/storage/assest/${company.logo}`" width="150px" height="150px" />
             </v-avatar>
           </div>
@@ -28,7 +25,6 @@
     <v-container>
       <v-row class="company_profile_infor">
         <v-col sm="12" md="6" lg="8" xl="8" class="company_profile_infor_left">
-
           <v-card class="card2" style="margin-bottom: 20px">
             <v-icon @click="openModal" style="margin-left: 97%">mdi-pencil</v-icon>
             <v-card-title style="font-family: Poppins, sans-serif"><v-icon>mdi-domain</v-icon>
@@ -81,9 +77,9 @@
         </v-col>
         <v-col sm="12" md="6" lg="4" xl="4" class="company_profile_infor_right">
           <v-card>
-
             <v-card-text>
               <div>
+                <!-- {{ user }} -->
                 <label for="name" class="ps-0">Representative Name:</label>
                 <span>{{ user.name }}</span>
               </div>
@@ -202,27 +198,15 @@
         <v-card-title>Edit Address</v-card-title>
         <v-card-text>
           <v-text-field v-model="editedAddress.first_line_address" label="First_line_address" variant="outlined"
-            density="compact" :rules="[
-            (value) => !!value || 'First line address is required',
-
-          ]"></v-text-field>
-          <v-text-field v-model="editedAddress.street" label="Street" variant="outlined" density="compact" :rules="[
-            (value) => !!value || 'Street is required',
-
-          ]"></v-text-field>
-          <v-text-field v-model="editedAddress.city" label="City" variant="outlined" density="compact" :rules="[
-            (value) => !!value || 'City is required',
-
-          ]"></v-text-field>
-          <v-text-field v-model="editedAddress.state" label="State" density="compact" variant="outlined" :rules="[
-            (value) => !!value || 'State is required',
-
-          ]"></v-text-field>
+            density="compact" :rules="[(value) => !!value || 'First line address is required']"></v-text-field>
+          <v-text-field v-model="editedAddress.street" label="Street" variant="outlined" density="compact"
+            :rules="[(value) => !!value || 'Street is required']"></v-text-field>
+          <v-text-field v-model="editedAddress.city" label="City" variant="outlined" density="compact"
+            :rules="[(value) => !!value || 'City is required']"></v-text-field>
+          <v-text-field v-model="editedAddress.state" label="State" density="compact" variant="outlined"
+            :rules="[(value) => !!value || 'State is required']"></v-text-field>
           <v-text-field v-model="editedAddress.postal_code" label="postal_code" density="compact" variant="outlined"
-            :rules="[
-            (value) => !!value || 'Postal code is required',
-
-          ]"></v-text-field>
+            :rules="[(value) => !!value || 'Postal code is required']"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedAddress">Save</v-btn>
@@ -234,33 +218,18 @@
       <v-card>
         <v-card-title>Edit Profile</v-card-title>
         <v-card-text>
-          <v-text-field v-model="editedJob.name" label="User Name" variant="outlined" density="compact" :rules="[
-            (value) => !!value || 'User name is required',
-
-          ]"></v-text-field>
-          <v-text-field v-model="editedJob.email" label="User Email" variant="outlined" density="compact" :rules="[
-            (value) => !!value || 'User email is required',
-
-          ]"></v-text-field>
-          <v-text-field v-model="editedJob.phone" label="User Phone" variant="outlined" density="compact" :rules="[
-            (value) => !!value || 'User phone is required',
-
-          ]"></v-text-field>
+          <v-text-field v-model="editedJob.name" label="User Name" variant="outlined" density="compact"
+            :rules="[(value) => !!value || 'User name is required']"></v-text-field>
+          <v-text-field v-model="editedJob.email" label="User Email" variant="outlined" density="compact"
+            :rules="[(value) => !!value || 'User email is required']"></v-text-field>
+          <v-text-field v-model="editedJob.phone" label="User Phone" variant="outlined" density="compact"
+            :rules="[(value) => !!value || 'User phone is required']"></v-text-field>
           <v-text-field v-model="editedJob.company_name" label="Company Name" density="compact" variant="outlined"
-            :rules="[
-            (value) => !!value || 'Company Name is required',
-
-          ]"></v-text-field>
+            :rules="[(value) => !!value || 'Company Name is required']"></v-text-field>
           <v-text-field v-model="editedJob.company_email" label="Company Email" density="compact" variant="outlined"
-            :rules="[
-            (value) => !!value || 'Company Email is required',
-
-          ]"></v-text-field>
+            :rules="[(value) => !!value || 'Company Email is required']"></v-text-field>
           <v-file-input v-model="editedJob.logo" label="Company Logo" density="compact" variant="outlined" name="logo"
-            @change="handleImage" :rules="[
-            (value) => !!value || 'Company Logo is required',
-
-          ]"></v-file-input>
+            @change="handleImage" :rules="[(value) => !!value || 'Company Logo is required']"></v-file-input>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedJob">Save</v-btn>
@@ -285,10 +254,10 @@ export default {
       state: "",
       postal_code: "",
     });
-    const facebook = ref('');
-    const twitter = ref('');
-    const linkedin = ref('');
-    const instagram = ref('');
+    const facebook = ref("");
+    const twitter = ref("");
+    const linkedin = ref("");
+    const instagram = ref("");
     const store = useUsersStore();
     const user = ref([]);
     const fileInput = ref();
@@ -323,11 +292,12 @@ export default {
         const response = await axios.get(`/company/list`);
         console.log(response.data);
         company.value = response.data.companydata;
+        user.value = response.data.user;
+        console.log(user.value);
         facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
         twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
         linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
         instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
-        user.value = response.data.user;
         if (response.data.companydata.address) {
           address.value = response.data.companydata.address;
         }
@@ -356,7 +326,6 @@ export default {
     //   console.log(currentplan.value);
     // };
     const saveEditedJob = async () => {
-
       try {
         const formData = new FormData();
         formData.append("name", editedJob.value.name);
@@ -419,7 +388,6 @@ export default {
     };
 
     const saveEditedAddress = async () => {
-
       try {
         const formData = new FormData();
         formData.append(
@@ -474,7 +442,7 @@ export default {
           facebook: facebook.value,
           twitter: twitter.value,
           linkedin: linkedin.value,
-          instagram: instagram.value
+          instagram: instagram.value,
         });
         // Handle successful response
       } catch (error) {
@@ -515,7 +483,7 @@ export default {
       twitter,
       linkedin,
       instagram,
-      saveSocialMedia
+      saveSocialMedia,
     };
   },
 };

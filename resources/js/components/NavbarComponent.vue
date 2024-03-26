@@ -129,7 +129,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;
@@ -143,10 +143,6 @@ header.dah_header-bar {
 .v-list-item__prepend>.v-icon~.v-list-item__spacer,
 .v-list-item__prepend>.v-tooltip~.v-list-item__spacer {
   width: 11px;
-}
-
-a {
-  text-decoration: none;
 }
 
 #logoheading {
@@ -229,5 +225,20 @@ nav.left_side_bar .group.active {
 nav.left_side_bar .v-list--one-line {
   width: 85%;
   margin: 0 auto;
+}
+
+nav.left_side_bar .v-list .v-list-item {
+  font-size: 20px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 200;
+  color: #696969;
+  text-decoration: none;
+  border-radius: 7px;
+}
+
+nav.left_side_bar .v-list .v-list-item.v-list-item--active,
+nav.left_side_bar .v-list .v-list-item:hover {
+  color: #1967d2;
+  background: #1967d21a;
 }
 </style>

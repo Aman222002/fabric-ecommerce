@@ -1,164 +1,141 @@
 <template>
   <v-container>
-    <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
-      <v-row style="margin-top: 20px">
-        <v-col cols="12">
-          <p class="mb-4 form-title">User Detail:</p>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.name"
-            label="Representative Name"
-            :rules="nameRules"
-            density="compact"
-            outlined
-            :disabled="disabledFields"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.email"
-            label="Representative Email"
-            :rules="emailRules"
-            density="compact"
-            outlined
-            :disabled="disabledFields"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.password"
-            label="Password"
-            :rules="passwordRules"
-            density="compact"
-            type="password"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.phone"
-            label="Phone"
-            :rules="phoneRules"
-            type="phone"
-            density="compact"
-            outlined
-            :disabled="disabledFields"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <div v-if="showCompanyDetails">
-        <v-row>
-          <v-col cols="12" sm="12">
-            <p class="mb-4 form-title">Company Details:</p>
+    <v-card class="elevation-12 mt-3" style="margin-bottom: 10px">
+      <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
+        <v-row class="form_page">
+          <v-col class="form_page_left" sm="12" md="12" lg="6" xl="6" cols="12">
+            <v-card-text>
+              <p
+                class="text-center"
+                style="font-size: 20px; font-style: sans-serif"
+              >
+                Employers Register
+              </p>
+              <v-row style="margin-top: 20px">
+                <v-col cols="12">
+                  <h4 class="form-title">User Detail:</h4>
+                </v-col>
+                <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.name"
+                    label="Representative Name"
+                    :rules="nameRules"
+                    density="compact"
+                    outlined
+                    :disabled="disabledFields"
+                  ></v-text-field>
+                </v-col>
+                <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.email"
+                    label="Representative Email"
+                    :rules="emailRules"
+                    density="compact"
+                    outlined
+                    :disabled="disabledFields"
+                  ></v-text-field>
+                </v-col>
+                <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.password"
+                    label="Password"
+                    :rules="passwordRules"
+                    density="compact"
+                    type="password"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+                <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.phone"
+                    label="Phone"
+                    :rules="phoneRules"
+                    type="phone"
+                    density="compact"
+                    outlined
+                    :disabled="disabledFields"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <div v-if="showCompanyDetails">
+                <v-row>
+                  <v-col cols="12" sm="12">
+                    <h4 class="form-title">Company Details:</h4>
+                  </v-col>
+                  <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                    <v-text-field
+                      variant="outlined"
+                      v-model="company.company_name"
+                      label="Company Name"
+                      :rules="nameRules"
+                      density="compact"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                    <v-text-field
+                      variant="outlined"
+                      v-model="company.company_email"
+                      label="Company Email"
+                      :rules="emailRules"
+                      density="compact"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                    <v-text-field
+                      variant="outlined"
+                      v-model="company.phone_number"
+                      label="Phone Number"
+                      :rules="phoneRules"
+                      density="compact"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col sm="12" md="12" lg="6" xl="6" cols="12">
+                    <v-file-input
+                      variant="outlined"
+                      v-model="company.logo"
+                      label="Company Logo"
+                      outlined
+                      density="compact"
+                    ></v-file-input>
+                  </v-col>
+
+                  <v-col cols="12" class="text-center">
+                    <v-btn type="submit" class="custom-button">
+                      Register Company
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-card-text>
           </v-col>
-          <v-col cols="3" sm="3">
-            <v-text-field
-              variant="outlined"
-              v-model="company.company_name"
-              label="Company Name"
-              :rules="nameRules"
-              density="compact"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="3" sm="3">
-            <v-text-field
-              variant="outlined"
-              v-model="company.company_email"
-              label="Company Email"
-              :rules="emailRules"
-              density="compact"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="3" sm="3">
-            <v-text-field
-              variant="outlined"
-              v-model="company.phone_number"
-              label="Phone Number"
-              :rules="phoneRules"
-              density="compact"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="3" sm="3">
-            <v-file-input
-              variant="outlined"
-              v-model="company.logo"
-              label="Company Logo"
-              outlined
-              density="compact"
-            ></v-file-input>
+          <v-col
+            class="blue form_page_right"
+            sm="12"
+            md="12"
+            lg="6"
+            xl="6"
+            cols="12"
+          >
+            <v-card-text class="white--text text-center">
+              <p style="font-size: 20px">Already Sign up?</p>
+              <p style="font-size: 13px; margin: 15px 0">
+                Log in to your account so you can continue building and
+                <br />
+                editing your onboarding flows
+              </p>
+              <a href="/job" class="company_loging">Login</a>
+            </v-card-text>
           </v-col>
         </v-row>
-      </div>
-      <v-row> </v-row>
-      <!-- <v-row>
-        <v-col cols="12">
-          <p class="mb-4 form-title">Company Address:</p>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.first_line_address"
-            label="First Line Address"
-            density="compact"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.street"
-            label="Street"
-            outlined
-            density="compact"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.city"
-            label="City"
-            :rules="cityRules"
-            outlined
-            density="compact"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.state"
-            label="State"
-            :rules="stateRules"
-            density="compact"
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3" sm="3">
-          <v-text-field
-            variant="outlined"
-            v-model="company.postal_code"
-            label="Postal Code"
-            :rules="postalCodeRules"
-            density="compact"
-            outlined
-          ></v-text-field>
-        </v-col>
-      </v-row> -->
-      <v-row justify="center">
-        <v-col cols="12" class="text-center">
-          <v-btn type="submit" color="primary" class="custom-button"
-            >Register Company</v-btn
-          >
-        </v-col>
-      </v-row>
-    </v-form>
+      </v-form>
+    </v-card>
   </v-container>
 </template>
 <script>
@@ -300,12 +277,49 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-.v-row.center {
-  margin: auto;
+.blue {
+  background-color: rgb(54, 194, 250);
 }
 
-.v-col.center {
+.form_page {
+  margin: 25px;
+}
+
+.form_page_right {
+  border-bottom-left-radius: 250px;
+  display: flex;
+  align-items: center;
   text-align: center;
+}
+.form_page_left button.v-btn,
+.form_page_right button.v-btn {
+  min-width: 150px;
+  margin: 0 auto;
+  background-color: #1967d2;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 11px 0;
+  height: 100%;
+  border-radius: 15px;
+  color: #fff;
+}
+.form_page_left button.v-btn {
+  min-width: 260px;
+}
+a.company_loging {
+  display: flex;
+  width: 150px;
+  margin: 15px auto;
+  background-color: #1967d2;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 11px 0;
+  border-radius: 15px;
+  color: #fff;
+  justify-content: center;
 }
 </style>

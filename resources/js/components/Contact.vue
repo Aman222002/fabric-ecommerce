@@ -11,16 +11,14 @@
       <v-row>
         <v-col sm="12" md="5" lg="5" xl="5" cols="12">
           <v-card class="mx-auto">
-            <template v-slot:title> Contact detail :</template>
-
-            <v-card-text>
+            <template v-slot:title> Contact details </template>
+            <!-- <v-card-text>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor</v-card-text
-            >
+            > -->
           </v-card>
-
           <div class="content">
-    
+
             <v-card class="mx-auto" prepend-icon="mdi-cellphone-basic">
               <template v-slot:title> PHONE :</template>
 
@@ -34,7 +32,7 @@
               <v-card-text>{{ contactDetails.email }}</v-card-text>
             </v-card>
 
-          
+
 
             <v-card class="mx-auto" prepend-icon="mdi-map-marker">
               <template v-slot:title> ADDRESS :</template>
@@ -46,32 +44,12 @@
 
         <v-col sm="12" md="7" lg="7" xl="7" cols="12">
           <v-form fast-fail @submit.prevent="sendEmail()" ref="form">
-            <v-text-field
-              v-model="fullName"
-              :rules="fullNameRules"
-              label="Full Name"
-            ></v-text-field>
-            <v-text-field
-
-              v-model="Email"
-              :rules="emailRules"
-              label="Email"
-            ></v-text-field>
-            <v-text-field
-              v-model="Subject"
-              :rules="subjectRules"
-              label="Subject"
-            ></v-text-field>
-            <v-textarea
-              label="Message"
-              v-model="Message"
-              :rules="messageRules"
-              name="input-7-1"
-              variant="filled"
-              auto-grow
-            ></v-textarea>
-
-            <v-btn class="mt-2" block  type="submit">Send Now!</v-btn>
+            <v-text-field v-model="fullName" :rules="fullNameRules" label="Full Name"></v-text-field>
+            <v-text-field v-model="Email" :rules="emailRules" label="Email"></v-text-field>
+            <v-text-field v-model="Subject" :rules="subjectRules" label="Subject"></v-text-field>
+            <v-textarea label="Message" v-model="Message" :rules="messageRules" name="input-7-1" variant="filled"
+              auto-grow></v-textarea>
+            <v-btn class="mt-2" block type="submit">Send Now!</v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -85,7 +63,6 @@ import axios from "axios";
 export default {
   name: "Contact",
   setup() {
-   
     const contactDetails = ref({});
     const fullName = ref('');
     const form = ref(null);
@@ -110,7 +87,7 @@ export default {
       try {
         axios.get("contact/data").then((response) => {
           contactDetails.value = response.data.data[0];
-      
+
         });
       } catch (error) {
         console.log(error);
@@ -120,42 +97,45 @@ export default {
       fetchData();
     });
     const sendEmail = async () => {
-  try {
-    const valid = await form.value.validate();
-    if (!valid.valid) {
-      const errors = JSON.parse(JSON.stringify(valid.errors));
-      let errorField = form.value[errors[0].id];
-      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
-      errorField.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-      });
-    } else {
-      const response = await axios.post('/send-email', {
-        fullName: fullName.value,
-        Email: Email.value,
-        Subject: Subject.value,
-        Message: Message.value,
-        recipientEmail: contactDetails.value.email
-      });
-      fullName.value = '';
-      Email.value = '';
-      Subject.value = '';
-      Message.value = '';
-      console.log(response.data.message);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
+      try {
+        const valid = await form.value.validate();
+        if (!valid.valid) {
+          const errors = JSON.parse(JSON.stringify(valid.errors));
+          let errorField = form.value[errors[0].id];
+          errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+          errorField.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "center",
+          });
+        } else {
+          const response = await axios.post('/send-email', {
+            fullName: fullName.value,
+            Email: Email.value,
+            Subject: Subject.value,
+            Message: Message.value,
+            recipientEmail: contactDetails.value.email
+          });
+          window.Swal.fire({
+            icon: "success",
+            title: " Email sent to Admin",
+
+            confirmButtonText: "OK",
+          });
+
+          console.log(response.data.message);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     return {
-      fetchData,contactDetails,fullName,Email,Subject,Message,sendEmail,
+      fetchData, contactDetails, fullName, Email, Subject, Message, sendEmail,
       fullNameRules,
       emailRules,
       subjectRules,
-      messageRules,form
+      messageRules, form
     };
   }
 }
@@ -210,6 +190,7 @@ export default {
 .contact .content .info {
   margin-top: 30px;
 }
+
 .contact .content .info h4 {
   font-size: 13px;
   line-height: 1.4;
@@ -220,6 +201,7 @@ export default {
   font-weight: 300;
   color: #999999;
 }
+
 section.contact_us_page {
   width: 75%;
   margin: 25px auto;
@@ -227,19 +209,22 @@ section.contact_us_page {
   background: #fff;
   border-radius: 10px;
 }
+
 section.contact_us_page form.v-form button.v-btn {
   min-width: 150px;
   margin: 0 auto;
   height: 100% !important;
-  padding: 16px 15px;
+  padding: 11px 13px;
   background: #1967d2;
   color: #fff;
   font-size: 19px;
 }
+
 section.contact_us_page .v-card {
   box-shadow: unset;
   border-bottom: 1px solid #1967d2;
 }
+
 section.contact_us_page .heading {
   background: #e2eaf8;
   padding: 20px 0;

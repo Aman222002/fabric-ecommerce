@@ -2,7 +2,7 @@
   <v-footer style="margin-top: auto" class="v-footer">
     <v-container class="w-75 footer">
       <v-row no-gutters>
-        <v-col class="footer_col" sm="12" md="6" lg="4" xl="4">
+        <v-col class="footer_col" cols="12" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
             <router-link class="logo" to="/" style="cursor: pointer" width="200">
               {{ appName }}</router-link>
@@ -20,7 +20,7 @@
             </p>
           </div>
         </v-col>
-        <v-col class="footer_col" sm="12" md="4" lg="2" xl="2">
+        <v-col class="footer_col" cols="12" sm="12" md="6" lg="2" xl="2">
           <h4 class="widget-title">For Candidates</h4>
           <div class="widget-content">
             <ul class="list">
@@ -30,13 +30,13 @@
                 <a href="#">Candidate Dashboard</a>
               </li> -->
               <!-- <li><a href="#">Job Alerts</a></li> -->
-              <li>
+              <!-- <li>
                 <a href="#">My Bookmarks</a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </v-col>
-        <v-col class="footer_col" sm="12" md="4" lg="2" xl="2">
+        <v-col class="footer_col" cols="12" sm="12" md="6" lg="2" xl="2">
           <h4 class="widget-title">For Employers</h4>
           <div class="widget-content">
             <ul class="list">
@@ -56,7 +56,7 @@
             </ul>
           </div>
         </v-col>
-        <v-col class="footer_col" sm="12" md="4" lg="2" xl="2">
+        <v-col class="footer_col" cols="12" sm="12" md="6" lg="2" xl="2">
           <h4 class="widget-title">About Us</h4>
           <div class="widget-content">
             <ul class="list">
@@ -83,6 +83,7 @@ export default {
     const employerStore = useEmployerStore();
     const users = ref([]);
     const contactDetails = ref({});
+    const currentRoute = ref();
     const updateRoute = () => {
       currentRoute.value = window.location.pathname;
     };
@@ -181,6 +182,7 @@ export default {
       handleLinks,
       updateRoute,
       checkAdress,
+      currentRoute,
     };
   },
 };

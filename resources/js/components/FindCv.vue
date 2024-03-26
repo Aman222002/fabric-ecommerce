@@ -31,7 +31,9 @@
       </v-col>
       <v-col sm="12" md="4" lg="2" xl="2">
         <v-sheet>
-          <v-btn @click="searchJobs" block class="mt-2">Search</v-btn>
+          <v-btn @click="searchJobs" block class="mt-2 job_search_btn"
+            >Search</v-btn
+          >
         </v-sheet>
       </v-col>
     </v-row>
@@ -74,5 +76,16 @@ form.job_search_form .v-field__overlay {
 
 form.job_search_form .v-sheet {
   position: relative;
+}
+
+form.job_search_form .job_search_btn {
+  width: 100%;
+  min-width: auto;
+  color: #fff;
+  background-color: #1967d2;
+  padding: 10px 0;
+  text-align: center;
+  text-decoration: unset;
+  border-bottom: 15px;
 }
 </style>

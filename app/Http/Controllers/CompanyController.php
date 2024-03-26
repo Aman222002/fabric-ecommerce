@@ -259,9 +259,12 @@ class CompanyController extends Controller
             // dd(!($request->company_Id));
             if (!($request->company_Id)) {
                 // dd($request->company_Id);
-                $image = $request->file('logo');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/assest', $imageName);
+                $imageName = null;
+                if ($request->hasfile('logo')) {
+                    $image = $request->file('logo');
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('public/assest', $imageName);
+                }
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
@@ -574,6 +577,7 @@ class CompanyController extends Controller
 
         try {
             $user = User::where('email', $request->email)->first();
+            // dd($user->hasRole('Company Admin'));
             if ($user->hasRole('Company Admin')) {
                 $companies = Company::select('id', 'company_name')->where('user_id', $user->id)->get();
             } else {
