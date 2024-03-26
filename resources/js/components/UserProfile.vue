@@ -60,7 +60,7 @@
       <v-row class="user_profile_infor">
         <v-col sm="12" md="6" lg="8" xl="8" class="user_profile_infor_left">
           <!-- Description -->
-          <v-card class="card2" style="margin-bottom: 20px">
+          <!-- <v-card class="card2" style="margin-bottom: 20px">
             <v-card-title
               ><v-icon>mdi-domain</v-icon> Candidates About:
             </v-card-title>
@@ -81,8 +81,8 @@
                 Mauris nec erat ut libero vulputate pulvinar.
               </div>
             </v-card-text>
-          </v-card>
-          <div class="user_profile_featured_jobs">
+          </v-card> -->
+          <div class="featured_jobs">
             <div class="sec-title">
               <h2>Experience Jobs</h2>
               <div class="text">
@@ -90,7 +90,11 @@
               </div>
             </div>
 
-            <v-card class="mx-auto mb-3 mt-2 company_info">
+            <v-card
+              class="mx-auto mb-3 mt-2 company_info"
+              v-for="(experience, index) in experience"
+              :key="index"
+            >
               <!-- <div class="company_logo">
                 <v-img
                   :src="`http://127.0.0.1:8000/${featuredJob.companyLogo}`"
@@ -99,15 +103,18 @@
               <div class="job_info">
                 <v-card-title><a href="#"> Experience</a> </v-card-title>
                 <ul class="company_seat">
-                  <li><v-icon>mdi-compare</v-icon>companyName</li>
-                  <li><v-icon>mdi-map-marker-outline </v-icon>location</li>
-                  <li><v-icon>mdi-clock-time-two-outline</v-icon>time</li>
-                  <li><v-icon>mdi-cash</v-icon>price</li>
+                  <li>
+                    <v-icon>mdi-compare</v-icon>{{ experience.company_name }}
+                  </li>
+                  <li><v-icon>mdi-medal </v-icon>{{ experience.position }}</li>
+                  <li>
+                    <v-icon>mdi-card-account-details</v-icon
+                    >{{ experience.description }}
+                  </li>
                 </ul>
                 <ul class="company_time">
-                  <li>companyTime</li>
-                  <li>companyStates</li>
-                  <li>projectDuration</li>
+                  <li>{{ experience.start_date }}</li>
+                  <li>{{ experience.end_date }}</li>
                 </ul>
               </div>
             </v-card>
@@ -173,7 +180,7 @@
               :key="index"
             >
               <v-card-title
-                ><v-icon>mdi-school</v-icon> Candidates Qualifications:<br />
+                ><v-icon>mdi-school</v-icon> Qualifications:<br />
                 {{ educationDetails.education_type }}</v-card-title
               >
               <v-card-text>
@@ -356,7 +363,7 @@ export default {
         experience.value = data.experience;
         skills.value = data.skills;
         progressValue.value = data.userDetails.status;
-        console.log(progressValue.value);
+        console.log(experience.value);
       } catch (error) {
         console.error("Error fetching company profile:", error);
       }

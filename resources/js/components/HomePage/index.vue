@@ -7,7 +7,7 @@
     <!-- <Testimonials /> -->
     <BrandLogo />
     <MillionsOfJob />
-    <RecentNews />
+    <RecentNews id="blogs" />
   </div>
 </template>
 

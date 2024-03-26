@@ -5,11 +5,12 @@
     v-model="drawer"
     :rail="rail"
   >
-    <h3 class="title" v-if="!rail">JOBS</h3>
-    <v-avatar v-if="rail">
-      <img src="/storage/assets/15.jpg" alt="" />
-    </v-avatar>
-
+    <span>
+      <h3 class="title" v-if="!rail">JOBS</h3>
+      <v-avatar v-if="rail">
+        <img src="/storage/assets/15.jpg" alt="" />
+      </v-avatar>
+    </span>
     <v-list>
       <v-list-item
         :class="{ 'v-list-item--active': isActiveItem(item) }"
@@ -24,21 +25,6 @@
         </a>
       </v-list-item>
     </v-list>
-
-    <!-- 
-      <a :href="item.href" style="text-decoration: none; color: black">
-        <v-list-item
-          :class="{ 'v-list-item--active': isActiveItem(item) }"
-          @mouseover="setHoverItem(item)"
-          @mouseleave="clearHoverItem()"
-          :prepend-icon="item.icon"
-          v-for="item in items"
-          :key="item.title"
-        >
-          <v-list-item-title v-if="!rail">{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </a>
--->
   </v-navigation-drawer>
   <v-app-bar height="45" id="header" class="dah_header-bar">
     <v-app-bar-nav-icon
@@ -48,21 +34,19 @@
     <v-spacer></v-spacer>
     <v-menu transition="slide-y-transition">
       <template v-slot:activator="{ props }">
-        <v-icon v-bind="props" id="account" size="40" style="color: white">
-          mdi-account-circle
-        </v-icon>
-        <v-icon v-bind="props" class="menu" size="35" style="color: white">
-          mdi-menu-down</v-icon
+        <v-icon v-bind="props" id="account" size="40"
+          >mdi-account-circle</v-icon
         >
+        <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
       </template>
       <v-list>
-        <!-- <v-list-item
+        <v-list-item
           prepend-icon="mdi-account"
           title="Login as User"
           value="Login as User"
           href="/login"
           class="dropdown"
-        ></v-list-item> -->
+        ></v-list-item>
         <v-list-item
           class="dropdown"
           prepend-icon="mdi-logout"
@@ -74,18 +58,15 @@
     </v-menu>
   </v-app-bar>
 </template>
-  
+
 <script>
 import { ref, onMounted } from "vue";
 import { useUsersStore } from "@/store/user";
 import axios from "axios";
-
 export default {
   name: "CompanyNav",
-
   setup() {
     const usersStore = useUsersStore();
-
     const users = ref([]);
     const currentRoute = ref(window.location.pathname);
     const drawer = ref(true);
@@ -124,6 +105,16 @@ export default {
         icon: "mdi-list-box",
         href: "/admin/plans",
       },
+      {
+        title: "Blogs",
+        icon: "mdi-post",
+        href: "/admin/blog/view",
+      },
+      // {
+      //   title: "Add New Blog",
+      //   icon: "mdi-post",
+      //   href: "/admin/add/blog",
+      // },
     ]);
     const isActiveItem = (item) => {
       return window.location.pathname === item.href;
@@ -166,6 +157,11 @@ export default {
 </script>
 
 <style>
+header.dah_header-bar {
+  box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
+  border-bottom: 1px solid #ecedf2;
+}
+
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
   padding-inline: 8px;
 }
@@ -229,12 +225,14 @@ nav.left_side_bar .v-list--one-line .group {
   text-decoration: none;
   border-radius: 7px;
 }
+
 nav.left_side_bar .v-list--one-line .group:hover,
 nav.left_side_bar .group a.active,
 nav.left_side_bar .group.active {
   color: #1967d2;
   background: #1967d21a;
 }
+
 .main {
   margin-bottom: 0px;
 }
@@ -245,11 +243,11 @@ nav.left_side_bar .group.active {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* .v-list-item:hover,
+.v-list-item:hover,
 .v-list-item--active {
   color: #1967d2;
   background: #1967d21a;
-} */
+}
 
 nav.left_side_bar .v-list--one-line {
   width: 85%;

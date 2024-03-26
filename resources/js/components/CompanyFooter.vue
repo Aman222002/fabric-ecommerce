@@ -4,14 +4,8 @@
       <v-row no-gutters>
         <v-col class="footer_col" cols="12" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
-            <router-link
-              class="logo"
-              to="/"
-              style="cursor: pointer"
-              width="200"
-            >
-              {{ appName }}</router-link
-            >
+            <router-link class="logo" to="/" style="cursor: pointer" width="200">
+              {{ appName }}</router-link>
           </v-toolbar-title>
           <div class="footer-column about-widget">
             <p class="phone-num">
@@ -48,19 +42,16 @@
             <ul class="list">
               <!-- <li><a href="/jobs-detail">Browse Candidates</a></li> -->
               <li>
-                <a :href="employerStore.isloggedin ? '/posted-jobs' : '/job'"
-                  >Employer Dashboard</a
-                >
+                <a @click="handleLinks('/findcv')">Employer
+                  Dashboard</a>
               </li>
               <li>
-                <a :href="employerStore.isloggedin ? '/postjob' : '/job'"
-                  >Add Job</a
-                >
+                <a @click="handleLinks('/postjob')">Add
+                  Job</a>
               </li>
               <li>
-                <a :href="employerStore.isloggedin ? '/product' : '/job'"
-                  >Job Packages</a
-                >
+                <a @click="handleLinks('/product')">Job
+                  Packages</a>
               </li>
             </ul>
           </div>
@@ -70,52 +61,67 @@
           <div class="widget-content">
             <ul class="list">
               <li><a href="/about">About Us</a></li>
-              <!-- <li><a href="#">Job Page Invoice</a></li> -->
-              <!-- <li><a href="#">Terms Page</a></li> -->
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><a @click="checkAdress">Blog</a></li>
+              <li><a href="/contact">Contact</a></li>
             </ul>
           </div>
         </v-col>
-        <!-- <v-col class="footer_col" sm="12" md="4" lg="2" xl="2">
-          <h4 class="widget-title">Helpful Resources</h4>
-          <div class="widget-content">
-            <ul class="list">
-              <li><a href="#">Site Map</a></li>
-              <li><a href="#">Terms of Use</a></li>
-              <li><a href="#">Privacy Center</a></li>
-              <li><a href="#">Security Center</a></li>
-              <li><a href="#">Accessibility Center</a></li>
-            </ul>
-          </div>
-        </v-col> -->
       </v-row>
     </v-container>
   </v-footer>
 </template>
-
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useUsersStore } from "../store/user";
 import { useEmployerStore } from "../store/employer";
-
 export default {
   name: "CompanyFooter",
   setup() {
     const appName = ref("JOBS");
     const usersStore = useUsersStore();
     const employerStore = useEmployerStore();
+    const users = ref([]);
     const contactDetails = ref({});
+    const updateRoute = () => {
+      currentRoute.value = window.location.pathname;
+    };
     const sendEmail = () => {
       window.location.href = `mailto:${contactDetails.value.email}`;
     };
     const makeCall = () => {
       window.location.href = `tel:${contactDetails.value.contact}`;
     };
+    const handleLinks = (Link) => {
+      employerStore.setPreviousRoute(Link);
+      const selectedRoute = employerStore.getPreviousRoute;
+      if (employerStore.isloggedin) {
+        fetchUserData();
+        if (selectedRoute == '/findcv') {
+          window.location.href = "/findcv";
+        }
+        if (selectedRoute == '/postjob') {
+          if (hasPermission('create users') || hasrole('Company Admin')) {
+            window.location.href = "/postjob";
+          } else {
+            alert(`You don't have permissions for this action`);
+          }
+        }
+        if (selectedRoute == '/company/plan') {
+          if (hasPermission('Change Plan') ||
+            hasrole('Company Admin')) {
+            window.location.href = "/company/plan";
+          } else {
+            alert(`You don't have permissions for this action`);
+          }
+        }
+      } else {
+        window.location.href = "/job";
+      }
+    };
     const fetchData = () => {
       try {
-        axios.get("contact/data").then((response) => {
+        axios.get(`/contact/data`).then((response) => {
           contactDetails.value = response.data.data[0];
           // console.log(contactDetails.value);
         });
@@ -123,30 +129,63 @@ export default {
         console.log(error);
       }
     };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/user/data");
+        users.value = response.data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    const hasPermission = (permission) => {
+      if (users.value && users.value.permissions) {
+        return users.value.permissions.includes(permission);
+      }
+      return false;
+    };
+    const checkAdress = () => {
+      // console.log(window.location.pathname);
+      if (window.location.pathname == '/') {
+        // window.location. const section = document.getElementById('section');
+        const section = document.getElementById('blogs');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.location.href = "/#blogs";
+      }
+    }
+    const hasrole = (role) => {
+      if (users.value && users.value.roles) {
+        return users.value.roles.includes(role);
+      }
+      return false;
+    };
     onMounted(() => {
       fetchData();
+      if (employerStore.isloggedin) {
+        fetchUserData();
+      }
+      window.addEventListener("popstate", updateRoute);
     });
     return {
       appName,
       fetchData,
+      fetchUserData,
+      users,
       contactDetails,
       sendEmail,
       makeCall,
       usersStore,
       employerStore,
+      handleLinks,
+      updateRoute,
+      checkAdress,
     };
-    // methods: {
-    //   sendEmail() {
-    //     // const emailAddress = "support@superio.com";
-    //     window.location.href = `mailto:${contactDetails.value.email}`;
-    //   }
-    // }
   },
 };
 </script>
-
 <style scoped>
-/* footer css Only  */
 .footer p.phone-num {
   font-size: 18px;
   line-height: 28px;
@@ -216,5 +255,9 @@ export default {
 .footer .list li:hover a {
   transform: translateX(25px);
   color: #1967d2;
+}
+
+a {
+  cursor: pointer;
 }
 </style>

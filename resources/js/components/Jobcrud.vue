@@ -1,31 +1,15 @@
 <template>
   <p style="text-align: center; font-size: 20px; margin-top: 20px">My Jobs</p>
-  <DxDataGrid
-    :show-borders="true"
-    :data-source="dataSource"
-    ref="dataGridRef"
-    @editing-start="logEvent(e)"
-  >
+  <DxDataGrid :show-borders="true" :data-source="dataSource" ref="dataGridRef" @editing-start="logEvent(e)">
     <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
-    <DxEditing
-      :allow-adding="true"
-      :allow-updating="true"
-      :allow-deleting="true"
-      :use-icons="true"
-      mode="popup"
-    />
+    <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" :use-icons="true" mode="popup" />
     <DxToolbar>
       <DxGridItem template="dropDown2" :location="'before'" />
       <DxGridItem name="searchPanel" :location="'after'"></DxGridItem>
     </DxToolbar>
     <DxLoadPanel :enabled="true" />
     <DxSearchPanel :visible="true" />
-    <DxColumn
-      caption="Action"
-      :allow-editing="false"
-      cell-template="customButtonTemplate"
-      :visible="noeditcolumn"
-    >
+    <DxColumn caption="Action" :allow-editing="false" cell-template="customButtonTemplate" :visible="noeditcolumn">
     </DxColumn>
     <DxColumn data-field="title" data-type="string"> </DxColumn>
     <DxColumn data-field="location" data-type="string"></DxColumn>
@@ -33,101 +17,49 @@
     <DxColumn data-field="salary" data-type="string"> </DxColumn>
     <DxColumn data-field="description" data-type="string"> </DxColumn>
     <DxColumn data-field="company_website" data-type="url"> </DxColumn>
-    <DxColumn
-      caption="Select Category"
-      cell-template="categorydropdown"
-      edit-cell-template="categorydropdown"
-      :visible="showcolumn"
-    >
+    <DxColumn caption="Select Category" cell-template="categorydropdown" edit-cell-template="categorydropdown"
+      :visible="showcolumn">
     </DxColumn>
     <template #categorydropdown="{ data: rowData }">
-      <DxDropDownBox
-        label="Select Category"
-        data-type="dropdown"
-        labelMode="floating"
-      >
-        <DxList
-          :data-source="categories"
-          selection-mode="single"
-          @item-click="selectStatus"
-        />
+      <DxDropDownBox label="Select Category" data-type="dropdown" labelMode="floating">
+        <DxList :data-source="categories" selection-mode="single" @item-click="selectStatus" />
       </DxDropDownBox>
     </template>
-    <DxColumn
-      caption="Select JobType"
-      cell-template="jobtypedropdown"
-      edit-cell-template="jobtypedropdown"
-      :visible="showcolumn"
-    >
+    <DxColumn caption="Select JobType" cell-template="jobtypedropdown" edit-cell-template="jobtypedropdown"
+      :visible="showcolumn">
     </DxColumn>
 
     <template #jobtypedropdown="{ data: rowData }">
       <DxDropDownBox label="Select JobType" labelMode="floating">
-        <DxList
-          :data-source="jobTypes"
-          selection-mode="single"
-          @item-click="selectStatus"
-        />
+        <DxList :data-source="jobTypes" selection-mode="single" @item-click="selectStatus" />
       </DxDropDownBox>
     </template>
-    <DxColumn
-      caption="Select Skill"
-      cell-template="skilldropdown"
-      edit-cell-template="skilldropdown"
-      :visible="showcolumn"
-    >
+    <DxColumn caption="Select Skill" cell-template="skilldropdown" edit-cell-template="skilldropdown"
+      :visible="showcolumn">
     </DxColumn>
 
     <template #skilldropdown="{ data: rowData }">
       <DxDropDownBox label="Select skill" labelMode="floating">
-        <DxList
-          :data-source="jobSkills"
-          selection-mode="single"
-          @item-click="selectStatus"
-        />
+        <DxList :data-source="jobSkills" selection-mode="single" @item-click="selectStatus" />
       </DxDropDownBox>
     </template>
-    <DxColumn
-      caption="Select Experience"
-      cell-template="experiencedropdown"
-      edit-cell-template="experiencedropdown"
-      :visible="showcolumn"
-    >
+    <DxColumn caption="Select Experience" cell-template="experiencedropdown" edit-cell-template="experiencedropdown"
+      :visible="showcolumn">
     </DxColumn>
 
     <template #experiencedropdown="{ data: rowData }">
       <DxDropDownBox label="Select skill" labelMode="floating">
-        <DxList
-          :data-source="experienceOptions"
-          selection-mode="single"
-          @item-click="selectStatus"
-        />
+        <DxList :data-source="experienceOptions" selection-mode="single" @item-click="selectStatus" />
       </DxDropDownBox>
     </template>
-    <DxColumn
-      caption="Qualification"
-      data-field="qualifications"
-      data-type="string"
-      :visible="showcolumn"
-    ></DxColumn>
+    <DxColumn caption="Qualification" data-field="qualifications" data-type="string" :visible="showcolumn"></DxColumn>
     <template #dropDown2>
-      <DxDropDownBox
-        :accept-custom-value="true"
-        @value-change="selectStatus"
-        label="Select status"
-        labelMode="floating"
-        v-model:value="selectedStatus"
-        v-model:opened="DropDown2"
-      >
-        <DxList
-          :data-source="items"
-          selection-mode="single"
-          @item-click="selectStatus"
-        >
+      <DxDropDownBox :accept-custom-value="true" @value-change="selectStatus" label="Select status" labelMode="floating"
+        v-model:value="selectedStatus" v-model:opened="DropDown2">
+        <DxList :data-source="items" selection-mode="single" @item-click="selectStatus">
         </DxList>
       </DxDropDownBox>
     </template>
-
     <template #customButtonTemplate="{ data }">
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -137,13 +69,9 @@
         </template>
         <v-card>
           <v-list>
-            <v-list-item
-              v-for="item in jobActions"
-              :key="item.text"
-              class="dropdown"
-              @click="duplicateJob(data.row.data.id, item.text)"
-              >{{ item.text }}</v-list-item
-            >
+            <v-list-item v-for="item in jobActions" :key="item.text" class="dropdown"
+          @click="duplicateJob(data.row.data.id, item.text)">{{
+    item.text }}</v-list-item>
           </v-list>
         </v-card>
       </v-menu>
@@ -232,61 +160,60 @@ export default {
       refreshTable(dataGridRef);
       DropDown2.value = false;
     };
-    const logEvent = (e) => {};
+    const logEvent = (e) => { };
     const duplicateJob = (id, value) => {
       try {
-        axios
-          .post("/jobs/draft/", {
-            params: {
-              id: id,
-              type: value,
-            },
-          })
-          .then((response) => {
-            if (response.data.status === true) {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "success",
-                title: "Job have been added to draft successfully!",
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            if (error.response.status == "402") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You don't have a active plan buy a plan or renew your plan`,
-              });
-            } else if (error.response.status == "403") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You have posted number of allowed post can't post more`,
-              });
-            } else if (error.response.status == "406") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You already posted this job`,
-              });
-            }
-          });
+        axios.post("/jobs/draft/", {
+          params: {
+            id: id,
+            type: value,
+          },
+        }).then((response) => {
+          if (response.data.status === true) {
+            window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Added',
+            });
+          }
+        }).catch((error) => {
+          console.log(error);
+          if (error.response.status == '402') {
+            window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: `You don't have a active plan buy a plan or renew your plan`,
+            });
+          }
+          else if (error.response.status == '403') {
+            window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: `You have posted number of allowed post can't post more`,
+            });
+          }
+          else if (error.response.status == '406') {
+            window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: `You already posted this job`,
+            });
+          }
+        });
         console.log(response);
-      } catch (err) {}
+      } catch (err) { }
     };
     const postJob = (id) => {
       const response = axios.post(`/jobs/draft/${id}`);
@@ -299,7 +226,7 @@ export default {
       updateURL,
       deleteUrl
     );
-    console.log("datasource", dataSource);
+    // console.log("datasource", dataSource);
     const edit = async (data) => {
       console.log(data);
       const transformedData = {

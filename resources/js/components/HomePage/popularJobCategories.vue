@@ -2,13 +2,13 @@
   <div class="popular_job_categories">
     <div class="sec-title text-center">
       <h2>Popular Job Categories</h2>
-      <div class="text">2020 jobs live - 293 added today.</div>
+      <div class="text">2024 jobs live - 293 added today.</div>
     </div>
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
         <v-col
           cols="12"
-          class="popular_col"
+          class="popular_col mb-0"
           sm="12"
           md="6"
           lg="4"
@@ -116,14 +116,17 @@ export default {
     const categories = ref([]);
     const findJob = (name) => {
       console.log(name);
-      window.location.href = "/jobs-detail?category=" + name;
+      var newName = name.trim();
+      window.location.href =
+        "/jobs-detail?category=" + encodeURIComponent(newName);
+      // window.location.href = "/jobs-detail?category=" + name;
     };
     const fetchCategories = async () => {
       try {
         axios.get("/categories").then((response) => {
           categories.value = response.data;
 
-          console.log(response.data);
+          // console.log(response.data);
         });
       } catch (error) {
         console.error("Error fetching categories:", error);

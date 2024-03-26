@@ -113,6 +113,7 @@ export default {
     const pageSize = ref(10);
     const { dataSource } = dxGridStore(
       loadURL,
+      null,
       insertURL,
       updateURL,
       deleteUrl

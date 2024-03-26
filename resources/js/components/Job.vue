@@ -138,6 +138,7 @@ export default {
   setup() {
     const employerStore = useEmployerStore();
     const jobDialog = ref(false);
+    const users = ref([]);
     const companyListDialog = ref(false);
     const selectedCompany = ref(null);
     const email = ref("");
@@ -154,7 +155,6 @@ export default {
       (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",
     ];
     const companyNames = ref([]);
-
     const submitForm = async () => {
       if (!formData.value.company_name) {
         return;
@@ -164,14 +164,46 @@ export default {
         if (response.data.status == true) {
           companyListDialog.value = false;
           employerStore.isLogIn();
-          // console.log(response.data);
-          window.location.href = "/findcv";
+          // window.location.href = "/findcv";
+          if (employerStore.isloggedin) {
+            const selectedRoute = employerStore.getPreviousRoute;
+            console.log(selectedRoute);
+            await fetchUserData();
+            if (selectedRoute == "/findcv") {
+              window.location.href = "/findcv";
+              employerStore.removePreviousRoute();
+            }
+            if (selectedRoute == "/postjob") {
+              // console.log('hello');
+              if (hasPermission("create users") || hasrole("Company Admin")) {
+                window.location.href = "/postjob";
+                employerStore.removePreviousRoute();
+              } else {
+                window.location.href = "/findcv";
+                employerStore.removePreviousRoute();
+                alert(`You don't have permissions for this action`);
+              }
+            }
+            if (selectedRoute == "/company/plan") {
+              if (hasPermission("Change Plan") || hasrole("Company Admin")) {
+                window.location.href = "/company/plan";
+                employerStore.removePreviousRoute();
+              } else {
+                window.location.href = "/findcv";
+                employerStore.removePreviousRoute();
+                alert(`You don't have permissions for this action`);
+              }
+            } else if (!selectedRoute) {
+              window.location.href = "/findcv";
+              employerStore.removePreviousRoute();
+            }
+            // employerStore.removePreviousRoute();
+          }
         }
       } catch (err) {
         console.error(err);
       }
     };
-
     const showCompanyListDialog = async () => {
       try {
         const response = await axios.get("/company/names", {
@@ -188,13 +220,31 @@ export default {
         console.error(err);
       }
     };
-
     const closeCompanyListDialog = () => {
       companyListDialog.value = false;
     };
-
     const signup = async () => {
       window.location.href = "/company/register";
+    };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/user/data");
+        users.value = response.data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    const hasPermission = (permission) => {
+      if (users.value && users.value.permissions) {
+        return users.value.permissions.includes(permission);
+      }
+      return false;
+    };
+    const hasrole = (role) => {
+      if (users.value && users.value.roles) {
+        return users.value.roles.includes(role);
+      }
+      return false;
     };
     watch(selectedCompany, () => {
       if (selectedCompany.value) {
@@ -202,7 +252,6 @@ export default {
         submitForm();
       }
     });
-
     return {
       password,
       email,
@@ -218,6 +267,8 @@ export default {
       signup,
       selectedCompany,
       employerStore,
+      fetchUserData,
+      users,
     };
   },
 };
@@ -238,6 +289,7 @@ export default {
   align-items: center;
   text-align: center;
 }
+
 .form_page_left button.v-btn,
 .form_page_right button.v-btn {
   min-width: 150px;

@@ -21,6 +21,7 @@ use App\Http\Controllers\QualificationsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CompanyLoginController;
 
 use App\Models\Company;
@@ -33,6 +34,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
+use App\Http\Controllers\SocialMediaAccountController;
 use App\Http\Controllers\webhookHandler;
 use App\Models\Job;
 use App\Models\Skill;
@@ -121,15 +123,19 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
-
+// Route::get('/viewjob{}', function () {
+//     return view('viewjob');
+// });
 // Route::get('/add-user', function () {
 //     return view('user');
 // });
 
 
-
+Route::get('/view/{jobid}', [SearchjobController::class, 'viewjob']);
+Route::get('/fetchjob/{jobid}', [SearchjobController::class, 'fetchJobDetails']);
 Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
+Route::get('/company/job', [SearchjobController::class, 'fetchJob']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [LoginController::class, 'index']);
@@ -172,17 +178,30 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/get/plans', [DashboardController::class, 'getplans']);
+
 //Admin Routes;
+
 Route::group(["prefix" => "/admin"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
+    Route::get('/add/blog', [DashboardController::class, 'viewAddBlog']);
+    Route::get('/blog/view', [DashboardController::class, 'viewAllBlogs']);
+    Route::get('/blog/fetch/{type?}', [DashboardController::class, 'fetchAllBlogs']);
     Route::get('/profile/getProfile', [UserController::class, 'getProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
     Route::get('/plans', [DashboardController::class, 'plans']);
     Route::post('/update/plans/{planID?}', [DashboardController::class, 'updateplans']);
     Route::get('/company/plan/{planID?}', [DashboardController::class, 'getDetails']);
+    Route::post('/upload-blog/image', [DashboardController::class, 'uploadBlogImage']);
+    Route::post('/save-blog/post', [DashboardController::class, 'storeBlog']);
+    Route::post('/update/blog/{id}', [DashboardController::class, 'updateBlog']);
+    Route::delete('/delete/blog/{id}', [DashboardController::class, 'deleteBlog']);
+    Route::post('/blog/draft/{id?}/{type?}', [DashboardController::class, 'draftBlog']);
+    Route::post('/blog/post/{id?}/{type?}', [DashboardController::class, 'postBlog']);
+
+    //user route in admin
 
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
@@ -194,6 +213,9 @@ Route::group(["prefix" => "/admin"], function () {
         Route::post('/update-password', [UserController::class, 'updatePassword']);
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
     });
+
+    //company route in admin
+
     Route::group(["prefix" => "/company"], function () {
         Route::get('/address/{addressId?}', [CompanyController::class, 'getAddress']);
         Route::post('/address/update/{addressId?}', [CompanyController::class, 'updateAddress']);
@@ -238,7 +260,12 @@ Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
 Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
 Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 Route::post('remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
-Route::get('contact/data', [DashboardController::class, 'viewContact']);
+Route::get('/contact/data', [DashboardController::class, 'viewContact']);
 Route::get('partner/data', [DashboardController::class, 'viewPartners']);
+Route::get('get/blog', [UserController::class, 'fetchBlogs']);
+Route::get('/view/blog/single/{blogId?}', [UserController::class, 'viewSingleBlog']);
+Route::get('/fetch/single/blog/{blogId?}', [UserController::class, 'fetchSingleBlog']);
 //users
 //user/{id} function(Request $request, $id)
+Route::post('/send-email', [ContactController::class, 'sendEmail']);
+Route::post('/company/updateSocialMedia', [SocialMediaAccountController::class, 'updateSocialMedia']);

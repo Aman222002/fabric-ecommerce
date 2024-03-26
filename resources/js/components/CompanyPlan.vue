@@ -9,66 +9,42 @@
               <v-card-title>{{ currentplan.name }}</v-card-title>
             </v-col>
             <v-col cols="4" class="d-flex justify-end align-center">
-              <v-btn
-                v-if="upgrade_status == 'initiated'"
-                class="bg-error mr-2"
-                @click="cancelupgrade()"
-                >Cancel Upgrade</v-btn
-              >
-              <v-btn
-                v-if="currentplan.name"
-                class="bg-primary"
-                @click="changeplan()"
-                :disabled="disabledButton"
-                >Change Plan</v-btn
-              >
-              <v-btn v-else class="bg-primary" @click="changeplan()"
-                >Buy Plan</v-btn
-              >
+              <v-btn v-if="upgrade_status == 'initiated'" class="bg-error mr-2" @click="cancelupgrade()">Cancel
+                Upgrade</v-btn>
+              <v-btn v-if="currentplan.name" class="bg-primary" @click="changeplan()" :disabled="disabledButton">Change
+                Plan</v-btn>
+              <v-btn v-else class="bg-primary" @click="changeplan()">Buy Plan</v-btn>
             </v-col>
           </v-row>
           <v-row no-gutters>
             <v-col cols="8">
-              <span
-                v-if="subscription_status == 'active'"
-                :class="{
-                  'subtitle-1': true,
-                  'font-weight-bold': true,
-                  'text-red': subscriptionDetail.remainig_days < 5,
-                  'text-green': subscriptionDetail.remainig_days >= 5,
-                }"
-              >
+              <span v-if="subscription_status == 'active'" :class="{
+          'subtitle-1': true,
+          'font-weight-bold': true,
+          'text-red': subscriptionDetail.remainig_days < 5,
+          'text-green': subscriptionDetail.remainig_days >= 5,
+        }">
                 {{
-                  subscriptionDetail.remainig_days >= 0
-                    ? "Your plan will expire in " +
-                      subscriptionDetail.remainig_days +
-                      " days"
-                    : "You don't have an Active Plan"
-                }}</span
-              >
-              <span
-                v-else
-                :class="{
-                  'subtitle-1': true,
-                  'font-weight-bold': true,
-                  'text-red': true,
-                }"
-              >
+          subscriptionDetail.remainig_days >= 0
+            ? "Your plan will expire in " +
+            subscriptionDetail.remainig_days +
+            " days"
+            : "You don't have an Active Plan"
+        }}</span>
+              <span v-else :class="{
+            'subtitle-1': true,
+            'font-weight-bold': true,
+            'text-red': true,
+          }">
                 Your Plan will be Activated Soon
               </span>
             </v-col>
             <v-col cols="4" class="d-flex justify-end align-center">
-              <v-btn class="bg-error" @click="removeplan()"
-                >Remove Subscription</v-btn
-              >
+              <v-btn class="bg-error" @click="removeplan()">Remove Subscription</v-btn>
             </v-col>
           </v-row>
         </v-card>
-        <v-card
-          class="no-plan-card"
-          outlined
-          v-if="subscription_status !== 'active'"
-        >
+        <v-card class="no-plan-card" outlined v-if="!plan_id">
           <v-card-title class="text-center">No Plan</v-card-title>
           <v-card-text class="text-center">
             <v-icon size="64">mdi-emoticon-sad-outline</v-icon>
@@ -78,19 +54,13 @@
             </p>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <v-btn color="primary" @click="redirectToPlansPage()"
-              >Subscribe Now</v-btn
-            >
+            <v-btn color="primary" @click="redirectToPlansPage()">Subscribe Now</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-  <v-dialog
-    v-model="changePlanModal"
-    max-width="800px"
-    class="choose_your_popup"
-  >
+  <v-dialog v-model="changePlanModal" max-width="800px" class="choose_your_popup">
     <v-card width="mx auto">
       <v-card-title class="headline">Choose Your Plan</v-card-title>
       <v-container>
@@ -112,23 +82,16 @@
               <v-col cols="4" v-for="(plan, key) in plans" :key="key">
                 <v-card>
                   <v-card-title class="bg-primary" style="font-size: 20px">{{
-                    plan.Name
-                  }}</v-card-title>
+          plan.Name
+        }}</v-card-title>
                   <v-card-text class="border-right border-left">
                     <v-list>
-                      <v-list-item
-                        v-for="(item, key) in plan.details"
-                        :key="key"
-                      >
+                      <v-list-item v-for="(item, key) in plan.details" :key="key">
                         <v-list-item-title>{{ item }}</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-card-text>
-                  <v-btn
-                    v-if="plan.Name"
-                    class="bg-primary"
-                    @click="buyPlan(plan.id)"
-                  >
+                  <v-btn v-if="plan.Name" class="bg-primary" @click="buyPlan(plan.id)">
                     Buy Now
                   </v-btn>
                   <v-btn v-else class="bg-secondary" disabled>
@@ -156,10 +119,12 @@ export default {
     const changingPlan = ref(false);
     const changePlanModal = ref(false);
     const selectedPlanValue = ref([]);
+    // const plan_id = ref('');
     const features = ref([]);
     const userId = ref();
     const disabledButton = ref(false);
     const upgrade_status = ref();
+    const plan_id = ref('');
     const subscriptionDetail = ref({
       start_date: "",
       end_date: "",
@@ -172,7 +137,7 @@ export default {
         axios.get(`remove/subscription/${user.id}`).then((response) => {
           console.log(response.data);
         });
-      } catch (error) {}
+      } catch (error) { }
     };
     const changeplan = () => {
       changePlanModal.value = true;
@@ -203,6 +168,7 @@ export default {
         .then((response) => {
           userId.value = response.data.data[0].id;
           subscription_status.value = response.data.data[0].subscription_status;
+          plan_id.value = response.data.data[0].plan_id;
           upgrade_status.value = response.data.data[0].upgrade_status;
         })
         .catch((error) => {
@@ -302,7 +268,7 @@ export default {
       upgrade_status,
       disabledButton,
       handleUpgradeStatusChange,
-      subscription_status,
+      subscription_status, plan_id
     };
   },
 };
@@ -326,52 +292,58 @@ export default {
   margin: auto;
   padding: 20px;
 }
+
 .choose_your_popup .v-card .v-card-title {
   text-align: center;
 }
+
 .choose_your_popup .v-row .v-col-4 button.v-btn {
   margin: 0 auto;
   text-align: center;
   display: table;
 }
+
 .choose_your_popup .v-row .v-col-4 .v-card,
 .choose_your_popup .v-row .v-col-3 .v-card {
   height: 450px;
 }
-.choose_your_popup
-  .v-row
-  .v-col-3
-  .v-card
-  .v-list-item__content
-  .v-list-item-title {
+
+.choose_your_popup .v-row .v-col-3 .v-card .v-list-item__content .v-list-item-title {
   text-transform: capitalize;
   font-weight: 600;
   font-size: 15px;
 }
+
 @media screen and (max-width: 980px) {
   .choose_your_popup .v-row.choose_your_popup_wor_on {
     flex-wrap: unset;
   }
+
   .choose_your_popup .v-row .v-col-3 {
     flex: 198px;
     max-width: 198px;
   }
+
   .choose_your_popup .v-row .v-col-9 {
     overflow-y: auto;
     overflow-x: auto;
   }
+
   .choose_your_popup .v-row .v-col-4 {
     margin-right: 20px;
   }
+
   .choose_your_popup .v-row .v-col-4,
   .choose_your_popup .v-row .v-col-4 .v-card {
     flex: 198px;
     max-width: 198px;
     width: 189px;
   }
+
   .choose_your_popup .v-row .v-col-9 .v-row {
     flex-wrap: unset;
   }
+
   .choose_your_popup .v-row .v-col-9 .v-row {
     flex-wrap: unset;
     width: 630px !important;

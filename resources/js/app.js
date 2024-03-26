@@ -94,6 +94,7 @@ import DxList from "devextreme-vue/list";
 app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
+// app.use(CKEditor);
 //app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
@@ -123,9 +124,18 @@ app.component("expired-component", ExpiredComponent);
 import AddressTabComponent from "./components/AddressTab.vue";
 app.component("address-component", AddressTabComponent);
 
-import index from "./components/HomePage/index.vue"
-app.component("home-component",index);
+import BlogPosts from "./components/BlogPost.vue";
+app.component("blog-posts", BlogPosts);
+// import index from "./components/HomePage/index.vue";
+// app.component("home-component", index);
+import viewjob from "./components/viewjob.vue";
+app.component("view-job", viewjob);
 
+import index from "./components/HomePage/index.vue";
+app.component("home-component", index);
+
+// import CKEditor from "./components/CKEditorComponent.vue";
+// app.component()
 // import UserprofileComponent from "./components/UserprofileComponent.vue";
 // app.component("userprofile-component", UserprofileComponent);
 import NavbarComponent from "./components/NavbarComponent.vue";
@@ -138,6 +148,8 @@ import CompaniesComponent from "./components/CompaniesComponent.vue";
 app.component("companies-component", CompaniesComponent);
 import SubscriptionPlans from "./components/SubscriptionPlans.vue";
 app.component("plans-component", SubscriptionPlans);
+import Blog from "./components/Blog.vue";
+app.component("blog-component", Blog);
 import SidebarComponent from "./components/SidebarComponent.vue";
 app.component("sidebar-component", SidebarComponent);
 app.config.globalProperties.emitter = emitter;
@@ -244,17 +256,19 @@ import UserProfile from "./components/UserProfile.vue";
 app.component("user-profile", UserProfile);
 
 import user from "./components/user.vue";
-app.component("user-component",user);
+app.component("user-component", user);
 
 import CompanyUsers from "./components/CompanyUsers.vue";
-app.component("companyuser-component",CompanyUsers);
+app.component("companyuser-component", CompanyUsers);
 
 import About from "./components/About.vue";
-app.component("about-component",About);
+app.component("about-component", About);
 
+import SingleBlog from "./components/blogSinglePage.vue";
+app.component("single-blog", SingleBlog);
 
 import Contact from "./components/Contact.vue";
-app.component("contact-component",Contact);
+app.component("contact-component", Contact);
 
 // import index from "./components/HomePage/index.vue"
 // app.component("home-component",index);

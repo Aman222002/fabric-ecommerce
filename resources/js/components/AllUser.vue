@@ -66,7 +66,7 @@ export default {
     const showColumn = ref(false);
     const pageSize = ref(10);
     const loadURL = `/admin/user/index`;
-    const updateURL = ref();
+    const updateURL = `/admin/user/update`;
     const editItem = (data) => {
       updateURL.value = `/admin/user/update`;
     };

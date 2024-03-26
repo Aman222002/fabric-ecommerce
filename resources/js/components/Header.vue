@@ -7,14 +7,12 @@
             <v-icon @click="showMenu = !showMenu" icon>{{
               !showMenu ? "mdi-menu" : "mdi-menu"
             }}</v-icon>
-            <!-- {/ !show ? "mdi-menu" : "mdi-close" /} -->
           </button>
           <mySection class="NavBar" v-show="isOpen">
             <button class="close_btn" @click="showSection()">
               <v-icon @click="showMenu = !showMenu" icon>{{
                 !showMenu ? "mdi-close" : "mdi-close"
               }}</v-icon>
-              <!-- {/ !show ? "mdi-menu" : "mdi-close" /} -->
             </button>
             <v-row>
               <v-col class="nav-links">
@@ -145,7 +143,7 @@
 import { ref } from "vue";
 import { reactive, onMounted } from "vue";
 import { useUsersStore } from "../store/user";
-// import { useEmployerStore } from "../store/employer";
+
 import axios from "axios";
 import { useEmployerStore } from "../store/employer";
 
@@ -160,11 +158,11 @@ export default {
       },
     ]);
     const loginItems = ref([
-      // {
-      //   title: "Login as User",
-      //   icon: "mdi-login",
-      //   href: "/login",
-      // },
+      {
+        title: "Login as User",
+        icon: "mdi-login",
+        href: "/login",
+      },
       {
         title: "Login as Company",
         icon: "mdi-office-building",
@@ -172,11 +170,11 @@ export default {
       },
     ]);
     const registerItems = ref([
-      // {
-      //   title: "Register as User",
-      //   icon: "mdi-account-plus",
-      //   href: "/registration",
-      // },
+      {
+        title: "Register as User",
+        icon: "mdi-account-plus",
+        href: "/registration",
+      },
       {
         title: "Register as Company",
         icon: "mdi-account-plus",
@@ -206,6 +204,7 @@ export default {
               usersStore.isLogOut();
             } else {
               employerStore.isLogOut();
+              employerStore.removePreviousRoute();
             }
             window.location.href = "/";
           }
@@ -299,11 +298,13 @@ header.header_bar a.nav-link:hover i {
 header.header_bar a.nav-link i {
   color: #000 !important;
 }
+
 .log_and_reg ul {
   width: 230px;
   background: #fff;
   margin: 5px 0;
 }
+
 .log_and_reg ul li {
   margin: 5px 5px;
 }
@@ -316,6 +317,7 @@ header.header_bar a.nav-link i {
   background: #e2eaf8;
   color: #1967d2;
 }
+
 .log_and_reg ul li:hover a {
   background: #1967d2;
   color: #fff;

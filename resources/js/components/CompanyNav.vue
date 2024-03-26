@@ -10,7 +10,7 @@
       <img src="/storage/assest/15.jpg" alt="" />
     </v-avatar>
     <v-list>
-      <v-list-group value="Jobs" class="group" v-if="usersStore.isloggedin">
+      <v-list-group value="Jobs" class="group" v-if="!usersStore.isloggedin">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -43,10 +43,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="
-          (usersStore.isloggedin && hasPermission('Buy Subscription')) ||
-          hasrole('Company Admin')
-        "
+        v-if="hasPermission('Buy Subscription') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/product' }"
         href="/product"
         prepend-icon="mdi-format-list-bulleted"
@@ -54,10 +51,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="
-          (usersStore.isloggedin && hasPermission('Change Plan')) ||
-          hasrole('Company Admin')
-        "
+        v-if="hasPermission('Change Plan') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/company/plan' }"
         href="/company/plan"
         prepend-icon="mdi-cash-sync"
@@ -65,10 +59,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="
-          (usersStore.isloggedin && hasPermission('Change Profile')) ||
-          hasrole('Company Admin')
-        "
+        v-if="hasPermission('Change Profile') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/company/profile' }"
         href="/company/profile"
         prepend-icon="mdi-account-circle"
@@ -76,10 +67,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="
-          (usersStore.isloggedin && hasPermission('create users')) ||
-          hasrole('Company Admin')
-        "
+        v-if="hasPermission('create users') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/add-user' }"
         href="/add-user"
         prepend-icon="mdi-account-plus-outline"
@@ -87,10 +75,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="
-          (usersStore.isloggedin && hasPermission('view users')) ||
-          hasrole('Company Admin')
-        "
+        v-if="hasPermission('view users') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/users' }"
         href="/users"
         prepend-icon="mdi-account"
@@ -123,13 +108,13 @@
       </template>
 
       <v-list>
-        <!-- <v-list-item
+        <v-list-item
           prepend-icon="mdi-account"
           title="Login as User"
           value="Login as User"
           href="/login"
           class="dropdown"
-        ></v-list-item> -->
+        ></v-list-item>
         <v-list-item
           v-if="usersStore.isloggedin || employerStore.isloggedin"
           class="dropdown"
@@ -170,6 +155,7 @@ export default {
         usersStore.isLogOut();
       } else {
         employerStore.isLogOut();
+        employerStore.removePreviousRoute();
       }
       axios.get("/company/logout");
       window.location.href = "/";
@@ -217,19 +203,31 @@ export default {
   },
 };
 </script>
-<style >
+<style>
+header.dah_header-bar {
+  box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
+  border-bottom: 1px solid #ecedf2;
+}
+
+a {
+  text-decoration: none;
+}
+
 nav.left_side_bar .v-list-group--open {
   margin-bottom: 10px;
 }
+
 nav.left_side_bar .v-list-group--open a.v-list-item {
   padding-inline-start: unset !important;
   font-size: 15px;
   padding-left: 13px !important;
 }
+
 nav.left_side_bar {
   border-color: transparent;
   box-shadow: -1px 2px 4px -1px;
 }
+
 #logoheading {
   font-size: 35px;
   margin-top: 7px;
@@ -301,15 +299,17 @@ nav.left_side_bar {
   margin-left: 32%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
+
 .log_and_reg_drop .v-list {
   width: 160px;
 }
+
 #div {
   background-color: white;
 }
+
 .log_and_reg_drop .v-list .v-list-item:hover {
   background-color: #1976d2;
   color: #fff;
 }
 </style>
-

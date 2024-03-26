@@ -25,27 +25,34 @@
             </template>
             <v-img
               cover
-              height="250"
-              :src="`http://127.0.0.1:8000/${recentNews.img}`"
+              height="200"
+              :src="`/storage/assets/${recentNews.featured_image}`"
             >
             </v-img>
             <div class="Cmt_time">
               <v-card-subtitle class="pt-4">
-                {{ recentNews.date }}
+                {{ formatCreatedAt(recentNews.created_at) }}
               </v-card-subtitle>
               <v-card-subtitle class="pt-4">
-                <v-icon>{{ recentNews.icon }}</v-icon
-                >{{ recentNews.comment }}
+                <v-icon>{{ icon }}</v-icon
+                >{{ comment }}
               </v-card-subtitle>
             </div>
-
             <v-card-item>
               <v-card-title>{{ recentNews.title }}</v-card-title>
             </v-card-item>
-
             <v-card-text>
+              <!-- <div v-html="recentNews.content">
+              </div> -->
               <div>
-                {{ recentNews.text }}
+                {{ recentNews.contentText
+                }}<span
+                  v-if="recentNews.contentText"
+                  class="read-more"
+                  @click="openDetailPage(recentNews.id)"
+                >
+                  Read More
+                </span>
               </div>
             </v-card-text>
           </v-card>
@@ -56,38 +63,105 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import axios from "axios";
 export default {
-  data: () => ({
-    recentNews: [
-      {
-        id: "1",
-        img: "assest/img/RecentNewsArticles/1.webp",
-        title: "Attract Sales And Profits",
-        date: "August 31, 2021 ",
-        icon: "mdi-circle-small",
-        comment: "comment",
-        text: "A job ravenously while Far much that one rank beheld after outside",
-      },
-      {
-        id: "2",
-        img: "assest/img/RecentNewsArticles/2.webp",
-        title: "5 Tips For Your Job Interviews",
-        date: "August 31, 2021 ",
-        icon: "mdi-circle-small",
-        comment: "comment",
-        text: "A job ravenously while Far much that one rank beheld after outside",
-      },
-      {
-        id: "3",
-        img: "assest/img/RecentNewsArticles/3.webp",
-        title: "Overworked Newspaper Editor",
-        date: "August 31, 2021 ",
-        icon: "mdi-circle-small",
-        comment: "comment",
-        text: "A job ravenously while Far much that one rank beheld after outside",
-      },
-    ],
-  }),
+  setup() {
+    const icon = ref("mdi-circle-small");
+    const comment = ref("comment");
+    const recentNews = ref([]);
+    const formatCreatedAt = (createdAt) => {
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      return new Date(createdAt).toLocaleDateString(undefined, options);
+    };
+    const openDetailPage = (id) => {
+      window.location.href = `/view/blog/single/${id}`;
+      // axios.get(`view/blog/single/${id}`).then((response) => {
+      // }).catch((error) => {
+      //   console.log(error);
+      // })
+    };
+    const fecthBlog = () => {
+      axios
+        .get("get/blog")
+        .then((response) => {
+          console.log(response.data.data);
+          recentNews.value = response.data.data.map((blog) => {
+            const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
+            const paragraphs = blog.content.match(paragraphRegex);
+            const contentText = paragraphs
+              ? paragraphs
+                  .map((p) => p.replace(/<[^>]+>/g, ""))
+                  .join(" ")
+                  .split(/\s+/)
+                  .slice(0, 24)
+                  .join(" ")
+              : "";
+            return {
+              ...blog,
+              contentText,
+            };
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    onMounted(() => {
+      fecthBlog();
+    });
+    return {
+      recentNews,
+      fecthBlog,
+      formatCreatedAt,
+      icon,
+      comment,
+      openDetailPage,
+    };
+  },
 };
 </script>
+<style>
+/* recent_news_articles only */
+.recent_news_articles {
+  padding: 65px 0 0;
+  background: #fff;
+}
 
+.recent_news_articles .sec-title h2 {
+  position: relative;
+  display: block;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 1.2em;
+  color: #202124;
+}
+
+.recent_news_articles .sec-title .text {
+  position: relative;
+  margin-top: 15px;
+  font-size: 15px;
+  line-height: 26px;
+  color: #696969;
+  font-weight: 400;
+}
+
+.featured_jobs .company_info {
+  padding: 15px;
+  width: 100%;
+  display: flex;
+}
+
+.Cmt_time {
+  display: flex;
+}
+
+.read-more {
+  color: #1967d2;
+  cursor: pointer;
+}
+
+.recent_news_articles .v-card .v-img {
+  margin-top: 15px;
+}
+</style>

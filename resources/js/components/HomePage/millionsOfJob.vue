@@ -44,7 +44,7 @@
                 <v-icon>mdi-check</v-icon>But I must explain to you how all this
               </li>
             </ul>
-            <a class="theme-btn" href="#">
+            <a class="theme-btn" href="/login">
               <span class="btn-title">Get Started</span>
             </a>
           </div>
@@ -53,3 +53,11 @@
     </v-container>
   </div>
 </template>
+<script>
+
+export default {
+  name: "millionsOfJob",
+  
+}
+</script>
+
