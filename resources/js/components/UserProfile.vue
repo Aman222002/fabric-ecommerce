@@ -62,8 +62,8 @@
           <!-- Description -->
           <!-- <v-card class="card2" style="margin-bottom: 20px">
             <v-card-title
-              ><v-icon>mdi-domain</v-icon> Candidates About:</v-card-title
-            >
+              ><v-icon>mdi-domain</v-icon> Candidates About:
+            </v-card-title>
             <v-card-text>
               <div style="font-family: sans-serif">
                 Hello my name is Nicole Wells and web developer from Portland.
@@ -82,7 +82,7 @@
               </div>
             </v-card-text>
           </v-card> -->
-          <div class="featured_jobs" >
+          <div class="featured_jobs">
             <div class="sec-title">
               <h2>Experience Jobs</h2>
               <div class="text">
@@ -90,7 +90,11 @@
               </div>
             </div>
 
-            <v-card class="mx-auto mb-3 mt-2 company_info"  v-for="(experience, index) in experience" :key="index">
+            <v-card
+              class="mx-auto mb-3 mt-2 company_info"
+              v-for="(experience, index) in experience"
+              :key="index"
+            >
               <!-- <div class="company_logo">
                 <v-img
                   :src="`http://127.0.0.1:8000/${featuredJob.companyLogo}`"
@@ -99,15 +103,18 @@
               <div class="job_info">
                 <v-card-title><a href="#"> Experience</a> </v-card-title>
                 <ul class="company_seat">
-                  <li><v-icon>mdi-compare</v-icon>{{experience.company_name }}</li>
-                  <li><v-icon>mdi-medal </v-icon>{{experience.position}}</li>
-                  <li><v-icon>mdi-card-account-details</v-icon>{{experience.description}}</li>
-                 
+                  <li>
+                    <v-icon>mdi-compare</v-icon>{{ experience.company_name }}
+                  </li>
+                  <li><v-icon>mdi-medal </v-icon>{{ experience.position }}</li>
+                  <li>
+                    <v-icon>mdi-card-account-details</v-icon
+                    >{{ experience.description }}
+                  </li>
                 </ul>
                 <ul class="company_time">
-                  <li>{{experience.start_date}}</li>
-                  <li>{{experience.end_date}}</li>
-                  
+                  <li>{{ experience.start_date }}</li>
+                  <li>{{ experience.end_date }}</li>
                 </ul>
               </div>
             </v-card>
@@ -173,7 +180,7 @@
               :key="index"
             >
               <v-card-title
-                ><v-icon>mdi-school</v-icon>  Qualifications:<br />
+                ><v-icon>mdi-school</v-icon> Qualifications:<br />
                 {{ educationDetails.education_type }}</v-card-title
               >
               <v-card-text>

@@ -3,9 +3,9 @@
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
         <v-col
-          cols="auto"
+          cols="12"
           class="millions_of_jobs_col"
-          sm="8"
+          sm="12"
           md="6"
           lg="6"
           xl="6"
@@ -16,7 +16,7 @@
           />
         </v-col>
         <v-col
-          cols="auto"
+          cols="12"
           class="millions_of_jobs_col"
           sm="12"
           md="12"

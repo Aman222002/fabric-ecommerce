@@ -5,15 +5,18 @@
         <v-card-title>{{ recentNews.title }}</v-card-title>
         <div class="px-4">
           <v-chip-group v-model="selection">
-            <v-chip>
-              {{ recentNews.published_by }}</v-chip>
+            <v-chip> {{ recentNews.published_by }}</v-chip>
             <v-chip>{{ formatCreatedAt(recentNews.created_at) }}</v-chip>
             <v-chip>Comment</v-chip>
           </v-chip-group>
         </div>
       </v-card-item>
 
-      <v-img :src="`/storage/assets/${recentNews.featured_image}`" height="450" cover></v-img>
+      <v-img
+        :src="`/storage/assets/${recentNews.featured_image}`"
+        height="450"
+        cover
+      ></v-img>
       <v-container fluid>
         <v-card>
           <v-card-text class="pb-0">
@@ -76,30 +79,37 @@ export default {
   props: {
     data: {
       type: Number,
-      default: () => { 0 },
-    }
+      default: () => {
+        0;
+      },
+    },
   },
   setup(props) {
     // console.log(props.data);
     const blogId = props.data;
     const recentNews = ref([]);
     const formatCreatedAt = (createdAt) => {
-      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
     const fetchBlog = () => {
-      axios.get(`/fetch/single/blog/${blogId}`).then((response) => {
-        recentNews.value = response.data.data;
-      }).catch((err) => {
-        console.log(err);
-      })
+      axios
+        .get(`/fetch/single/blog/${blogId}`)
+        .then((response) => {
+          recentNews.value = response.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     onMounted(() => {
       fetchBlog();
-    })
+    });
     return {
-      recentNews, blogId, formatCreatedAt
-    }
+      recentNews,
+      blogId,
+      formatCreatedAt,
+    };
   },
 };
 </script>
@@ -136,7 +146,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
-
 .single_blog_page .v-card .v-list .v-list-item {
   width: 50%;
 }

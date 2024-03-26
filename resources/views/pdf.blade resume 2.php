@@ -186,6 +186,8 @@
 						<tr>
 							<td colspan="2">
 							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}">
+													<!-- <img style="width: 120px;height: 120px;text-align: center;border-radius: 56px;"
+									src="https://static.vecteezy.com/system/resources/thumbnails/024/095/208/small/happy-young-man-smiling-free-png.png" /> -->
 									
 							</td>
 						</tr>

@@ -1,38 +1,64 @@
 <template>
   <div class="find_Job_list">
+    <v-card class="mx-auto my-12 top_page_section">
+      <div class="job_info" align="center" justify="center">
+        <v-card-title>Companies </v-card-title>
+        <v-breadcrumbs :items="items">
+          <template v-slot:title="{ item }">
+            {{ item.title.toUpperCase() }}
+          </template>
+        </v-breadcrumbs>
+      </div>
+    </v-card>
+    <!--
     <v-row>
-      <v-col cols="auto" sm="12" md="12" lg="12" xl="12">
-        <v-card class="mx-auto my-12 top_page_section">
-          <div class="job_info" align="center" justify="center">
-            <v-card-title>Companies </v-card-title>
-            <v-breadcrumbs :items="items">
-              <template v-slot:title="{ item }">
-                {{ item.title.toUpperCase() }}
-              </template>
-            </v-breadcrumbs>
-          </div>
-        </v-card>
-      </v-col>
+     <v-col cols="12" sm="12" md="12" lg="12" xl="12"></v-col> 
     </v-row>
+    -->
     <div class="body_page_section">
       <v-container class="w-75">
         <v-row>
-          <v-col cols="auto" sm="12" md="12" lg="3" xl="3">
+          <v-col cols="12" sm="12" md="12" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
               <v-card-title>Search by Keywords </v-card-title>
-              <v-text-field v-model="jobTitle" label="Job Title" density="compact" variant="outlined"
-                :rules="fullNameRules" clearable style="width: 100%"></v-text-field>
-              <v-text-field v-model="location" label="Location" density="compact" variant="outlined"
-                :rules="subjectRules" clearable style="width: 100%"></v-text-field>
+              <v-text-field
+                v-model="jobTitle"
+                label="Job Title"
+                density="compact"
+                variant="outlined"
+                :rules="fullNameRules"
+                clearable
+                style="width: 100%"
+              ></v-text-field>
+              <v-text-field
+                v-model="location"
+                label="Location"
+                density="compact"
+                variant="outlined"
+                :rules="subjectRules"
+                clearable
+                style="width: 100%"
+              ></v-text-field>
               <v-btn @click="searchJobs">Search</v-btn>
             </v-card>
           </v-col>
-          <v-col cols="auto" sm="12" md="12" lg="9" xl="9" class="find_Job_list_right">
-            <v-alert v-if="showAlert" type="error">
-              No job Found.
-            </v-alert>
+          <v-col
+            cols="auto"
+            sm="12"
+            md="12"
+            lg="9"
+            xl="9"
+            class="find_Job_list_right"
+          >
+            <v-alert v-if="showAlert" type="error"> No job Found. </v-alert>
 
-            <v-card v-else v-for="job in jobs" :key="job.id" class="custom-card" @click="openDetailPanel(job)">
+            <v-card
+              v-else
+              v-for="job in jobs"
+              :key="job.id"
+              class="custom-card"
+              @click="openDetailPanel(job)"
+            >
               <v-card-title>{{ job.company.company_name }}</v-card-title>
               <v-card-text class="pa-0 ml-3">
                 <div style="display: flex; align-items: center">
@@ -43,7 +69,11 @@
                 <div style="align-items: center">
                   <v-icon color="black">mdi-note</v-icon>
                   <span> {{ truncateDescription(job.description) }}</span>
-                  <span v-if="isDescriptionLong(job.description)" class="read-more" @click="openDetailPanel(job)">
+                  <span
+                    v-if="isDescriptionLong(job.description)"
+                    class="read-more"
+                    @click="openDetailPanel(job)"
+                  >
                     Read More
                   </span>
                 </div>
@@ -51,14 +81,16 @@
               <v-card-actions>
                 <div style="display: flex; align-items: center">
                   <v-icon color="black">mdi-human</v-icon>
-                  <span>{{ job.vacancy }}
-                    <v-icon color="black">mdi-desktop-classic</v-icon>{{ job.experience
-                    }}<v-icon color="black">mdi-map-marker</v-icon>{{ job.location }}</span>
+                  <span
+                    >{{ job.vacancy }}
+                    <v-icon color="black">mdi-desktop-classic</v-icon
+                    >{{ job.experience
+                    }}<v-icon color="black">mdi-map-marker</v-icon
+                    >{{ job.location }}</span
+                  >
                 </div>
               </v-card-actions>
             </v-card>
-
-
           </v-col>
         </v-row>
       </v-container>
@@ -86,12 +118,10 @@ export default {
 
     //   }
     const fullNameRules = [
-      value => !!value || 'Full Name is required',
-      value => (value && value.length <= 50) || 'Max 50 characters'
+      (value) => !!value || "Full Name is required",
+      (value) => (value && value.length <= 50) || "Max 50 characters",
     ];
-    const subjectRules = [
-      value => !!value || 'Subject is required'
-    ];
+    const subjectRules = [(value) => !!value || "Subject is required"];
     const usersStore = useUsersStore();
     const items = [
       {
@@ -132,8 +162,6 @@ export default {
         });
         jobs.value = response.data.data;
         console.log(jobs.value);
-
-
       } catch (err) {
         console.error(err);
         if (err.response.status == 404) {
@@ -142,18 +170,14 @@ export default {
       }
     };
 
-
     //getting Jobs posted by company
     const fetchJobs = async () => {
-
       try {
         const response = await axios.get("/company/post");
         // console.log(response.data);
         jobs.value = response.data.data;
-
       } catch (err) {
         console.error(err);
-
       }
     };
     const fetchpost = async () => {
@@ -161,16 +185,14 @@ export default {
         const response = await axios.get("/company/job");
         console.log(response.data);
         jobs.value = response.data.data;
-
       } catch (err) {
         console.error(err);
-
       }
     };
 
     const openDetailPanel = (job) => {
       console.log(job);
-      window.location.href = `http://127.0.0.1:8000/view/${job.id}`
+      window.location.href = `http://127.0.0.1:8000/view/${job.id}`;
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
       detail.value.location = job.location;
@@ -263,11 +285,9 @@ export default {
       // companypost();
       if (!usersStore.isloggedin) {
         fetchJobs();
-      }
-      else {
+      } else {
         fetchpost();
       }
-
 
       // const value =props.data ;
       // console.log(value);
@@ -302,7 +322,9 @@ export default {
       isDescriptionLong,
       category,
       items,
-      showAlert, subjectRules, fullNameRules
+      showAlert,
+      subjectRules,
+      fullNameRules,
     };
   },
 };

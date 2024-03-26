@@ -9,8 +9,17 @@
 
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
-        <v-col cols="12" class="featured_jobs_col mb-5" sm="12" md="12" lg="6" xl="6" v-for="job in displayedJobs"
-          :key="job.id" @click="openDetailPanel(job)">
+        <v-col
+          cols="12"
+          class="featured_jobs_col"
+          sm="12"
+          md="12"
+          lg="6"
+          xl="6"
+          v-for="job in displayedJobs"
+          :key="job.id"
+          @click="openDetailPanel(job)"
+        >
           <v-card class="mx-auto company_info">
             <div class="company_logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
@@ -27,23 +36,20 @@
                   <v-icon>mdi-map-marker-outline</v-icon>{{ job.location }}
                 </li>
                 <li>
-                  <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(job.company.created_at) }}
+                  <v-icon>mdi-clock-time-two-outline</v-icon
+                  >{{ formatCreatedAt(job.company.created_at) }}
                 </li>
                 <!-- <li><v-icon>mdi-cash</v-icon>{{ job.price }}</li> -->
               </ul>
               <ul class="company_time">
                 <li>{{ job.job_type.name }}</li>
-                <li>{{ job.category
-          .name }}</li>
-
+                <li>{{ job.category.name }}</li>
               </ul>
             </v-card>
-
 
             <!-- <a href="#" class="bookmark_fr">
               <v-icon>mdi-bookmark-outline</v-icon>
             </a> -->
-
           </v-card>
         </v-col>
         <!-- <v-navigation-drawer v-model="detailPanelVisible" location="right" class="single_job_search_page">
@@ -52,8 +58,10 @@
           <v-card style="width: 100%">
             <div class="compamy_infor">
               <div class="compamy_infor_left">
-                <v-card-title><v-icon>mdi-format-title</v-icon>
-                  <span>{{ detail.title }}</span></v-card-title>
+                <v-card-title
+                  ><v-icon>mdi-format-title</v-icon>
+                  <span>{{ detail.title }}</span></v-card-title
+                >
 
                 <v-icon color="black">mdi-domain</v-icon>
                 <span>{{ detail.company_name }}</span>
@@ -65,13 +73,16 @@
                 <span>{{ detail.vacancy }}</span>
               </div>
               <div class="compamy_infor_btn">
-                <v-btn class="apply_for_job" @click="apply(detail.id)">Apply For Job</v-btn>
+                <v-btn class="apply_for_job" @click="apply(detail.id)"
+                  >Apply For Job</v-btn
+                >
                 <v-btn class="save_btn" color="white" @click="save(detail.id)">
-                  <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn>
+                  <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn
+                >
               </div>
             </div>
             <v-row class="compamy_infor_description">
-              <v-col cols="auto" sm="12" md="12" lg="8" xl="8">
+              <v-col cols="12" sm="12" md="12" lg="8" xl="8">
                 <span style="display: block">{{ detail.description }}</span>
               </v-col>
               <v-col cols="auto" sm="12" md="12" lg="4" xl="4">
@@ -80,7 +91,7 @@
             </v-row>
           </v-card>
         </v-navigation-drawer> -->
-        <v-btn size="x-large" class="load_more" to="#"  @click="searchJob">
+        <v-btn size="x-large" class="load_more" to="#" @click="searchJob">
           Load More Listing
         </v-btn>
       </v-row>
@@ -91,7 +102,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useUsersStore } from ".././../store/user"
+import { useUsersStore } from ".././../store/user";
 export default {
   name: "featuredJob",
   setup() {
@@ -123,9 +134,8 @@ export default {
       detailPanelVisible.value = false;
     };
     const searchJob = () => {
-     
-     window.location.href = "/jobs-detail";
-   };
+      window.location.href = "/jobs-detail";
+    };
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
@@ -138,10 +148,8 @@ export default {
       }
     };
 
-
-
     const formatCreatedAt = (createdAt) => {
-      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
     onMounted(() => {
@@ -207,12 +215,17 @@ export default {
     };
 
     return {
-      jobs, formatCreatedAt, displayedJobs, closeDetailDialog,
+      jobs,
+      formatCreatedAt,
+      displayedJobs,
+      closeDetailDialog,
       apply,
       save,
       openDetailPanel,
       detailPanelVisible,
-      detail, usersStore,searchJob
+      detail,
+      usersStore,
+      searchJob,
     };
   },
 };

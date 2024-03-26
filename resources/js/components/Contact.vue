@@ -234,7 +234,7 @@ section.contact_us_page form.v-form button.v-btn {
   min-width: 150px;
   margin: 0 auto;
   height: 100% !important;
-  padding: 16px 15px;
+  padding: 11px 13px;
   background: #1967d2;
   color: #fff;
   font-size: 19px;

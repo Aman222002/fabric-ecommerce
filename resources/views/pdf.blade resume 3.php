@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>resume 2</title>
+	<title>resume 3</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Questrial&display=swap');
 
@@ -18,26 +18,133 @@
 
 <body>
 
-	<div class="resume_1" style="color: #444;border: solid #666;border-width: 8px 0 2px 0;margin: 30px auto;">
-		<div style="width: 70%;float: left;">
+	<div class="resume_1" style="color: #444;margin: 30px auto;">
+		<!-- left side -->
+		<div style="width: 30%;height: 100%;float: left;background-color: #006666;color: #fff;">
+			<!-- Candidates Image  -->
+			<!-- <div style="width: 100%;">
+				<table style="width: 100%;text-align: center;font-family: Biryani;margin-top: 20px;">
+					<tbody>
+						<tr>
+							<td colspan="2">
+								<img style="width: 120px;height: 120px;text-align: center;border-radius: 56px;"
+									src="https://static.vecteezy.com/system/resources/thumbnails/024/095/208/small/happy-young-man-smiling-free-png.png" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div> -->
+			<!-- Hobbies And Strengths -->
+			<div>
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+					<thead>
+						<tr>
+							<th>
+							<h1 style="margin: 0; margin-top: 15px ; font-family:  Biryani;">{{ $userdata['name'] }}</h1>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<!-- Skills(Technical) -->
+			<div style="border-top: 2px solid; margin-top: 25px;">
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+					<thead>
+						<tr>
+							<th>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Skills(Technical)</h2>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach ($userdata['skill_name'] as $skill)
+                    <tr>
+						<td>
+							<strong>{{ $skill[0]}}, </strong>
+						</td>
+					</tr>
+                @endforeach
+					</tbody>
+				</table>
+			</div>
+			<!-- Hobbies And Strengths -->
+			<div style="border-top: 2px solid; margin-top: 25px;">
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+					<thead>
+						<tr>
+							<th>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies And Strengths</h2>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<strong>Adrealine sport, Composing music</strong>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- languages -->
+			<div style="border-top: 2px solid; margin-top: 25px;">
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+					<thead>
+						<tr>
+							<th>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;">languages</h2>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<strong>Englisg</strong>
+							</td>
+							<td>
+								<strong>Native</strong>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>Spanish</strong>
+							</td>
+							<td>
+								<strong>Advances</strong>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>German</strong>
+							</td>
+							<td>
+								<strong>Intermediate</strong>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- right side -->
+		<div style="width: 70%;height: 100%;float: left;">
 			<!-- Candidates Name -->
-			<div style="margin-top: 25px;">
+			<div style="margin-top: 15px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 					<tbody>
 						<tr>
 							<td style="width: 100%;">
-								<h1 style="margin: 0; margin-top: 15px ; font-family:  Biryani;">{{ $userdata['name'] }}</h1>
-								<h2 style="margin: 0; margin-top: 10px ;">
+								<!-- <h1 style="margin: 0; margin-top: 15px ; font-family:  Biryani;">
+									Candidates Name</h1> -->
+								<h2 style="margin: 0; color: #006666;">
 								{{ $userdata['experience'][0]['position'] }} 
 								 </h2>
 							</td>
 						</tr>
 						<tr>
-							<td>
-								<span>{{ $userdata['email'] }}</span>
+						<td>
+							<span>{{ $userdata['email'] }}</span>
 							 <span> {{ $userdata['phone'] }}</span>
 							</td>
-
 						</tr>
 					</tbody>
 				</table>
@@ -65,7 +172,6 @@
 					</tbody>
 				</table>
 			</div>
-
 			<!-- Experience -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
@@ -82,7 +188,40 @@
 					<tbody>
 						<tr>
 							<td style="width: 60%;">
-								<h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
+								<h3 style="margin: 0;color: #006666;">{{ $exp['company_name'] }}</h3>
+							</td>
+							<td style="width: 40%; text-align: right;">
+								<strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
+							</td>
+						</tr>
+						<tr>
+							<td>{{ $exp['position'] }} </td>
+						</tr>
+						<tr>
+							<td colspan="3">{{ $exp['description'] }}</td>
+						</tr>
+					</tbody>
+					@endforeach
+				</table>
+			</div>
+			<!-- Experience -->
+			<div style="border-top: 2px solid;margin-top: 25px;">
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+					<thead>
+						<tr>
+							<th>
+								<h2 style="margin: 0;margin-top: 10px; font-family:  Biryani; text-align: left;">
+									Experience
+								</h2>
+							</th>
+						</tr>
+					</thead>
+
+					@foreach ($userdata['experience'] as $exp)
+					<tbody>
+						<tr>
+							<td style="width: 60%;">
+								<h3 style="margin: 0;color: #006666;">{{ $exp['company_name'] }}</h3>
 							</td>
 							<td style="width: 40%; text-align: right;">
 								<strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
@@ -147,17 +286,6 @@
 						</tr>
 
                     @endforeach
-						
-						<!-- <tr>
-							<td style="width: 70%;">
-								PMI Professional in Business Analysis (PBA) — <strong>PMI</strong>, 2019
-							</td>
-						</tr>
-						<tr>
-							<td style="width: 70%;">
-								PMI Professional in Business Analysis (PBA) — <strong>PMI</strong>, 2019
-							</td>
-						</tr> -->
 					</tbody>
 				</table>
 			</div>
@@ -177,101 +305,7 @@
 				</table>
 			</div>
 		</div>
-		<!-- Hobbies And Strengths -->
-		<div style="width: 30%;float: left;background-color: #22405c;height: 100%;color: #fff;">
-			<!-- Candidates Image  -->
-			<div style="width: 100%;">
-				<table style="width: 100%;text-align: center;font-family: Biryani;margin-top: 20px;">
-					<tbody>
-						<tr>
-							<td colspan="2">
-							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}">
-									
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<!-- Skills(Technical) -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Skills(Technical)</h2>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-					@foreach ($userdata['skill_name'] as $skill)
-                    <tr>
-						<td>
-							<strong>{{ $skill[0]}}, </strong>
-						</td>
-					</tr>
-                @endforeach
-					</tbody>
-				</table>
-			</div>
-			<!-- Hobbies And Strengths -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies And Strengths</h2>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<strong>Adrealine sport, Composing music</strong>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<!-- languages -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">languages</h2>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<strong>Englisg</strong>
-							</td>
-							<td>
-								<strong>Native</strong>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>Spanish </strong>
-							</td>
-							<td>
-								<strong>Advances</strong>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>German </strong>
-							</td>
-							<td>
-								<strong>Intermediate</strong>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-		</div>
 	</div>
 
 

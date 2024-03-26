@@ -5,37 +5,77 @@
         <v-col class="nab_burger_menu">
           <button class="burger_menu" @click="showSection()">
             <v-icon @click="showMenu = !showMenu" icon>{{
-            !showMenu ? "mdi-menu" : "mdi-menu"
-          }}</v-icon>
+              !showMenu ? "mdi-menu" : "mdi-menu"
+            }}</v-icon>
           </button>
           <mySection class="NavBar" v-show="isOpen">
             <button class="close_btn" @click="showSection()">
               <v-icon @click="showMenu = !showMenu" icon>{{
-            !showMenu ? "mdi-close" : "mdi-close"
-          }}</v-icon>
-
+                !showMenu ? "mdi-close" : "mdi-close"
+              }}</v-icon>
             </button>
             <v-row>
               <v-col class="nav-links">
-                <a href="/" class="nav-link" :class="{ active: isActive('/') }">Home</a>
-                <a href="/jobs-detail" class="nav-link" :class="{ active: isActive('/jobs-detail') }">Jobs</a>
-                <a href="/about" class="nav-link" :class="{ active: isActive('/about') }">About</a>
-                <a href="/contact" class="nav-link" :class="{ active: isActive('/contact') }">Contact</a>
-                <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/job-apply') }">Jobs Applied</a>
-                <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/savedjobs') }">Jobs Saved</a>
-                <a href="/userprofile" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/userprofile') }">Profile</a>
+                <a href="/" class="nav-link" :class="{ active: isActive('/') }"
+                  >Home</a
+                >
+                <a
+                  href="/jobs-detail"
+                  class="nav-link"
+                  :class="{ active: isActive('/jobs-detail') }"
+                  >Jobs</a
+                >
+                <a
+                  href="/about"
+                  class="nav-link"
+                  :class="{ active: isActive('/about') }"
+                  >About</a
+                >
+                <a
+                  href="/contact"
+                  class="nav-link"
+                  :class="{ active: isActive('/contact') }"
+                  >Contact</a
+                >
+                <a
+                  href="/job-apply"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/job-apply') }"
+                  >Jobs Applied</a
+                >
+                <a
+                  href="/savedjobs"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/savedjobs') }"
+                  >Jobs Saved</a
+                >
+                <a
+                  href="/userprofile"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/userprofile') }"
+                  >Profile</a
+                >
               </v-col>
             </v-row>
           </mySection>
         </v-col>
 
-        <v-menu class="log_and_reg" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+        <v-menu
+          class="log_and_reg"
+          v-if="!usersStore.isloggedin && !employerStore.isloggedin"
+        >
           <template v-slot:activator="{ props }">
-            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
-              style="margin-right: 40px">Login <v-icon color="white">mdi-login</v-icon></a>
+            <a
+              href="#"
+              class="nav-link"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              style="margin-right: 40px"
+              >Login <v-icon color="white">mdi-login</v-icon></a
+            >
           </template>
 
           <ul>
@@ -48,10 +88,19 @@
           </ul>
         </v-menu>
 
-        <v-menu class="log_and_reg" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+        <v-menu
+          class="log_and_reg"
+          v-if="!usersStore.isloggedin && !employerStore.isloggedin"
+        >
           <template v-slot:activator="{ props }">
-            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
-              style="margin-right: 40px">Register <v-icon color="white">mdi-account-plus</v-icon></a>
+            <a
+              href="#"
+              class="nav-link"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              style="margin-right: 40px"
+              >Register <v-icon color="white">mdi-account-plus</v-icon></a
+            >
           </template>
 
           <ul>
@@ -64,11 +113,15 @@
           </ul>
         </v-menu>
 
-        <v-menu class="profile user_drop_down" v-if="usersStore.isloggedin || employerStore.isloggedin"
-          transition="slide-x-transition">
+        <v-menu
+          class="profile user_drop_down"
+          v-if="usersStore.isloggedin || employerStore.isloggedin"
+          transition="slide-x-transition"
+        >
           <template v-slot:activator="{ props }">
             <span style="margin-right: 20px">
-              <v-btn icon="mdi-account" v-bind="props"></v-btn></span>
+              <v-btn icon="mdi-account" v-bind="props"></v-btn
+            ></span>
           </template>
 
           <v-list>
@@ -193,6 +246,9 @@ export default {
 <style scoped>
 .custom-app-bar {
   height: 65px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .nav-links {
