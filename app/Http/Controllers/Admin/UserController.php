@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Job;
 use App\Models\Company;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvitationEmail;
@@ -371,8 +372,8 @@ class UserController extends Controller
 
             $user->status = 'rejected';
             $user->save();
-
-            return response()->json(['status' => true, 'message' => 'Invitation rejected successfully'], 200);
+            return view('rejected')->with('message', 'Invitation rejected successfully');
+           // return response()->json(['status' => true, 'message' => 'Invitation rejected successfully'], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
@@ -410,4 +411,5 @@ class UserController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+   
 }

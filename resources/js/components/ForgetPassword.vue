@@ -56,6 +56,7 @@
 </template>
 <script>
 import { ref, onMounted, computed } from "vue";
+import axios from 'axios';
 export default {
   name: "ForgetPassword",
   setup() {
@@ -74,6 +75,14 @@ export default {
           formData.value
         );
         console.log(response.data);
+        if (response.data.status == true) {
+          window.Swal.fire({
+            icon: "success",
+            title: "Email Sent",
+            text: "We sent a mail to reset password",
+            confirmButtonText: "OK",
+          });
+        }
       } catch (error) {
         console.log(error);
       }

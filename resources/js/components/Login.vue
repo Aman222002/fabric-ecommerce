@@ -92,9 +92,7 @@ export default {
             usersStore.isLogIn();
             window.location.href = "/resume";
           }
-        } else {
-          alert("Login failed");
-        }
+        } 
       } catch (error) {
         console.error(error);
         alert("An error occurred during login");

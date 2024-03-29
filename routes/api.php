@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/userlogin', [UserController::class, 'login']);
+
 
 Route::group(['middleware' =>'auth:api'],function(){
     Route::get('/my-profile', [UserController::class, 'getUserData']);

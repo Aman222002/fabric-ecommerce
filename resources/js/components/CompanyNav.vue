@@ -10,7 +10,7 @@
       <img src="/storage/assest/15.jpg" alt="" />
     </v-avatar>
     <v-list>
-      <v-list-group value="Jobs" class="group" v-if="!usersStore.isloggedin">
+      <v-list-group value="Jobs" class="group"  v-if="!rail">
         <template v-slot:activator="{ props }">
           <v-list-item
             v-bind="props"
@@ -35,13 +35,13 @@
         <!-- <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
         </v-list-item> -->
       </v-list-group>
-      <v-list-item
+      <!-- <v-list-item
         :class="{ group: true, active: currentRoute === '/findcv' }"
         href="/findcv"
         prepend-icon="mdi-magnify"
         title="Find CV"
       >
-      </v-list-item>
+      </v-list-item> -->
       <v-list-item
         v-if="hasPermission('Buy Subscription') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/product' }"
@@ -67,7 +67,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="hasPermission('create users') || hasrole('Company Admin')"
+        v-if="hasPermission('Create Users') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/add-user' }"
         href="/add-user"
         prepend-icon="mdi-account-plus-outline"
@@ -75,7 +75,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="hasPermission('view users') || hasrole('Company Admin')"
+        v-if="hasPermission('View Users') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/users' }"
         href="/users"
         prepend-icon="mdi-account"
@@ -108,13 +108,13 @@
       </template>
 
       <v-list>
-        <v-list-item
+        <!-- <v-list-item
           prepend-icon="mdi-account"
           title="Login as User"
           value="Login as User"
           href="/login"
           class="dropdown"
-        ></v-list-item>
+        ></v-list-item> -->
         <v-list-item
           v-if="usersStore.isloggedin || employerStore.isloggedin"
           class="dropdown"
@@ -203,7 +203,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;
@@ -312,4 +312,5 @@ nav.left_side_bar {
   background-color: #1976d2;
   color: #fff;
 }
+
 </style>

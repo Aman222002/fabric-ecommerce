@@ -246,6 +246,16 @@ class CompanyController extends Controller
                 ]);
                 $user->assignRole('Company Subadmin');
             }
+            else{
+                  $user = User::create([
+                    'name' => $input['name'],
+                    'email' => $input['email'],
+                    'password' => $input['password'],
+                    'phone' => $input['phone'],
+                ]);
+                $user->assignRole('Company Admin');
+
+            }
             if ($request->has('permission') && !empty($request->permission)) {
                 foreach (json_decode($request->permission) as $permission) {
                     // dd($permission);
@@ -265,13 +275,7 @@ class CompanyController extends Controller
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assest', $imageName);
                 }
-                $user = User::create([
-                    'name' => $input['name'],
-                    'email' => $input['email'],
-                    'password' => $input['password'],
-                    'phone' => $input['phone'],
-                ]);
-                $user->assignRole('Company Admin');
+              
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
@@ -281,6 +285,7 @@ class CompanyController extends Controller
                 ]);
                 dispatch(new VerificationMail($user->email));
             }
+            
             return response()->json([
                 'status' => true,
                 'message' => "Registation Successfully"
@@ -652,6 +657,35 @@ class CompanyController extends Controller
     //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     //     }
     // }
+    // public function fetchuser(Request $request)
+    // {
+    //     try {
+    //         $companyId = session('company_id');
+    //         $type = $request->input('type');
+
+    //         switch ($type) {
+    //             case 'Invited':
+
+    //                 $users = Invitation::where('company_id', $companyId)
+    //                     ->where('status', 'pending')
+    //                     ->get();
+    //                 break;
+
+    //             case 'Rejected':
+    //                 $users = Invitation::where('company_id', $companyId)
+    //                     ->where('status', 'rejected')
+    //                     ->get();
+    //                 break;
+    //             default:
+    //                 $users = User::where('company_id', $companyId)->get();
+    //                 break;
+    //         }
+    //         return response()->json(['status' => true, 'data' => $users], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
     public function fetchuser(Request $request)
     {
         try {
@@ -660,22 +694,55 @@ class CompanyController extends Controller
 
             switch ($type) {
                 case 'Invited':
-
                     $users = Invitation::where('company_id', $companyId)
-                        ->where('status', 'pending')
-                        ->get();
+                        ->where('status', 'pending');
                     break;
 
                 case 'Rejected':
                     $users = Invitation::where('company_id', $companyId)
-                        ->where('status', 'rejected')
-                        ->get();
+                        ->where('status', 'rejected');
                     break;
                 default:
-                    $users = User::where('company_id', $companyId)->get();
+                    $users = User::where('company_id', $companyId);
                     break;
             }
-            return response()->json(['status' => true, 'data' => $users], 200);
+            $response = [];
+            if ($request->requireTotalCount) {
+                $response['totalCount'] = $users->count();
+            }
+            if (isset($request->take)) {
+                $users->skip($request->skip)->take($request->take);
+            }
+            // if (isset($request->sort)) {
+            //     $sort = json_decode($request->sort, true);
+            //     if (count($sort)) {
+            //         $users->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
+            //     }
+            // } else {
+            //     $users->orderBy('created_at', 'DESC');
+            // }
+            if ($request->has('filter')) {
+                $filters = json_decode($request->filter, true);
+                if (count($filters)) {
+                    $filters = is_array($filters[0]) ? $filters[0] : $filters;
+                    $search = !blank($filters[2]) ? $filters[2] : false;
+
+                    if ($search) {
+                        $users->where('name', 'like', "%$search%");
+                    }
+                }
+            }
+            $userList = $users->get();
+            $response['data'] = $userList;
+            $totalCount = $users->count();
+            if ($userList->isNotEmpty()) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $userList,
+                    'totalCount' => $totalCount,
+                ], 200);
+                // return response()->json(['status' => true, 'data' => $users], 200);
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -762,10 +829,16 @@ class CompanyController extends Controller
     {
         try {
             $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
+            $user = User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
             $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
             return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
+    }
+    public function getTotalPublishedJobs()
+    {
+        $totalPublishedJobs = Job::getTotalPublishedJobs();
+        return response()->json(['totalPublishedJobs' => $totalPublishedJobs]);
     }
 }

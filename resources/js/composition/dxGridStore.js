@@ -9,7 +9,7 @@ export default function useDataSource(
     deleteURL = null
 ) {
     const skipLoader = ref(true);
-    const pageSizes = ref([10, 15, 20]);
+    const pageSizes = ref([5, 10, 15]);
     const user_id = ref("");
     const isNotEmpty = (value) => {
         return value !== undefined && value !== null && value !== "";

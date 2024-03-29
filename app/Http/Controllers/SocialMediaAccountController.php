@@ -21,7 +21,7 @@ class SocialMediaAccountController extends Controller
                 'instagram' => 'nullable|url',
             ]);
 
-            $companyId = auth()->user()->company->id; 
+            $companyId = session('company_id');
             $socialMedia = SocialMediaAccount::updateOrCreate(
                 ['company_id' => $companyId],
                 [

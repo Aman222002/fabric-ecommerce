@@ -42,6 +42,7 @@
             label="Permission"
             multiple
             chips
+            :rules="permissionRules"
             variant="outlined"
             density="compact"
             small-chips
@@ -76,9 +77,11 @@ export default {
       (v) => !!v || "Phone number is required",
       (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
     ];
-
+  
+    const permissionRules = [
+      (v) => !!v && v.length > 0 || "Permission is required", 
+    ];
     const userPermissions = ref([]);
-
     const fetchPermissions = async () => {
       try {
         const response = await axios.get("/permission");
@@ -106,17 +109,11 @@ export default {
           text: "Invitation sent Successfully to the user Email",
           confirmButtonText: "OK",
         });
-        userData.value = {
-          name: "",
-          email: "",
-          phone: "",
-          permission: [],
-        };
+        window.location.reload(); 
       } catch (error) {
         console.error("Error adding user:", error);
       }
     };
-
     return {
       userData,
       userPermissions,
@@ -124,7 +121,7 @@ export default {
       selectCategory,
       nameRules,
       emailRules,
-
+      permissionRules,
       phoneRules,
     };
   },

@@ -11,6 +11,7 @@ use App\Models\UserExperience;
 use App\Models\UserAchievement;
 use App\Models\UserSkill;
 use Carbon\Carbon;
+
 use App\Models\Address;
 use App\Models\Qualification;
 use Illuminate\Http\Request;
@@ -103,23 +104,65 @@ class ResumeController extends Controller
                     'strengths' => $request->userProfile['strengths'],
                 ]
             );
+            // if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
+            //     $qualificationData = [];
+            //     foreach ($request->educationDetails as $educationDetail) {
+            //         $educationDetail['user_id'] = $user->id;
+            //         $qualificationData[] = $educationDetail;
+            //     }
+             
+            //     Qualification::upsert(
+            //         $qualificationData,
+            //         [
+            //             'user_id' => $user->id,
+            //             'education_type' => $educationDetail['education_type'],
+            //         ],
+            //         ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
+            //     );
+                
+            // }
             if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
-                $qualificationData = [];
                 foreach ($request->educationDetails as $educationDetail) {
                     $educationDetail['user_id'] = $user->id;
-                    $qualificationData[] = $educationDetail;
+                    
+                   
+                    if (!array_key_exists('still_pursuing', $educationDetail)) {
+                      
+                        continue;
+                    }
+                    
+                    try {
+                        $existingQualification = Qualification::where('user_id', $user->id)
+                            ->where('education_type', $educationDetail['education_type'])
+                            ->first();
+            
+                        if ($existingQualification) {
+                            $existingQualification->update([
+                                'starting_year' => $educationDetail['starting_year'],
+                                'passing_year' => $educationDetail['passing_year'],
+                                'still_pursuing' => $educationDetail['still_pursuing'],
+                                'school_university' => $educationDetail['school_university'],
+                            ]);
+                            Log::debug('Qualification updated: ' . $existingQualification->id);
+                        } else {
+                            $newQualification = Qualification::create($educationDetail);
+                            Log::debug('New qualification created: ' . $newQualification->id);
+                        }
+                    } catch (\Exception $e) {
+                    
+                        Log::error('Error updating or creating qualification: ' . $e->getMessage());
+                       
+                        return response()->json(['error' => 'An error occurred while updating or creating qualification.'], 500);
+                    }
                 }
-             
-                Qualification::upsert(
-                    $qualificationData,
-                    [
-                        'user_id' => $user->id,
-                        'education_type' => $educationDetail['education_type'],
-                    ],
-                    ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
-                );
-                
             }
+            
+            
+            
+            
+            
+         
+            
             if (is_array($request->experience) && count($request->experience) > 0 && is_array($request->experience[0])) {
                 $experienceData = [];
                 foreach ($request->experience as $experiences) {

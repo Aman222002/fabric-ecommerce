@@ -8,7 +8,7 @@
               !showMenu ? "mdi-menu" : "mdi-menu"
             }}</v-icon>
           </button>
-          <mySection class="NavBar" v-show="isOpen">
+          <div class="NavBar" v-show="isOpen">
             <button class="close_btn" @click="showSection()">
               <v-icon @click="showMenu = !showMenu" icon>{{
                 !showMenu ? "mdi-close" : "mdi-close"
@@ -60,7 +60,7 @@
                 >
               </v-col>
             </v-row>
-          </mySection>
+          </div>
         </v-col>
 
         <v-menu

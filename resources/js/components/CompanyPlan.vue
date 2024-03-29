@@ -134,8 +134,9 @@ export default {
     const plans = ref({});
     const removeplan = () => {
       try {
-        axios.get(`remove/subscription/${user.id}`).then((response) => {
+        axios.get(`/remove/subscription/${user.id}`).then((response) => {
           console.log(response.data);
+          window.location.reload();
         });
       } catch (error) { }
     };
@@ -217,7 +218,7 @@ export default {
       }
     };
     const redirectToPlansPage = () => {
-      window.location.href = "http://127.0.0.1:8000/product";
+      window.location.href = "/product";
     };
     const getPlan = () => {
       try {

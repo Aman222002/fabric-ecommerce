@@ -106,13 +106,14 @@
                     ></v-file-input>
                   </v-col>
 
-                  <v-col cols="12" class="text-center">
+                  
+                </v-row>
+              </div>
+              <v-col cols="12" class="text-center">
                     <v-btn type="submit" class="custom-button">
                       Register Company
                     </v-btn>
                   </v-col>
-                </v-row>
-              </div>
             </v-card-text>
           </v-col>
           <v-col

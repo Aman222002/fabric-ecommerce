@@ -169,17 +169,49 @@ export default {
             const selectedRoute = employerStore.getPreviousRoute;
             console.log(selectedRoute);
             await fetchUserData();
-            if (selectedRoute == "/findcv") {
-              window.location.href = "/findcv";
-              employerStore.removePreviousRoute();
-            }
+            // if (selectedRoute == "/findcv") {
+            //   window.location.href = "/findcv";
+            //   employerStore.removePreviousRoute();
+            // }
             if (selectedRoute == "/postjob") {
               // console.log('hello');
               if (hasPermission("create users") || hasrole("Company Admin")) {
                 window.location.href = "/postjob";
                 employerStore.removePreviousRoute();
               } else {
-                window.location.href = "/findcv";
+                if (hasrole("Company Admin")) {
+                        window.location.href = "/postjob"; 
+                        employerStore.removePreviousRoute();
+                    } else if (hasrole("Company Subadmin")) {
+                       
+                        if (hasPermission("create users")) {
+                            window.location.href = "/add-user";
+                            employerStore.removePreviousRoute();
+                        } else if (hasPermission("Change Plan")) {
+                            window.location.href = "/company/plan";
+                            employerStore.removePreviousRoute();
+                        } 
+                    else if (hasPermission("view users")) {
+                            window.location.href = "/users";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Post Job")) {
+                            window.location.href = "/postjob";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Edit Job")) {
+                            window.location.href = "/posted-jobs";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Buy Subscription")) {
+                            window.location.href = "/product";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Change Profile")) {
+                            window.location.href = "/company/profile";
+                            employerStore.removePreviousRoute();
+                        } 
+                      }
                 employerStore.removePreviousRoute();
                 alert(`You don't have permissions for this action`);
               }
@@ -189,17 +221,88 @@ export default {
                 window.location.href = "/company/plan";
                 employerStore.removePreviousRoute();
               } else {
-                window.location.href = "/findcv";
+                if (hasrole("Company Admin")) {
+                        window.location.href = "/postjob"; 
+                        employerStore.removePreviousRoute();
+                    } else if (hasrole("Company Subadmin")) {
+                       
+                        if (hasPermission("create users")) {
+                            window.location.href = "/add-user";
+                            employerStore.removePreviousRoute();
+                        } else if (hasPermission("Change Plan")) {
+                            window.location.href = "/company/plan";
+                            employerStore.removePreviousRoute();
+                        } 
+                    else if (hasPermission("view users")) {
+                            window.location.href = "/users";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Post Job")) {
+                            window.location.href = "/postjob";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Edit Job")) {
+                            window.location.href = "/posted-jobs";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Buy Subscription")) {
+                            window.location.href = "/product";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Change Profile")) {
+                            window.location.href = "/company/profile";
+                            employerStore.removePreviousRoute();
+                        } 
+                      }
                 employerStore.removePreviousRoute();
                 alert(`You don't have permissions for this action`);
               }
-            } else if (!selectedRoute) {
-              window.location.href = "/findcv";
-              employerStore.removePreviousRoute();
             }
+            // } else if (!selectedRoute) {
+            //   window.location.href = "/findcv";
+            //   employerStore.removePreviousRoute();
+            // }
             // employerStore.removePreviousRoute();
-          }
+            else if (!selectedRoute) {
+                   
+                    if (hasrole("Company Admin")) {
+                        window.location.href = "/postjob"; 
+                        employerStore.removePreviousRoute();
+                    } else if (hasrole("Company Subadmin")) {
+                       
+                        if (hasPermission("create users")) {
+                            window.location.href = "/add-user";
+                            employerStore.removePreviousRoute();
+                        } else if (hasPermission("Change Plan")) {
+                            window.location.href = "/company/plan";
+                            employerStore.removePreviousRoute();
+                        } 
+                    else if (hasPermission("view users")) {
+                            window.location.href = "/users";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Post Job")) {
+                            window.location.href = "/postjob";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Edit Job")) {
+                            window.location.href = "/posted-jobs";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Buy Subscription")) {
+                            window.location.href = "/product";
+                            employerStore.removePreviousRoute();
+                        } 
+                        else if (hasPermission("Change Profile")) {
+                            window.location.href = "/company/profile";
+                            employerStore.removePreviousRoute();
+                        } 
+                      }
+                }
+            }
         }
+
+      
       } catch (err) {
         console.error(err);
       }

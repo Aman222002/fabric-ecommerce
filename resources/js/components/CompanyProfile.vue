@@ -197,7 +197,7 @@
       <v-card>
         <v-card-title>Edit Address</v-card-title>
         <v-card-text>
-          <v-text-field v-model="editedAddress.first_line_address" label="First_line_address" variant="outlined"
+          <v-text-field v-model="editedAddress.first_line_address" label="First line address" variant="outlined"
             density="compact" :rules="[(value) => !!value || 'First line address is required']"></v-text-field>
           <v-text-field v-model="editedAddress.street" label="Street" variant="outlined" density="compact"
             :rules="[(value) => !!value || 'Street is required']"></v-text-field>
@@ -205,7 +205,7 @@
             :rules="[(value) => !!value || 'City is required']"></v-text-field>
           <v-text-field v-model="editedAddress.state" label="State" density="compact" variant="outlined"
             :rules="[(value) => !!value || 'State is required']"></v-text-field>
-          <v-text-field v-model="editedAddress.postal_code" label="postal_code" density="compact" variant="outlined"
+          <v-text-field v-model="editedAddress.postal_code" label="Postal Code" density="compact" variant="outlined"
             :rules="[(value) => !!value || 'Postal code is required']"></v-text-field>
         </v-card-text>
         <v-card-actions>
@@ -293,15 +293,23 @@ export default {
         console.log(response.data);
         company.value = response.data.companydata;
         user.value = response.data.user;
-        console.log(user.value);
-        facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
-        twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
-        linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
-        instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
         if (response.data.companydata.address) {
           address.value = response.data.companydata.address;
         }
+        console.log(user.value);
+        // facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
+        // twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
+        // linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
+        // instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
+        if (response.data.companydata.social_media_accounts && response.data.companydata.social_media_accounts.length > 0) {
+      facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
+      twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
+      linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
+      instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
+    }
+       
         console.log(response.data.companydata.address);
+     
       } catch (error) {
         console.error("Error fetching company profile:", error);
       }
@@ -340,7 +348,7 @@ export default {
           },
         });
         closeEditAddressModal();
-        window.location.reload();
+        
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
@@ -444,6 +452,7 @@ export default {
           linkedin: linkedin.value,
           instagram: instagram.value,
         });
+    window.location.reload();
         // Handle successful response
       } catch (error) {
         console.error("Error updating social media accounts:", error);
