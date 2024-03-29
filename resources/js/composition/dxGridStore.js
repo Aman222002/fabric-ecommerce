@@ -33,7 +33,7 @@ export default function useDataSource(
                     paramsObject[i] = JSON.stringify(loadOptions[i]);
                 }
             });
-            // console.log(params);
+            // console.log(params.value);
             if (params) {
                 Object.assign(paramsObject, params.value);
             }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BlogPost;
 use App\Models\Partner;
+use App\Models\Job;
 use App\Models\Plan;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
@@ -53,6 +54,28 @@ class DashboardController extends Controller
         return view('admin/blog');
     }
     /**
+     * function to return jobs view
+     */
+    public function viewJobs()
+    {
+        return view('admin.jobs');
+    }
+    /**
+     * function to get all jobs
+     */
+    public function getAllJobs()
+    {
+        try {
+            $publishedJobs = Job::getTotalPublishedJobs();
+            // dd($publishedJobs);
+            Log::info('data' . json_encode($publishedJobs));
+            $totalCount = $publishedJobs->count();
+            return response()->json(['status' => true, 'data' => $publishedJobs, 'totalCount' => $totalCount], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'messsage' => $e->getMessage()], 500);
+        }
+    }
+    /**
      * function to get Plans
      */
     public function getplans()
@@ -94,7 +117,7 @@ class DashboardController extends Controller
                 return response()->json(['status' => true, 'message' => 'plan updated Successfully'], 200);
             }
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'messsage' => $e], 500);
+            return response()->json(['status' => false, 'messsage' => $e->getMessage()], 500);
         }
     }
     /**
@@ -162,8 +185,9 @@ class DashboardController extends Controller
                 }
                 return $blog;
             });;
+            $totalCount = $blog->count();
             // $jobs = Job::all();
-            return response()->json(['status' => true, 'data' => $blogs], 200);
+            return response()->json(['status' => true, 'data' => $blogs, 'totalCount' => $totalCount], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);

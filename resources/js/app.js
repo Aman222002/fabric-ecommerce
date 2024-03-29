@@ -196,9 +196,6 @@ Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);
 });
 
-import DashBoard from "./components/DashBoard.vue";
-app.component("dashboard-component", DashBoard);
-
 import FindCv from "./components/FindCv.vue";
 app.component("findcv-component", FindCv);
 
@@ -266,6 +263,12 @@ app.component("about-component", About);
 
 import SingleBlog from "./components/blogSinglePage.vue";
 app.component("single-blog", SingleBlog);
+
+import AdminDashBoard from "./components/AdminDashboard.vue";
+app.component("admindashboard-component", AdminDashBoard);
+
+import JobsComponent from "./components/JobsComponent.vue";
+app.component("jobs-component", JobsComponent);
 
 import Contact from "./components/Contact.vue";
 app.component("contact-component", Contact);

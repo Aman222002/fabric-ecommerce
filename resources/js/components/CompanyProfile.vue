@@ -293,14 +293,15 @@ export default {
         console.log(response.data);
         company.value = response.data.companydata;
         user.value = response.data.user;
+        if (response.data.companydata.address) {
+          address.value = response.data.companydata.address;
+        }
         console.log(user.value);
         facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
         twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
         linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
         instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
-        if (response.data.companydata.address) {
-          address.value = response.data.companydata.address;
-        }
+
         console.log(response.data.companydata.address);
       } catch (error) {
         console.error("Error fetching company profile:", error);

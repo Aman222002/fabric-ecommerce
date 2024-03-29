@@ -1,24 +1,14 @@
 <template>
   <p style="text-align: center; font-size: 20px; margin-top: 20px"> Users</p>
-  <DxDataGrid
-    :show-borders="true"
-    :data-source="dataSource"
-    :repaint-changes-only="true"
-    :remote-operations="true"
-    ref="dataGridRef"
-  >
-  <DxToolbar>
+  <DxDataGrid :remote-operations="true" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
+    ref="dataGridRef">
+    <DxToolbar>
       <DxGridItem template="dropDown2" :location="'before'" />
       <DxGridItem name="searchPanel" :location="'after'"></DxGridItem>
     </DxToolbar>
-    <DxEditing
-      mode="row"
-     
-      :use-icons="true"
-    >
+    <DxEditing mode="row" :use-icons="true">
     </DxEditing>
     <DxSearchPanel :visible="true" />
-    <DxScrolling mode="virtual" row-rendering-mode="virtual" />
     <DxColumn v-if="selectedStatus === 'All'" data-field="name" data-type="string"></DxColumn>
     <DxColumn v-if="selectedStatus === 'All'" data-field="email" data-type="string"></DxColumn>
     <DxColumn v-if="selectedStatus !== 'All'" data-field="user_email" data-type="string"></DxColumn>
@@ -31,6 +21,12 @@
         </DxList>
       </DxDropDownBox>
     </template>
+    <DxPaging :page-size="pageSize" />
+    <DxPager :visible="true" :allowed-page-sizes="[10, 15, 20]" :display-mode="'compact'"
+      :show-page-size-selector="true" :show-navigation-buttons="true" :show-info="true" />
+    <DxSummary>
+      <DxTotalItem column="id" summary-type="count" />
+    </DxSummary>
   </DxDataGrid>
 </template>
 
@@ -41,11 +37,12 @@ import { ref, onMounted, computed } from "vue";
 
 export default {
   name: "companyusers",
- 
+
   setup() {
     const dataGridRef = ref(null);
     const DropDown2 = ref(false);
     const params = ref({});
+    const pageSize = ref(10);
     const selectedStatus = ref("All");
     const selectStatus = (e) => {
       const value = e.itemData.text;
@@ -70,11 +67,11 @@ export default {
     ]);
     const loadUrl = `/fetch-user`;
     const deleteUrl = `/admin/user/destroy`;
-    const { dataSource , refreshTable } = dxGridStore(loadUrl, params, null, null, deleteUrl);
-    
+    const { dataSource, refreshTable } = dxGridStore(loadUrl, params, null, null, deleteUrl);
+
     return {
       dataSource, items, selectStatus, selectedStatus,
-      DropDown2, dataGridRef, params
+      DropDown2, dataGridRef, params, pageSize,
     };
   },
 };

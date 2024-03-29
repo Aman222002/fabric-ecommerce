@@ -1,47 +1,40 @@
 <template>
-  <div class="recent_news_articles">
+  <div class="recent_news_articles" v-if="recentNews.length > 0">
     <v-container class="w-75 mb-6">
       <div class="sec-title text-center">
         <h2>Recent News Articles</h2>
         <div class="text">
           Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
-          <!-- Read recent news articles here -->
         </div>
       </div>
-      <v-row align="center" justify="center">
-        <v-col cols="12" class="recent_news_col" sm="12" md="6" lg="4" xl="4" v-for="recentNews in recentNews"
-          :key="recentNews.id">
-          <v-card class="mx-auto my-4">
-            <template>
-              <v-progress-linear color="deep-purple" height="4" indeterminate>
-              </v-progress-linear>
-            </template>
-            <v-img cover height="200" :src="`/storage/assets/${recentNews.featured_image}`">
-            </v-img>
-            <div class="Cmt_time">
-              <v-card-subtitle class="pt-4">
-                {{ formatCreatedAt(recentNews.created_at) }}
-              </v-card-subtitle>
-              <v-card-subtitle class="pt-4">
-                <!-- <v-icon>{{ icon }}</v-icon>{{ comment }} -->
-              </v-card-subtitle>
-            </div>
-            <v-card-item>
-              <v-card-title>{{ recentNews.title }}</v-card-title>
-            </v-card-item>
-            <v-card-text>
-              <!-- <div v-html="recentNews.content">
-              </div> -->
-              <div>
-                {{ recentNews.contentText
-                }}<span v-if="recentNews.contentText" class="read-more" @click="openDetailPage(recentNews.id)">
-                  Read More
-                </span>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+      <v-carousel hide-delimiters show-arrows="hover">
+        <v-carousel-item v-for="(slideIndex) in Math.ceil(recentNews.length / 3)" :key="slideIndex">
+          <v-row align="center" justify="center">
+            <v-col v-for="(recentItem, itemIndex) in recentNews.slice((slideIndex - 1) * 3, slideIndex * 3)"
+              :key="itemIndex" cols="12" class="recent_news_col" sm="12" md="4" lg="4" xl="4">
+              <v-card class="my-4">
+                <template>
+                  <v-progress-linear color="deep-purple" height="4" indeterminate>
+                  </v-progress-linear>
+                </template>
+                <v-img cover height="200" :src="`/storage/assets/${recentItem.featured_image}`"></v-img>
+                <div class="Cmt_time">
+                  <v-card-subtitle class="pt-4">{{ formatCreatedAt(recentItem.created_at) }}</v-card-subtitle>
+                </div>
+                <v-card-item>
+                  <v-card-title>{{ recentItem.title }}</v-card-title>
+                </v-card-item>
+                <v-card-text>
+                  <div>
+                    {{ truncateDescription(recentItem.contentText) }}<span v-if="recentItem.contentText"
+                      class="read-more" @click="openDetailPage(recentItem.id)">Read full article</span>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-carousel-item>
+      </v-carousel>
     </v-container>
   </div>
 </template>
@@ -67,7 +60,6 @@ export default {
     };
     const fecthBlog = () => {
       axios.get('get/blog').then((response) => {
-        // console.log(response.data.data);
         recentNews.value = response.data.data.map(blog => {
           const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
           const paragraphs = blog.content.match(paragraphRegex);
@@ -75,17 +67,23 @@ export default {
             .map(p => p.replace(/<[^>]+>/g, ''))
             .join(' ')
             .split(/\s+/)
-            .slice(0, 24)
+            .slice(0, 25)
             .join(' ') : '';
           return {
             ...blog,
             contentText
           };
-        })
+        }).sort((a, b) => b.id - a.id);
       })
         .catch((err) => {
           console.log(err);
         });
+    };
+    const truncateDescription = (description) => {
+      if (description && description.length > 200) {
+        return description.substring(0, 200) + "...";
+      }
+      return description;
     };
     onMounted(() => {
       fecthBlog();
@@ -97,6 +95,7 @@ export default {
       icon,
       comment,
       openDetailPage,
+      truncateDescription,
     };
   },
 };

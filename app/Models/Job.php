@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+
 class Job extends Model
 {
     use HasFactory;
@@ -56,5 +57,9 @@ class Job extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');
+    }
+    public static function getTotalPublishedJobs()
+    {
+        return static::where('post_status', 'published')->get();
     }
 }

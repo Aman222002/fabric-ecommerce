@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer location="left" class="left_side_bar" v-model="drawer" :rail="rail">
+  <v-navigation-drawer location="left" v-model="drawer" :rail="rail">
     <span>
       <h3 class="title" v-if="!rail">JOBS</h3>
       <v-avatar v-if="rail">
@@ -80,6 +80,11 @@ export default {
         href: "/admin/plans",
       },
       {
+        title: "Jobs",
+        icon: "mdi-list-box",
+        href: "/admin/jobs",
+      },
+      {
         title: "Blogs",
         icon: "mdi-post",
         href: "/admin/blog/view",
@@ -129,7 +134,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;

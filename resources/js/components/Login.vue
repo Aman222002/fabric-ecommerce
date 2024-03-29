@@ -84,13 +84,13 @@ export default {
           console.log(data.data.roles[0].name);
 
           if (data.data.roles[0].name == "Admin") {
-            window.location.href = "./admin/dashboard";
+            window.location.href = "/admin/users";
             usersStore.isLogIn();
           } else if (data.data.roles[0].name == "Company Admin") {
             window.location.href = "/job";
           } else {
-            usersStore.isLogIn();
             window.location.href = "/resume";
+            usersStore.isLogIn();
           }
         } else {
           alert("Login failed");
