@@ -11,7 +11,7 @@
         <v-col cols="12">
           <h2 class="mb-4 form_fild_title">Post Detail:</h2>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             variant="outlined"
             v-model="job.title"
@@ -21,7 +21,7 @@
             density="compact"
           ></v-text-field>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12"  class="pb-0">
           <v-select
             variant="outlined"
             v-model="job.category"
@@ -33,7 +33,7 @@
             density="compact"
           ></v-select>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-select
             variant="outlined"
             v-model="job.jobType"
@@ -45,7 +45,7 @@
             density="compact"
           ></v-select>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-select
             variant="outlined"
             v-model="job.jobSkill"
@@ -57,7 +57,7 @@
             density="compact"
           ></v-select>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             variant="outlined"
             v-model="job.vacancy"
@@ -69,17 +69,8 @@
             density="compact"
           ></v-text-field>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
-          <v-text-field
-            variant="outlined"
-            v-model="job.salary"
-            label="Salary"
-            placeholder="Salary"
-            :rules="rules.salary"
-            density="compact"
-          ></v-text-field>
-        </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+       
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             variant="outlined"
             v-model="job.location"
@@ -89,7 +80,7 @@
             density="compact"
           ></v-text-field>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             variant="outlined"
             v-model="job.qualifications"
@@ -99,7 +90,7 @@
             density="compact"
           ></v-text-field>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-select
             variant="outlined"
             v-model="job.experience"
@@ -110,7 +101,7 @@
             :rules="rules.experience"
           ></v-select>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             variant="outlined"
             type="url"
@@ -122,7 +113,49 @@
             density="compact"
           ></v-text-field>
         </v-col>
-        <v-col sm="12" md="12" lg="12" xl="12" cols="12">
+        
+          <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
+  <v-select
+    v-model="job.salaryType"
+    :items="['fixed', 'range']"
+    label="Salary Type"
+    density="compact"
+    variant="outlined"
+    :rules="rules.salaryType"
+  ></v-select>
+         
+  <template v-if="job.salaryType === 'range'">
+    <v-text-field
+      variant="outlined"
+      v-model="job.minSalary"
+      label="Minimum Salary"
+      placeholder="Minimum Salary"
+      :rules="rules.minSalary"
+      density="compact"
+      style="margin-top: 10px;"
+    ></v-text-field>
+    <v-text-field
+      variant="outlined"
+      v-model="job.maxSalary"
+      label="Maximum Salary"
+      placeholder="Maximum Salary"
+      :rules="rules.maxSalary"
+      density="compact"
+      style="margin-top: 10px;"
+    ></v-text-field>
+  </template>
+  <template v-else>
+    <v-text-field
+      variant="outlined"
+      v-model="job.salary"
+      label="Salary"
+      placeholder="Salary"
+      :rules="rules.salary"
+      density="compact"
+    ></v-text-field>
+  </template>
+        </v-col>
+        <v-col sm="12" md="12" lg="12" xl="12" cols="12" class="pb-0">
           <v-textarea
             variant="outlined"
             v-model="job.description"
@@ -145,6 +178,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+
 export default {
   name: "Postjob",
   setup() {
@@ -155,6 +189,9 @@ export default {
       jobType: "",
       vacancy: "",
       salary: "",
+      salaryType: "fixed",
+      minSalary: "", 
+  maxSalary: "",
       location: "",
       description: "",
       qualifications: "",
@@ -163,11 +200,20 @@ export default {
       jobSkill: "",
     });
     const rules = {
+      minSalary: [
+    (v) => !!v || "Minimum Salary is required",
+    (v) => /^\d+(\.\d{1,2})?$/.test(v) || "Enter a valid minimum salary", // Ensure it's a valid number with up to 2 decimal places
+  ],
+  maxSalary: [
+    (v) => !!v || "Maximum Salary is required",
+    (v) => /^\d+(\.\d{1,2})?$/.test(v) || "Enter a valid maximum salary", // Ensure it's a valid number with up to 2 decimal places
+  ],
       title: [(v) => !!v || "Title is required"],
       category: [(v) => !!v || "Category is required"],
       jobType: [(v) => !!v || "Job Type is required"],
       vacancy: [(v) => !!v || "Vacancy is required"],
       salary: [(v) => !!v || "Salary is required"],
+      salaryType: [(v) => !!v || "Salary Type is required"],
       location: [(v) => !!v || "Location is required"],
       description: [(v) => !!v || "Description is required"],
       qualifications: [(v) => !!v || "Qualifications are required"],

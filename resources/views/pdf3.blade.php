@@ -4,7 +4,6 @@
 <head>
 	<title>resume 3</title>
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Questrial&display=swap');
 
 		/* font-family:  Biryani;
   font-family: Biryani; */
@@ -73,57 +72,43 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies And Strengths</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies</h2>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
+					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
 							<td>
-								<strong>Adrealine sport, Composing music</strong>
+								<strong>{{ $hobbies['hobbies']}}</strong>
 							</td>
 						</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
-			<!-- languages -->
 			<div style="border-top: 2px solid; margin-top: 25px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">languages</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;"> Strengths</h2>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
+					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
 							<td>
-								<strong>Englisg</strong>
-							</td>
-							<td>
-								<strong>Native</strong>
+								<strong>{{ $hobbies['strengths']}}</strong>
 							</td>
 						</tr>
-						<tr>
-							<td>
-								<strong>Spanish</strong>
-							</td>
-							<td>
-								<strong>Advances</strong>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>German</strong>
-							</td>
-							<td>
-								<strong>Intermediate</strong>
-							</td>
-						</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
+		
+			
 		</div>
 		<!-- right side -->
 		<div style="width: 70%;height: 100%;float: left;">
@@ -149,29 +134,6 @@
 					</tbody>
 				</table>
 			</div>
-			<!-- Summary -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Summary</h2>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								Result-orientated project team leader with 5 years of experience covering project and
-								product management including developing, implementing and supporting complex
-								infrastructures for fast growing startups. A fast and eager learner, I am detail
-								oriented and adapt to changing project requirements quickly to meet business goals.
-								Comfortable with ambiguity and able to thrive in a fast-paced environment.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 			<!-- Experience -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
@@ -204,39 +166,8 @@
 					@endforeach
 				</table>
 			</div>
-			<!-- Experience -->
-			<div style="border-top: 2px solid;margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0;margin-top: 10px; font-family:  Biryani; text-align: left;">
-									Experience
-								</h2>
-							</th>
-						</tr>
-					</thead>
-
-					@foreach ($userdata['experience'] as $exp)
-					<tbody>
-						<tr>
-							<td style="width: 60%;">
-								<h3 style="margin: 0;color: #006666;">{{ $exp['company_name'] }}</h3>
-							</td>
-							<td style="width: 40%; text-align: right;">
-								<strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
-							</td>
-						</tr>
-						<tr>
-							<td>{{ $exp['position'] }} </td>
-						</tr>
-						<tr>
-							<td colspan="3">{{ $exp['description'] }}</td>
-						</tr>
-					</tbody>
-					@endforeach
-				</table>
-			</div>
+			
+			
 			<!-- Education(Qualifications) -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 
@@ -297,7 +228,7 @@
 				<tbody>
 					<tr>
 						<td style="width: 100%;">
-							{{ $addresses['city'] }}, Chennai, {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
+							{{ $addresses['city'] }} {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
 						</td>
 					</tr>
 				</tbody>

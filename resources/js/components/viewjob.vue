@@ -1,5 +1,5 @@
 <template>
-    <div class="employers_search_single">
+    <div v-if="featuredJob && featuredJob.title" class="employers_search_single">
       <div class="employers_search_single_top">
         <v-container class="w-75 mb-6">
           <v-row align="center" justify="center">
@@ -64,6 +64,9 @@
                     >
                       <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn
                     >
+                    <!-- <v-btn icon class="share-btn" @click="shareJob">
+                <v-icon>mdi-share</v-icon>
+              </v-btn> -->
                   </div>
             </v-col>
           </v-row>
@@ -319,9 +322,25 @@ const formatCreatedAt = (createdAt) => {
         });
       }
     };
+    // const shareJob = () => {
+    //   const jobUrl = window.location.href;
+    //   console.log(jobUrl);
+    //   if (navigator.share) {
+    //     navigator.share({
+    //       title: 'Check out this job!',
+    //       text: `Check out this job: ${featuredJob.value.title} at ${featuredJob.value.company.company_name}`,
+    //       url: jobUrl
+    //     })
+    //     .then(() => console.log('Shared successfully'))
+    //     .catch(error => console.error('Error sharing:', error));
+    //   } else {
+    //     console.log('Not shared');
+    //   }
+    // };
   
       return {
-        featuredJob,formatCreatedAt,apply,save,jobid
+        featuredJob,formatCreatedAt,apply,save,jobid,
+        // shareJob,
       };
     }
   };

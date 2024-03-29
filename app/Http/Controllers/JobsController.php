@@ -133,6 +133,11 @@ class JobsController extends Controller
             }
             $company = $user->company;
             $input = $request->all();
+            if ($request->has('salaryType') && $input['salaryType'] === 'range') {
+                $salary = $input['minSalary'] . '-' . $input['maxSalary'];
+            } else {
+                $salary = $input['salary'];
+            }
             $job = Job::create([
                 'user_id' => $user->id,
                 'company_id' => $company->id,
@@ -140,7 +145,7 @@ class JobsController extends Controller
                 'category_id' => $input['category'],
                 'job_type_id' => $input['jobType'],
                 'vacancy' => $input['vacancy'],
-                'salary' => $input['salary'],
+                'salary' =>$salary,
                 'location' => $input['location'],
                 'description' => $input['description'],
                 'qualifications' => $input['qualifications'],

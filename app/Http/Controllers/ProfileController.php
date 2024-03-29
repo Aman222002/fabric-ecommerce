@@ -70,8 +70,9 @@ class ProfileController extends Controller
 
             $company = Company::with(['address', 'socialMediaAccounts', 'jobs' => function ($query) {
                 $query->where('is_draft', 0);
+               
             }])->find($companyId);
-
+       
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }

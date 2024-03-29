@@ -243,7 +243,7 @@ Route::post('/jobs/draft/{id?}/{type?}', [JobsController::class, 'detail']);
 Route::get('/jobs/qualification/{id}', [JobsController::class, 'qualification']);
 Route::get('/jobs/experience/{id}', [JobsController::class, 'experience']);
 Route::get('/jobs/application/{id}', [JobsController::class, 'getapplicants']);
-Route::get('/generate-pdf', [PdfController::class, 'download']);
+Route::get('/generate-pdf/{design?}', [PdfController::class, 'download']);
 Route::post('/update-status', [UserController::class, 'updatestatus']);
 Route::get('/draft/jobs', [DraftController::class, 'index']);
 Route::get('/post/edit/{id}', [DraftController::class, 'edit']);
@@ -259,7 +259,7 @@ Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
 Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
 Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
 Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
-Route::post('remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
+Route::post('/remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
 Route::get('/contact/data', [DashboardController::class, 'viewContact']);
 Route::get('partner/data', [DashboardController::class, 'viewPartners']);
 Route::get('get/blog', [UserController::class, 'fetchBlogs']);
@@ -269,3 +269,5 @@ Route::get('/fetch/single/blog/{blogId?}', [UserController::class, 'fetchSingleB
 //user/{id} function(Request $request, $id)
 Route::post('/send-email', [ContactController::class, 'sendEmail']);
 Route::post('/company/updateSocialMedia', [SocialMediaAccountController::class, 'updateSocialMedia']);
+Route::get('/total-published-jobs', [CompanyController::class, 'getTotalPublishedJobs']);
+Route::get('/template-preview/{template}', [PdfController::class, 'preview']);

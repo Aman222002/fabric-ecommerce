@@ -5,10 +5,10 @@
     </div>
     <div class="banner_st">
       <v-row no-gutters>
-        <v-col class="banner_left" sm="12" md="8" lg="7" xl="7">
+        <v-col class="banner_left" sm="12" md="8" lg="6" xl="6">
           <div class="title-box">
             <h3>
-              There Are <span class="colored">93,178</span> Postings Here For
+              There Are <span class="colored">{{ totalJobPostings }}</span> Postings Here For
               you!
             </h3>
             <div class="text">
@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 export default {
   name: "HomePage",
   setup() {
@@ -67,10 +67,23 @@ export default {
         "&location=" +
         location.value;
     };
+    const totalJobPostings = ref(0);
+    const fetchTotalJobPostings = async () => {
+      try {
+        const response = await fetch('/total-published-jobs'); // Adjust the URL accordingly
+        const data = await response.json();
+        totalJobPostings.value = data.totalPublishedJobs;
+      } catch (error) {
+        console.error('Error fetching total job postings:', error);
+      }
+    };
+    onMounted(() => {
+      fetchTotalJobPostings();
+    });
     return {
       redirectToJobsDetail,
       jobTitle,
-      location,
+      location,totalJobPostings,
     };
   },
 };

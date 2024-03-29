@@ -46,7 +46,7 @@ main.v-main {
 }
 
 .banner_right {
-    width: 50%;
+    width: 47%;
     position: absolute;
     display: flex;
     right: 2%;
@@ -76,7 +76,7 @@ main.v-main {
 
 form.job_search_form {
     background: #fff;
-    padding: 15px 25px;
+    padding: 7px 10px;
     border-radius: 15px;
 }
 
@@ -847,7 +847,10 @@ button.save_btn {
     .banner_right {
         margin-top: -242px;
     }
-
+    .banner_st h3{
+        font-size: 30px;
+        margin-bottom: 0;
+    }
 }
 
 
@@ -915,7 +918,9 @@ button.save_btn {
 
 @media screen and (max-width: 961px) {
 
-
+    .banner_st h3{
+        font-size: 25px;
+    }
     .banner_right,
     .home_page .banner {
         display: none;
@@ -1014,4 +1019,10 @@ button.save_btn {
         margin: 25px 0 !important;
     }
 
+}
+
+@media screen and (max-width: 961px) {
+.banner_st h3{
+    font-size: 20px;
+}
 }

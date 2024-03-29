@@ -4,8 +4,8 @@
       <v-row no-gutters>
         <v-col class="footer_col" cols="12" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
-            <router-link class="logo" to="/" style="cursor: pointer" width="200">
-              {{ appName }}</router-link>
+            <a class="logo" href="/" style="cursor: pointer" width="200">
+              {{ appName }}</a>
           </v-toolbar-title>
           <div class="footer-column about-widget">
             <p class="phone-num">
@@ -261,5 +261,6 @@ export default {
 
 a {
   cursor: pointer;
+  color: black;
 }
 </style>

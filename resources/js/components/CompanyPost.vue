@@ -192,7 +192,7 @@ export default {
 
     const openDetailPanel = (job) => {
       console.log(job);
-      window.location.href = `http://127.0.0.1:8000/view/${job.id}`;
+      window.location.href = `/view/${job.id}`;
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
       detail.value.location = job.location;

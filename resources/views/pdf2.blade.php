@@ -4,7 +4,7 @@
 <head>
 	<title>resume 2</title>
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Questrial&display=swap');
+	
 
 		/* font-family:  Biryani;
   font-family: Biryani; */
@@ -42,30 +42,7 @@
 					</tbody>
 				</table>
 			</div>
-			<!-- Summary -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Summary</h2>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								Result-orientated project team leader with 5 years of experience covering project and
-								product management including developing, implementing and supporting complex
-								infrastructures for fast growing startups. A fast and eager learner, I am detail
-								oriented and adapt to changing project requirements quickly to meet business goals.
-								Comfortable with ambiguity and able to thrive in a fast-paced environment.
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
+			
 			<!-- Experience -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
@@ -185,9 +162,8 @@
 					<tbody>
 						<tr>
 							<td colspan="2">
-							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}">
-													<!-- <img style="width: 120px;height: 120px;text-align: center;border-radius: 56px;"
-									src="https://static.vecteezy.com/system/resources/thumbnails/024/095/208/small/happy-young-man-smiling-free-png.png" /> -->
+							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}"  style="width: 120px;height: 120px;">
+									
 									
 							</td>
 						</tr>
@@ -221,57 +197,43 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies And Strengths</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies </h2>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
+					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
 							<td>
-								<strong>Adrealine sport, Composing music</strong>
+								<strong>{{ $hobbies['hobbies']}}</strong>
 							</td>
 						</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
-			<!-- languages -->
 			<div style="border-top: 2px solid; margin-top: 25px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">languages</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Strengths</h2>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
+					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
 							<td>
-								<strong>Englisg</strong>
-							</td>
-							<td>
-								<strong>Native</strong>
+								<strong>{{ $hobbies['strengths']}}</strong>
 							</td>
 						</tr>
-						<tr>
-							<td>
-								<strong>Spanish </strong>
-							</td>
-							<td>
-								<strong>Advances</strong>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<strong>German </strong>
-							</td>
-							<td>
-								<strong>Intermediate</strong>
-							</td>
-						</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
+			
+			
 
 		</div>
 	</div>

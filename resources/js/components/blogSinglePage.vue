@@ -1,10 +1,10 @@
 <template>
-  <div class="single_blog_page">
-    <v-card :loading="loading" class="mx-auto my-12">
+<div v-if="recentNews && recentNews.title" class="single_blog_page">
+    <v-card  class="mx-auto my-12">
       <v-card-item>
         <v-card-title>{{ recentNews.title }}</v-card-title>
         <div class="px-4">
-          <v-chip-group v-model="selection">
+          <v-chip-group>
             <v-chip> {{ recentNews.published_by }}</v-chip>
             <v-chip>{{ formatCreatedAt(recentNews.created_at) }}</v-chip>
             <!-- <v-chip>Comment</v-chip> -->

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitation</title>
     <style>
         body {
@@ -19,20 +21,11 @@
         }
         h2 {
             color: #333;
-        }
-        h4, h5 {
-            color: #666;
+            margin-bottom: 10px;
         }
         p {
             margin: 10px 0;
             color: #777;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        ul li {
-            margin-bottom: 5px;
         }
         a {
             color: #007bff;
@@ -41,27 +34,46 @@
         a:hover {
             text-decoration: underline;
         }
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Hello {{ $name }},</h2>
-        <h4>Email {{ $email }},</h4>
-        <h5>Phone {{ $phone }},</h5>
-        <p>You have been invited to join our platform!</p>
-        <p>Your company Detail is: {{ $company_name }}</p>
-        @if(is_array($permission))
-            <p>Your permission level:</p>
-            <ul>
-                @foreach($permissions as $perm)
-                    <li>{{ $perm }}</li>
-                @endforeach
-            </ul>
-        @else
-            <p>Your permission level: {{ $permissions }}</p>
-        @endif
-        <p>You Accepted this <br><a href="{{ url($url . '/' . $name . '/' . $company . '/' .$email. '/' . $phone. '/' .urlencode(json_encode($permission))) }}">click here</a></p>
-        <p>You Rejected this <br><a href="{{$url2}}">Rejected</a></p>
+        <p>You have been invited to join our platform.</p>
+        <p>Please review the details below:</p>
+        <ul>
+            <li><strong>Email:</strong> {{ $email }}</li>
+            <li><strong>Phone:</strong> {{ $phone }}</li>
+            <li><strong>Company:</strong> {{ $company_name }}</li>
+            <li><strong>Permission Level:</strong> 
+                @if(is_array($permission))
+                    <ul>
+                        @foreach($permissions as $perm)
+                            <li>{{ $perm }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    {{ $permissions }}
+                @endif
+            </li>
+        </ul>
+        <p>To accept this invitation, click the button below:</p>
+        <p>
+            <a href="{{ url($url . '/' . $name . '/' . $company . '/' .$email. '/' . $phone. '/' .urlencode(json_encode($permission))) }}" class="button">Accept Invitation</a>
+        </p>
+        <p>If you wish to decline this invitation, click the following link:</p>
+        <p>
+            <a href="{{$url2}}" class="button">Decline Invitation</a>
+        </p>
         <p>Thank you!</p>
     </div>
 </body>

@@ -129,7 +129,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;

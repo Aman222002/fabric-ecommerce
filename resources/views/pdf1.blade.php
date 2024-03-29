@@ -9,7 +9,6 @@
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Questrial&display=swap');
 
 		/* font-family:  Biryani;
   font-family: Biryani; */
@@ -30,7 +29,7 @@
 				<tr>
 					<td colspan="2">
 						<h1 style="margin: 0; margin: 15px; font-family:  Biryani;">{{ $userdata['name'] }}</h1>
-						<h2 style="margin: 0;margin: 10px;">Web Designer, Director</h2>
+						
 					</td>
 				</tr>
 				<tr>
@@ -149,7 +148,7 @@
 				<tbody>
 					<tr>
 						<td style="width: 100%;">
-							{{ $addresses['city'] }}, Chennai, {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
+							{{ $addresses['city'] }} {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
 						</td>
 					</tr>
 				</tbody>

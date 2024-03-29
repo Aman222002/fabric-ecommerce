@@ -1,4 +1,3 @@
-
 <template>
   <v-container>
     <div>
@@ -62,6 +61,8 @@
                       <div>
                         <user-profile></user-profile>
                       </div>
+                      <!-- Replace v-select with iframe -->
+                     
                     </template>
                     <v-stepper-actions
                       :disabled="disabled"
@@ -69,9 +70,16 @@
                       @click:next="goToNext()"
                       color="#006400"
                     ></v-stepper-actions>
-                    <v-btn v-if="currentStep === 4" @click="downloadcv()"
-                      >Generate CV</v-btn
-                    >
+
+                    <v-select v-if="currentStep === 4"
+                      v-model="selectedTemplate"
+                      :items="['Template1', 'Template2','Template3']"
+                      label="Select Template"
+                      density="compact"
+                      variant="outlined"
+                    ></v-select>
+                    <iframe v-if="selectedTemplate && currentStep ===4" :src="getTemplatePreview(selectedTemplate)" width="400" height="300" frameborder="0"></iframe>
+                    <v-btn v-if="currentStep === 4" @click="downloadcv()">Generate CV</v-btn>
                   </v-form>
                 </v-card>
               </v-stepper-window-item>
@@ -82,6 +90,7 @@
     </div>
   </v-container>
 </template>
+
 <script >
 import axios from "axios";
 import { ref, computed, onMounted } from "vue";
@@ -124,6 +133,8 @@ export default {
       "Work Experience",
       "Hobbies",
     ]);
+    const selectedTemplate = ref('');
+
     const stepBackgrounds = ref([]);
     const formData = ref({});
     const nameRules = ref([]);
@@ -173,9 +184,21 @@ export default {
 
       return val;
     });
+    
     const downloadcv = () => {
-      window.location.href = "/generate-pdf";
+      if (!selectedTemplate.value) {
+        
+        return;
+      }
+      const url = `/generate-pdf?template=${selectedTemplate.value}`;
+      window.location.href = url;
+     
     };
+
+    const getTemplatePreview = (template) => {
+      return `/template-preview/${template}`;
+    };
+
     return {
       store,
       maxSteps: 4,
@@ -189,7 +212,9 @@ export default {
       valid,
       circularSteps,
       myForm,
-      downloadcv,
+      downloadcv, 
+      selectedTemplate,
+      getTemplatePreview
     };
   },
   computed: {
@@ -202,24 +227,6 @@ export default {
     await this.store.getUserData();
   },
   methods: {
-    // async goToNext() {
-    //     const formRefs = this.$refs.myForm;
-
-    //     for (let i = 0; i < formRefs.length; i++) {
-    //         const { valid } = await formRefs[i].validate();
-    //         if (!valid) {
-
-    //             return;
-    //         }
-    //     }
-    //     if (this.e1 === this.steps) {
-
-    //         useMyStore().submitForm();
-    //     } else {
-    //         this.e1 = this.e1 < this.steps ? this.e1 + 1 : 1;
-    //     }
-    // },
-
     async goToNext() {
       const formRefs = this.$refs.myForm;
 
@@ -285,5 +292,3 @@ export default {
   font-size: 40%;
 }
 </style>
-
-
