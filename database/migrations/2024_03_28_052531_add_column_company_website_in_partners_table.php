@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::table('user_qualifications', function (Blueprint $table) {
-            $table->unique('education_type');
+        Schema::table('partners', function (Blueprint $table) {
+            //
+            $table->string('website_link')->nullable();
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-
-        Schema::table('user_qualifications', function (Blueprint $table) {
-            $table->dropUnique(['education_type']);
+        Schema::table('partners', function (Blueprint $table) {
+            //
+            $table->dropColumn('website_link');
         });
     }
 };

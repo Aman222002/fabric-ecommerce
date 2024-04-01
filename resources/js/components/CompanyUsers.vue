@@ -15,8 +15,8 @@
     <DxColumn v-if="selectedStatus === 'All'" data-field="phone" data-type="string"></DxColumn>
     <DxColumn v-if="selectedStatus !== 'All'" data-field="status" data-type="string"></DxColumn>
     <DxPaging :page-size="pageSize" />
-    <DxPager :visible="true" :allowed-page-sizes="[5, 10, 15]" :display-mode="'compact'"
-      :show-page-size-selector="true" :show-navigation-buttons="true" :show-info="true" />
+    <DxPager :visible="true" :allowed-page-sizes="[5, 10, 15]" :display-mode="'compact'" :show-page-size-selector="true"
+      :show-navigation-buttons="true" :show-info="true" />
     <template #dropDown2>
       <DxDropDownBox :accept-custom-value="true" @value-change="selectStatus" label="Select status" labelMode="floating"
         v-model:value="selectedStatus" v-model:opened="DropDown2">
@@ -24,6 +24,12 @@
         </DxList>
       </DxDropDownBox>
     </template>
+    <DxPaging :page-size="pageSize" />
+    <DxPager :visible="true" :allowed-page-sizes="[10, 15, 20]" :display-mode="'compact'"
+      :show-page-size-selector="true" :show-navigation-buttons="true" :show-info="true" />
+    <DxSummary>
+      <DxTotalItem column="id" summary-type="count" />
+    </DxSummary>
   </DxDataGrid>
 </template>
 

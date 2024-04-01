@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <v-card-title class="text-left">
@@ -34,7 +33,8 @@
             </v-col>
             <v-col cols="12" md="50">
                 <v-textarea v-model="experience[index].description" :name="'description_' + index" label="Description"
-                    variant="outlined" :rules="index === 0 ? [] : [v => !!v || 'description  is required']"></v-textarea>
+                    variant="outlined"
+                    :rules="index === 0 ? [] : [v => !!v || 'description  is required']"></v-textarea>
             </v-col>
             <v-col v-if="index > 0" md="2">
                 <v-btn @click="removeWorkExperience(index)" color="red" class="custom-button">Remove</v-btn>
@@ -45,7 +45,7 @@
         </v-row>
     </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
 import { ref } from 'vue';
@@ -56,12 +56,12 @@ export default {
     setup() {
         const store = useMyStore();
         const experience = ref(store.experience);
-        const removeWorkExperience = async (index) => {
-
+        const removeWorkExperience = (index) => {
+            store.removeWorkExperience;
             const experienceId = experience.value[index].id;
             try {
                 console.log(experienceId, 'experienceId ')
-                await axios.post(`/removedExperience/${experienceId}`);
+                axios.post(`/removedExperience/${experienceId}`);
                 experience.value.splice(index, 1);
             } catch (error) {
                 console.error('Error deleting experience detail:', error);
@@ -78,12 +78,12 @@ export default {
             removeWorkExperience,
             addWorkExperience: store.addWorkExperience,
             dateClicked,
-             removeWorkExperience:store.removeWorkExperience,
+            removeWorkExperience: store.removeWorkExperience,
         };
     },
 };
 </script>
-  
+
 <style scoped>
 .container-center {
     display: flex;
@@ -102,4 +102,3 @@ export default {
     height: 100px;
 }
 </style>
-  

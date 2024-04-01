@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <v-card-title class="pl-0">
@@ -49,11 +48,12 @@ export default {
     setup() {
         const store = useMyStore();
         const achievements = ref(store.achievements);
-        const removeAchievement = async (index) => {
+        const removeAchievement = (index) => {
+            store.removeAchievement;
             const achievmentId = achievements.value[index].id;
             try {
                 console.log(achievmentId, 'achievmentId')
-                await axios.post(`/removedAchievment/${achievmentId}`);
+                axios.post(`/removedAchievment/${achievmentId}`);
                 achievements.value.splice(index, 1);
             } catch (error) {
                 console.error('Error deleting experience detail:', error);

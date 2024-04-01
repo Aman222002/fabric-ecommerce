@@ -114,7 +114,7 @@ class CompanyController extends Controller
                         $user->update(['upgrade_plan_id' => $input['id'], 'upgrade_status' => 'initiated']);
                         return response()->json([
                             'status' => true,
-                            'message' => "Subscription Will be added soon in your account"
+                            'message' => "Subscription Will be added within 4-5 days in your account"
                         ], 200);
                         // } else if ($selected_plan->name == 'Standard' && $user_plan->name == 'Basic') {
                         //     $this->gocardlessService->createSubscription($data);
@@ -251,16 +251,14 @@ class CompanyController extends Controller
                     'company_id' => $request->company_Id,
                 ]);
                 $user->assignRole('Company Subadmin');
-            }
-            else{
-                  $user = User::create([
+            } else {
+                $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
                     'phone' => $input['phone'],
                 ]);
                 $user->assignRole('Company Admin');
-
             }
             if ($request->has('permission') && !empty($request->permission)) {
                 foreach (json_decode($request->permission) as $permission) {
@@ -281,7 +279,7 @@ class CompanyController extends Controller
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assest', $imageName);
                 }
-              
+
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
@@ -291,7 +289,7 @@ class CompanyController extends Controller
                 ]);
                 dispatch(new VerificationMail($user->email));
             }
-            
+
             return response()->json([
                 'status' => true,
                 'message' => "Registation Successfully"
@@ -696,27 +694,28 @@ class CompanyController extends Controller
     {
         try {
             $companyId = session('company_id');
-            $loggedInUserId = auth()->id(); 
-    
+            $loggedInUserId = auth()->id();
+
             $type = $request->input('type');
-    
+
             switch ($type) {
                 case 'Invited':
                     $users = Invitation::where('company_id', $companyId)
                         ->where('status', 'pending');
                     break;
-    
+
                 case 'Rejected':
                     $users = Invitation::where('company_id', $companyId)
                         ->where('status', 'rejected');
                     break;
-                    
+
                 default:
                     $users = User::where('company_id', $companyId)
                         ->where('id', '!=', $loggedInUserId); // Exclude logged-in user
                     break;
             }
-            
+
+
             $response = [];
             if ($request->requireTotalCount) {
                 $response['totalCount'] = $users->count();
@@ -724,13 +723,11 @@ class CompanyController extends Controller
             if (isset($request->take)) {
                 $users->skip($request->skip)->take($request->take);
             }
-            
             if ($request->has('filter')) {
                 $filters = json_decode($request->filter, true);
                 if (count($filters)) {
                     $filters = is_array($filters[0]) ? $filters[0] : $filters;
                     $search = !blank($filters[2]) ? $filters[2] : false;
-    
                     if ($search) {
                         $users->where('name', 'like', "%$search%");
                     }
@@ -739,7 +736,6 @@ class CompanyController extends Controller
             $userList = $users->get();
             $response['data'] = $userList;
             $totalCount = $users->count();
-            
             if ($userList->isNotEmpty()) {
                 return response()->json([
                     'status' => true,
@@ -758,7 +754,7 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
+
     public function userData()
     {
         $user = Auth::user();
@@ -850,7 +846,7 @@ class CompanyController extends Controller
     public function getTotalPublishedJobs()
     {
         $jobs = Job::getTotalPublishedJobs();
-        $totalPublishedJobs=$jobs->count();
+        $totalPublishedJobs = $jobs->count();
         return response()->json(['totalPublishedJobs' => $totalPublishedJobs]);
     }
 
@@ -862,32 +858,32 @@ class CompanyController extends Controller
         try {
             $companyId = session()->get('company_id');
             $company = Company::find($companyId);
-            if(!$company) {
+            if (!$company) {
                 throw new \Exception("Company not found.");
             }
             $recentPosts = $company->jobs()
-            ->where('post_status', 'Published') 
-            ->latest()
-            ->take(5)
-            ->get();
-        
-        $totalPosts = $company->jobs()->where('post_status', 'Published')->count();
-    
+                ->where('post_status', 'Published')
+                ->latest()
+                ->take(5)
+                ->get();
+
+            $totalPosts = $company->jobs()->where('post_status', 'Published')->count();
+
             return response()->json(['status' => true, 'data' => $recentPosts, 'total_posts' => $totalPosts], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
-public function totalJobs(Request $request)
+
+    public function totalJobs(Request $request)
 
     {
         try {
             $companyId = $request->session()->get('company_id');
             $totalJobs = Job::where('company_id', $companyId)
-            ->where('post_status', 'published')
-            ->count();
+                ->where('post_status', 'published')
+                ->count();
             return response()->json(['status' => true, 'totalJobs' => $totalJobs], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -899,31 +895,30 @@ public function totalJobs(Request $request)
         try {
             $companyId = $request->session()->get('company_id');
             $totalJobs = Job::where('company_id', $companyId)
-            ->where('post_status', 'expired')
-            ->count();
+                ->where('post_status', 'expired')
+                ->count();
             return response()->json(['status' => true, 'totalJobs' => $totalJobs], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
-
     }
-   
+
 
     public function getPostsAboutToExpire(Request $request)
-{
-    $companyId = $request->session()->get('company_id');
-    
-    $startDate = Carbon::now()->subDays(30);
-    $endDate = Carbon::now()->subDays(23);
+    {
+        $companyId = $request->session()->get('company_id');
 
-    $posts = Job::where('created_at', '>', $endDate)
-                 ->where('created_at', '<=', $startDate)
-                 ->where('company_id', $companyId)
-                 ->where('post_status', 'published')
-                 ->get();
+        $startDate = Carbon::now()->subDays(30);
+        $endDate = Carbon::now()->subDays(23);
 
-    return response()->json(['data' => $posts], 200);
-}
+        $posts = Job::where('created_at', '>', $endDate)
+            ->where('created_at', '<=', $startDate)
+            ->where('company_id', $companyId)
+            ->where('post_status', 'published')
+            ->get();
+
+        return response()->json(['data' => $posts], 200);
+    }
 
     // public function fetchusers(Request $request)
     // {
