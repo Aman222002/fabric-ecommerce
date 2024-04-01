@@ -38,6 +38,7 @@ use App\Http\Controllers\SocialMediaAccountController;
 use App\Http\Controllers\webhookHandler;
 use App\Models\Job;
 use App\Models\Skill;
+use Illuminate\Auth\Events\Login;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +123,10 @@ Route::get('/about', function () {
 });
 Route::get('/contact', function () {
     return view('contact');
+});
+
+Route::get('/company-dashboard', function () {
+    return view('companydashboard');
 });
 // Route::get('/viewjob{}', function () {
 //     return view('viewjob');
@@ -235,6 +240,7 @@ Route::prefix('company')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::get('/list', [ProfileController::class, 'show']);
     Route::post('/update', [ProfileController::class, 'update']);
+    Route::post('/updatecompany', [ProfileController::class, 'updateCompanyDetails']);
     Route::post('/updateaddress', [ProfileController::class, 'updateaddress']);
     Route::post('/updatedescription', [ProfileController::class, 'updatedescription']);
 });
@@ -271,3 +277,9 @@ Route::post('/send-email', [ContactController::class, 'sendEmail']);
 Route::post('/company/updateSocialMedia', [SocialMediaAccountController::class, 'updateSocialMedia']);
 Route::get('/total-published-jobs', [CompanyController::class, 'getTotalPublishedJobs']);
 Route::get('/template-preview/{template}', [PdfController::class, 'preview']);
+Route::get('/company/recent-posts', [CompanyController::class, 'recentPosts']);
+Route::get('/dashboard/total-jobs', [CompanyController::class, 'totalJobs']);
+Route::get('/dashboard/total-expiredjobs', [CompanyController::class, 'totalExpiredJobs']);
+Route::get('/posts/about-to-expire', [CompanyController::class, 'getPostsAboutToExpire']);
+Route::delete('/destroy/{id}', [LoginController::class, 'destroy']);
+Route::get('/fetch-users/{type?}', [CompanyController::class, 'fetchusers']);

@@ -75,4 +75,27 @@ class LoginController extends Controller
         Auth::logout();
         return response()->json(['status' => true, 'message' => 'Logout Successfully'], 200);
     }
+    public function destroy(string $id)
+    {
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $user->delete();
+                $response = [
+                    'status' => true,
+                    'data' => 'User deleted Successsfully',
+                ];
+                return response()->json($response, 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'no data found',
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }

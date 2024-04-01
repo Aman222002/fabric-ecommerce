@@ -158,6 +158,14 @@ export default {
     const submitForm = async () => {
       if (!formData.value.company_name) {
         return;
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: 'User not found',
+            });
       }
       try {
         const response = await axios.post("/company/login", formData.value);
@@ -175,7 +183,7 @@ export default {
             // }
             if (selectedRoute == "/postjob") {
               // console.log('hello');
-              if (hasPermission("create users") || hasrole("Company Admin")) {
+              if (hasPermission("Create Users") || hasrole("Company Admin")) {
                 window.location.href = "/postjob";
                 employerStore.removePreviousRoute();
               } else {
@@ -184,14 +192,14 @@ export default {
                         employerStore.removePreviousRoute();
                     } else if (hasrole("Company Subadmin")) {
                        
-                        if (hasPermission("create users")) {
+                        if (hasPermission("Create Users")) {
                             window.location.href = "/add-user";
                             employerStore.removePreviousRoute();
                         } else if (hasPermission("Change Plan")) {
                             window.location.href = "/company/plan";
                             employerStore.removePreviousRoute();
                         } 
-                    else if (hasPermission("view users")) {
+                    else if (hasPermission("View Users")) {
                             window.location.href = "/users";
                             employerStore.removePreviousRoute();
                         } 
@@ -226,14 +234,14 @@ export default {
                         employerStore.removePreviousRoute();
                     } else if (hasrole("Company Subadmin")) {
                        
-                        if (hasPermission("create users")) {
+                        if (hasPermission("Create Users")) {
                             window.location.href = "/add-user";
                             employerStore.removePreviousRoute();
                         } else if (hasPermission("Change Plan")) {
                             window.location.href = "/company/plan";
                             employerStore.removePreviousRoute();
                         } 
-                    else if (hasPermission("view users")) {
+                    else if (hasPermission("View Users")) {
                             window.location.href = "/users";
                             employerStore.removePreviousRoute();
                         } 
@@ -270,14 +278,14 @@ export default {
                         employerStore.removePreviousRoute();
                     } else if (hasrole("Company Subadmin")) {
                        
-                        if (hasPermission("create users")) {
+                        if (hasPermission("Create Users")) {
                             window.location.href = "/add-user";
                             employerStore.removePreviousRoute();
                         } else if (hasPermission("Change Plan")) {
                             window.location.href = "/company/plan";
                             employerStore.removePreviousRoute();
                         } 
-                    else if (hasPermission("view users")) {
+                    else if (hasPermission("View Users")) {
                             window.location.href = "/users";
                             employerStore.removePreviousRoute();
                         } 
@@ -305,6 +313,14 @@ export default {
       
       } catch (err) {
         console.error(err);
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: 'User not found',
+            });
       }
     };
     const showCompanyListDialog = async () => {

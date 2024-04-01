@@ -31,9 +31,9 @@ class JobsController extends Controller
             $user = auth()->user();
 
             $companyId = 0;
-
-            if ($user->hasRole('Company Admin')) {
-                $companyId =  $user->company ? $user->company->id : 0;
+            if ($user->hasRole('Company Admin') || $user->hasRole('Company Subadmin')) {
+                // $companyId =  $user->company ? $user->company->id : 0;
+                $companyId = session()->get('company_id', 0);
             }
             $jobs = Job::with("company");
             if ($companyId != 0) {
@@ -131,7 +131,7 @@ class JobsController extends Controller
                     'message' => `User exceeds posts allowed`
                 ], 403);
             }
-            $company = $user->company;
+            $company = Company::find($companyId);
             $input = $request->all();
             if ($request->has('salaryType') && $input['salaryType'] === 'range') {
                 $salary = $input['minSalary'] . '-' . $input['maxSalary'];

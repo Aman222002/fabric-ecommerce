@@ -40,13 +40,15 @@ class WebhookController extends Controller
                         if ($v->action == 'cancelled') {
                             $user_id = $v->resource_metadata->user_id;
                             $user = User::find($user_id);
-                            if ($user->upgrade_status == 'initiated') {
+                            log::info('User' . $user);  
+                            if ($user->upgrade_status === 'initiated') {
                                 $user->update(['upgrade_status' => 'cancelled', 'upgrade_plan_id' => null, 'upgrade_plan_payment_id' => null]);
                                 $user_subscription = DB::table('user_subscription')->where('user_id', $user->id)->update([
                                     'plan_id' => $user->plan_id,
                                     'user_id' => $user->id,
                                     'upgrade_subscription_id' => null,
                                 ]);
+                                 
                             } else {
                                 $user->update(['subscription_status' => 'cancelled', 'plan_id' => null, 'payment_id' => null]);
                                 $user_subscription = DB::table('user_subscription')->where('user_id', $user->id)->update([
@@ -70,9 +72,9 @@ class WebhookController extends Controller
                                     'user_id' => $user->id,
                                     'subscription_status' => 'active',
                                     'upgrade_subscription_id' => $v->links->subscription,
-                                ]);
+                                ]); 
                             } else {
-                                $user_subscription = DB::table('user_subscription')->where('user_id', $user->id)->update([
+                                $user_subscription = DB::table('user_subscription')->insert([
                                     'plan_id' => $user->plan_id,
                                     'user_id' => $user->id,
                                     'subscription_status' => 'pending',
@@ -116,8 +118,10 @@ class WebhookController extends Controller
                             Log::info("Inside Payment");
                             if ($v->action !== 'confirmed') {
                                 log::info(print_r('Action:' . $v->action, 1));
-                            } else if ($v->action == 'paid_out') {
+                            } 
+                             if ($v->action == 'paid_out') {
                                 $user = User::where('upgrade_plan_payment_id', $v->links->payment)->first();
+                                // log::info(print_r('User:' . json_encode($user), 1));
                                 if ($user->upgrade_status == 'initiated') {
                                     $plan = Plan::where('id', $user->upgrade_plan_id)->first();
                                 } else {

@@ -68,7 +68,7 @@
         </ul>
         <p>To accept this invitation, click the button below:</p>
         <p>
-            <a href="{{ url($url . '/' . $name . '/' . $company . '/' .$email. '/' . $phone. '/' .urlencode(json_encode($permission))) }}" class="button">Accept Invitation</a>
+            <a href="{{ url($url . '/' .  urlencode($name) . '/' . $company . '/' .$email. '/' . $phone. '/' .urlencode(json_encode($permission))) }}" class="button">Accept Invitation</a>
         </p>
         <p>If you wish to decline this invitation, click the following link:</p>
         <p>

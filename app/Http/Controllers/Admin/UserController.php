@@ -350,10 +350,10 @@ class UserController extends Controller
 
             if (!$existingUser) {
                 //  $serializedPermissions = urlencode(serialize($permissions));
-                $url =  url('/company/register/' . $request->id . '/' . $request->name . '/' . $request->email . '/' . $request->phone . '/' . $request->company . '/' . $request->permission);
+                $url =  url('/company/register/' . $request->id . '/' . urlencode($request->name) . '/' . $request->email . '/' . $request->phone . '/' . $request->company . '/' . $request->permission);
                 return redirect($url);
             } else {
-                return redirect('/company/register');
+                return redirect('/job');
             }
             return response()->json(['status' => true, 'message' => 'Invitation accepted successfully'], 200);
         } catch (\Exception $e) {

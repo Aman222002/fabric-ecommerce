@@ -14,13 +14,18 @@ class SocialMediaAccountController extends Controller
     public function updateSocialMedia(Request $request)
     {
         try {
+            // Check if the authenticated user has the role of company admin
+            if (!auth()->user()->hasRole('Company Admin')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+    
             $this->validate($request, [
                 'facebook' => 'nullable|url',
                 'twitter' => 'nullable|url',
                 'linkedin' => 'nullable|url',
                 'instagram' => 'nullable|url',
             ]);
-
+    
             $companyId = session('company_id');
             $socialMedia = SocialMediaAccount::updateOrCreate(
                 ['company_id' => $companyId],
@@ -31,7 +36,7 @@ class SocialMediaAccountController extends Controller
                     'instagram_url' => $request->input('instagram'),
                 ]
             );
-
+    
             return response()->json(['message' => 'Social media details updated successfully'], 200);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
@@ -39,6 +44,7 @@ class SocialMediaAccountController extends Controller
             return response()->json(['message' => 'Failed to update social media details'], 500);
         }
     }
+    
 
 
     public function index()

@@ -3,7 +3,8 @@
     <div class="company_profile_top_bar">
       <v-container>
         <v-row>
-          <v-icon @click="goToEditPage()" class="right_side_edif_btn">mdi-pencil</v-icon>
+       <v-icon @click="goToEditPage()" style="margin-left: 97%">mdi-pencil</v-icon>
+          
           <div style="align-items: center; display: flex; margin-left: 15px">
             <v-avatar size="130px" class="avatar" style="margin: 10px">
               <img :src="`/storage/assest/${company.logo}`" width="150px" height="150px" />
@@ -11,11 +12,11 @@
           </div>
           <v-col cols="4" style="margin-left: 10px; margin-top: 10px">
             <p style="font-size: 30px">{{ user.name }}</p>
-            <p style="font-size: 15px">Representative</p>
-            <p v-if="company.length > 0 && company.address">
+           
+            <p v-if="address && address.street && address.city && address.state">
               <v-icon style="font-size: 15px; color: rgb(3, 3, 3)">mdi-map-marker</v-icon>
-              {{ company.address.street }}, {{ company.address.city }},
-              {{ company.address.state }}
+              {{ address.street }}, {{ address.city }},
+              {{ address.state }}
             </p>
           </v-col>
         </v-row>
@@ -76,11 +77,16 @@
           </v-dialog>
         </v-col>
         <v-col sm="12" md="6" lg="4" xl="4" class="company_profile_infor_right">
+        
           <v-card>
+            <div class="edit_btn"><v-icon @click="openEditCompanyModal()" class="right_side_edif_btn">mdi-pencil</v-icon></div>
+            <v-card-title>
+              Company:
+            </v-card-title>
             <v-card-text>
               <div>
-                <!-- {{ user }} -->
-                <label for="name" class="ps-0">Representative Name:</label>
+                
+                <label for="name" class="ps-0"> Name:</label>
                 <span>{{ user.name }}</span>
               </div>
 
@@ -106,11 +112,27 @@
               </div>
             </v-card-text>
           </v-card>
+          <v-dialog v-model="isEditCompanyModalOpen" max-width="600px">
+  <v-card>
+    <v-card-title>Edit Company Details</v-card-title>
+    <v-card-text>
+     
+      <v-text-field v-model="editedCompany.name" label="Company Name" density="compact" variant="outlined" :rules="[(value) => !!value || 'Company Name is required']"></v-text-field>
+      <v-text-field v-model="editedCompany.email" label="Company Email" density="compact" variant="outlined" :rules="[(value) => !!value || 'Company Email is required']"></v-text-field>
+    
+      <v-file-input v-model="editedCompany.logo" label="Company Logo" density="compact" variant="outlined" name="logo" @change="handleCompanyLogoChange" :rules="[(value) => !!value || 'Company Logo is required']"></v-file-input>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn @click="saveEditedCompany">Save</v-btn>
+      <v-btn @click="closeEditCompanyModal">Cancel</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
           <v-card>
-            <v-icon @click="openEditAddressModal()" class="right_side_edif_btn">
+            <div class="edit_btn"><v-icon @click="openEditAddressModal()" class="right_side_edif_btn">
               mdi-pencil
-            </v-icon>
-            <v-card-title style="font-family: Poppins, sans-serif">
+            </v-icon></div>
+            <v-card-title style="font-family: Poppins, sans-serif" class="pt-0">
               Address:
             </v-card-title>
 
@@ -160,9 +182,7 @@
         </template>
       </v-table>
     </v-card>
-    <!--  -->
-
-    <!--  -->
+   
     <v-card v-if="showAddress && company.address" class="card2" style="margin-bottom: 20px; font-size: 16px">
       <v-icon @click="openEditAddressModal()"> mdi-pencil </v-icon>
       <v-card-title style="font-family: Poppins, sans-serif">
@@ -191,9 +211,9 @@
         </template>
       </v-table>
     </v-card>
-    <!--  -->
+    
 
-    <v-dialog v-model="isEditAddressModalOpen" max-width="600px">
+    <v-dialog  v-model="isEditAddressModalOpen" max-width="600px">
       <v-card>
         <v-card-title>Edit Address</v-card-title>
         <v-card-text>
@@ -224,12 +244,7 @@
             :rules="[(value) => !!value || 'User email is required']"></v-text-field>
           <v-text-field v-model="editedJob.phone" label="User Phone" variant="outlined" density="compact"
             :rules="[(value) => !!value || 'User phone is required']"></v-text-field>
-          <v-text-field v-model="editedJob.company_name" label="Company Name" density="compact" variant="outlined"
-            :rules="[(value) => !!value || 'Company Name is required']"></v-text-field>
-          <v-text-field v-model="editedJob.company_email" label="Company Email" density="compact" variant="outlined"
-            :rules="[(value) => !!value || 'Company Email is required']"></v-text-field>
-          <v-file-input v-model="editedJob.logo" label="Company Logo" density="compact" variant="outlined" name="logo"
-            @change="handleImage" :rules="[(value) => !!value || 'Company Logo is required']"></v-file-input>
+         
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedJob">Save</v-btn>
@@ -254,6 +269,7 @@ export default {
       state: "",
       postal_code: "",
     });
+   
     const facebook = ref("");
     const twitter = ref("");
     const linkedin = ref("");
@@ -264,6 +280,7 @@ export default {
     const image = ref(null);
     const isEditModalOpen = ref(false);
     const modalOpen = ref(false);
+    const isEditCompanyModalOpen = ref(false);
     const editedDescription = ref({
       description: "",
     });
@@ -282,6 +299,11 @@ export default {
       state: "",
       postal_code: "",
     });
+    const editedCompany = ref({
+    name: "",
+    email: "",
+    logo: null,
+  });
     const showOverview = ref(true);
     const showJob = ref(false);
     const showAddress = ref(false);
@@ -293,14 +315,12 @@ export default {
         console.log(response.data);
         company.value = response.data.companydata;
         user.value = response.data.user;
+       
         if (response.data.companydata.address) {
           address.value = response.data.companydata.address;
         }
         console.log(user.value);
-        // facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
-        // twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
-        // linkedin.value = response.data.companydata.social_media_accounts[0].linkedin_url;
-        // instagram.value = response.data.companydata.social_media_accounts[0].instagram_url;
+        
         if (response.data.companydata.social_media_accounts && response.data.companydata.social_media_accounts.length > 0) {
       facebook.value = response.data.companydata.social_media_accounts[0].facebook_url;
       twitter.value = response.data.companydata.social_media_accounts[0].twitter_url;
@@ -327,12 +347,7 @@ export default {
     const closeEditModal = () => {
       isEditModalOpen.value = false;
     };
-    // const fetchPlan = async () => {
-    //   const response = await axios.get(`/find/plan/${user.value.plan_id}`);
-    //   console.log(response);
-    //   currentplan.value = response.data.data;
-    //   console.log(currentplan.value);
-    // };
+   
     const saveEditedJob = async () => {
       try {
         const formData = new FormData();
@@ -348,11 +363,80 @@ export default {
           },
         });
         closeEditAddressModal();
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'User  Updated',
+            });
+            window.location.reload();
         
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
     };
+    const openEditCompanyModal = () => {
+      const isAdmin = user.value.roles.some(role => role.name === 'Company Admin');
+
+ 
+if (!isAdmin) {
+  window.Swal.fire({
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false,
+            icon: 'error',
+            title: 'You are not authorize',
+          });
+  return;
+}
+   
+    editedCompany.value.name = company.value.company_name;
+    editedCompany.value.email = company.value.company_email;
+    
+    editedCompany.value.logo = null;
+  
+    isEditCompanyModalOpen.value = true;
+  };
+  const closeEditCompanyModal = () => {
+    isEditCompanyModalOpen.value = false;
+  };
+  const saveEditedCompany = async () => {
+    try {
+     
+      const formData = new FormData();
+      formData.append("company_name", editedCompany.value.name);
+      formData.append("company_email", editedCompany.value.email);
+      formData.append("logo", editedCompany.value.logo);
+      const response = await axios.post("/company/updatecompany", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+     
+      closeEditCompanyModal();
+      window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Company Updated',
+            });
+    
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating company details:", error);
+    }
+  };
+  const handleCompanyLogoChange = (event) => {
+    
+    const file = event.target.files[0];
+    editedCompany.value.logo = file;
+  };
 
     const handleImage = (event) => {
       const file = event.target.files[0];
@@ -372,25 +456,63 @@ export default {
     onMounted(() => {
       fetchCompanyProfile();
     });
-    const openEditAddressModal = () => {
-      isEditAddressModalOpen.value = true;
+    // const openEditAddressModal = () => {
+    //   isEditAddressModalOpen.value = true;
 
-      if (company.value?.address) {
-        editedAddress.value.first_line_address =
-          company.value.address.first_line_address || "";
-        editedAddress.value.street = company.value.address.street || "";
-        editedAddress.value.city = company.value.address.city || "";
-        editedAddress.value.state = company.value.address.state || "";
-        editedAddress.value.postal_code =
-          company.value.address.postal_code || "";
-      } else {
-        editedAddress.value.first_line_address = "";
-        editedAddress.value.street = "";
-        editedAddress.value.city = "";
-        editedAddress.value.state = "";
-        editedAddress.value.postal_code = "";
-      }
-    };
+    //   if (company.value?.address) {
+    //     editedAddress.value.first_line_address =
+    //       company.value.address.first_line_address || "";
+    //     editedAddress.value.street = company.value.address.street || "";
+    //     editedAddress.value.city = company.value.address.city || "";
+    //     editedAddress.value.state = company.value.address.state || "";
+    //     editedAddress.value.postal_code =
+    //       company.value.address.postal_code || "";
+    //   } else {
+    //     editedAddress.value.first_line_address = "";
+    //     editedAddress.value.street = "";
+    //     editedAddress.value.city = "";
+    //     editedAddress.value.state = "";
+    //     editedAddress.value.postal_code = "";
+    //   }
+    // };
+    const openEditAddressModal = () => {
+ 
+  const isAdmin = user.value.roles.some(role => role.name === 'Company Admin');
+
+ 
+  if (!isAdmin) {
+    window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: 'You are not authorize',
+            });
+    return;
+  }
+  isEditAddressModalOpen.value = true;
+
+ 
+  if (company.value?.address) {
+    editedAddress.value.first_line_address =
+      company.value.address.first_line_address || "";
+    editedAddress.value.street = company.value.address.street || "";
+    editedAddress.value.city = company.value.address.city || "";
+    editedAddress.value.state = company.value.address.state || "";
+    editedAddress.value.postal_code =
+      company.value.address.postal_code || "";
+  } else {
+   
+    editedAddress.value.first_line_address = "";
+    editedAddress.value.street = "";
+    editedAddress.value.city = "";
+    editedAddress.value.state = "";
+    editedAddress.value.postal_code = "";
+  }
+};
+
+
     const closeEditAddressModal = () => {
       isEditAddressModalOpen.value = false;
     };
@@ -412,12 +534,34 @@ export default {
           },
         });
         closeEditAddressModal();
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Address Updated',
+            });
         window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
     };
     const openModal = () => {
+      const isAdmin = user.value.roles.some(role => role.name === 'Company Admin');
+
+ 
+if (!isAdmin) {
+  window.Swal.fire({
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false,
+            icon: 'error',
+            title: 'You are not authorize',
+          });
+  return;
+}
       modalOpen.value = true;
       editedDescription.value.description = company.value.description;
     };
@@ -439,25 +583,56 @@ export default {
           }
         );
         closeModal();
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Description Updated',
+            });
         window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
     };
     const saveSocialMedia = async () => {
-      try {
-        const response = await axios.post("/company/updateSocialMedia", {
-          facebook: facebook.value,
-          twitter: twitter.value,
-          linkedin: linkedin.value,
-          instagram: instagram.value,
-        });
+  try {
+    const isAdmin = user.value.roles.some(role => role.name === 'Company Admin');
+
+    if (!isAdmin) {
+      window.Swal.fire({
+        toast: true,
+        position: 'top-end',
+        timer: 2000,
+        showConfirmButton: false,
+        icon: 'error',
+        title: 'You are not authorized',
+      });
+      return;
+    }
+
+    const response = await axios.post("/company/updateSocialMedia", {
+      facebook: facebook.value,
+      twitter: twitter.value,
+      linkedin: linkedin.value,
+      instagram: instagram.value,
+    });
+    window.Swal.fire({
+      toast: true,
+      position: 'top-end',
+      timer: 2000,
+      showConfirmButton: false,
+      icon: 'success',
+      title: 'Social Media Links Updated',
+    });
     window.location.reload();
-        // Handle successful response
-      } catch (error) {
-        console.error("Error updating social media accounts:", error);
-      }
-    };
+
+  } catch (error) {
+    console.error("Error updating social media accounts:", error);
+  }
+};
+
     return {
       company,
       user,
@@ -493,6 +668,12 @@ export default {
       linkedin,
       instagram,
       saveSocialMedia,
+      editedCompany,
+    isEditCompanyModalOpen,
+    openEditCompanyModal,
+    closeEditCompanyModal,
+    saveEditedCompany,
+    handleCompanyLogoChange,
     };
   },
 };
@@ -509,7 +690,11 @@ export default {
   justify-content: space-between;
   margin-bottom: 15px;
 }
-
+.company_profile_infor_right .edit_btn {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 15px;
+}
 .company_profile_top_bar {
   background-image: linear-gradient(to right, #f3f6fb, #bfd1f1);
   padding: 15px 0;
@@ -523,10 +708,7 @@ export default {
   width: 75%;
 }
 
-.right_side_edif_btn {
-  position: absolute;
-  right: 25px;
-}
+
 
 .company_profile_infor_right .v-card .v-card-text {
   padding: 0;

@@ -172,15 +172,23 @@
                       <template v-slot:append  v-if="featuredJob && featuredJob.company && featuredJob.company.created_at">
                         <v-card-text class="pb-0"> {{ formatCreatedAt(featuredJob.company.created_at) }} </v-card-text>
                       </template>
+                     
                     </v-list-item>
-                    <!-- <v-btn size="x-large" class="" to="#">
-                      Load More Listing
-                    </v-btn> -->
+                    <v-list-item>
+                      <template v-slot:prepend>
+                        <v-card-title class="p-0"> Company Location: </v-card-title>
+                      </template>
+                      <template v-slot:append  v-if="featuredJob && featuredJob.company && featuredJob.company.address">
+                        <v-card-text class="pb-0"> {{ featuredJob.company.address.city  }} </v-card-text>
+                      </template>
+                     
+                    </v-list-item>
+                 
                   </v-col>
                 </v-row>
               </v-card-item>
               <v-card-item>
-                <div class="text-h6 mb-1" v-if="featuredJob && featuredJob.company && featuredJob.company.address">CompanyLocation:{{ featuredJob.company.address.city  }}</div>
+      
                 <div class="social-media-icons"  v-if="featuredJob && featuredJob.company && featuredJob.company.social_media_accounts[0]">
         <a :href="featuredJob.company.social_media_accounts[0].facebook_url" target="_blank">
           <v-icon class="mdi mdi-facebook" style="color: 	#1877F2;"></v-icon>
@@ -196,15 +204,7 @@
           <v-icon class="mdi mdi-instagram"  style="color: 	#fa7e1e;"></v-icon>
         </a>
       </div>
-                <!-- <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.5022673812873!2d76.73736487619195!3d30.676141388364538!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fec06bceb7def%3A0x1931f58b31410a85!2sBetasoft%20Solutions%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1709537050814!5m2!1sen!2sin"
-                  width="100%"
-                  height="350"
-                  style="border: 0"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe> -->
+                
               </v-card-item>
             </v-col>
           </v-row>
@@ -230,19 +230,6 @@
         const jobid = props.data;
         const usersStore = useUsersStore();
         const featuredJob = ref({});
-        
-    //   const featuredJob = ref([
-    //     {
-    //       id: "1",
-    //       companyLogo: "assets/img/featured-Jobs/1-1.webp",
-    //       title: "Software Engineer (Android), Libraries",
-    //       companyName: "Segment",
-    //       location: "London, UK",
-    //       time: "12:09",
-    //       price: "1500$",
-    //       companyTime: "Open Jobs – 15",
-    //     },
-    //   ]);
       const fetchJobs = async  (jobid) => {    
         console.log(jobid) 
 try {
@@ -305,15 +292,14 @@ const formatCreatedAt = (createdAt) => {
           
             window.Swal.fire({
               icon: "success",
-              title: "saved Successfully",
-              text: "saved successfully ",
+              title: "Saved Successfully",
+            
               confirmButtonText: "OK",
             });
           }
         });
       } catch (err) {
         console.error(err);
-      
         window.Swal.fire({
           title: "Application Failed",
           text: "You Already saved this Job",
@@ -322,25 +308,11 @@ const formatCreatedAt = (createdAt) => {
         });
       }
     };
-    // const shareJob = () => {
-    //   const jobUrl = window.location.href;
-    //   console.log(jobUrl);
-    //   if (navigator.share) {
-    //     navigator.share({
-    //       title: 'Check out this job!',
-    //       text: `Check out this job: ${featuredJob.value.title} at ${featuredJob.value.company.company_name}`,
-    //       url: jobUrl
-    //     })
-    //     .then(() => console.log('Shared successfully'))
-    //     .catch(error => console.error('Error sharing:', error));
-    //   } else {
-    //     console.log('Not shared');
-    //   }
-    // };
+    
   
       return {
         featuredJob,formatCreatedAt,apply,save,jobid,
-        // shareJob,
+        
       };
     }
   };
@@ -352,7 +324,8 @@ const formatCreatedAt = (createdAt) => {
   }
   .employers_search_col .company_info {
     display: flex;
-  }
+    background: transparent;
+}
   .employers_search_single_right a.v-btn--variant-elevated {
     background: #e2eaf8;
     color: #1967d2;
