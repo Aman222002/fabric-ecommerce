@@ -74,9 +74,15 @@ export default function useDataSource(
                 });
         },
         update: (key, values) => {
-            // console.log(updateURL + "/" + key.id, values);
+            let paramsObject = {};
+            if (params) {
+                Object.assign(paramsObject, params.value);
+            }
+            // console.log(updateURL + "/" + key.id, values, paramsObject);
             return axios
-                .post(updateURL + "/" + key.id, values)
+                .post(updateURL + "/" + key.id, values, {
+                    params: paramsObject,
+                })
                 .then(() => {
                     return true;
                 })

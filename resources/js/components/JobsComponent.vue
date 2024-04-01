@@ -1,5 +1,7 @@
 <template>
-    <DxDataGrid :show-borders="true" :data-source="dataSource" ref="dataGridRef" @editing-start="logEvent">
+    <p style="text-align: center; font-size: 20px; margin-top: 20px">All Jobs</p>
+    <DxDataGrid :show-borders="true" :column-auto-width="true" :allow-column-resizing="true" :data-source="dataSource"
+        ref="dataGridRef" @editing-start="logEvent">
         <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
         <!-- <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" :use-icons="true" mode="popup" /> -->
         <DxToolbar>
@@ -9,10 +11,12 @@
         <DxLoadPanel :enabled="true" />
         <DxSearchPanel :visible="true" />
         <DxColumn data-field="title" data-type="string"> </DxColumn>
+        <DxColumn data-field="company_name" data-type="string"> </DxColumn>
+        <DxColumn data-field="company_email" data-type="string"> </DxColumn>
+        <DxColumn data-field="company_phone" data-type="number"> </DxColumn>
         <DxColumn data-field="location" data-type="string"></DxColumn>
         <DxColumn data-field="vacancy" data-type="string"> </DxColumn>
         <DxColumn data-field="salary" data-type="string"> </DxColumn>
-        <DxColumn data-field="description" data-type="string"> </DxColumn>
         <DxColumn data-field="company_website" data-type="url"> </DxColumn>
         <DxColumn caption="Select Category" edit-cell-template="categorydropdown" :visible="showcolumn">
         </DxColumn>

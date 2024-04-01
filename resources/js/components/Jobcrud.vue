@@ -1,6 +1,7 @@
 <template>
   <p style="text-align: center; font-size: 20px; margin-top: 20px">My Jobs</p>
-  <DxDataGrid :show-borders="true" :data-source="dataSource" ref="dataGridRef" @editing-start="logEvent">
+  <DxDataGrid :show-borders="true" :data-source="dataSource" ref="dataGridRef" @editing-start="logEvent"
+    @saving="saveEvent">
     <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
     <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" :use-icons="true" mode="popup" />
     <DxToolbar>
@@ -17,7 +18,7 @@
     <DxColumn data-field="salary" data-type="string"> </DxColumn>
     <DxColumn data-field="description" data-type="string"> </DxColumn>
     <DxColumn data-field="company_website" data-type="url"> </DxColumn>
-    <DxColumn caption="Select Category" edit-cell-template="categorydropdown" :visible="showcolumn">
+    <DxColumn caption="Select Category" dat-type="string" edit-cell-template="categorydropdown" :visible="showcolumn">
     </DxColumn>
     <template #categorydropdown="{ data: rowData }">
       <DxDropDownBox :accept-custom-value="true" label="Select Category" data-type="dropdown" labelMode="floating"
@@ -132,6 +133,7 @@ export default {
     const allJobType = ref([]);
     const allSkills = ref([]);
     const params = ref({});
+    const job_Id = ref();
     const selectedStatus = ref("All");
     const selectedCategory = ref("");
     const selectedJobType = ref("");
@@ -149,24 +151,49 @@ export default {
       refreshTable(dataGridRef);
     };
     const selectCategory = (e) => {
-      const value = e.itemData;
+      let value = e.itemData;
       selectedCategory.value = value;
+      const foundCategory = allCategories.value.find(item => item.name === selectedCategory.value);
+      if (foundCategory) {
+        value = foundCategory.id;
+      } else {
+        null;
+      }
+      // console.log(value);
+      params.value = { ...params.value, category_id: value };
       datadropdown.value = false;
       // refreshTable(dataGridRef);
     };
     const selectJobType = (e) => {
-      const value = e.itemData;
+      let value = e.itemData;
       selectedJobType.value = value;
+      const foundJobType = allJobType.value.find(item => item.name === selectedJobType.value);
+      if (foundJobType) {
+        value = foundJobType.id;
+      } else {
+        null;
+      }
+      params.value = { ...params.value, job_type_id: value };
       jobtypedropdown.value = false;
     };
     const selectSkill = (e) => {
-      const value = e.itemData;
+      let value = e.itemData;
       selectedSkill.value = value;
+      const foundSkill = allSkills.value.find(item => item.skill_name === selectedSkill.value);
+      // console.log(foundSkill);
+      if (foundSkill) {
+        value = foundSkill.id;
+      } else {
+        null;
+      }
+      params.value = { ...params.value, skill_id: value };
       skilldropdown.value = false;
     };
     const selectExperience = (e) => {
       const value = e.itemData;
       selectedExperience.value = value;
+
+      params.value = { ...params.value, experience: value };
       experiencedropdown.value = false;
     };
     const items = ref([
@@ -203,13 +230,15 @@ export default {
       DropDown2.value = false;
     };
     const logEvent = (e) => {
-      console.log(e);
+      // console.log(e);
+      job_Id.value = e.data.id;
+      // console.log(job_Id.value);
       selectedExperience.value = e.data.experience;
       const categoryId = e.data.category_id;
-      const skillId = e.data.category_id;
-      const JobTypeId = e.data.category_id;
-      console.log(categoryId);
-      console.log(allCategories.value);
+      const skillId = e.data.skill_id;
+      const JobTypeId = e.data.job_type_id;
+      // console.log(categoryId);
+      // console.log(allCategories.value);
       const foundCategory = allCategories.value.find(item => item.id === categoryId);
       if (foundCategory) {
         selectedCategory.value = foundCategory.name;
@@ -217,7 +246,7 @@ export default {
         null;
       }
       const foundSkill = allSkills.value.find(item => item.id === skillId);
-      console.log(foundSkill);
+      // console.log(foundSkill);
       if (foundSkill) {
         selectedSkill.value = foundSkill.skill_name;
       } else {
@@ -230,6 +259,25 @@ export default {
         null;
       }
     };
+    const saveEvent = (e) => {
+
+      if (e.changes == 0) {
+        if (params.value.category_id || params.value.skill_id || params.value.job_type_id) {
+          // console.log(e.changes);
+          axios.post(`/post/jobs/${job_Id.value}`, {
+            params: params.value,
+          }).then((response) => {
+            const keys = Object.keys(params.value);
+            for (let i = 1; i < keys.length; i++) {
+              delete params.value[keys[i]];
+            }
+            // console.log(params.value);
+            refreshTable(dataGridRef);
+          })
+
+        };
+      }
+    }
     const duplicateJob = (id, value) => {
       try {
         axios.post("/jobs/draft/", {
@@ -295,29 +343,7 @@ export default {
       updateURL,
       deleteUrl
     );
-    // console.log("datasource", dataSource);
-    const edit = async (data) => {
-      console.log(data);
-      const transformedData = {
-        id: data.id,
-        title: data.title,
-        category_id: data.category_id,
-        job_type_id: data.job_type_id,
-        vacancy: data.vacancy,
-        salary: data.salary,
-        location: data.location,
-        description: data.description,
-        qualifications: data.qualifications,
-        experience: data.experience,
-        company_website: data.company_website,
-        created_at: data.created_at,
-        job_skill: data.skill_id,
-      };
-      console.log(transformedData);
-      job.value = transformedData;
-      console.log(job.value);
-      dialog.value = true;
-    };
+
     const checkItem = async (id) => {
       try {
         const response = await axios.post(`/jobs/application/${id}`);
@@ -370,13 +396,6 @@ export default {
     // const selectJobType = (selectedJobType) => {
     //   job.jobType = selectedJobType.name;
     // };
-    const update = (id) => {
-      axios.post(`/post/jobs/${id}`, job.value).then((response) => {
-        console.log(response.data);
-        dialog.value = false;
-        window.location.reload();
-      });
-    };
     const deletejob = (e) => {
       console.log(e.id);
       window.Swal.fire({
@@ -427,7 +446,6 @@ export default {
       showcolumn,
       noeditcolumn,
       refreshTable,
-      edit,
       dialog,
       job,
       categories,
@@ -439,7 +457,6 @@ export default {
       selectJobType,
       fetchJobTypes,
       fetchJobSkill,
-      update,
       deletejob,
       selectStatus,
       selectedStatus,
@@ -465,7 +482,9 @@ export default {
       experiencedropdown,
       allCategories,
       allSkills,
-      allJobType
+      allJobType,
+      saveEvent,
+      job_Id
     };
   },
 };

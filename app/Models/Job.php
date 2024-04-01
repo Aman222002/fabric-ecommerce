@@ -60,6 +60,6 @@ class Job extends Model
     }
     public static function getTotalPublishedJobs()
     {
-        return static::where('post_status', 'published')->get();
+        return static::where('post_status', 'published');
     }
 }

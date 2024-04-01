@@ -1,95 +1,3 @@
-<!-- <template>
-    <v-container style="margin-top: 50px">
-     
-        <v-row>
-          <v-col cols="auto">
-            <v-card class="mx-auto card" id="Card">
-              <v-card-item>
-                <div class="cardtop">
-                  <h6 class="dashboardh6">Total Jobs</h6>
-                  <h6 class="profit">
-                    <v-icon size="15">mdi-arrow-top-right</v-icon
-                    ><v-icon size="15">mdi-plus</v-icon>16.24 %
-                  </h6>
-                </div>
-                <h1 class="numbering">{{ totalJobs }}</h1>
-               
-              </v-card-item>
-            </v-card>
-          </v-col>
-  
-        </v-row>
-        <div id="SupplierDiv">
-        <v-card>
-          <v-card-title style="background-color: #1976d2; color: white"
-            >Recent Posts</v-card-title
-          >
-          <v-card-text>
-            <v-table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th class="text-left">Title</th>
-                  <th class="text-left">location</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr  v-for="post in recentPosts" :key="post.id">
-                  <td>
-                  </td>
-                  <td>{{ post.title }}</td>
-                  <td>{{ post.location }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-card-text>
-        </v-card>
-      </div>
-    </v-container>
-  </template>
-  <script>
-  import { ref, onMounted } from "vue";
-
-  import axios from "axios";
-  export default {
-    name: "companydashboard",
-    setup() {
-      const totalJobs = ref(null);
-      const recentPosts = ref([]);
-
-    const fetchTotalJobs = () => {
-        try {
-          axios.get("/dashboard/total-jobs").then((response) => {
-            console.log(response.data.data);
-            totalJobs.value = response.data.totalJobs;
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      const fetchRecentPosts = () => {
-      try {
-        axios.get("/company/recent-posts").then((response) => {
-          console.log(response.data.data);
-          recentPosts.value = response.data.data;
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-  
-      onMounted(() => {
-        fetchRecentPosts();
-        fetchTotalJobs();
-      });
-  
-      return {
-       totalJobs, recentPosts,
-      };
-    },
-  };
-  </script>
-  -->
 <template>
     <div id="cardsDiv">
         <v-row>
@@ -141,9 +49,9 @@
                                     size="15">mdi-minus</v-icon>4.60%
                             </h6> -->
                         </div>
-                        <h1 class="numbering">676</h1>
+                        <h1 class="numbering">{{ totalJobs }}</h1>
                         <div class="cardbottom">
-                            <a href="" class="link">View all jobs</a>
+                            <a href="/admin/jobs" class="link">View all jobs</a>
                             <v-icon class="bottomicon3" size="20">mdi-list-box-outline</v-icon>
                         </div>
                     </v-card-item>
@@ -173,17 +81,16 @@
 
     <div id="chartDiv">
         <div class="graph">
-            <DxChart id="chart" :data-source="DataSource" title="Total Orders & Total Earning"
-                @pointClick="onPointClick">
+            <DxChart id="chart" :data-source="grossProductData" title="Job Postings" @pointClick="onPointClick">
                 <DxCommonSeriesSettings argument-field="Month" type="bar" hover-mode="allArgumentPoints"
                     selection-mode="allArgumentPoints">
                     <DxLabel :visible="true">
                         <DxFormat :precision="0" type="fixedPoint" />
                     </DxLabel>
                 </DxCommonSeriesSettings>
-                <DxSeries value-field="year2024" name="Total Order" />
-                <DxSeries value-field="year2023" name="Total Earning" />
-                <DxLegend vertical-alignment="bottom" horizontal-alignment="center" />
+                <DxSeries value-field="jobCount" name="Total Job Posted" />
+                <!-- <DxSeries value-field="year2023" name="Total Earning" /> -->
+                <!-- <DxLegend vertical-alignment="bottom" horizontal-alignment="center" /> -->
                 <DxExport :enabled="true" />
             </DxChart>
         </div>
@@ -195,27 +102,14 @@
                     <v-table>
                         <thead>
                             <tr>
-                                <th></th>
-                                <th class="text-left">Name</th>
-                                <th class="text-left">Email</th>
+                                <th class="text-left">Title</th>
+                                <th class="text-left">Location</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in suppliers" :key="item.name">
-                                <td>
-                                    <img v-if="item.image == null" :src="`/storage/pics/avtaar.webp`" style="
-                          height: 30px;
-                          width: 30px;
-                          border-radius: 50px;
-                        " />
-                                    <img v-else :src="`/storage/pics/${item.image}`" style="
-                           height: 30px;
-                          width: 30px;
-                          border-radius: 50px;
-                        " />
-                                </td>
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.email }}</td>
+                            <tr v-for="item in recentPosts" :key="item.name">
+                                <td>{{ item.title }}</td>
+                                <td>{{ item.location }}</td>
                             </tr>
                         </tbody>
                     </v-table>
@@ -236,65 +130,34 @@ export default {
         const totalBlog = ref('0');
         const recentPosts = ref([]);
         const grossProductData = ref([
-            {
-                Month: "January",
-                year2023: 823,
-                year2024: 863,
-            },
-            {
-                Month: "February",
-                year2023: 332,
-                year2024: 332,
-            },
-            {
-                Month: "March",
-                year2023: 459,
-                year2024: 470,
-            },
-            {
-                Month: "April",
-                year2023: 642,
-                year2024: 675,
-            },
-            {
-                Month: "May",
-                year2023: 294,
-                year2024: 301,
-            },
-            {
-                Month: "June",
-                year2023: 294,
-                year2024: 301,
-            },
         ]);
         const fetchTotalUsers = () => {
             try {
                 axios.get('/admin/user/index').then((response) => {
-                    console.log(response.data.totalCount);
+                    // console.log(response.data.totalCount);
                     totalUser.value = response.data.totalCount;
                 })
             } catch (err) {
-
+                console.log(err);
             }
         }
         const fetchTotalCompany = () => {
             try {
                 axios.get('/admin/company/getCompanies').then((response) => {
-                    console.log(response.data.totalCount);
+                    // console.log(response.data.totalCount);
                     totalCompany.value = response.data.totalCount;
                 })
             } catch (err) {
-
+                console.log(err);
             }
         }
         const fetchTotalBlogs = () => {
             try {
                 axios.get('/admin/blog/fetch').then((response) => {
-                    console.log(response.data.totalCount);
                     totalBlog.value = response.data.totalCount;
                 })
             } catch (err) {
-
+                console.log(err);
             }
         }
         const fetchRecentPosts = () => {
@@ -302,22 +165,38 @@ export default {
                 axios.get("/company/recent-posts").then((response) => {
                     console.log(response.data.data);
                     recentPosts.value = response.data.data;
+                    totalposted.value = response.data.total_posts;
                 });
             } catch (err) {
                 console.log(err);
             }
         };
-        const totalJobs = ref(null);
+        const totalJobs = ref('0');
         const fetchTotalJobs = () => {
             try {
-                axios.get("/dashboard/total-jobs").then((response) => {
-                    totalJobs.value = response.data.totalJobs;
-                    console.log(totalJobs.value);
+                axios.get("/admin/get/jobs").then((response) => {
+                    console.log(response.data);
+                    recentPosts.value = response.data.recentJobs;
+                    totalJobs.value = response.data.totalCount;
+                    // console.log(totalJobs.value);
                 });
             } catch (err) {
                 console.log(err);
             }
         };
+        const fetchGraphData = () => {
+            try {
+                axios.get("/admin/graph/data").then((response) => {
+                    console.log(response.data.data);
+                    grossProductData.value = response.data.data;
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        function onPointClick({ target }) {
+            target.select();
+        }
 
         onMounted(() => {
             fetchRecentPosts();
@@ -325,10 +204,11 @@ export default {
             fetchTotalUsers();
             fetchTotalCompany();
             fetchTotalBlogs();
+            fetchGraphData();
         });
 
         return {
-            recentPosts, totalJobs, fetchTotalUsers, totalUser, totalCompany, fetchTotalBlogs, totalBlog
+            recentPosts, totalJobs, fetchTotalUsers, totalUser, totalCompany, fetchTotalBlogs, totalBlog, fetchTotalJobs, grossProductData, onPointClick, fetchGraphData
         };
     },
 };

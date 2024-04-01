@@ -90,6 +90,11 @@ import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
 import { DxBox, DxItem as DxBoxItem } from "devextreme-vue/box";
 import { DxButton } from "devextreme-vue/button";
 import { DxDropDownBox } from "devextreme-vue/drop-down-box";
+import DxChart, {
+    DxLegend,
+    DxSeries,
+    DxCommonSeriesSettings,
+} from "devextreme-vue/chart";
 import DxList from "devextreme-vue/list";
 app.use(vuetify);
 app.use(pinia);
@@ -191,6 +196,10 @@ const component = {
     DxTabItem,
     DxList,
     DxDropDownBox,
+    DxChart,
+    DxSeries,
+    DxLegend,
+    DxCommonSeriesSettings,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);

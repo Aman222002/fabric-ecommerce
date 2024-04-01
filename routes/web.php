@@ -166,7 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/post/jobs/{type?}', [JobsController::class, 'index']);
     Route::post('/post', [JobsController::class, 'store']);
     Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
-    Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+    Route::post('/post/jobs/{id}/{category?}/{jobtype?}/{skill?}/{experience?}', [JobsController::class, 'update']);
     Route::delete('/post/delete/{id}', [JobsController::class, 'destroy']);
     Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
     Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
@@ -202,6 +202,7 @@ Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::post('/blog/post/{id?}/{type?}', [DashboardController::class, 'postBlog']);
     Route::get('/jobs', [DashboardController::class, 'viewJobs']);
     Route::get('/get/jobs', [DashboardController::class, 'getAllJobs']);
+    Route::get('/graph/data', [DashboardController::class, 'getGraphData']);
     //user route in admin
 
     Route::group(["prefix" => "/user"], function () {
