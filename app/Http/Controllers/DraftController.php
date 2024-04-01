@@ -16,23 +16,23 @@ class DraftController extends Controller
     {
         try {
             $user = auth()->user();
-            $companyId = session('company_id'); 
-            
+            $companyId = session('company_id');
+
             $jobs = Job::with("company")->where('is_draft', 1);
-            
-            if($companyId){
+
+            if ($companyId) {
                 $jobs->where('company_id', $companyId);
             }
-            
+
             $jobs = $jobs->get();
-    
+
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -113,9 +113,9 @@ class DraftController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        Log::info('request' . json_encode($request->all()));
         try {
             $job = Job::find($id);
-
             if ($job) {
                 $input = $request->all();
                 $job->update($input);
@@ -136,7 +136,6 @@ class DraftController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -163,15 +162,16 @@ class DraftController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    public function draft($id, Request $request) {
+    public function draft($id, Request $request)
+    {
         try {
             $originalJob = Job::find($id);
-            if(!$originalJob) {
+            if (!$originalJob) {
                 return response()->json(['status' => false, 'message' => 'Job not found'], 404);
             }
             $originalJob->is_draft = 0;
             $originalJob->save();
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Job status updated successfully',
@@ -182,5 +182,4 @@ class DraftController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
 }

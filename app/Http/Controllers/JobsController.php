@@ -216,9 +216,15 @@ class JobsController extends Controller
     {
         try {
             $job = Job::find($id);
+            if ($request->params) {
+                $input = $request->params;
+                log::info('request' . json_encode($input));
+                $job->update($input);
+            }
             if ($job) {
                 $input = $request->all();
-                $job->update(['post_status', 'Published']);
+                // log::info('request' . json_encode($input['params']));
+                // $job->update(['post_status', 'Published']);
                 $job->update($input);
                 $response = [
                     'status' => true,

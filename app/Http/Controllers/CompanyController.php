@@ -89,6 +89,11 @@ class CompanyController extends Controller
             $input = $request->all();
             if (!($request->input('user_name'))) {
                 $user = Auth::user();
+                if ($user->hasRole('Company Subadmin')) {
+                    $companyId = session('company_id');
+                    $user_Id = Company::where('id', $companyId)->value('user_id');
+                    $user = User::where('id', $user_Id)->first();
+                }
                 $selected_plan = Plan::find($input['id']);
                 $user_plan = Plan::find($user->plan_id);
                 $priceCents = $selected_plan->price * 100;
@@ -108,7 +113,7 @@ class CompanyController extends Controller
                         $user->update(['upgrade_plan_id' => $input['id'], 'upgrade_status' => 'initiated']);
                         return response()->json([
                             'status' => true,
-                            'message' => "Subscription Will be added soon in your account"
+                            'message' => "Subscription Will be added within 4-5 days in your account"
                         ], 200);
                         // } else if ($selected_plan->name == 'Standard' && $user_plan->name == 'Basic') {
                         //     $this->gocardlessService->createSubscription($data);
@@ -660,22 +665,55 @@ class CompanyController extends Controller
 
             switch ($type) {
                 case 'Invited':
-
                     $users = Invitation::where('company_id', $companyId)
-                        ->where('status', 'pending')
-                        ->get();
+                        ->where('status', 'pending');
                     break;
 
                 case 'Rejected':
                     $users = Invitation::where('company_id', $companyId)
-                        ->where('status', 'rejected')
-                        ->get();
+                        ->where('status', 'rejected');
                     break;
                 default:
-                    $users = User::where('company_id', $companyId)->get();
+                    $users = User::where('company_id', $companyId);
                     break;
             }
-            return response()->json(['status' => true, 'data' => $users], 200);
+            $response = [];
+            if ($request->requireTotalCount) {
+                $response['totalCount'] = $users->count();
+            }
+            if (isset($request->take)) {
+                $users->skip($request->skip)->take($request->take);
+            }
+            if (isset($request->sort)) {
+                $sort = json_decode($request->sort, true);
+                if (count($sort)) {
+                    $users->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
+                }
+            } else {
+                $users->orderBy('created_at', 'DESC');
+            }
+            if ($request->has('filter')) {
+                $filters = json_decode($request->filter, true);
+                if (count($filters)) {
+                    $filters = is_array($filters[0]) ? $filters[0] : $filters;
+                    $search = !blank($filters[2]) ? $filters[2] : false;
+
+                    if ($search) {
+                        $users->where('name', 'like', "%$search%");
+                    }
+                }
+            }
+            $userList = $users->get();
+            $response['data'] = $userList;
+            $totalCount = $users->count();
+            if ($userList->isNotEmpty()) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $userList,
+                    'totalCount' => $totalCount,
+                ], 200);
+                // return response()->json(['status' => true, 'data' => $users], 200);
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -748,11 +786,12 @@ class CompanyController extends Controller
         try {
             $user = Auth::user();
             $user_subscription = UserSubscription::where('user_id', $user->id)->first();
-            $user->update(['upgrade_status' => null]);
+            // $user->update(['upgrade_status' => null]);
             $this->gocardlessService->removeSubscription($user_subscription->upgrade_subscription_id);
+            sleep(5);
             return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
     /**
@@ -762,10 +801,11 @@ class CompanyController extends Controller
     {
         try {
             $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
+            $user = User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
             $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
             return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

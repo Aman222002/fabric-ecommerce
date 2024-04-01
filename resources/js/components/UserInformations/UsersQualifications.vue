@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <v-card-title class="pl-0">
@@ -17,8 +16,8 @@
 
             <v-col md="2">
                 <v-select v-model="educationDetails[index].starting_year" :name="'starting_year_' + index"
-                    :items="yearOptions" label="Starting Year" required :rules="[v => !!v || 'Starting Year is required']"
-                    variant="outlined"></v-select>
+                    :items="yearOptions" label="Starting Year" required
+                    :rules="[v => !!v || 'Starting Year is required']" variant="outlined"></v-select>
             </v-col>
             <v-col md="2">
                 <v-select v-model="educationDetails[index].passing_year" :name="'passing_year_' + index"
@@ -35,7 +34,7 @@
     </div>
     <hr style="width:100%;text-align:left;margin-left:0">
 </template>
-  
+
 <script>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
@@ -49,12 +48,12 @@ export default {
         const educationTypes = ref(['High School', 'College', 'University']);
         const still_pursuing = ref(false);
         const yearOptions = ref([2022, 2023, 2024]);
-        const removeEducationEntry = async (index) => {
-
+        const removeEducationEntry = (index) => {
+            store.removeEducationEntry;
             const educationId = educationDetails.value[index].id;
             try {
                 console.log(educationId, 'education id')
-                await axios.post(`/removedEducation/${educationId}`);
+                axios.post(`/removedEducation/${educationId}`);
                 educationDetails.value.splice(index, 1);
             } catch (error) {
                 console.error('Error deleting education detail:', error);

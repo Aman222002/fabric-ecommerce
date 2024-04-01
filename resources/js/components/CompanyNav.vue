@@ -1,10 +1,5 @@
 <template>
-  <v-navigation-drawer
-    location="left"
-    class="left_side_bar"
-    v-model="drawer"
-    :rail="rail"
-  >
+  <v-navigation-drawer location="left" class="left_side_bar" v-model="drawer" :rail="rail">
     <h3 class="title" v-if="!rail">JOBS</h3>
     <v-avatar style="margin-left: 10%" v-if="rail">
       <img src="/storage/assest/15.jpg" alt="" />
@@ -12,85 +7,45 @@
     <v-list>
       <v-list-group value="Jobs" class="group" v-if="!usersStore.isloggedin">
         <template v-slot:activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="mdi-view-dashboard-outline"
-            title="Jobs"
-          ></v-list-item>
+          <v-list-item v-bind="props" prepend-icon="mdi-view-dashboard-outline" title="Jobs"></v-list-item>
         </template>
-        <v-list-item
-          v-if="hasPermission('Edit Job') || hasrole('Company Admin')"
-          :class="{ main: true, active: currentRoute === '/posted-jobs' }"
-          href="/posted-jobs"
-          title=" My Jobs"
-        >
+        <v-list-item v-if="hasPermission('Edit Job') || hasrole('Company Admin')"
+          :class="{ main: true, active: currentRoute === '/posted-jobs' }" href="/posted-jobs" title=" My Jobs">
         </v-list-item>
-        <v-list-item
-          v-if="hasPermission('Post Job') || hasrole('Company Admin')"
-          :class="{ main: true, active: currentRoute === '/postjob' }"
-          href="/postjob"
-          title="Post a Job"
-        >
+        <v-list-item v-if="hasPermission('Post Job') || hasrole('Company Admin')"
+          :class="{ main: true, active: currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
         </v-list-item>
         <!-- <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
         </v-list-item> -->
       </v-list-group>
-      <v-list-item
-        :class="{ group: true, active: currentRoute === '/findcv' }"
-        href="/findcv"
-        prepend-icon="mdi-magnify"
-        title="Find CV"
-      >
+      <v-list-item :class="{ group: true, active: currentRoute === '/findcv' }" href="/findcv"
+        prepend-icon="mdi-magnify" title="Find CV">
       </v-list-item>
-      <v-list-item
-        v-if="hasPermission('Buy Subscription') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/product' }"
-        href="/product"
-        prepend-icon="mdi-format-list-bulleted"
-        title="Plans"
-      >
+      <v-list-item v-if="hasPermission('Buy Subscription') || hasrole('Company Admin')"
+        :class="{ group: true, active: currentRoute === '/product' }" href="/product"
+        prepend-icon="mdi-format-list-bulleted" title="Plans">
       </v-list-item>
-      <v-list-item
-        v-if="hasPermission('Change Plan') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/company/plan' }"
-        href="/company/plan"
-        prepend-icon="mdi-cash-sync"
-        title="Subscription details"
-      >
+      <v-list-item v-if="hasPermission('Change Plan') || hasrole('Company Admin')"
+        :class="{ group: true, active: currentRoute === '/company/plan' }" href="/company/plan"
+        prepend-icon="mdi-cash-sync" title="Subscription details">
       </v-list-item>
-      <v-list-item
-        v-if="hasPermission('Change Profile') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/company/profile' }"
-        href="/company/profile"
-        prepend-icon="mdi-account-circle"
-        title="Profile"
-      >
+      <v-list-item v-if="hasPermission('Change Profile') || hasrole('Company Admin')"
+        :class="{ group: true, active: currentRoute === '/company/profile' }" href="/company/profile"
+        prepend-icon="mdi-account-circle" title="Profile">
       </v-list-item>
-      <v-list-item
-        v-if="hasPermission('create users') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/add-user' }"
-        href="/add-user"
-        prepend-icon="mdi-account-plus-outline"
-        title="Add User"
-      >
+      <v-list-item v-if="hasPermission('create users') || hasrole('Company Admin')"
+        :class="{ group: true, active: currentRoute === '/add-user' }" href="/add-user"
+        prepend-icon="mdi-account-plus-outline" title="Add User">
       </v-list-item>
-      <v-list-item
-        v-if="hasPermission('view users') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/users' }"
-        href="/users"
-        prepend-icon="mdi-account"
-        title="Users"
-      >
+      <v-list-item v-if="hasPermission('view users') || hasrole('Company Admin')"
+        :class="{ group: true, active: currentRoute === '/users' }" href="/users" prepend-icon="mdi-account"
+        title="Users">
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
 
   <v-app-bar height="46" id="header">
-    <v-app-bar-nav-icon
-      variant="text"
-      @click.stop="rail = !rail"
-      style="color: white"
-    ></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail" style="color: white"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
     <v-menu class="log_and_reg_drop" transition="slide-y-transition">
       <template v-slot:activator="{ props }">
@@ -99,30 +54,16 @@
         >
         <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon> -->
 
-        <v-icon v-bind="props" id="account" size="40" style="color: white"
-          >mdi-account-circle</v-icon
-        >
+        <v-icon v-bind="props" id="account" size="40" style="color: white">mdi-account-circle</v-icon>
         <v-icon v-bind="props" class="menu" size="35" style="color: white">
-          mdi-menu-down</v-icon
-        >
+          mdi-menu-down</v-icon>
       </template>
 
       <v-list>
-        <v-list-item
-          prepend-icon="mdi-account"
-          title="Login as User"
-          value="Login as User"
-          href="/login"
-          class="dropdown"
-        ></v-list-item>
-        <v-list-item
-          v-if="usersStore.isloggedin || employerStore.isloggedin"
-          class="dropdown"
-          prepend-icon="mdi-logout"
-          title="Logout"
-          value="Dashboard"
-          @click="logout()"
-        ></v-list-item>
+        <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"
+          class="dropdown"></v-list-item>
+        <v-list-item v-if="usersStore.isloggedin || employerStore.isloggedin" class="dropdown" prepend-icon="mdi-logout"
+          title="Logout" value="Dashboard" @click="logout()"></v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -203,7 +144,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;

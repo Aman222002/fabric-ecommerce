@@ -26,7 +26,7 @@ export default {
     const namePattern = ref("[a-zA-Z]{3,30}");
     const loadURL = `/get/plans`;
     const updateURL = `/admin/update/plans`;
-    const { dataSource } = dxGridStore(loadURL, null, updateURL);
+    const { dataSource } = dxGridStore(loadURL, null, null, updateURL);
     return {
       dataSource,
       namePattern,
