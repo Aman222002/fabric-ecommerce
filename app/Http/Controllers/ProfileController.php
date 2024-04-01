@@ -63,22 +63,25 @@ class ProfileController extends Controller
     {
         try {
             $companyId = session('company_id');
-
+    
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-
+    
             $company = Company::with(['address', 'socialMediaAccounts', 'jobs' => function ($query) {
                 $query->where('is_draft', 0);
-               
             }])->find($companyId);
-       
+    
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }
-
+    
             $user = auth()->user();
-            // dd($user);
+    
+            if (!$user->hasAnyRole(['Company Admin', 'Company Subadmin'])) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+    
             return response()->json([
                 'companydata' => $company,
                 'user' => $user
@@ -87,6 +90,7 @@ class ProfileController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -158,6 +162,47 @@ class ProfileController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    public function updateCompanyDetails(Request $request)
+    {
+        try {
+          
+            if (!auth()->user()->hasRole('Company Admin')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            $companyId = session('company_id');
+    
+            if (!$companyId) {
+                return response()->json(['error' => 'Company ID not found in session'], 404);
+            }
+    
+            $company = Company::find($companyId);
+    
+            if (!$company) {
+                return response()->json(['error' => 'Company not found'], 404);
+            }
+    
+            $company->update([
+                'company_name' => $request->input('company_name'),
+                'company_email' => $request->input('company_email'),
+            ]);
+    
+            if ($request->hasFile('logo')) {
+                $image = $request->file('logo');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/assest', $imageName);
+    
+                $company->update([
+                    'logo' => $imageName
+                ]);
+            }
+    
+            return response()->json(['message' => 'Company details updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
+
     /**
      * Remove the specified resource from storage.
      */
@@ -192,12 +237,17 @@ class ProfileController extends Controller
     public function updateAddress(Request $request)
     {
         try {
+           
+            if (!auth()->user()->hasRole('Company Admin')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+    
             $companyId = session('company_id');
-
+    
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-
+    
             Address::updateOrCreate(
                 ['company_id' => $companyId],
                 [
@@ -208,35 +258,40 @@ class ProfileController extends Controller
                     'postal_code' => $request->input('postal_code'),
                 ]
             );
-
+    
             return response()->json(['message' => 'Address updated successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
+    
     public function updatedescription(Request $request)
     {
         try {
+            // Check if the authenticated user has the role of company admin
+            if (!auth()->user()->hasRole('Company Admin')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
             $companyId = session('company_id');
-
+    
             if (!$companyId) {
                 return response()->json(['error' => 'Company ID not found in session'], 404);
             }
-
+    
             $company = Company::find($companyId);
-
+    
             if (!$company) {
                 return response()->json(['error' => 'Company not found'], 404);
             }
-
+    
             $company->update([
                 'description' => $request->input('description'),
             ]);
-
+    
             return response()->json(['message' => 'Description updated successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
 }

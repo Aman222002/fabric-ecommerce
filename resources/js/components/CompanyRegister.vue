@@ -106,8 +106,9 @@
                     ></v-file-input>
                   </v-col>
 
-                  
+               
                 </v-row>
+               
               </div>
               <v-col cols="12" class="text-center">
                     <v-btn type="submit" class="custom-button">
@@ -190,12 +191,12 @@ export default {
     onMounted(() => {
       const value = props.data;
       console.log(value);
-      company.value.name = props.data.name;
+      company.value.name = props.data.name.replace(/\+/g, ' ');
       company.value.email = props.data.email;
       company.value.phone = props.data.phone;
 
       if (props.data.name) {
-        company.value.name = props.data.name;
+        company.value.name = props.data.name.replace(/\+/g, ' ');
         company.value.email = props.data.email;
         company.value.phone = props.data.phone;
         disabledFields.value = true;

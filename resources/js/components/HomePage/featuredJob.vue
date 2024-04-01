@@ -140,7 +140,7 @@ export default {
     const openDetailPage = (id) => {
       // console.log(id);
       // window.lo
-      window.location.href = `http://127.0.0.1:8000/view/${id}`
+      window.location.href = `/view/${id}`
     }
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };

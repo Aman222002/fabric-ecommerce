@@ -14,11 +14,55 @@
     <DxColumn data-field="title" data-type="string"> </DxColumn>
     <DxColumn data-field="location" data-type="string"></DxColumn>
     <DxColumn data-field="vacancy" data-type="string"> </DxColumn>
-    <DxColumn data-field="salary" data-type="string"> </DxColumn>
+    <DxColumn data-field="salary"  edit-cell-template="salarytemplate"> </DxColumn>
     <DxColumn data-field="description" data-type="string"> </DxColumn>
     <DxColumn data-field="company_website" data-type="url"> </DxColumn>
     <DxColumn caption="Select Category" edit-cell-template="categorydropdown" :visible="showcolumn">
     </DxColumn>
+    <template #salarytemplate="{ data }">
+  <div>
+    <v-select
+    v-model="salaryType"
+   
+    :items="['fixed', 'range']"
+    label="Salary Type"
+    density="compact"
+    variant="outlined"
+   
+  ></v-select>      
+  <template   v-if="shouldDisplayRangeInput(data)">
+    <v-text-field
+      variant="outlined"
+      v-model="minSalary"
+      label="Minimum Salary"
+      placeholder="Minimum Salary"
+     
+      density="compact"
+      style="margin-top: 10px;"
+    ></v-text-field>
+    <v-text-field
+      variant="outlined"
+      v-model="maxSalary"
+      label="Maximum Salary"
+      placeholder="Maximum Salary"
+    
+      density="compact"
+      style="margin-top: 10px;"
+    ></v-text-field>
+  </template>
+  <template v-else>
+    <v-text-field
+      variant="outlined"
+      v-model="salary"
+      label="Salary"
+      placeholder="Salary"
+    
+      density="compact"
+    ></v-text-field>
+  </template>
+  </div>
+</template>
+
     <template #categorydropdown>
       <DxDropDownBox :accept-custom-value="true" label="Select Category" data-type="dropdown" labelMode="floating"
         v-model:value="selectedCategory" v-model:opened="datadropdown" @value-change="selectCategory">
@@ -112,13 +156,18 @@ export default {
     const DropDown2 = ref(false);
     const showcolumn = ref(false);
     const noeditcolumn = ref(true);
+    const salary = ref("");
+    const salaryType=ref("fixed");
+    const minSalary=ref("");
+    const maxSalary=ref("");
     const job = ref({
-      id: "",
       title: "",
       category: "",
       jobType: "",
       vacancy: "",
-      salary: "",
+      salaryType: "fixed",
+      minSalary: "", 
+  maxSalary: "",
       location: "",
       description: "",
       qualifications: "",
@@ -126,6 +175,7 @@ export default {
       companywebsite: "",
       jobSkill: "",
     });
+    
     const dialog = ref(false);
     const categories = ref([]);
     const allCategories = ref([]);
@@ -208,7 +258,7 @@ export default {
       const categoryId = e.data.category_id;
       const skillId = e.data.category_id;
       const JobTypeId = e.data.category_id;
-      console.log(categoryId);
+      // salary.value=e.data.salary;
       console.log(allCategories.value);
       const foundCategory = allCategories.value.find(item => item.id === categoryId);
       if (foundCategory) {
@@ -216,6 +266,15 @@ export default {
       } else {
         null;
       }
+      if (e.data.salary.includes("-")) {
+    const [min, max] = e.data.salary.split("-");
+    salaryType.value = "range";
+    minSalary.value = min.trim();
+    maxSalary.value = max.trim();
+  } else {
+    salary.value = e.data.salary;
+    salaryType.value = "fixed";
+  }
       const foundSkill = allSkills.value.find(item => item.id === skillId);
       console.log(foundSkill);
       if (foundSkill) {
@@ -248,6 +307,7 @@ export default {
               icon: 'success',
               title: 'Added',
             });
+            refreshTable(dataGridRef);
           }
         }).catch((error) => {
           console.log(error);
@@ -404,6 +464,22 @@ export default {
         }
       });
     };
+    const updateSalaryType = (newValue) => {
+      salaryType.value = newValue;
+    };
+    const shouldDisplayRangeInput = (data) => {
+     
+      const salaryContainsRange = data.row.data.salary.includes("-");
+      if (salaryContainsRange) {
+      
+        salaryType.value = "range";
+      } else {
+       
+        salaryType.value = "fixed";
+      }
+      return salaryContainsRange;
+    };
+   
     onMounted(() => {
       fetchCategories();
       fetchJobTypes();
@@ -450,7 +526,7 @@ export default {
       fetchJobs,
       duplicateJob,
       postJob,
-      dataGridRef,
+      dataGridRef,updateSalaryType,
       DropDown2,
       jobActions,
       logEvent,
@@ -466,7 +542,8 @@ export default {
       experiencedropdown,
       allCategories,
       allSkills,
-      allJobType
+      allJobType,
+      salary,maxSalary,minSalary,salaryType,shouldDisplayRangeInput
     };
   },
 };

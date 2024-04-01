@@ -22,6 +22,7 @@ use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
 use App\Jobs\PaymentJob;
 use App\Models\Invitation;
+use Carbon\Carbon;
 
 use function PHPSTORM_META\map;
 
@@ -89,6 +90,11 @@ class CompanyController extends Controller
             $input = $request->all();
             if (!($request->input('user_name'))) {
                 $user = Auth::user();
+                if ($user->hasRole('Company Subadmin')) {
+                    $companyId = session('company_id');
+                    $user_Id = Company::where('id', $companyId)->value('user_id');
+                    $user = User::where('id', $user_Id)->first();
+                }
                 $selected_plan = Plan::find($input['id']);
                 $user_plan = Plan::find($user->plan_id);
                 $priceCents = $selected_plan->price * 100;
@@ -690,22 +696,27 @@ class CompanyController extends Controller
     {
         try {
             $companyId = session('company_id');
+            $loggedInUserId = auth()->id(); 
+    
             $type = $request->input('type');
-
+    
             switch ($type) {
                 case 'Invited':
                     $users = Invitation::where('company_id', $companyId)
                         ->where('status', 'pending');
                     break;
-
+    
                 case 'Rejected':
                     $users = Invitation::where('company_id', $companyId)
                         ->where('status', 'rejected');
                     break;
+                    
                 default:
-                    $users = User::where('company_id', $companyId);
+                    $users = User::where('company_id', $companyId)
+                        ->where('id', '!=', $loggedInUserId); // Exclude logged-in user
                     break;
             }
+            
             $response = [];
             if ($request->requireTotalCount) {
                 $response['totalCount'] = $users->count();
@@ -713,20 +724,13 @@ class CompanyController extends Controller
             if (isset($request->take)) {
                 $users->skip($request->skip)->take($request->take);
             }
-            // if (isset($request->sort)) {
-            //     $sort = json_decode($request->sort, true);
-            //     if (count($sort)) {
-            //         $users->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
-            //     }
-            // } else {
-            //     $users->orderBy('created_at', 'DESC');
-            // }
+            
             if ($request->has('filter')) {
                 $filters = json_decode($request->filter, true);
                 if (count($filters)) {
                     $filters = is_array($filters[0]) ? $filters[0] : $filters;
                     $search = !blank($filters[2]) ? $filters[2] : false;
-
+    
                     if ($search) {
                         $users->where('name', 'like', "%$search%");
                     }
@@ -735,19 +739,26 @@ class CompanyController extends Controller
             $userList = $users->get();
             $response['data'] = $userList;
             $totalCount = $users->count();
+            
             if ($userList->isNotEmpty()) {
                 return response()->json([
                     'status' => true,
                     'data' => $userList,
                     'totalCount' => $totalCount,
                 ], 200);
-                // return response()->json(['status' => true, 'data' => $users], 200);
+            } else {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Users not found',
+                    'totalCount' => $totalCount,
+                ], 200);
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    
     public function userData()
     {
         $user = Auth::user();
@@ -815,11 +826,11 @@ class CompanyController extends Controller
         try {
             $user = Auth::user();
             $user_subscription = UserSubscription::where('user_id', $user->id)->first();
-            $user->update(['upgrade_status' => null]);
             $this->gocardlessService->removeSubscription($user_subscription->upgrade_subscription_id);
+            sleep(5);
             return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
     /**
@@ -838,7 +849,119 @@ class CompanyController extends Controller
     }
     public function getTotalPublishedJobs()
     {
-        $totalPublishedJobs = Job::getTotalPublishedJobs();
+        $jobs = Job::getTotalPublishedJobs();
+        $totalPublishedJobs=$jobs->count();
         return response()->json(['totalPublishedJobs' => $totalPublishedJobs]);
     }
+
+
+
+
+    public function recentPosts(Request $request)
+    {
+        try {
+            $companyId = session()->get('company_id');
+            $company = Company::find($companyId);
+            if(!$company) {
+                throw new \Exception("Company not found.");
+            }
+            $recentPosts = $company->jobs()
+            ->where('post_status', 'Published') 
+            ->latest()
+            ->take(5)
+            ->get();
+        
+        $totalPosts = $company->jobs()->where('post_status', 'Published')->count();
+    
+            return response()->json(['status' => true, 'data' => $recentPosts, 'total_posts' => $totalPosts], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    
+public function totalJobs(Request $request)
+
+    {
+        try {
+            $companyId = $request->session()->get('company_id');
+            $totalJobs = Job::where('company_id', $companyId)
+            ->where('post_status', 'published')
+            ->count();
+            return response()->json(['status' => true, 'totalJobs' => $totalJobs], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    public function totalExpiredJobs(Request $request)
+
+    {
+        try {
+            $companyId = $request->session()->get('company_id');
+            $totalJobs = Job::where('company_id', $companyId)
+            ->where('post_status', 'expired')
+            ->count();
+            return response()->json(['status' => true, 'totalJobs' => $totalJobs], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+
+    }
+   
+
+    public function getPostsAboutToExpire(Request $request)
+{
+    $companyId = $request->session()->get('company_id');
+    
+    $startDate = Carbon::now()->subDays(30);
+    $endDate = Carbon::now()->subDays(23);
+
+    $posts = Job::where('created_at', '>', $endDate)
+                 ->where('created_at', '<=', $startDate)
+                 ->where('company_id', $companyId)
+                 ->where('post_status', 'published')
+                 ->get();
+
+    return response()->json(['data' => $posts], 200);
+}
+
+    // public function fetchusers(Request $request)
+    // {
+    //     try {
+    //         $companyId = session('company_id');
+    //         $type = $request->input('type');
+
+    //         switch ($type) {
+    //             case 'Invited':
+    //                 $users = Invitation::where('company_id', $companyId)
+    //                     ->where('status', 'pending');
+    //                 break;
+
+    //             case 'Rejected':
+    //                 $users = Invitation::where('company_id', $companyId)
+    //                     ->where('status', 'rejected');
+    //                 break;
+    //             default:
+    //                 $users = User::where('company_id', $companyId);
+    //                 break;
+    //         }
+    //         $response = [];
+    //         if ($request->requireTotalCount) {
+    //             $response['totalCount'] = $users->count();
+    //         }
+    //         $userList = $users->get();
+    //         $response['data'] = $userList;
+    //         $totalCount = $users->count();
+    //         if ($userList->isNotEmpty()) {
+    //             return response()->json([
+    //                 'status' => true,
+    //                 'data' => $userList,
+    //                 'totalCount' => $totalCount,
+    //             ], 200);
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
 }

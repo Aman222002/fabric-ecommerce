@@ -10,6 +10,13 @@
       <img src="/storage/assest/15.jpg" alt="" />
     </v-avatar>
     <v-list>
+      <v-list-item
+        :class="{ group: true, active: currentRoute === '/company-dashboard' }"
+        href="/company-dashboard"
+        prepend-icon="mdi-view-dashboard-variant"
+        title="Dashboard"
+      >
+      </v-list-item>
       <v-list-group value="Jobs" class="group"  v-if="!rail">
         <template v-slot:activator="{ props }">
           <v-list-item
@@ -35,13 +42,7 @@
         <!-- <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
         </v-list-item> -->
       </v-list-group>
-      <!-- <v-list-item
-        :class="{ group: true, active: currentRoute === '/findcv' }"
-        href="/findcv"
-        prepend-icon="mdi-magnify"
-        title="Find CV"
-      >
-      </v-list-item> -->
+     
       <v-list-item
         v-if="hasPermission('Buy Subscription') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/product' }"
@@ -59,7 +60,7 @@
       >
       </v-list-item>
       <v-list-item
-        v-if="hasPermission('Change Profile') || hasrole('Company Admin')"
+       
         :class="{ group: true, active: currentRoute === '/company/profile' }"
         href="/company/profile"
         prepend-icon="mdi-account-circle"
@@ -163,7 +164,6 @@ export default {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/user/data");
-
         users.value = response.data;
       } catch (error) {
         console.error("Error fetching user data:", error);

@@ -158,11 +158,11 @@ export default {
       },
     ]);
     const loginItems = ref([
-      {
-        title: "Login as User",
-        icon: "mdi-login",
-        href: "/login",
-      },
+      // {
+      //   title: "Login as User",
+      //   icon: "mdi-login",
+      //   href: "/login",
+      // },
       {
         title: "Login as Company",
         icon: "mdi-office-building",
@@ -170,11 +170,11 @@ export default {
       },
     ]);
     const registerItems = ref([
-      {
-        title: "Register as User",
-        icon: "mdi-account-plus",
-        href: "/registration",
-      },
+      // {
+      //   title: "Register as User",
+      //   icon: "mdi-account-plus",
+      //   href: "/registration",
+      // },
       {
         title: "Register as Company",
         icon: "mdi-account-plus",

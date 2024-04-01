@@ -95,7 +95,14 @@ export default {
         } 
       } catch (error) {
         console.error(error);
-        alert("An error occurred during login");
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: 'Invalid Credential',
+            });
       }
     };
     const signup = async () => {

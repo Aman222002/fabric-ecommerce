@@ -6,7 +6,7 @@
       <DxGridItem template="dropDown2" :location="'before'" />
       <DxGridItem name="searchPanel" :location="'after'"></DxGridItem>
     </DxToolbar>
-    <DxEditing mode="row" :use-icons="true">
+    <DxEditing mode="row" :use-icons="true" :allow-deleting="true">
     </DxEditing>
     <DxSearchPanel :visible="true" />
     <DxColumn v-if="selectedStatus === 'All'" data-field="name" data-type="string"></DxColumn>
@@ -63,7 +63,7 @@ export default {
       },
     ]);
     const loadUrl = `/fetch-user`;
-    const deleteUrl = `/admin/user/destroy`;
+    const deleteUrl = `/destroy`;
     const { dataSource, refreshTable } = dxGridStore(loadUrl, params, null, null, deleteUrl);
 
     return {

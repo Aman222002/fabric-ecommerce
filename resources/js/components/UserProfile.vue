@@ -435,10 +435,7 @@ export default {
   margin-bottom: 40px;
   width: 75%;
 }
-.right_side_edif_btn {
-  position: absolute;
-  right: 25px;
-}
+
 .user_profile_infor_right .v-card .v-card-text {
   padding: 0;
 }

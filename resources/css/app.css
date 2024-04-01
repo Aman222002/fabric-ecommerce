@@ -838,6 +838,22 @@ button.save_btn {
     margin-right: 5px;
 }
 
+.employers_search_single_top, .employers_search_single_body {
+    background: #fff;
+}
+.employers_search_single_body .employers_search_single_right .v-card-item .v-list-item .v-list-item__append .v-card-text {
+    padding-top: 0;
+}
+
+
+.employers_search_single_right {
+    background: #f5f7fc;
+    border-radius: 15px;
+}
+.employers_search_col .company_info .job_info a {
+    font-weight: 600;
+    text-transform: capitalize;
+}
 
 
 /* responsive start  only */
