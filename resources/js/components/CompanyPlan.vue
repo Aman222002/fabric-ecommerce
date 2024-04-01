@@ -36,7 +36,7 @@
             'font-weight-bold': true,
             'text-red': true,
           }">
-                Your Plan will be Activated Soon
+                Your Plan will be Activated in 3 to 4 days
               </span>
             </v-col>
             <v-col cols="4" class="d-flex justify-end align-center">
@@ -133,12 +133,15 @@ export default {
     const planName = ref([]);
     const plans = ref({});
     const removeplan = () => {
+      console.log(userId.value);
       try {
         axios.get(`/remove/subscription/${user.id}`).then((response) => {
           console.log(response.data);
           window.location.reload();
         });
-      } catch (error) { }
+      } catch (error) {
+        console.log(error);
+      }
     };
     const changeplan = () => {
       changePlanModal.value = true;
@@ -204,7 +207,7 @@ export default {
         .catch((error) => {
           console.error("Error:", error);
         });
-      window.location.reload();
+      // window.location.reload();
     };
     const cancelupgrade = () => {
       try {
@@ -223,20 +226,22 @@ export default {
     const getPlan = () => {
       try {
         axios.get(`/find/plan`).then((response) => {
-          currentplan.value = response.data.data;
-          subscriptionDetail.value.start_date = new Date(
-            response.data.subscription.start_date
-          ).toLocaleDateString();
-          subscriptionDetail.value.end_date = new Date(
-            response.data.subscription.end_date
-          ).toLocaleDateString();
-          const endDate = new Date(subscriptionDetail.value.end_date);
-          const today = new Date();
-          const differenceInTime = endDate.getTime() - today.getTime();
-          const differenceInDays = Math.ceil(
-            differenceInTime / (1000 * 3600 * 24)
-          );
-          subscriptionDetail.value.remainig_days = differenceInDays;
+          if (response.data.data) {
+            currentplan.value = response.data.data;
+            subscriptionDetail.value.start_date = new Date(
+              response.data.subscription.start_date
+            ).toLocaleDateString();
+            subscriptionDetail.value.end_date = new Date(
+              response.data.subscription.end_date
+            ).toLocaleDateString();
+            const endDate = new Date(subscriptionDetail.value.end_date);
+            const today = new Date();
+            const differenceInTime = endDate.getTime() - today.getTime();
+            const differenceInDays = Math.ceil(
+              differenceInTime / (1000 * 3600 * 24)
+            );
+            subscriptionDetail.value.remainig_days = differenceInDays;
+          }
         });
       } catch (error) {
         console.log(error);

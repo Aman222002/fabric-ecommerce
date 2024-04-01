@@ -1,6 +1,6 @@
 <template>
-<div v-if="recentNews && recentNews.title" class="single_blog_page">
-    <v-card  class="mx-auto my-12">
+  <div v-if="recentNews && recentNews.title" class="single_blog_page">
+    <v-card class="mx-auto my-12">
       <v-card-item>
         <v-card-title>{{ recentNews.title }}</v-card-title>
         <div class="px-4">

@@ -52,12 +52,13 @@
                 <v-card>
                     <v-list v-for="item in blogActions" :key="item.text">
                         <template v-if="selectedStatus === 'Draft'">
-                            <v-list-item class="dropdown" @click="duplicateJob(data.row.data.id, item.text)">
+                            <v-list-item class="dropdown" @click="duplicateBlog(data.row.data.id, item.text)">
                                 {{ item.text }}
                             </v-list-item>
                         </template>
                         <template v-else>
-                            <v-list-item v-if="item.text !== 'Post Blog'" class="dropdown">
+                            <v-list-item v-if="item.text !== 'Post Blog' || selectedStatus == 'All'" class="dropdown"
+                                @click="duplicateBlog(data.row.data.id, item.text)">
                                 {{ item.text }}
                             </v-list-item>
                         </template>
@@ -222,6 +223,7 @@ export default {
                             icon: 'success',
                             title: `Blog Drafted Successfully`,
                         });
+                        refreshTable(dataGridRef);
                     }).catch((err) => {
                         console.log(err);
                     })
@@ -244,6 +246,7 @@ export default {
                         icon: 'success',
                         title: `Blog Posted Successfully`,
                     });
+                    refreshTable(dataGridRef);
                 }).catch((err) => {
                     console.log(err);
                     if (err.response.status == '406') {
@@ -314,9 +317,6 @@ export default {
         const showcolumn = ref(false);
         const logEvent = (e) => {
             showcolumn.value = true;
-            // DxFormItem.value = false;
-            // console.log(e.data);
-            // title.value = e.data.title;
             content.value = e.data.content;
         }
         const cancelEdit = (data) => {

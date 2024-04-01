@@ -28,7 +28,6 @@ class LoginController extends Controller
         try {
             if (Auth::attempt($credential)) {
                 $user = Auth::user();
-                // dd($user);
                 if ($user) {
                     $user->getRoleNames();
                     return response()->json(['status' => true, 'data' => $user]);

@@ -95,7 +95,7 @@ Route::get('/footer', function () {
 });
 Route::get('/job', function () {
     return view('Job');
-});
+})->middleware('guest');
 // Route::get('/companyregister', function () {
 //     return view('companyregister');
 // });
@@ -143,19 +143,19 @@ Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/company/job', [SearchjobController::class, 'fetchJob']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/login', [LoginController::class, 'index']);
+Route::get('/login', [LoginController::class, 'index'])->middleware('guest');
 Route::get('/forget/password', [ForgotPasswordController::class, 'forgetPassword']);
 Route::post('/get/forget/password/link', [ForgotPasswordController::class, 'getLink']);
 Route::get('reset/password/{user_id}/{token}', [ForgotPasswordController::class, 'showResetPasswordForm']);
 Route::post('/reset/new/password/', [ForgotPasswordController::class, 'updatePassword']);
-Route::post('/login', [LoginController::class, 'check'])->name('login');
+Route::post('/login', [LoginController::class, 'check'])->name('login')->middleware('guest');
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
-Route::get('/registration', [RegistrationController::class, 'index']);
+Route::get('/registration', [RegistrationController::class, 'index'])->middleware('guest');
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 Route::prefix('company')->group(function () {
-    Route::get('/register/{id?}/{name?}/{email?}/{phone?}/{company?}/{permission?}', [CompanyController::class, 'index']);
+    Route::get('/register/{id?}/{name?}/{email?}/{phone?}/{company?}/{permission?}', [CompanyController::class, 'index'])->middleware('guest');
     Route::post('/post/{permission?}', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
     Route::get('/names/{email?}', [CompanyController::class, 'getCompanyNames']);
@@ -171,7 +171,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/post/jobs/{type?}', [JobsController::class, 'index']);
     Route::post('/post', [JobsController::class, 'store']);
     Route::get('/post/edit/{id}', [JobsController::class, 'edit']);
-    Route::post('/post/jobs/{id}', [JobsController::class, 'update']);
+    Route::post('/post/jobs/{id}/{category?}/{jobtype?}/{skill?}/{experience?}', [JobsController::class, 'update']);
     Route::delete('/post/delete/{id}', [JobsController::class, 'destroy']);
     Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
     Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
@@ -186,7 +186,7 @@ Route::get('/get/plans', [DashboardController::class, 'getplans']);
 
 //Admin Routes;
 
-Route::group(["prefix" => "/admin"], function () {
+Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout', [DashboardController::class, 'logout']);
     Route::get('/profile', [DashboardController::class, 'viewProfile']);
@@ -205,7 +205,9 @@ Route::group(["prefix" => "/admin"], function () {
     Route::delete('/delete/blog/{id}', [DashboardController::class, 'deleteBlog']);
     Route::post('/blog/draft/{id?}/{type?}', [DashboardController::class, 'draftBlog']);
     Route::post('/blog/post/{id?}/{type?}', [DashboardController::class, 'postBlog']);
-
+    Route::get('/jobs', [DashboardController::class, 'viewJobs']);
+    Route::get('/get/jobs', [DashboardController::class, 'getAllJobs']);
+    Route::get('/graph/data', [DashboardController::class, 'getGraphData']);
     //user route in admin
 
     Route::group(["prefix" => "/user"], function () {

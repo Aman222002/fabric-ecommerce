@@ -5,10 +5,7 @@
         <v-row class="form_page">
           <v-col class="form_page_left" sm="12" md="12" lg="6" xl="6" cols="12">
             <v-card-text>
-              <p
-                class="text-center"
-                style="font-size: 20px; font-style: sans-serif"
-              >
+              <p class="text-center" style="font-size: 20px; font-style: sans-serif">
                 Employers Register
               </p>
               <v-row style="margin-top: 20px">
@@ -16,49 +13,20 @@
                   <h4 class="form-title">User Detail:</h4>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field
-                    variant="outlined"
-                    v-model="company.name"
-                    label="Representative Name"
-                    :rules="nameRules"
-                    density="compact"
-                    outlined
-                    :disabled="disabledFields"
-                  ></v-text-field>
+                  <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
+                    density="compact" outlined :disabled="disabledFields"></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field
-                    variant="outlined"
-                    v-model="company.email"
-                    label="Representative Email"
-                    :rules="emailRules"
-                    density="compact"
-                    outlined
-                    :disabled="disabledFields"
-                  ></v-text-field>
+                  <v-text-field variant="outlined" v-model="company.email" label="Representative Email"
+                    :rules="emailRules" density="compact" outlined :disabled="disabledFields"></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field
-                    variant="outlined"
-                    v-model="company.password"
-                    label="Password"
-                    :rules="passwordRules"
-                    density="compact"
-                    type="password"
-                    outlined
-                  ></v-text-field>
+                  <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
+                    density="compact" type="password" outlined></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field
-                    variant="outlined"
-                    v-model="company.phone"
-                    label="Phone"
-                    :rules="phoneRules"
-                    type="phone"
-                    density="compact"
-                    outlined
-                    :disabled="disabledFields"
-                  ></v-text-field>
+                  <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules"
+                    type="phone" density="compact" outlined :disabled="disabledFields"></v-text-field>
                 </v-col>
               </v-row>
               <div v-if="showCompanyDetails">
@@ -67,43 +35,20 @@
                     <h4 class="form-title">Company Details:</h4>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="company.company_name"
-                      label="Company Name"
-                      :rules="nameRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="company.company_name" label="Company Name"
+                      :rules="nameRules" density="compact" outlined></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="company.company_email"
-                      label="Company Email"
-                      :rules="emailRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="company.company_email" label="Company Email"
+                      :rules="emailRules" density="compact" outlined></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field
-                      variant="outlined"
-                      v-model="company.phone_number"
-                      label="Phone Number"
-                      :rules="phoneRules"
-                      density="compact"
-                      outlined
-                    ></v-text-field>
+                    <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number"
+                      :rules="phoneRules" density="compact" outlined></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-file-input
-                      variant="outlined"
-                      v-model="company.logo"
-                      label="Company Logo"
-                      outlined
-                      density="compact"
-                    ></v-file-input>
+                    <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined
+                      density="compact"></v-file-input>
                   </v-col>
 
                
@@ -117,14 +62,7 @@
                   </v-col>
             </v-card-text>
           </v-col>
-          <v-col
-            class="blue form_page_right"
-            sm="12"
-            md="12"
-            lg="6"
-            xl="6"
-            cols="12"
-          >
+          <v-col class="blue form_page_right" sm="12" md="12" lg="6" xl="6" cols="12">
             <v-card-text class="white--text text-center">
               <p style="font-size: 20px">Already Sign up?</p>
               <p style="font-size: 13px; margin: 15px 0">
@@ -163,9 +101,7 @@ export default {
       phone: "",
       company_name: "",
       company_email: "",
-
       phone_number: "",
-
       status: "1",
       logo: [],
     });
@@ -295,6 +231,7 @@ export default {
   align-items: center;
   text-align: center;
 }
+
 .form_page_left button.v-btn,
 .form_page_right button.v-btn {
   min-width: 150px;
@@ -308,9 +245,11 @@ export default {
   border-radius: 15px;
   color: #fff;
 }
+
 .form_page_left button.v-btn {
   min-width: 260px;
 }
+
 a.company_loging {
   display: flex;
   width: 150px;

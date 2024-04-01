@@ -22,8 +22,8 @@
                 </v-card-item>
                 <v-card-text>
                   <div>
-                    {{ recentItem.contentText }}<span v-if="recentItem.contentText" class="read-more"
-                      @click="openDetailPage(recentItem.id)">Read full article</span>
+                    {{ truncateDescription(recentItem.contentText) }}<span v-if="recentItem.contentText"
+                      class="read-more" @click="openDetailPage(recentItem.id)">Read full article</span>
                   </div>
                 </v-card-text>
               </v-card>
@@ -59,7 +59,6 @@ export default {
     };
     const fecthBlog = () => {
       axios.get('get/blog').then((response) => {
-        // console.log(response.data.data);
         recentNews.value = response.data.data.map(blog => {
           const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
           const paragraphs = blog.content.match(paragraphRegex);
@@ -67,7 +66,7 @@ export default {
             .map(p => p.replace(/<[^>]+>/g, ''))
             .join(' ')
             .split(/\s+/)
-            .slice(0, 20)
+            .slice(0, 25)
             .join(' ') : '';
           return {
             ...blog,
@@ -79,6 +78,12 @@ export default {
           console.log(err);
         });
     };
+    const truncateDescription = (description) => {
+      if (description && description.length > 200) {
+        return description.substring(0, 200) + "...";
+      }
+      return description;
+    };
     onMounted(() => {
       fecthBlog();
     });
@@ -89,6 +94,7 @@ export default {
       icon,
       comment,
       openDetailPage,
+      truncateDescription,
     };
   },
 };

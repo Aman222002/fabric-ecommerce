@@ -1,4 +1,4 @@
 @extends('layouts.dashboard')
 @section('content')
-<admindashboard-component></admindashboard-component>
+<jobs-component></jobs-component>
 @endsection

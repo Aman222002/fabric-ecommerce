@@ -21,11 +21,11 @@ class ResumeController extends Controller
 {
 
     public function store(Request $request)
-    {    
-   //dd($request);
+    {
+        //dd($request);
         try {
             $user = auth()->user();
-   
+
             $request->validate([
                 // 'user_id' => 'required|exists:users,id',
                 'address.address1' => 'required|string|max:255',
@@ -63,8 +63,8 @@ class ResumeController extends Controller
             $userId = $user->id;
             $user = User::find($userId);
             if ($user) {
-                $user->user_image = $imageName; 
-                $user->save(); 
+                $user->user_image = $imageName;
+                $user->save();
             }
             UserAddress::updateOrInsert(
                 [
@@ -81,7 +81,6 @@ class ResumeController extends Controller
                     'longitude' => $request->address['longitude'],
                     'address2' => $request->address['address2'],
                     'county' => $request->address['county'],
-                   
                 ]
             );
             $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
@@ -104,65 +103,22 @@ class ResumeController extends Controller
                     'strengths' => $request->userProfile['strengths'],
                 ]
             );
-            // if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
-            //     $qualificationData = [];
-            //     foreach ($request->educationDetails as $educationDetail) {
-            //         $educationDetail['user_id'] = $user->id;
-            //         $qualificationData[] = $educationDetail;
-            //     }
-             
-            //     Qualification::upsert(
-            //         $qualificationData,
-            //         [
-            //             'user_id' => $user->id,
-            //             'education_type' => $educationDetail['education_type'],
-            //         ],
-            //         ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
-            //     );
-                
-            // }
             if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
+                $qualificationData = [];
                 foreach ($request->educationDetails as $educationDetail) {
                     $educationDetail['user_id'] = $user->id;
-                    
-                   
-                    if (!array_key_exists('still_pursuing', $educationDetail)) {
-                      
-                        continue;
-                    }
-                    
-                    try {
-                        $existingQualification = Qualification::where('user_id', $user->id)
-                            ->where('education_type', $educationDetail['education_type'])
-                            ->first();
-            
-                        if ($existingQualification) {
-                            $existingQualification->update([
-                                'starting_year' => $educationDetail['starting_year'],
-                                'passing_year' => $educationDetail['passing_year'],
-                                'still_pursuing' => $educationDetail['still_pursuing'],
-                                'school_university' => $educationDetail['school_university'],
-                            ]);
-                            Log::debug('Qualification updated: ' . $existingQualification->id);
-                        } else {
-                            $newQualification = Qualification::create($educationDetail);
-                            Log::debug('New qualification created: ' . $newQualification->id);
-                        }
-                    } catch (\Exception $e) {
-                    
-                        Log::error('Error updating or creating qualification: ' . $e->getMessage());
-                       
-                        return response()->json(['error' => 'An error occurred while updating or creating qualification.'], 500);
-                    }
+                    // qualification::updateOrCreate(['user_id' => $user->id, 'education_type' => $educationDetail['education_type']], ['education_type' => $educationDetail['education_type'], 'starting_year' => $educationDetail['starting_year'], 'passing_year' => $educationDetail['passing_year'], 'school_university' => $educationDetail['school_university']]);
+                    $qualificationData[] = $educationDetail;
                 }
+                Log::info('data' . json_encode($qualificationData));
+                Qualification::upsert(
+                    $qualificationData,
+                    [
+                        'user_id', 'education_type'
+                    ],
+                    ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
+                );
             }
-            
-            
-            
-            
-            
-         
-            
             if (is_array($request->experience) && count($request->experience) > 0 && is_array($request->experience[0])) {
                 $experienceData = [];
                 foreach ($request->experience as $experiences) {
@@ -175,7 +131,8 @@ class ResumeController extends Controller
                     }
                     $experienceData[] = $experiences;
                 }
-
+                // 'company_name' => $experiences['company_name'],
+                Log::info('data' . json_encode($experiences['company_name']));
                 UserExperience::upsert(
                     $experienceData,
                     [
@@ -212,19 +169,19 @@ class ResumeController extends Controller
                 );
             }
             $userSkill = UserSkill::where('user_id', $user->id)->get()->pluck('skill_id');
-        
+
             //$userInfo =  UserProfile::where('user_id', $user->id)->first();
             $userProfile = UserProfile::where('user_id', $user->id)->first();
             $userExperience = UserExperience::where('user_id', $user->id)->get();
             $userAchievment = UserAchievement::where('user_id', $user->id)->get();
             $userQualification = Qualification::where('user_id', $user->id)->get();
             $userAddress = UserAddress::where('user_id', auth()->id())->first();
-          //dd( $userExperience);
-        
+            //dd( $userExperience);
+
             $response = [
                 "status" => true,
                 "data" => [
-                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone,"user_image"=>$user->user_image],
+                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone, "user_image" => $user->user_image],
                     "address" => $userAddress,
                     "educationDetails" => $userQualification,
                     "experience" => $userExperience,
@@ -253,11 +210,11 @@ class ResumeController extends Controller
             $userAchievment = UserAchievement::where('user_id', $user->id)->get();
             $userQualification = Qualification::where('user_id', $user->id)->get();
             $userAddress = UserAddress::where('user_id', auth()->id())->first();
-         
+
             $response = [
                 "status" => true,
                 "data" => [
-                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone,"user_image" =>$user->user_image,"status" => $user->status],
+                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone, "user_image" => $user->user_image, "status" => $user->status],
                     "address" => $userAddress,
                     "educationDetails" => $userQualification,
                     "experience" => $userExperience,
@@ -265,9 +222,9 @@ class ResumeController extends Controller
                     "userProfile" => $userProfile,
                     "skills" => $userSkills,
                 ]
-              
+
             ];
-         
+
             return response()->json($response, 200);
         } catch (\Exception $e) {
 

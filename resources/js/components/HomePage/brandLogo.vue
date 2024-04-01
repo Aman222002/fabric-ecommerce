@@ -3,15 +3,12 @@
     <v-container class="w-75">
       <v-sheet class="mx-auto">
         <v-slide-group class="pa-4" selected-class="bg-success" show-arrows>
-          <v-slide-group-item
-            v-for="brandLogo in brandLogo"
-            :key="brandLogo.id"
-          >
+          <v-slide-group-item v-for="brandLogo in brandLogo" :key="brandLogo.id">
             <div class="brand_logo_slide">
-              <v-img
-                aspect-ratio="16/9"
-                :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"
-              ></v-img>
+              <!-- aspect-ratio="16/9" -->
+              <a :href=brandLogo.website_link target="_blank">
+                <v-img aspect-ratio="16/9" :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"></v-img>
+              </a>
             </div>
           </v-slide-group-item>
         </v-slide-group>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\BlogPost;
 use App\Models\Partner;
+use App\Models\Job;
 use App\Models\Plan;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
@@ -53,6 +54,57 @@ class DashboardController extends Controller
         return view('admin/blog');
     }
     /**
+     * function to return jobs view
+     */
+    public function viewJobs()
+    {
+        return view('admin.jobs');
+    }
+    /**
+     * function to get all jobs
+     */
+    public function getAllJobs()
+    {
+        try {
+            $publishedJobsQuery = Job::getTotalPublishedJobs();
+            $publishedJobs = $publishedJobsQuery->with('company')->get();
+            $recentJobs = $publishedJobsQuery->with('company')->latest()->take(5)->get();;
+            $modifiedPublishedJobs = $publishedJobs->map(function ($job) {
+                return [
+                    'id' => $job->id,
+                    'company_name' => $job->company->company_name,
+                    'company_email' => $job->company->company_email,
+                    'company_phone' => $job->company->phone_number,
+                    'title' => $job->title,
+                    'location' => $job->location,
+                    'salary' => $job->salary,
+                    'vacancy' => $job->vacancy,
+                    'company_website' => $job->company_website,
+                    // Include other company fields if needed
+                ];
+            });
+            // $totalJobData = $publishedJobs->map(function ($job) {
+            //     return [
+            //         'Month' => $job->
+            //     ];
+            // });
+            $recentJobs = $recentJobs->map(function ($job) {
+                return [
+                    'id' => $job->id,
+                    'title' => $job->title,
+                    'location' => $job->location,
+                    // Include other company fields if needed
+                ];
+            });
+            Log::info('data' . json_encode($publishedJobs));
+            $totalCount = $publishedJobs->count();
+            return response()->json(['status' => true, 'data' => $modifiedPublishedJobs, 'recentJobs' => $recentJobs, 'totalCount' => $totalCount], 200);
+        } catch (\Exception $e) {
+            // Return error response if any exception occurs
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
      * function to get Plans
      */
     public function getplans()
@@ -94,7 +146,7 @@ class DashboardController extends Controller
                 return response()->json(['status' => true, 'message' => 'plan updated Successfully'], 200);
             }
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'messsage' => $e], 500);
+            return response()->json(['status' => false, 'messsage' => $e->getMessage()], 500);
         }
     }
     /**
@@ -162,8 +214,9 @@ class DashboardController extends Controller
                 }
                 return $blog;
             });;
+            $totalCount = $blog->count();
             // $jobs = Job::all();
-            return response()->json(['status' => true, 'data' => $blogs], 200);
+            return response()->json(['status' => true, 'data' => $blogs, 'totalCount' => $totalCount], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -368,6 +421,36 @@ class DashboardController extends Controller
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    /**
+     * funcion to get graph data
+     */
+    public function getGraphData()
+    {
+        try {
+            $publishedJobs = Job::getTotalPublishedJobs()->get();
+            // Log::info('data' . json_encode($publishedJobs));
+            $jobCountsByMonth = [];
+            foreach ($publishedJobs as $job) {
+                $createdAt = Carbon::parse($job->created_at);
+                $month = $createdAt->format('F');
+                if (!isset($jobCountsByMonth[$month])) {
+                    $jobCountsByMonth[$month] = 0;
+                }
+                $jobCountsByMonth[$month]++;
+            }
+            Log::info('new' . json_encode($jobCountsByMonth));
+            $formattedData = [];
+            foreach ($jobCountsByMonth as $month => $jobCount) {
+                $formattedData[] = [
+                    'Month' => $month,
+                    'jobCount' => $jobCount,
+                ];
+            }
+            return response()->json(['status' => true, 'data' => $formattedData], 200);
+        } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
