@@ -38,6 +38,28 @@
 				</tr>
 			</tbody>
 		</table>
+		<div style="border-top: 2px solid;margin-top: 25px;">
+			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+				<thead>
+					<tr>
+						<th>
+							<h2 style="margin: 0;margin-top: 10px; font-family:  Biryani; text-align: left;">
+							Achievements
+							</h2>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				@foreach ($userdata['achievements'] as $achievement)
+					<tr>
+						<td style="width: 70%;">
+						{{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>, 2019
+						</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
 		<div style="border-top: 2px solid; margin-top: 25px;">
 			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 				<thead>
@@ -120,45 +142,12 @@
 				@endforeach
 			</table>
 		</div>
-		<div style="border-top: 2px solid;margin-top: 25px;">
-			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-				<thead>
-					<tr>
-						<th>
-							<h2 style="margin: 0;margin-top: 10px; font-family:  Biryani; text-align: left;">
-							Achievements
-							</h2>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-				@foreach ($userdata['achievements'] as $achievement)
-					<tr>
-						<td style="width: 70%;">
-						{{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>, 2019
-						</td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
-		<div style="border-top: 2px solid;margin-top: 25px;">
-			<table style="width: 90%;text-align: center;margin: 25px auto;margin-bottom: 30px;font-family: Biryani;">
-			@foreach ($userdata['address'] as $addresses)
-				<tbody>
-					<tr>
-						<td style="width: 100%;">
-							{{ $addresses['city'] }} {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
-						</td>
-					</tr>
-				</tbody>
-				@endforeach
-			</table>
-		</div>
+
+
 
 	</div>
 
 
 </body>
 
-</html>
+</html> 

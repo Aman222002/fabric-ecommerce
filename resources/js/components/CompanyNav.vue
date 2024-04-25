@@ -8,15 +8,21 @@
       <v-list-item :class="{ group: true, active: currentRoute === '/company-dashboard' }" href="/company-dashboard"
         prepend-icon="mdi-view-dashboard-variant" title="Dashboard">
       </v-list-item>
-      <v-list-group value="Jobs" class="group" v-if="!rail">
+      <v-list-group value="Jobs" class="group" >
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props" prepend-icon="mdi-view-dashboard-outline" title="Jobs"></v-list-item>
         </template>
-        <v-list-item v-if="hasPermission('Edit Job') || hasrole('Company Admin')"
+        <!-- <v-list-item v-if="hasPermission('Edit Job') || hasrole('Company Admin')"
           :class="{ main: true, active: currentRoute === '/posted-jobs' }" href="/posted-jobs" title=" My Jobs">
         </v-list-item>
         <v-list-item v-if="hasPermission('Post Job') || hasrole('Company Admin')"
           :class="{ main: true, active: currentRoute === '/postjob' }" href="/postjob" title="Post a Job">
+        </v-list-item> -->
+        <v-list-item v-if="hasPermission('Edit Job') || hasrole('Company Admin')"
+          :class="{ main: true, active: currentRoute === '/posted-jobs' }" href="/posted-jobs" title=" My Jobs"  prepend-icon="mdi-post" >
+        </v-list-item>
+        <v-list-item v-if="hasPermission('Post Job') || hasrole('Company Admin')"
+          :class="{ main: true, active: currentRoute === '/postjob' }" href="/postjob" title="Post a Job" prepend-icon="mdi-note-edit"  >
         </v-list-item>
         <!-- <v-list-item :class="{ 'main': true, 'active': currentRoute === '/draft' }" href="/draft" title="Draft Jobs">
         </v-list-item> -->
@@ -82,7 +88,6 @@ import axios from "axios";
 
 export default {
   name: "CompanyNav",
-
   setup() {
     const usersStore = useUsersStore();
     const employerStore = useEmployerStore();

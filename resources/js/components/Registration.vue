@@ -93,12 +93,12 @@
                         label="Phone"
                       ></v-text-field>
 
-                      <v-checkbox
+                      <!-- <v-checkbox
                         label="Remember Me"
                         class="mt-n1"
                         color="blue"
                       >
-                      </v-checkbox>
+                      </v-checkbox> -->
 
                       <v-btn type="submit" dark block tile color="primary"
                         >Register</v-btn

@@ -64,15 +64,22 @@ export default {
             //console.log("date", date, x.toJSON().split('T')[0])
             achievements.value[index][type] = x.toJSON().split('T')[0];
         }
+        const addAchievement = () => {
+    achievements.value.push({
+        certification_name: '',
+        company_name: '',
+        certificate_number: '',
+        expiry_date: '',
+        certificate_file: null 
+    });
+};
 
 
         return {
             removeAchievement,
             achievements,
             dateClicked,
-
-            // removeAchievement: store.removeAchievement,
-            addAchievement: store.AddAchievement,
+            addAchievement
 
         };
     },

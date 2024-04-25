@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12">
-        <v-card outlined class="pa-4" v-if="currentplan.name !== 'No Plan'">
+        <v-card outlined class="pa-4" v-if="currentplan.name !== 'No Plan' && plan_id !== ''">
           <v-row no-gutters>
             <v-col cols="8">
               <v-card-subtitle> Current Plan </v-card-subtitle>
@@ -44,7 +44,7 @@
             </v-col>
           </v-row>
         </v-card>
-        <v-card class="no-plan-card" outlined v-if="!plan_id">
+        <v-card class="no-plan-card" outlined v-else>
           <v-card-title class="text-center">No Plan</v-card-title>
           <v-card-text class="text-center">
             <v-icon size="64">mdi-emoticon-sad-outline</v-icon>
@@ -135,8 +135,8 @@ export default {
     const removeplan = () => {
       console.log(userId.value);
       try {
-        axios.get(`/remove/subscription/${user.id}`).then((response) => {
-          console.log(response.data);
+        axios.post(`/remove/subscription/${userId.value}`).then((response) => {
+          console.log(user.id);
           window.location.reload();
         });
       } catch (error) {
@@ -170,15 +170,17 @@ export default {
       axios
         .get("/get/comapny-admin")
         .then((response) => {
+           plan_id.value = response.data.data[0].plan_id;
           userId.value = response.data.data[0].id;
           subscription_status.value = response.data.data[0].subscription_status;
-          plan_id.value = response.data.data[0].plan_id;
+         
           upgrade_status.value = response.data.data[0].upgrade_status;
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     };
+   
     const handleUpgradeStatusChange = () => {
       if (upgrade_status.value === "initiated") {
         disabledButton.value = true;
@@ -203,6 +205,7 @@ export default {
           }
           changePlanModal.value = false;
           changingPlan.value = true;
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -253,6 +256,7 @@ export default {
       setTimeout(() => {
         handleUpgradeStatusChange();
       }, 1200);
+    
     });
     return {
       userId,

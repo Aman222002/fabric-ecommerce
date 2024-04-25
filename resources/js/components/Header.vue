@@ -102,11 +102,11 @@ export default {
       },
     ]);
     const loginItems = ref([
-      // {
-      //   title: "Login as User",
-      //   icon: "mdi-login",
-      //   href: "/login",
-      // },
+      {
+        title: "Login as User",
+        icon: "mdi-login",
+        href: "/login",
+      },
       {
         title: "Login as Company",
         icon: "mdi-office-building",

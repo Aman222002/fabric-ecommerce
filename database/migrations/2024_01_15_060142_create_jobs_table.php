@@ -22,8 +22,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('qualifications')->nullable();
             $table->string('experience');
-            $table->string('company_name');
-            $table->string('company_location');
             $table->string('company_website');
             $table->timestamps();
         });

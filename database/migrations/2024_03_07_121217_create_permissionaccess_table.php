@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('permissionaccess', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies');
             $table->unsignedBigInteger('permission_id')->nullable();
-            $table->foreign('permission_id')->references('id')->on('permissions');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

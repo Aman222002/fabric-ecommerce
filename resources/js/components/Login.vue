@@ -95,14 +95,14 @@ export default {
         } 
       } catch (error) {
         console.error(error);
-        window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: 'Invalid Credential',
-            });
+        // window.Swal.fire({
+        //       toast: true,
+        //       position: 'top-end',
+        //       timer: 2000,
+        //       showConfirmButton: false,
+        //       icon: 'error',
+        //       title: 'Invalid Credential',
+        //     });
       }
     };
     const signup = async () => {

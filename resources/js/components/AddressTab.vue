@@ -38,9 +38,10 @@ export default {
   setup(props) {
     const loadURL = `/admin/company/address/${props.addressId}`;
     const updateURL = `/admin/company/address/update`;
-    const { dataSource } = dxGridStore(loadURL, null, updateURL, null);
+    const { dataSource } = dxGridStore(loadURL, null,null, updateURL, null);
     return {
       dataSource,
+      updateURL
     };
   },
 };

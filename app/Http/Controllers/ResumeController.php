@@ -107,18 +107,26 @@ class ResumeController extends Controller
                 $qualificationData = [];
                 foreach ($request->educationDetails as $educationDetail) {
                     $educationDetail['user_id'] = $user->id;
+                   
                     // qualification::updateOrCreate(['user_id' => $user->id, 'education_type' => $educationDetail['education_type']], ['education_type' => $educationDetail['education_type'], 'starting_year' => $educationDetail['starting_year'], 'passing_year' => $educationDetail['passing_year'], 'school_university' => $educationDetail['school_university']]);
                     $qualificationData[] = $educationDetail;
                 }
                 Log::info('data' . json_encode($qualificationData));
+                 dd(($qualificationData));
+                
                 Qualification::upsert(
                     $qualificationData,
                     [
-                        'user_id', 'education_type'
+                        'user_id' =>$user->id, 
+                        'education_type'=>$educationDetail['education_type'],
                     ],
                     ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
                 );
             }
+            
+            
+            
+            
             if (is_array($request->experience) && count($request->experience) > 0 && is_array($request->experience[0])) {
                 $experienceData = [];
                 foreach ($request->experience as $experiences) {

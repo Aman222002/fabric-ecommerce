@@ -38,6 +38,7 @@ class User extends Authenticatable
         'user_image',
         'reset_token',
         'company_id',
+        'verification_token',
     ];
 
     /**

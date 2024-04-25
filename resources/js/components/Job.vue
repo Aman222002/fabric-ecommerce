@@ -156,9 +156,12 @@ export default {
     ];
     const companyNames = ref([]);
     const submitForm = async () => {
+    
       if (!formData.value.company_name) {
-        return;
-        window.Swal.fire({
+      
+       
+            return;
+            window.Swal.fire({
               toast: true,
               position: 'top-end',
               timer: 2000,
@@ -170,6 +173,7 @@ export default {
       try {
         const response = await axios.post("/company/login", formData.value);
         if (response.data.status == true) {
+        
           companyListDialog.value = false;
           employerStore.isLogIn();
           // window.location.href = "/findcv";

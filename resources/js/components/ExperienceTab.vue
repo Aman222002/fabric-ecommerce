@@ -10,12 +10,12 @@
       <DxSearchPanel :visible="true" />
       <DxColumn
         data-field="company_name"
-        caption="Education Type"
+        caption="Company Name"
         data-type="string"
       />
-      <DxColumn data-field="position" caption="Starting Year" data-type="int">
+      <DxColumn data-field="start_date" caption="Starting Year" data-type="int">
       </DxColumn>
-      <DxColumn data-field="description" caption="Passing Year" data-type="int">
+      <DxColumn data-field="end_date" caption="Passing Year" data-type="int">
       </DxColumn>
     </DxDataGrid>
   </div>

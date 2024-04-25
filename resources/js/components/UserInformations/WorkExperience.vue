@@ -55,30 +55,79 @@ export default {
     name: 'WorkExperience',
     setup() {
         const store = useMyStore();
-        const experience = ref(store.experience);
-        const removeWorkExperience = (index) => {
-            store.removeWorkExperience;
-            const experienceId = experience.value[index].id;
-            try {
-                console.log(experienceId, 'experienceId ')
-                axios.post(`/removedExperience/${experienceId}`);
-                experience.value.splice(index, 1);
-            } catch (error) {
-                console.error('Error deleting experience detail:', error);
-            }
-        };
+        const experience = ref(store.experience?? []);
+        // const removeWorkExperience = async (index) => {
+        //     store.removeWorkExperience;
+        //     const experienceId = experience.value[index].id;
+        //     try {
+        //         console.log(experienceId, 'experienceId ')
+        //         axios.post(`/removedExperience/${experienceId}`);
+        //         experience.value.splice(index, 1);
+        //     } catch (error) {
+        //         console.error('Error deleting experience detail:', error);
+        //     }
+        // };
+        const removeWorkExperience = async (index) => {
+    console.log('Before removal - experience:', experience.value);
+    console.log('Removing index:', index);
+    
+    const workExperience = experience.value[index];
+    const experienceId = workExperience.id;
+    
+    if (!workExperience.company_name && !workExperience.position && !workExperience.start_date && !workExperience.end_date && !workExperience.description) {
+        console.warn('Cannot remove empty work experience entry');
+        return;
+    }
+
+    try {
+    
+        store.removeWorkExperience(experienceId);
+
+     
+        if (workExperience.company_name || workExperience.position || workExperience.start_date || workExperience.end_date || workExperience.description) {
+        
+            const updatedExperience = [
+                ...experience.value.slice(0, index),
+                ...experience.value.slice(index + 1)
+            ];
+            
+          
+            experience.value = updatedExperience;
+            
+           
+            await axios.post(`/removedExperience/${experienceId}`);
+            
+            console.log('After removal - experience:', experience.value);
+        } else {
+            console.warn('Cannot remove empty work experience entry');
+        }
+    } catch (error) {
+        console.error('Error deleting work experience detail:', error);
+    }
+};
+
 
         const dateClicked = (index, type, date) => {
             const x = new Date(date);
             //console.log("date", date, x.toJSON().split('T')[0])
             experience.value[index][type] = x.toJSON().split('T')[0];
         }
+        const addWorkExperience = () => {
+    experience.value.push({
+        company_name: '',
+        position: '',
+        start_date: '',
+        end_date: '',
+        description: ''
+    });
+};
         return {
             experience,
             removeWorkExperience,
-            addWorkExperience: store.addWorkExperience,
+           
             dateClicked,
             removeWorkExperience: store.removeWorkExperience,
+            addWorkExperience,
         };
     },
 };

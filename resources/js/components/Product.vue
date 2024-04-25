@@ -240,7 +240,9 @@ export default {
   margin-bottom: 25px;
 }
 .choose_your_plan .packages_price .v-list-item-title {
-  text-transform: capitalize;
+    text-transform: capitalize;
+    flex-wrap: wrap;
+    display: flex;
 }
 .choose_your_plan .plan_infor .v-card {
   padding: 35px 20px;

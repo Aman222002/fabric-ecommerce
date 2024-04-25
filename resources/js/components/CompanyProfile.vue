@@ -27,7 +27,7 @@
       <v-row class="company_profile_infor">
         <v-col sm="12" md="6" lg="8" xl="8" class="company_profile_infor_left">
           <v-card class="card2" style="margin-bottom: 20px">
-            <v-icon @click="openModal" style="margin-left: 97%">mdi-pencil</v-icon>
+            <v-icon @click="openModal" style="margin-left: 97%" class="pr-9 pt-5">mdi-pencil</v-icon>
             <v-card-title style="font-family: Poppins, sans-serif"><v-icon>mdi-domain</v-icon>
               Description:</v-card-title>
             <v-card-text>
@@ -232,6 +232,9 @@
             :rules="[(value) => !!value || 'State is required']"></v-text-field>
           <v-text-field v-model="editedAddress.postal_code" label="Postal Code" density="compact" variant="outlined"
             :rules="[(value) => !!value || 'Postal code is required']"></v-text-field>
+            <!-- <v-select  :items="countries" :rules="[v => !!v || 'Country is required']"
+                        item-title="country_name" item-value="id" label="country" clearable searchable
+                        placeholder="Select Country"></v-select> -->
         </v-card-text>
         <v-card-actions>
           <v-btn @click="saveEditedAddress">Save</v-btn>
@@ -263,6 +266,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useUsersStore } from "../store/user";
+import { countries } from "../utils/countries"
 export default {
   name: "CompanyProfile",
   setup() {
@@ -274,7 +278,7 @@ export default {
       state: "",
       postal_code: "",
     });
-
+    const countriesList = ref(countries);
     const facebook = ref("");
     const twitter = ref("");
     const linkedin = ref("");
@@ -679,6 +683,7 @@ export default {
       closeEditCompanyModal,
       saveEditedCompany,
       handleCompanyLogoChange,
+      countries: countriesList,
     };
   },
 };
@@ -691,9 +696,17 @@ export default {
 }
 
 .company_profile_infor_right .v-card-text div {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+.choose_your_plan .packages_price .plan_choose:nth-child(2) div.v-card.v-theme--light {
+    height: 97%;
+}
+
+.choose_your_plan .packages_price .plan_choose:nth-child(2) div.v-card.v-theme--light div.border-left {
+    height: 93%;
 }
 
 .company_profile_infor_right .edit_btn {

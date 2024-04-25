@@ -222,7 +222,7 @@
     },
   };
   </script>
-  <style >
+  <style scoped>
  .company_dashboard_view #chartDiv {
     display: flex;
    

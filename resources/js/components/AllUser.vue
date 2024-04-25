@@ -28,6 +28,7 @@
     <DxSummary>
       <DxTotalItem column="id" summary-type="count" />
     </DxSummary>
+ 
   </DxDataGrid>
 </template>
 <script>
@@ -53,8 +54,10 @@ export default {
       null,
       insertURL,
       updateURL,
-      deleteUrl
+      deleteUrl,
+     
     );
+  
     const initNewRow = (e) => {
       e.data.status = "1";
       showColumn.value = true;
@@ -72,6 +75,7 @@ export default {
       rowInserted,
       pageSize,
       editItem,
+      
     };
   },
 };

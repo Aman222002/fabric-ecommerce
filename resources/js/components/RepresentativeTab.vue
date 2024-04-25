@@ -3,6 +3,7 @@
     :show-borders="true"
     :data-source="dataSource"
     :repaint-changes-only="true"
+    :remote-operations="true"
   >
     <DxEditing :allow-updating="true" mode="row" :use-icons="true" />
     <DxSearchPanel :visible="true" />
@@ -19,6 +20,7 @@
 </template>
 <script>
 import dxGridStore from "../composition/dxGridStore";
+import axios from "axios";
 export default {
   name: "RepresentativeTab",
   props: {
@@ -31,9 +33,11 @@ export default {
     // console.log(props.userId);
     const loadURL = `/admin/company/representative/${props.userId}`;
     const updateURL = `/admin/user/update`;
-    const { dataSource } = dxGridStore(loadURL, null, updateURL);
+    console.log(updateURL);
+    const { dataSource } = dxGridStore(loadURL,null,null,updateURL,null);
     return {
       dataSource,
+      updateURL
     };
   },
 };

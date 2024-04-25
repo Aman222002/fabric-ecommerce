@@ -12,7 +12,7 @@ class Qualification extends Model
     protected $fillable = [
         'user_id',
         'education_type',
-        'school_unversity',
+        'school_university',
         'starting_year',
         'passing_year',
         'highest_education_path',
@@ -23,6 +23,4 @@ class Qualification extends Model
     {
         return $this->belongsTo(User::class);
     }
-   
-
 }

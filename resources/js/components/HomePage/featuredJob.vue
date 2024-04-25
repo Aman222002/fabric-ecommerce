@@ -27,7 +27,7 @@
                   <v-icon>mdi-map-marker-outline</v-icon>{{ job.location }}
                 </li>
                 <li>
-                  <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(job.company.created_at) }}
+                  <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(job.created_at) }}
                 </li>
                 <!-- <li><v-icon>mdi-cash</v-icon>{{ job.price }}</li> -->
               </ul>

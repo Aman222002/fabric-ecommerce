@@ -285,6 +285,8 @@ app.component("contact-component", Contact);
 import companydashboard from "./components/companydashboard.vue";
 app.component("company-dashboard",companydashboard);
 
+
+
 // import index from "./components/HomePage/index.vue"
 // app.component("home-component",index);
 

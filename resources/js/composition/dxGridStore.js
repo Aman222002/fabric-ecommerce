@@ -18,6 +18,45 @@ export default function useDataSource(
         byKey: (key) => {
             return fetch(url + "?id=" + key);
         },
+        // load: async function (loadOptions) {
+        //     const dxKeys = [
+        //         "skip",
+        //         "take",
+        //         "requireTotalCount",
+        //         "requireGroupCount",
+        //         "sort",
+        //         "filter",
+        //     ];
+        //     let paramsObject = {};
+        //     dxKeys.forEach((i) => {
+        //         if (i in loadOptions && loadOptions[i]) {
+        //             paramsObject[i] = JSON.stringify(loadOptions[i]);
+        //         }
+        //     });
+        //     // console.log(params.value);
+        //     if (params) {
+        //         Object.assign(paramsObject, params.value);
+        //     }
+        //     return axios
+        //         .get(url, { params: paramsObject })
+        //         .then(({ data }) => {
+        //             if (skipLoader.value) {
+        //                 skipLoader.value = false;
+        //             }
+        //             // console.log(data);
+        //             return {
+        //                 data: data.data || [],
+        //                 summary: data.summary || [],
+        //                 totalCount: data.totalCount ?? 10,
+        //             };
+        //         })
+        //         .catch(() => {
+        //             if (skipLoader.value) {
+        //                 skipLoader.value = false;
+        //             }
+        //             throw new Error("Data Loading Error");
+        //         });
+        // },
         load: async function (loadOptions) {
             const dxKeys = [
                 "skip",
@@ -33,28 +72,50 @@ export default function useDataSource(
                     paramsObject[i] = JSON.stringify(loadOptions[i]);
                 }
             });
-            // console.log(params.value);
+        
             if (params) {
                 Object.assign(paramsObject, params.value);
             }
+        
             return axios
                 .get(url, { params: paramsObject })
                 .then(({ data }) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
-                    // console.log(data);
+        
+                    if (!data.data || data.data.length === 0) {
+                        return {
+                            data: [],
+                            summary: [],
+                            totalCount: 0,
+                            message: "No data",
+                        };
+                    }
+        
                     return {
-                        data: data.data || [],
+                        data: data.data,
                         summary: data.summary || [],
                         totalCount: data.totalCount ?? 10,
                     };
                 })
-                .catch(() => {
+                .catch((error) => {
                     if (skipLoader.value) {
                         skipLoader.value = false;
                     }
-                    throw new Error("Data Loading Error");
+                    
+                 
+                    if (error.response && error.response.status !== 404) {
+                        throw new Error("Data Loading Error");
+                    }
+        
+                  
+                    return {
+                        data: [],
+                        summary: [],
+                        totalCount: 0,
+                        message: "No data",
+                    };
                 });
         },
         insert: (values) => {
@@ -62,7 +123,7 @@ export default function useDataSource(
             if (params) {
                 Object.assign(paramsObject, params.value);
             }
-            // console.log(values);
+             console.log(values);
             return axios
                 .post(insertURL, values, { params: paramsObject })
                 .then(() => {
@@ -78,7 +139,7 @@ export default function useDataSource(
             if (params) {
                 Object.assign(paramsObject, params.value);
             }
-            // console.log(updateURL + "/" + key.id, values, paramsObject);
+            console.log(updateURL);
             return axios
                 .post(updateURL + "/" + key.id, values, {
                     params: paramsObject,
@@ -91,6 +152,7 @@ export default function useDataSource(
                     throw new Error("Error while updating record.");
                 });
         },
+      
         remove: (key) => {
             return axios
                 .delete(deleteURL + "/" + key.id)

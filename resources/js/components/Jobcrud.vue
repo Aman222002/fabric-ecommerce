@@ -11,7 +11,7 @@
     <DxLoadPanel :enabled="true" />
     <DxSearchPanel :visible="true" />
     <DxColumn caption="Action" :allow-editing="false" cell-template="customButtonTemplate" :visible="noeditcolumn">
-    </DxColumn>
+</DxColumn>
     <DxColumn data-field="title" data-type="string"> </DxColumn>
     <DxColumn data-field="location" data-type="string"></DxColumn>
     <DxColumn data-field="vacancy" data-type="string"> </DxColumn>
@@ -293,12 +293,19 @@ export default {
       }
     };
     const saveEvent = (e) => {
-
+      if (salaryType.value === 'range') {
+    salary.value = `${minSalary.value}-${maxSalary.value}`;
+    
+  } 
+  params.value.salary = salary.value;
+  console.log(params.value.salary);
       if (e.changes == 0) {
-        if (params.value.category_id || params.value.skill_id || params.value.job_type_id) {
-          // console.log(e.changes);
+        if (params.value.category_id || params.value.skill_id || params.value.job_type_id  || params.value.salary) {
+         
+      console.log(params.value);
           axios.post(`/post/jobs/${job_Id.value}`, {
             params: params.value,
+         
           }).then((response) => {
             const keys = Object.keys(params.value);
             for (let i = 1; i < keys.length; i++) {

@@ -112,8 +112,9 @@ export default {
     ];
     const passwordRules = [(v) => !!v || "Password is required"];
     const phoneRules = [
-      (v) => !!v || "Phone number is required",
-      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+    (v) => !!v || "Phone number is required",
+  (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+  (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
     ];
     const stateRules = [(v) => !!v || "State is required"];
     const cityRules = [(v) => !!v || "city is required"];
@@ -127,7 +128,7 @@ export default {
     onMounted(() => {
       const value = props.data;
       console.log(value);
-      company.value.name = props.data.name.replace(/\+/g, ' ');
+      company.value.name = props.data.name;
       company.value.email = props.data.email;
       company.value.phone = props.data.phone;
 

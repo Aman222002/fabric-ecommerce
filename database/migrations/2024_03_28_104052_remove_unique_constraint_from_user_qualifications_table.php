@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('user_qualifications', function (Blueprint $table) {
-            //
-            $table->dropUnique(['education_type']);
-        });
+        $connection = Schema::getConnection();
+        $table = 'user_qualifications';
+        $column = 'education_type';
+
+        // Check if a unique constraint exists on the column
+        $constraintExists = collect($connection->select("SHOW INDEX FROM $table WHERE Column_name = '$column' AND Non_unique = 0"))
+            ->isNotEmpty();
+
+        if ($constraintExists) {
+            Schema::table($table, function (Blueprint $table) use ($column) {
+                $table->dropUnique($column);
+            });
+        }
     }
 
     /**
@@ -23,7 +32,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('user_qualifications', function (Blueprint $table) {
-            //
             $table->unique('education_type');
         });
     }

@@ -1,78 +1,88 @@
 <template>
+     <v-container  class="company_dashboard_view">
     <div id="cardsDiv">
         <v-row>
-            <v-col cols="auto">
-                <v-card class="mx-auto card" id="Card">
+            <v-col  sm="12" md="6" lg="3" xl="3" cols="12">
+                <v-card class="mx-auto card one_dt" id="Card">
                     <v-card-item>
+
+                        <div class=" flex-container">
+                  <v-icon class="bottomicon3" size="48">mdi-account</v-icon>
+                </div>
                         <div class="cardtop">
                             <h6 class="dashboardh6">Total Users</h6>
-                            <!-- <h6 class="profit">
-                                <v-icon size="15">mdi-arrow-top-right</v-icon><v-icon size="15">mdi-plus</v-icon>16.24 %
-                            </h6> -->
+                          
+                            <h1 class="numbering">{{ totalUser }}</h1>
                         </div>
-                        <h1 class="numbering">{{ totalUser }}</h1>
+                      
+                      
                         <div class="cardbottom">
                             <a href="/admin/users" class="link">View all users</a>
-                            <v-icon class="bottomicon" size="20">mdi-account</v-icon>
+                           
                         </div>
                     </v-card-item>
                 </v-card>
             </v-col>
 
-            <v-col cols="auto">
-                <v-card class="mx-auto card" id="Card">
+            <v-col  sm="12" md="6" lg="3" xl="3" cols="12">
+                <v-card class="mx-auto card two_dt" id="Card">
                     <v-card-item>
+                        <div class=" flex-container">
+                  <v-icon class="bottomicon3" size="48">mdi-office-building</v-icon>
+                </div>
                         <div class="cardtop">
                             <h6 class="dashboardh6">Total Companies</h6>
-                            <!-- <h6 class="profit">
-                                <v-icon size="15">mdi-arrow-top-right</v-icon><v-icon size="15">mdi-plus</v-icon>16.24 %
-                            </h6> -->
-                        </div>
-                        <h1 class="numbering">
+                            
+                            <h1 class="numbering">
                             {{ totalCompany }}
                         </h1>
+                        </div>
+                       
                         <div class="cardbottom">
                             <a href="/admin/companies" class="link">View all companies</a>
-                            <v-icon class="bottomicon2" size="20">mdi-office-building</v-icon>
+                            
                         </div>
                     </v-card-item>
                 </v-card>
             </v-col>
 
-            <v-col cols="auto">
-                <v-card class="mx-auto card" id="Card">
+            <v-col  sm="12" md="6" lg="3" xl="3" cols="12">
+                <v-card class="mx-auto card three_dt" id="Card">
                     <v-card-item>
+                        <div class=" flex-container">
+                  <v-icon class="bottomicon3" size="48">mdi-purse</v-icon>
+                </div>
                         <div class="cardtop">
-                            <h6 class="dashboardh6">Total Jobs Potings</h6>
-                            <!-- <h6 class="loss">
-                                <v-icon size="15">mdi-arrow-bottom-right</v-icon><v-icon
-                                    size="15">mdi-minus</v-icon>4.60%
-                            </h6> -->
+                            <h6 class="dashboardh6">Total Jobs Postings</h6>
+                          
+                            <h1 class="numbering">{{ totalJobs }}</h1>
                         </div>
-                        <h1 class="numbering">{{ totalJobs }}</h1>
+                        
                         <div class="cardbottom">
                             <a href="/admin/jobs" class="link">View all jobs</a>
-                            <v-icon class="bottomicon3" size="20">mdi-list-box-outline</v-icon>
+                           
                         </div>
                     </v-card-item>
                 </v-card>
             </v-col>
 
-            <v-col cols="auto">
-                <v-card class="mx-auto card" id="Card">
+            <v-col  sm="12" md="6" lg="3" xl="3" cols="12">
+                <v-card class="mx-auto card four_dt" id="Card">
                     <v-card-item>
+                        <div class=" flex-container">
+                  <v-icon class="bottomicon3" size="48">mdi-post</v-icon>
+                </div>
                         <div class="cardtop">
                             <h6 class="dashboardh6">Total Blogs</h6>
-                            <!-- <h6 class="loss">
-                                <v-icon size="15">mdi-arrow-bottom-right</v-icon><v-icon
-                                    size="15">mdi-minus</v-icon>4.60%
-                            </h6> -->
+                        
+                            <h1 class="numbering">{{ totalBlog }}</h1>
                         </div>
-                        <h1 class="numbering">{{ totalBlog }}</h1>
+                     
                         <div class="cardbottom">
                             <a href="/admin/blog/view" class="link">View all Blogs</a>
-                            <v-icon class="bottomicon3" size="20">mdi-list-box-outline</v-icon>
+                            
                         </div>
+                        
                     </v-card-item>
                 </v-card>
             </v-col>
@@ -83,7 +93,7 @@
         <div class="graph">
             <DxChart id="chart" :data-source="grossProductData" title="Job Postings" @pointClick="onPointClick">
                 <DxCommonSeriesSettings argument-field="Month" type="bar" hover-mode="allArgumentPoints"
-                    selection-mode="allArgumentPoints">
+                    selection-mode="allArgumentPoints" :barWidth="40">
                     <DxLabel :visible="true">
                         <DxFormat :precision="0" type="fixedPoint" />
                     </DxLabel>
@@ -117,6 +127,7 @@
             </v-card>
         </div>
     </div>
+</v-container>
 </template>
 <script>
 import { ref, onMounted } from "vue";
@@ -214,47 +225,75 @@ export default {
 };
 </script>
 <style scoped>
-.graph {
-    margin-top: 50px;
-    width: 60%;
-    height: 500px;
-}
 
-.bottomicon4 {
-    color: rgb(224, 101, 0);
-    background-color: rgb(248, 224, 202);
-    padding: 22px;
-    border-radius: 5px;
+.company_dashboard_view #chartDiv {
+    display: flex;
+   
+  }
+  
+  .company_dashboard_view #SupplierDiv {
+    margin: 50px 0px 0px 0px;
+    width: 100%;
 }
-
-#chartDiv {
+ .company_dashboard_view div.card:hover {
+    background: #1976d2;
+    color: #fff;
+}
+  .flex-container {
+    display: flex;
+    align-items: center; 
+}
+.company_dashboard_view div.card:hover .flex-container i.mdi, .company_dashboard_view div.card:hover h1.numbering, .company_dashboard_view div.card:hover .cardtop h6.dashboardh6 {
+    color: #fff !important;
+}
+.company_dashboard_view div.card .flex-container i.mdi {
+    color: #1976d2;
+    margin-right: 10px;
+    background-color: #1976d24d;
+    border-radius: 25px;
+    font-size: 27px !important;
+}
+.company_dashboard_view div.card:hover .flex-container i.mdi{background-color: #0e0f0f4d;}
+.company_dashboard_view .cardtop h6.dashboardh6{
+      font-size: 15px;
+}
+.company_dashboard_view div.card h1.numbering, .company_dashboard_view .cardtop h6.dashboardh6 {
+    color: #696969;
+}
+.company_dashboard_view div#chartDiv div#SupplierDiv .v-card-title {
+    padding: 3px 15px;
+}
+.company_dashboard_view div#cardsDiv div#Card .v-card-item__content {
     display: flex;
 }
-
-#SupplierDiv {
-    margin: 50px 0px 0px 30px;
-    width: 41%;
-
+.company_dashboard_view .v-table--density-default {
+    --v-table-header-height: 40px;
+    --v-table-row-height: 40px;
+}
+.company_dashboard_view #SupplierDiv table thead th.text-left {
+    font-weight: 600;
+}
+.company_dashboard_view .cardbottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    text-align: center;
 }
 
-#Card {
-    max-width: 240px;
+.company_dashboard_view .cardbottom a {
+    color: #1976d2; 
+    text-decoration: none;
+    font-weight: bold;
 }
 
-@media only screen and (max-width: 1200px) {
-    #chartDiv {
-        display: grid;
-        margin-left: 0px;
-    }
-
-    .graph {
-        width: 100%;
-        height: 500px;
-    }
-
-    #SupplierDiv {
-        margin: 0px 0px 20px 0px;
-        width: 100%;
-    }
+.company_dashboard_view .cardbottom a:hover {
+    text-decoration: underline;
+}
+.company_dashboard_view .card {
+    height: 170px;
+    position: relative; 
 }
 </style>
