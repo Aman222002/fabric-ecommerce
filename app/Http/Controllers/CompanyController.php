@@ -1023,20 +1023,27 @@ class CompanyController extends Controller
 
     public function getPostsAboutToExpire(Request $request)
     {
+      
         $companyId = $request->session()->get('company_id');
-
+    
         $startDate = Carbon::now()->subDays(30);
         $endDate = Carbon::now()->subDays(23);
-
+    
+      
         $posts = Job::where('created_at', '>', $endDate)
             ->where('created_at', '<=', $startDate)
             ->where('company_id', $companyId)
             ->where('post_status', 'published')
             ->get();
-
-        return response()->json(['data' => $posts], 200);
+    
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully fetched posts about to expire',
+            'data' => $posts
+        ], 200);
     }
-
+    
     // public function fetchusers(Request $request)
     // {
     //     try {

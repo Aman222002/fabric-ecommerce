@@ -97,4 +97,24 @@ class LoginController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    public function getSkills($userId)
+    {
+        try {
+            // Fetch the user based on the user ID
+            $user = User::findOrFail($userId);
+
+            // Fetch the user's skills using the 'skills' relationship
+            $userSkills = $user->skills;
+
+            // Transform the user skills to only include the skill details
+            $skills = $userSkills->map(function ($userSkill) {
+                return $userSkill->skill;
+            });
+
+            return response()->json($skills);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch user skills.'], 500);
+        }
+    }
 }

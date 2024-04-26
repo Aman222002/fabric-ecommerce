@@ -18,74 +18,87 @@
             <input type="hidden" v-model="address.latitude" id="latitude" />
             <input type="hidden" v-model="address.longitude" id="longitude" />
             <v-row>
-                <v-col>
-                    <v-text-field v-model="address.city" :rules="[v => !!v || 'City is required']" label="City" required
-                        name="city" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                    <v-text-field v-model="address.state" :rules="[v => !!v || 'State is required']" label="State" required
-                        name="state" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                    <v-text-field v-model="address.county" label="County" variant="outlined"></v-text-field>
-
-                </v-col>
-            </v-row>
-            <v-row>
                 <v-col cols="12" md="6">
                     <v-select v-model="address.country" :items="countries" :rules="[v => !!v || 'Country is required']"
-                        item-title="country_name" item-value="id" label="country" clearable searchable
+                        item-title="name" item-value="isoCode" label="Country" clearable searchable
                         placeholder="Select Country"></v-select>
                 </v-col>
                 <v-col cols="12" md="6">
-                    <v-text-field v-model="address.zip_code"
+                    <!-- <v-text-field v-model="address.zip_code"
+                        :rules="[v => !!v || 'Zip Code is required', v => /^[0-9]{6}$/.test(v) || 'Invalid Zip Code (must be 6 digits and numeric)']"
+                        name="Zip_code" label="Zip Code" variant="outlined">
+                    </v-text-field> -->
+                    <v-select v-model="address.state" :items="filteredStates" :rules="[v => !!v || 'State is required']"
+                        item-title="name" item-value="isoCode" label="State" clearable searchable
+                        placeholder="Select State"></v-select>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col>
+                    <v-text-field v-model="address.city" :rules="[v => !!v || 'City is required']" label="City" required
+                        name="City" variant="outlined"></v-text-field>
+                </v-col>
+                <v-col>
+                    <!-- <v-select v-model="address.state" :items="filteredStates" :rules="[v => !!v || 'State is required']"
+                        item-title="name" item-value="isoCode" label="state" clearable searchable
+                        placeholder="Select State"></v-select> -->
+                          <v-text-field v-model="address.zip_code"
                         :rules="[v => !!v || 'Zip Code is required', v => /^[0-9]{6}$/.test(v) || 'Invalid Zip Code (must be 6 digits and numeric)']"
                         name="Zip_code" label="Zip Code" variant="outlined">
                     </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-text-field v-model="address.county" label="County" variant="outlined"></v-text-field>
                 </v-col>
             </v-row>
         </div>
     </div>
 </template>
+
 <script>
-import axios from 'axios';
-import { countries } from "../../utils/countries"
-import { ref, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useMyStore } from '@/store';
+import { Country, State }  from 'country-state-city';
 
 export default {
     name: "UserAddress",
     setup() {
         const store = useMyStore();
         const address = ref(store.address);
-        const countriesList = ref(countries);
-        // onMounted(() => {
-        //     try {
-        //         axios.get('/getcountry').then(({ data }) => {
-        //             console.log(data.countries, "dbvdbgvcdgcvg")
-        //             countries.value = data.countries ?? [];
+       
+        const countries = Country.getAllCountries().map(country => ({
+            name: country.name,
+            isoCode: country.isoCode
+        }));
 
-        //         });
-        //     } catch (err) {
-        //         console.log(err);
-        //     }
-        // });
+        const state = State.getAllStates().map(state => ({
+            name: state.name,
+            isoCode: state.isoCode
+        }));
 
-
+        const filteredStates = computed(() => {
+            if (address.value.country) {
+                return State.getStatesOfCountry(address.value.country).map(state => ({
+                    name: state.name,
+                    isoCode: state.isoCode
+                }));
+            } else {
+                return [];
+            }
+        });
         return {
             address,
-            countries: countriesList,
+            countries,
+            state,
+            filteredStates
         };
     },
-
 };
 </script>
   
 <style scoped>
 .container-center {
     display: flex;
-
     align-items: center;
-
 }
 </style>

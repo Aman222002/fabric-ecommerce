@@ -68,43 +68,38 @@ export default {
         //     }
         // };
         const removeWorkExperience = async (index) => {
-    console.log('Before removal - experience:', experience.value);
-    console.log('Removing index:', index);
-    
     const workExperience = experience.value[index];
     const experienceId = workExperience.id;
-    
+    console.log('Removing experienceId:',  workExperience.id);
+
     if (!workExperience.company_name && !workExperience.position && !workExperience.start_date && !workExperience.end_date && !workExperience.description) {
         console.warn('Cannot remove empty work experience entry');
         return;
     }
 
     try {
-    
-        store.removeWorkExperience(experienceId);
-
-     
-        if (workExperience.company_name || workExperience.position || workExperience.start_date || workExperience.end_date || workExperience.description) {
+       
+        await axios.post(`/removedExperience/${experienceId}`);
         
-            const updatedExperience = [
-                ...experience.value.slice(0, index),
-                ...experience.value.slice(index + 1)
-            ];
-            
-          
-            experience.value = updatedExperience;
-            
-           
-            await axios.post(`/removedExperience/${experienceId}`);
-            
-            console.log('After removal - experience:', experience.value);
-        } else {
-            console.warn('Cannot remove empty work experience entry');
-        }
+      
+        store.removeWorkExperience(index);
+
+      
+        const updatedExperience = [
+            ...experience.value.slice(0, index),
+            ...experience.value.slice(index + 1)
+        ];
+        experience.value = updatedExperience;
+        
+        console.log('Work experience removed successfully');
     } catch (error) {
+     
         console.error('Error deleting work experience detail:', error);
+    
+        experience.value = store.experience ?? [];
     }
 };
+
 
 
         const dateClicked = (index, type, date) => {
@@ -126,7 +121,7 @@ export default {
             removeWorkExperience,
            
             dateClicked,
-            removeWorkExperience: store.removeWorkExperience,
+           
             addWorkExperience,
         };
     },

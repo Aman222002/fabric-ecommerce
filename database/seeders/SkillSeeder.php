@@ -19,6 +19,18 @@ class SkillSeeder extends Seeder
             [ 'skill_name' => 'Programming'],
             [ 'skill_name' => 'Database Management'],
             [ 'skill_name' => 'Design'],
+            [ 'skill_name' => 'SQL proficiency'],
+            [ 'skill_name' => 'Scripting Languages'],
+            [ 'skill_name' => 'Data Migration'],
+            [ 'skill_name' => 'Database Optimization'],
+            [ 'skill_name' => 'Version Control Systems'],
+            [ 'skill_name' => 'Data Security'],
+            [ 'skill_name' => 'Data Validation and Testing'],
+            [ 'skill_name' => 'Backup and Recovery'],
+            [ 'skill_name' => 'Performance Tuning'],
+            [ 'skill_name' => 'Cloud Platforms'],
+            [ 'skill_name' => 'Data Privacy Regulations'],
+            [ 'skill_name' => 'Troubleshooting Skills'],
             // Add more skills as needed
         ];
 

@@ -148,8 +148,8 @@ export default {
       email: "",
       company_name: "",
     });
-    const companyNameRules = [(v) => !!v || "Company Name is require"];
-    const passRules = [(v) => !!v || "Password is require"];
+    const companyNameRules = [(v) => !!v || "Company Name is required"];
+    const passRules = [(v) => !!v || "Password is required"];
     const emailRules = [
       (v) => !!v || "Email is required",
       (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",

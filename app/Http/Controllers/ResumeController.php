@@ -83,49 +83,90 @@ class ResumeController extends Controller
                     'county' => $request->address['county'],
                 ]
             );
+            // $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
+
+            // $alteredSkills = [];
+            // foreach ($skills as $skill) {
+            //     $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
+            // }
+            // if (count($alteredSkills)) {
+            //     UserSkill::upsert(
+            //         $alteredSkills,
+            //         ['user_id', 'skill_id'],
+            //         ['skill_id']
+            //     );
+            // }
             $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
 
-            $alteredSkills = [];
-            foreach ($skills as $skill) {
-                $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
-            }
-            if (count($alteredSkills)) {
-                UserSkill::upsert(
-                    $alteredSkills,
-                    ['user_id', 'skill_id'],
-                    ['skill_id']
-                );
-            }
-            UserProfile::updateOrInsert(
+$alteredSkills = [];
+foreach ($skills as $skill) {
+   
+    $existingSkill = Skill::find($skill);
+    if ($existingSkill) {
+        $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
+    } 
+}
+if (count($alteredSkills)) {
+    UserSkill::upsert(
+        $alteredSkills,
+        ['user_id', 'skill_id'],
+        ['skill_id']
+    );
+}
+
+
+$existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
+$skillsToDelete = array_diff($existingSkills, $skills);
+
+if (!empty($skillsToDelete)) {
+    UserSkill::where('user_id', $user->id)
+        ->whereIn('skill_id', $skillsToDelete)
+        ->delete();
+}
+UserProfile::updateOrInsert(
                 ['user_id' => $user->id],
                 [
                     'hobbies' => $request->userProfile['hobbies'],
                     'strengths' => $request->userProfile['strengths'],
                 ]
             );
+            // if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
+            //     $qualificationData = [];
+            //     foreach ($request->educationDetails as $educationDetail) {
+            //         $educationDetail['user_id'] = $user->id;
+            //         // qualification::updateOrCreate(['user_id' => $user->id, 'education_type' => $educationDetail['education_type']], ['education_type' => $educationDetail['education_type'], 'starting_year' => $educationDetail['starting_year'], 'passing_year' => $educationDetail['passing_year'], 'school_university' => $educationDetail['school_university']]);
+            //         $qualificationData[] = $educationDetail;
+            //     }
+            //     Log::info('data' . json_encode($qualificationData));
+            //     // dd($qualificationData);
+            //     Qualification::upsert(
+            //         $qualificationData,
+            //         ['user_id', 'education_type'],
+            //         ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
+            //     );
+            // }
             if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
                 $qualificationData = [];
-                foreach ($request->educationDetails as $educationDetail) {
-                    $educationDetail['user_id'] = $user->id;
-                   
-                    // qualification::updateOrCreate(['user_id' => $user->id, 'education_type' => $educationDetail['education_type']], ['education_type' => $educationDetail['education_type'], 'starting_year' => $educationDetail['starting_year'], 'passing_year' => $educationDetail['passing_year'], 'school_university' => $educationDetail['school_university']]);
-                    $qualificationData[] = $educationDetail;
-                }
-                Log::info('data' . json_encode($qualificationData));
-                 dd(($qualificationData));
                 
+                // Store user_id in a variable
+                $userId = $user->id;
+            
+                $data = array_map(function($educationDetail) use ($userId){
+                    return [
+                        'user_id' => $userId,
+                        'education_type' => $educationDetail['education_type'],
+                        'starting_year' => $educationDetail['starting_year'],
+                        'passing_year' => $educationDetail['passing_year'],
+                        'still_pursuing' => $educationDetail['still_pursuing'] ?? 0,
+                        'school_university' => $educationDetail['school_university']
+                    ];
+                }, $request->educationDetails);
+               
                 Qualification::upsert(
-                    $qualificationData,
-                    [
-                        'user_id' =>$user->id, 
-                        'education_type'=>$educationDetail['education_type'],
-                    ],
-                    ['education_type', 'starting_year', 'passing_year', 'still_pursuing', 'school_university']
+                    $data,
+                    ['user_id', 'education_type'],
                 );
             }
-            
-            
-            
             
             if (is_array($request->experience) && count($request->experience) > 0 && is_array($request->experience[0])) {
                 $experienceData = [];

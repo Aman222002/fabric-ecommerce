@@ -143,9 +143,9 @@ export default {
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
     const phoneRules = [
-      (v) => !!v || "Phone number is required",
-      (v) =>
-        (v && v.length >= 10) || "Phone number must be a valid 10-digit number",
+    (v) => !!v || "Phone number is required",
+  (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+  (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
     ];
     const submitForm = () => {
       if (this.$refs.form.validate()) {

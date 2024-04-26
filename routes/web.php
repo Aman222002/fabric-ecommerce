@@ -65,6 +65,7 @@ Route::get('/resume', function () {
 Route::get('/userprofile', function () {
     return view('userprofile');
 });
+Route::get('/user/skills', [SkillController::class, 'getUserSkills'])->name('user.skills');
 Route::post('/removedEducation/{educationId}', [ResumeController::class, 'destroyEducation']);
 Route::post('/removedExperience/{experienceId}', [ResumeController::class, 'destroyExperience']);
 Route::post('/removedAchievment/{achievmentId}', [ResumeController::class, 'destroyAchievment']);
@@ -287,3 +288,4 @@ Route::get('/posts/about-to-expire', [CompanyController::class, 'getPostsAboutTo
 Route::delete('/destroy/{id}', [LoginController::class, 'destroy']);
 // Route::get('/fetch-users/{type?}', [CompanyController::class, 'fetchusers']);
 Route::get('/verify/{token}', 'RegistrationController@verify')->name('verify');
+Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);

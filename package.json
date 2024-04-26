@@ -23,6 +23,7 @@
                 "@ckeditor/ckeditor5-vue": "^5.1.0",
                 "@mdi/font": "^7.4.47",
                 "@vuepic/vue-datepicker": "^7.4.1",
+                "country-state-city": "^3.2.1",
                 "devextreme-vue": "^23.2.4",
                 "dropzone": "^6.0.0-beta.2",
                 "dropzone-vue": "^0.1.11",
