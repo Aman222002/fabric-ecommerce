@@ -22,8 +22,8 @@
               <a id="categoryName" @click="findJob(category.name)">
                 {{ category.name }}</a
               >
+              <!-- <v-card-text  class="pa-0"> ({{ popularJob.subtitle }}) </v-card-text> -->
             </template>
-            <!-- <v-card-text> ({{ popularJob.subtitle }}) </v-card-text> -->
           </v-card>
           <!-- 
           <v-card class="mx-auto">

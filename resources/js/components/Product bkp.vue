@@ -254,12 +254,7 @@ export default {
   padding: 15px 0;
   text-align: center;
 }
-.plan_infor .v-card:hover .v-responsive img.v-img__img {
-  transform: scale(1.1);
-}
-.plan_infor .v-card .v-responsive img.v-img__img {
-  transition: all 0.3s ease;
-}
+
 @media screen and (min-width: 1280px) {
   /* .choose_your_plan .packages_price .plan_choose:nth-child(2) {
     padding: 0;

@@ -5,36 +5,77 @@
         <v-col class="nab_burger_menu">
           <button class="burger_menu" @click="showSection()">
             <v-icon @click="showMenu = !showMenu" icon>{{
-            !showMenu ? "mdi-menu" : "mdi-menu"
-          }}</v-icon>
+              !showMenu ? "mdi-menu" : "mdi-menu"
+            }}</v-icon>
           </button>
           <div class="NavBar" v-show="isOpen">
             <button class="close_btn" @click="showSection()">
               <v-icon @click="showMenu = !showMenu" icon>{{
-            !showMenu ? "mdi-close" : "mdi-close"
-          }}</v-icon>
+                !showMenu ? "mdi-close" : "mdi-close"
+              }}</v-icon>
             </button>
             <v-row>
               <v-col class="nav-links">
-                <a href="/" class="nav-link" :class="{ active: isActive('/') }">Home</a>
-                <a href="/jobs-detail" class="nav-link" :class="{ active: isActive('/jobs-detail') }">Jobs</a>
-                <a href="/about" class="nav-link" :class="{ active: isActive('/about') }">About</a>
-                <a href="/contact" class="nav-link" :class="{ active: isActive('/contact') }">Contact</a>
-                <a href="/job-apply" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/job-apply') }">Jobs Applied</a>
-                <a href="/savedjobs" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/savedjobs') }">Jobs Saved</a>
-                <a href="/userprofile" v-if="usersStore.isloggedin" class="nav-link"
-                  :class="{ active: isActive('/userprofile') }">Profile</a>
+                <a href="/" class="nav-link" :class="{ active: isActive('/') }"
+                  >Home</a
+                >
+                <a
+                  href="/jobs-detail"
+                  class="nav-link"
+                  :class="{ active: isActive('/jobs-detail') }"
+                  >Jobs</a
+                >
+                <a
+                  href="/about"
+                  class="nav-link"
+                  :class="{ active: isActive('/about') }"
+                  >About</a
+                >
+                <a
+                  href="/contact"
+                  class="nav-link"
+                  :class="{ active: isActive('/contact') }"
+                  >Contact</a
+                >
+                <a
+                  href="/job-apply"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/job-apply') }"
+                  >Jobs Applied</a
+                >
+                <a
+                  href="/savedjobs"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/savedjobs') }"
+                  >Jobs Saved</a
+                >
+                <a
+                  href="/userprofile"
+                  v-if="usersStore.isloggedin"
+                  class="nav-link"
+                  :class="{ active: isActive('/userprofile') }"
+                  >Profile</a
+                >
               </v-col>
             </v-row>
           </div>
         </v-col>
 
-        <v-menu class="log_and_reg" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+        <v-menu
+          class="log_and_reg"
+          v-if="!usersStore.isloggedin && !employerStore.isloggedin"
+        >
           <template v-slot:activator="{ props }">
-            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
-              style="margin-right: 40px">Login <v-icon color="white">mdi-login</v-icon></a>
+            <a
+              href="#"
+              class="nav-link login__a_tg"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              style="margin-right: 40px"
+              >Login <v-icon color="white">mdi-login</v-icon></a
+            >
           </template>
 
           <ul>
@@ -47,10 +88,19 @@
           </ul>
         </v-menu>
 
-        <v-menu class="log_and_reg" v-if="!usersStore.isloggedin && !employerStore.isloggedin">
+        <v-menu
+          class="log_and_reg"
+          v-if="!usersStore.isloggedin && !employerStore.isloggedin"
+        >
           <template v-slot:activator="{ props }">
-            <a href="#" class="nav-link" v-bind="props" :class="{ active: isActive('#') }"
-              style="margin-right: 40px">Register <v-icon color="white">mdi-account-plus</v-icon></a>
+            <a
+              href="#"
+              class="nav-link register_a_tg"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              style="margin-right: 40px"
+              >Register <v-icon color="white">mdi-account-plus</v-icon></a
+            >
           </template>
           <ul>
             <li v-for="(item, i) in registerItems" :key="i">
@@ -61,11 +111,15 @@
             </li>
           </ul>
         </v-menu>
-        <v-menu class="profile user_drop_down" v-if="usersStore.isloggedin || employerStore.isloggedin"
-          transition="slide-x-transition">
+        <v-menu
+          class="profile user_drop_down"
+          v-if="usersStore.isloggedin || employerStore.isloggedin"
+          transition="slide-x-transition"
+        >
           <template v-slot:activator="{ props }">
             <span style="margin-right: 20px">
-              <v-btn icon="mdi-account" v-bind="props"></v-btn></span>
+              <v-btn icon="mdi-account" v-bind="props"></v-btn
+            ></span>
           </template>
 
           <v-list>
@@ -193,6 +247,7 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
+  background-color: #fff;
 }
 
 .nav-links {
@@ -265,6 +320,41 @@ header.header_bar a.nav-link i {
 .log_and_reg ul li:hover a {
   background: #1967d2;
   color: #fff;
+}
+.nab_burger_menu .nav-links a.nav-link {
+  font-weight: 600;
+}
+.nab_burger_menu .nav-links a.nav-link.active,
+.nab_burger_menu .nav-links a.nav-link:hover {
+  color: #1967d2;
+}
+header.header_bar a.login__a_tg,
+header.header_bar a.register_a_tg {
+  text-align: center;
+  color: #1967d2;
+  background-color: #e2eaf8;
+  font-size: 15px;
+  line-height: 20px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 10px 35px;
+}
+header.header_bar a.register_a_tg {
+  background-color: #0146a6;
+  color: #fff;
+}
+header.header_bar a.login__a_tg i.mdi {
+  color: #1967d2 !important;
+}
+header.header_bar a.login__a_tg:hover {
+  color: #e2eaf8;
+  background-color: #1967d2;
+}
+header.header_bar a.login__a_tg:hover i.mdi {
+  color: #e2eaf8 !important;
+}
+header.header_bar a.register_a_tg i.mdi {
+  color: #fff !important;
 }
 
 @media screen and (min-width: 1201px) {

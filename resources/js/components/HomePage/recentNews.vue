@@ -8,22 +8,47 @@
         </div>
       </div>
       <v-carousel hide-delimiters show-arrows="hover">
-        <v-carousel-item v-for="(slideIndex) in Math.ceil(recentNews.length / 3)" :key="slideIndex">
+        <v-carousel-item
+          v-for="slideIndex in Math.ceil(recentNews.length / 3)"
+          :key="slideIndex"
+        >
           <v-row align="center" justify="center">
-            <v-col v-for="(recentItem, itemIndex) in recentNews.slice((slideIndex - 1) * 3, slideIndex * 3)"
-              :key="itemIndex" cols="12" class="recent_news_col" sm="12" md="4" lg="4" xl="4">
+            <v-col
+              v-for="(recentItem, itemIndex) in recentNews.slice(
+                (slideIndex - 1) * 3,
+                slideIndex * 3
+              )"
+              :key="itemIndex"
+              cols="12"
+              class="recent_news_col"
+              sm="12"
+              md="4"
+              lg="4"
+              xl="4"
+            >
               <v-card class="mx-auto my-4">
-                <v-img cover height="200" :src="`/storage/assets/${recentItem.featured_image}`"></v-img>
+                <v-img
+                  cover
+                  height="250"
+                  :src="`/storage/assets/${recentItem.featured_image}`"
+                ></v-img>
                 <div class="Cmt_time">
-                  <v-card-subtitle class="pt-4">{{ formatCreatedAt(recentItem.created_at) }}</v-card-subtitle>
+                  <v-card-subtitle class="pt-4">{{
+                    formatCreatedAt(recentItem.created_at)
+                  }}</v-card-subtitle>
                 </div>
                 <v-card-item>
                   <v-card-title>{{ recentItem.title }}</v-card-title>
                 </v-card-item>
                 <v-card-text>
                   <div>
-                    {{ truncateDescription(recentItem.contentText) }}<span v-if="recentItem.contentText"
-                      class="read-more" @click="openDetailPage(recentItem.id)">Read full article</span>
+                    {{ truncateDescription(recentItem.contentText)
+                    }}<span
+                      v-if="recentItem.contentText"
+                      class="read-more"
+                      @click="openDetailPage(recentItem.id)"
+                      >Read full article <v-icon>mdi-chevron-right</v-icon>
+                    </span>
                   </div>
                 </v-card-text>
               </v-card>
@@ -58,22 +83,28 @@ export default {
       // })
     };
     const fecthBlog = () => {
-      axios.get('get/blog').then((response) => {
-        recentNews.value = response.data.data.map(blog => {
-          const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
-          const paragraphs = blog.content.match(paragraphRegex);
-          const contentText = paragraphs ? paragraphs
-            .map(p => p.replace(/<[^>]+>/g, ''))
-            .join(' ')
-            .split(/\s+/)
-            .slice(0, 25)
-            .join(' ') : '';
-          return {
-            ...blog,
-            contentText
-          };
-        }).sort((a, b) => b.id - a.id);
-      })
+      axios
+        .get("get/blog")
+        .then((response) => {
+          recentNews.value = response.data.data
+            .map((blog) => {
+              const paragraphRegex = /<p[^>]*>(.*?)<\/p>/gi;
+              const paragraphs = blog.content.match(paragraphRegex);
+              const contentText = paragraphs
+                ? paragraphs
+                    .map((p) => p.replace(/<[^>]+>/g, ""))
+                    .join(" ")
+                    .split(/\s+/)
+                    .slice(0, 25)
+                    .join(" ")
+                : "";
+              return {
+                ...blog,
+                contentText,
+              };
+            })
+            .sort((a, b) => b.id - a.id);
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -104,6 +135,7 @@ export default {
 .recent_news_articles {
   padding: 65px 0 0;
   background: #fff;
+  padding-bottom: 150px;
 }
 
 .recent_news_articles .sec-title h2 {

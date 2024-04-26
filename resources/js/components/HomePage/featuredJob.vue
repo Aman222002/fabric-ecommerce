@@ -9,9 +9,18 @@
 
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
-        <v-col cols="12" class="featured_jobs_col mb-5" sm="12" md="12" lg="6" xl="6" v-for="job in displayedJobs"
-          :key="job.id" @click="openDetailPanel(job)">
-          <v-card class="mx-auto company_info" @click="openDetailPage(job.id)">
+        <v-col
+          cols="12"
+          class="featured_jobs_col"
+          sm="12"
+          md="12"
+          lg="6"
+          xl="6"
+          v-for="job in displayedJobs"
+          :key="job.id"
+          @click="openDetailPanel(job)"
+        >
+          <v-card class="mx-auto company_info">
             <div class="company_logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
             </div>
@@ -21,13 +30,18 @@
               </v-card-title>
               <ul class="company_seat">
                 <li>
-                  <v-icon>mdi-compare</v-icon>{{ job.company.company_name }}
+                  <v-icon color="#f16666" class="mr-1">mdi-domain</v-icon
+                  >{{ job.company.company_name }}
                 </li>
                 <li>
-                  <v-icon>mdi-map-marker-outline</v-icon>{{ job.location }}
+                  <v-icon color="#34a853" class="mr-1"
+                    >mdi-map-marker-outline</v-icon
+                  >{{ job.location }}
                 </li>
                 <li>
-                  <v-icon>mdi-clock-time-two-outline</v-icon>{{ formatCreatedAt(job.created_at) }}
+                  <v-icon color="#f9ab00" class="mr-1"
+                    >mdi-clock-time-two-outline</v-icon
+                  >{{ formatCreatedAt(job.company.created_at) }}
                 </li>
                 <!-- <li><v-icon>mdi-cash</v-icon>{{ job.price }}</li> -->
               </ul>
@@ -137,11 +151,7 @@ export default {
         console.error(err);
       }
     };
-    const openDetailPage = (id) => {
-      // console.log(id);
-      // window.lo
-      window.location.href = `/view/${id}`
-    }
+
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
@@ -217,7 +227,9 @@ export default {
       save,
       openDetailPanel,
       detailPanelVisible,
-      detail, usersStore, searchJob, openDetailPage
+      detail,
+      usersStore,
+      searchJob,
     };
   },
 };

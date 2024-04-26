@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row align="center" justify="center">
+    <v-row class="form_log_reg" align="center" justify="center">
       <v-col sm="12" md="10" lg="12" xl="10" cols="12">
         <v-card class="elevation-12 mt-3" style="margin-bottom: 10px">
           <v-row class="form_page">
@@ -156,24 +156,20 @@ export default {
     ];
     const companyNames = ref([]);
     const submitForm = async () => {
-    
       if (!formData.value.company_name) {
-      
-       
-            return;
-            window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: 'User not found',
-            });
+        return;
+        window.Swal.fire({
+          toast: true,
+          position: "top-end",
+          timer: 2000,
+          showConfirmButton: false,
+          icon: "error",
+          title: "User not found",
+        });
       }
       try {
         const response = await axios.post("/company/login", formData.value);
         if (response.data.status == true) {
-        
           companyListDialog.value = false;
           employerStore.isLogIn();
           // window.location.href = "/findcv";
@@ -192,38 +188,32 @@ export default {
                 employerStore.removePreviousRoute();
               } else {
                 if (hasrole("Company Admin")) {
-                        window.location.href = "/postjob"; 
-                        employerStore.removePreviousRoute();
-                    } else if (hasrole("Company Subadmin")) {
-                       
-                        if (hasPermission("Create Users")) {
-                            window.location.href = "/add-user";
-                            employerStore.removePreviousRoute();
-                        } else if (hasPermission("Change Plan")) {
-                            window.location.href = "/company/plan";
-                            employerStore.removePreviousRoute();
-                        } 
-                    else if (hasPermission("View Users")) {
-                            window.location.href = "/users";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Post Job")) {
-                            window.location.href = "/postjob";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Edit Job")) {
-                            window.location.href = "/posted-jobs";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Buy Subscription")) {
-                            window.location.href = "/product";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Change Profile")) {
-                            window.location.href = "/company/profile";
-                            employerStore.removePreviousRoute();
-                        } 
-                      }
+                  window.location.href = "/postjob";
+                  employerStore.removePreviousRoute();
+                } else if (hasrole("Company Subadmin")) {
+                  if (hasPermission("Create Users")) {
+                    window.location.href = "/add-user";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Change Plan")) {
+                    window.location.href = "/company/plan";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("View Users")) {
+                    window.location.href = "/users";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Post Job")) {
+                    window.location.href = "/postjob";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Edit Job")) {
+                    window.location.href = "/posted-jobs";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Buy Subscription")) {
+                    window.location.href = "/product";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Change Profile")) {
+                    window.location.href = "/company/profile";
+                    employerStore.removePreviousRoute();
+                  }
+                }
                 employerStore.removePreviousRoute();
                 alert(`You don't have permissions for this action`);
               }
@@ -234,38 +224,32 @@ export default {
                 employerStore.removePreviousRoute();
               } else {
                 if (hasrole("Company Admin")) {
-                        window.location.href = "/postjob"; 
-                        employerStore.removePreviousRoute();
-                    } else if (hasrole("Company Subadmin")) {
-                       
-                        if (hasPermission("Create Users")) {
-                            window.location.href = "/add-user";
-                            employerStore.removePreviousRoute();
-                        } else if (hasPermission("Change Plan")) {
-                            window.location.href = "/company/plan";
-                            employerStore.removePreviousRoute();
-                        } 
-                    else if (hasPermission("View Users")) {
-                            window.location.href = "/users";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Post Job")) {
-                            window.location.href = "/postjob";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Edit Job")) {
-                            window.location.href = "/posted-jobs";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Buy Subscription")) {
-                            window.location.href = "/product";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Change Profile")) {
-                            window.location.href = "/company/profile";
-                            employerStore.removePreviousRoute();
-                        } 
-                      }
+                  window.location.href = "/postjob";
+                  employerStore.removePreviousRoute();
+                } else if (hasrole("Company Subadmin")) {
+                  if (hasPermission("Create Users")) {
+                    window.location.href = "/add-user";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Change Plan")) {
+                    window.location.href = "/company/plan";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("View Users")) {
+                    window.location.href = "/users";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Post Job")) {
+                    window.location.href = "/postjob";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Edit Job")) {
+                    window.location.href = "/posted-jobs";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Buy Subscription")) {
+                    window.location.href = "/product";
+                    employerStore.removePreviousRoute();
+                  } else if (hasPermission("Change Profile")) {
+                    window.location.href = "/company/profile";
+                    employerStore.removePreviousRoute();
+                  }
+                }
                 employerStore.removePreviousRoute();
                 alert(`You don't have permissions for this action`);
               }
@@ -276,55 +260,46 @@ export default {
             // }
             // employerStore.removePreviousRoute();
             else if (!selectedRoute) {
-                   
-                    if (hasrole("Company Admin")) {
-                        window.location.href = "/postjob"; 
-                        employerStore.removePreviousRoute();
-                    } else if (hasrole("Company Subadmin")) {
-                       
-                        if (hasPermission("Create Users")) {
-                            window.location.href = "/add-user";
-                            employerStore.removePreviousRoute();
-                        } else if (hasPermission("Change Plan")) {
-                            window.location.href = "/company/plan";
-                            employerStore.removePreviousRoute();
-                        } 
-                    else if (hasPermission("View Users")) {
-                            window.location.href = "/users";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Post Job")) {
-                            window.location.href = "/postjob";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Edit Job")) {
-                            window.location.href = "/posted-jobs";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Buy Subscription")) {
-                            window.location.href = "/product";
-                            employerStore.removePreviousRoute();
-                        } 
-                        else if (hasPermission("Change Profile")) {
-                            window.location.href = "/company/profile";
-                            employerStore.removePreviousRoute();
-                        } 
-                      }
+              if (hasrole("Company Admin")) {
+                window.location.href = "/postjob";
+                employerStore.removePreviousRoute();
+              } else if (hasrole("Company Subadmin")) {
+                if (hasPermission("Create Users")) {
+                  window.location.href = "/add-user";
+                  employerStore.removePreviousRoute();
+                } else if (hasPermission("Change Plan")) {
+                  window.location.href = "/company/plan";
+                  employerStore.removePreviousRoute();
+                } else if (hasPermission("View Users")) {
+                  window.location.href = "/users";
+                  employerStore.removePreviousRoute();
+                } else if (hasPermission("Post Job")) {
+                  window.location.href = "/postjob";
+                  employerStore.removePreviousRoute();
+                } else if (hasPermission("Edit Job")) {
+                  window.location.href = "/posted-jobs";
+                  employerStore.removePreviousRoute();
+                } else if (hasPermission("Buy Subscription")) {
+                  window.location.href = "/product";
+                  employerStore.removePreviousRoute();
+                } else if (hasPermission("Change Profile")) {
+                  window.location.href = "/company/profile";
+                  employerStore.removePreviousRoute();
                 }
+              }
             }
+          }
         }
-
-      
       } catch (err) {
         console.error(err);
         window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: 'User not found',
-            });
+          toast: true,
+          position: "top-end",
+          timer: 2000,
+          showConfirmButton: false,
+          icon: "error",
+          title: "User not found",
+        });
       }
     };
     const showCompanyListDialog = async () => {
@@ -442,5 +417,8 @@ export default {
   color: #e2eaf8;
   background-color: #1967d2;
   padding-left: 20px;
+}
+.form_log_reg .v-card {
+  border-radius: 15px;
 }
 </style>

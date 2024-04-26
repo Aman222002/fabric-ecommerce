@@ -20,12 +20,14 @@
         <v-row>
           <v-col cols="12" sm="12" md="12" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
-              <v-card-title>Search by Keywords </v-card-title>
+              <v-card-title class="font-weight-bold px-0"
+                >Search by Keywords
+              </v-card-title>
               <v-text-field
                 v-model="jobTitle"
                 label="Job Title"
                 density="compact"
-                variant="outlined"
+                variant="solo"
                 :rules="fullNameRules"
                 clearable
                 style="width: 100%"
@@ -34,12 +36,12 @@
                 v-model="location"
                 label="Location"
                 density="compact"
-                variant="outlined"
+                variant="solo"
                 :rules="subjectRules"
                 clearable
                 style="width: 100%"
               ></v-text-field>
-              <v-btn @click="searchJobs">Search</v-btn>
+              <v-btn @click="searchJobs" class="b_string_btn">Search</v-btn>
             </v-card>
           </v-col>
           <v-col
@@ -51,7 +53,6 @@
             class="find_Job_list_right"
           >
             <v-alert v-if="showAlert" type="error"> No job Found. </v-alert>
-
             <v-card
               v-else
               v-for="job in jobs"
@@ -59,37 +60,57 @@
               class="custom-card"
               @click="openDetailPanel(job)"
             >
-              <v-card-title>{{ job.company.company_name }}</v-card-title>
-              <v-card-text class="pa-0 ml-3">
-                <div style="display: flex; align-items: center">
-                  <v-icon color="black">mdi-domain</v-icon>
-                  <span>{{ job.title }}</span>
-                </div>
+              <v-row>
+                <v-col
+                  class="cpmany_logo"
+                  cols="12"
+                  sm="12"
+                  md="12"
+                  lg="1"
+                  xl="1"
+                >
+                  <v-img
+                    src="https://superio-appdir.vercel.app/_next/image?url=%2Fimages%2Fresource%2Fcompany-logo%2F1-2.png&w=64&q=75"
+                  ></v-img
+                ></v-col>
+                <v-col cols="12" sm="12" md="12" lg="11" xl="11">
+                  <v-card-title>{{ job.company.company_name }}</v-card-title>
+                  <v-card-text class="pa-0 ml-3">
+                    <div style="display: flex; align-items: center">
+                      <v-icon color="#f16666" class="mr-2"
+                        >mdi-newspaper-variant</v-icon
+                      >
+                      <span>{{ job.title }}</span>
+                    </div>
 
-                <div style="align-items: center">
-                  <v-icon color="black">mdi-note</v-icon>
-                  <span> {{ truncateDescription(job.description) }}</span>
-                  <span
-                    v-if="isDescriptionLong(job.description)"
-                    class="read-more"
-                    @click="openDetailPanel(job)"
-                  >
-                    Read More
-                  </span>
-                </div>
-              </v-card-text>
-              <v-card-actions>
-                <div style="display: flex; align-items: center">
-                  <v-icon color="black">mdi-human</v-icon>
-                  <span
-                    >{{ job.vacancy }}
-                    <v-icon color="black">mdi-desktop-classic</v-icon
-                    >{{ job.experience
-                    }}<v-icon color="black">mdi-map-marker</v-icon
-                    >{{ job.location }}</span
-                  >
-                </div>
-              </v-card-actions>
+                    <div style="align-items: center">
+                      <v-icon color="#34a853" class="mr-2">mdi-note</v-icon>
+                      <span> {{ truncateDescription(job.description) }}</span>
+                      <span
+                        v-if="isDescriptionLong(job.description)"
+                        class="read-more"
+                        @click="openDetailPanel(job)"
+                      >
+                        Read More <v-icon>mdi-chevron-right</v-icon>
+                      </span>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <div style="display: flex; align-items: center">
+                      <v-icon color="#f9ab00" class="mr-2">mdi-account</v-icon>
+                      <span
+                        >{{ job.vacancy }}
+                        <v-icon color="#f16666" class="mr-2"
+                          >mdi-clipboard-text-clock-outline</v-icon
+                        >{{ job.experience
+                        }}<v-icon color="#34a853" class="mr-2"
+                          >mdi-map-marker</v-icon
+                        >{{ job.location }}</span
+                      >
+                    </div>
+                  </v-card-actions>
+                </v-col>
+              </v-row>
             </v-card>
           </v-col>
         </v-row>
@@ -331,6 +352,10 @@ export default {
 </script>
 
 <style>
+.cpmany_logo .v-img {
+  width: 45px;
+  margin: 0 auto;
+}
 .find_Job_list_left {
   position: relative;
   background: #f5f7fc;
@@ -338,26 +363,22 @@ export default {
   margin-bottom: 30px;
   padding: 7% 7% 10px;
 }
-
 .find_Job_list .top_page_section {
   background: transparent;
   box-shadow: unset;
   display: flex;
   justify-content: center;
 }
-
 .find_Job_list .top_page_section .v-card-title {
   font-weight: 500;
   font-size: 30px;
   text-align: center;
   color: #202124;
 }
-
 .find_Job_list .body_page_section {
   background: #fff;
   padding: 50px 0 100px;
 }
-
 .find_Job_list_right .custom-card {
   padding: 2% 1%;
   background: #fff;
@@ -367,7 +388,6 @@ export default {
   transition: all 0.3s ease;
   margin-bottom: 15px;
 }
-
 .find_Job_list_right .v-card-title {
   font-size: 30px;
   font-weight: bolder;
@@ -375,19 +395,15 @@ export default {
   font-family: sans-serif;
   text-transform: capitalize;
 }
-
 .find_Job_list_right .custom-card:hover .v-card-title {
   color: #1967d2;
 }
-
 .single_job_search_page {
   width: 70% !important;
 }
-
 .compamy_infor .compamy_infor_left i.mdi {
   margin-right: 5px;
 }
-
 .compamy_infor {
   display: flex;
   justify-content: space-between;
@@ -396,7 +412,6 @@ export default {
   padding: 1% 15px;
   align-items: center;
 }
-
 button.apply_for_job {
   text-align: center;
   color: #fff;
@@ -407,7 +422,6 @@ button.apply_for_job {
   padding: 18px 35px;
   height: 50px !important;
 }
-
 button.save_btn {
   height: 50px !important;
   line-height: 50px;
@@ -420,12 +434,10 @@ button.save_btn {
   transition: all 0.3s ease;
   margin-left: 20px;
 }
-
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
 }
-
 .find_Job_list_left button.search_btn {
   display: table;
   margin: 0 auto;
@@ -437,7 +449,6 @@ button.save_btn {
   padding: 18px 35px;
   height: 50px !important;
 }
-
 button.save_btn {
   height: 50px !important;
   line-height: 50px;
@@ -450,16 +461,21 @@ button.save_btn {
   transition: all 0.3s ease;
   margin-left: 20px;
 }
-
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
 }
-
 .no-jobs-message {
   margin-bottom: 20px;
   font-size: 20px;
   text-align: center;
   color: #ff0000;
+}
+span.read-more:hover i.mdi {
+  opacity: 0;
+  margin-left: 20px;
+}
+span.read-more i.mdi {
+  transition: all 0.3s ease;
 }
 </style>
