@@ -146,7 +146,7 @@
 				<tbody>
 					<tr>
 						<td style="width: 100%;">
-							{{ $addresses['city'] }}, Chennai, {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
+							{{ $addresses['city'] }}, {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
 						</td>
 					</tr>
 				</tbody>

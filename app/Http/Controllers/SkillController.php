@@ -93,4 +93,12 @@ class SkillController extends Controller
             return response()->json(['message' => 'Error retrieving job types', 'error' => $e->getMessage()], 500);
         }
     }
+    public function getUserSkills(Request $request)
+    {
+        $user = $request->user();
+        $skills = $user->skills;
+
+        // Return the skills as JSON response
+        return response()->json($skills);
+    }
 }

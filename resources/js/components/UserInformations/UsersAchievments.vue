@@ -55,6 +55,7 @@ export default {
                 console.log(achievmentId, 'achievmentId')
                 axios.post(`/removedAchievment/${achievmentId}`);
                 achievements.value.splice(index, 1);
+                store.removeAchievement;
             } catch (error) {
                 console.error('Error deleting experience detail:', error);
             }

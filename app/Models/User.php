@@ -118,4 +118,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Permissionaccess::class);
     }
+   
 }

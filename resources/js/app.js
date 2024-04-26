@@ -21,6 +21,7 @@ const emitter = mitt();
 import "vue-tel-input/vue-tel-input.css";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+
 import "../css/app.css";
 
 import { createPinia } from "pinia";
