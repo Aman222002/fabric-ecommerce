@@ -6,20 +6,20 @@
         <v-col cols="12">
           <h2 class="mb-4 form_fild_title">User add:</h2>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12 " class="pb-0">
           <v-text-field
             v-model="userData.name"
             label="Name"
-            variant="outlined"
+            variant="solo"
             density="compact"
             :rules="nameRules"
           ></v-text-field>
         </v-col>
-        <v-col sm="12" md="6" lg="6" xl="6" cols="12">
+        <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             v-model="userData.email"
             label="Email"
-            variant="outlined"
+            variant="solo"
             density="compact"
             :rules="emailRules"
           ></v-text-field>
@@ -28,7 +28,7 @@
           <v-text-field
             v-model="userData.phone"
             label="Phone"
-            variant="outlined"
+            variant="solo"
             density="compact"
             :rules="phoneRules"
           ></v-text-field>
@@ -43,7 +43,7 @@
             multiple
             chips
             :rules="permissionRules"
-            variant="outlined"
+            variant="solo"
             density="compact"
             small-chips
           ></v-select>
@@ -77,9 +77,9 @@ export default {
       (v) => !!v || "Phone number is required",
       (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
     ];
-  
+
     const permissionRules = [
-      (v) => !!v && v.length > 0 || "Permission is required", 
+      (v) => (!!v && v.length > 0) || "Permission is required",
     ];
     const userPermissions = ref([]);
     const fetchPermissions = async () => {
@@ -109,7 +109,7 @@ export default {
           text: "Invitation sent Successfully to the user Email",
           confirmButtonText: "OK",
         });
-        window.location.reload(); 
+        window.location.reload();
       } catch (error) {
         console.error("Error adding user:", error);
       }

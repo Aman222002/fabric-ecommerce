@@ -1,11 +1,14 @@
 <template>
   <v-container>
-    <v-card class="elevation-12 mt-3" style="margin-bottom: 10px">
+    <v-card class="elevation-12 mt-3 form_log_reg" style="margin-bottom: 10px">
       <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
         <v-row class="form_page">
           <v-col class="form_page_left" sm="12" md="12" lg="6" xl="6" cols="12">
             <v-card-text>
-              <p class="text-center" style="font-size: 20px; font-style: sans-serif">
+              <p
+                class="text-center"
+                style="font-size: 20px; font-style: sans-serif"
+              >
                 Employers Register
               </p>
               <v-row style="margin-top: 20px">
@@ -13,20 +16,49 @@
                   <h4 class="form-title">User Detail:</h4>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field variant="outlined" v-model="company.name" label="Representative Name" :rules="nameRules"
-                    density="compact" outlined :disabled="disabledFields"></v-text-field>
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.name"
+                    label="Representative Name"
+                    :rules="nameRules"
+                    density="compact"
+                    outlined
+                    :disabled="disabledFields"
+                  ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field variant="outlined" v-model="company.email" label="Representative Email"
-                    :rules="emailRules" density="compact" outlined :disabled="disabledFields"></v-text-field>
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.email"
+                    label="Representative Email"
+                    :rules="emailRules"
+                    density="compact"
+                    outlined
+                    :disabled="disabledFields"
+                  ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field variant="outlined" v-model="company.password" label="Password" :rules="passwordRules"
-                    density="compact" type="password" outlined></v-text-field>
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.password"
+                    label="Password"
+                    :rules="passwordRules"
+                    density="compact"
+                    type="password"
+                    outlined
+                  ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field variant="outlined" v-model="company.phone" label="Phone" :rules="phoneRules"
-                    type="phone" density="compact" outlined :disabled="disabledFields"></v-text-field>
+                  <v-text-field
+                    variant="outlined"
+                    v-model="company.phone"
+                    label="Phone"
+                    :rules="phoneRules"
+                    type="phone"
+                    density="compact"
+                    outlined
+                    :disabled="disabledFields"
+                  ></v-text-field>
                 </v-col>
               </v-row>
               <div v-if="showCompanyDetails">
@@ -35,34 +67,61 @@
                     <h4 class="form-title">Company Details:</h4>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field variant="outlined" v-model="company.company_name" label="Company Name"
-                      :rules="nameRules" density="compact" outlined></v-text-field>
+                    <v-text-field
+                      variant="outlined"
+                      v-model="company.company_name"
+                      label="Company Name"
+                      :rules="nameRules"
+                      density="compact"
+                      outlined
+                    ></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field variant="outlined" v-model="company.company_email" label="Company Email"
-                      :rules="emailRules" density="compact" outlined></v-text-field>
+                    <v-text-field
+                      variant="outlined"
+                      v-model="company.company_email"
+                      label="Company Email"
+                      :rules="emailRules"
+                      density="compact"
+                      outlined
+                    ></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field variant="outlined" v-model="company.phone_number" label="Phone Number"
-                      :rules="phoneRules" density="compact" outlined></v-text-field>
+                    <v-text-field
+                      variant="outlined"
+                      v-model="company.phone_number"
+                      label="Phone Number"
+                      :rules="phoneRules"
+                      density="compact"
+                      outlined
+                    ></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-file-input variant="outlined" v-model="company.logo" label="Company Logo" outlined
-                      density="compact"></v-file-input>
+                    <v-file-input
+                      variant="outlined"
+                      v-model="company.logo"
+                      label="Company Logo"
+                      outlined
+                      density="compact"
+                    ></v-file-input>
                   </v-col>
-
-               
                 </v-row>
-               
               </div>
               <v-col cols="12" class="text-center">
-                    <v-btn type="submit" class="custom-button">
-                      Register Company
-                    </v-btn>
-                  </v-col>
+                <v-btn type="submit" class="custom-button">
+                  Register Company
+                </v-btn>
+              </v-col>
             </v-card-text>
           </v-col>
-          <v-col class="blue form_page_right" sm="12" md="12" lg="6" xl="6" cols="12">
+          <v-col
+            class="blue form_page_right"
+            sm="12"
+            md="12"
+            lg="6"
+            xl="6"
+            cols="12"
+          >
             <v-card-text class="white--text text-center">
               <p style="font-size: 20px">Already Sign up?</p>
               <p style="font-size: 13px; margin: 15px 0">
@@ -112,9 +171,9 @@ export default {
     ];
     const passwordRules = [(v) => !!v || "Password is required"];
     const phoneRules = [
-    (v) => !!v || "Phone number is required",
-  (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
-  (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
+      (v) => !!v || "Phone number is required",
+      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+      (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
     ];
     const stateRules = [(v) => !!v || "State is required"];
     const cityRules = [(v) => !!v || "city is required"];
@@ -133,7 +192,7 @@ export default {
       company.value.phone = props.data.phone;
 
       if (props.data.name) {
-        company.value.name = props.data.name.replace(/\+/g, ' ');
+        company.value.name = props.data.name.replace(/\+/g, " ");
         company.value.email = props.data.email;
         company.value.phone = props.data.phone;
         disabledFields.value = true;
@@ -263,5 +322,8 @@ a.company_loging {
   border-radius: 15px;
   color: #fff;
   justify-content: center;
+}
+.form_log_reg {
+  border-radius: 15px;
 }
 </style>

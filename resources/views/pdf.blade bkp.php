@@ -4,7 +4,7 @@
 <head>
 	<title>resume 2</title>
 	<style>
-		
+		@import url('https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Questrial&display=swap');
 
 		/* font-family:  Biryani;
   font-family: Biryani; */
@@ -185,9 +185,7 @@
 					<tbody>
 						<tr>
 							<td colspan="2">
-							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}" style="width: 120px;height: 120px;text-align: center;border-radius: 56px;">
-													<!-- <img style="width: 120px;height: 120px;text-align: center;border-radius: 56px;"
-									src="https://static.vecteezy.com/system/resources/thumbnails/024/095/208/small/happy-young-man-smiling-free-png.png" /> -->
+							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}">
 									
 							</td>
 						</tr>

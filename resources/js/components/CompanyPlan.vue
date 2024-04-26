@@ -1,66 +1,106 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-col cols="12">
-        <v-card outlined class="pa-4" v-if="currentplan.name !== 'No Plan' && plan_id !== ''">
+      <v-col cols="6">
+        <v-card
+          outlined
+          class="pa-4"
+          v-if="currentplan.name !== 'No Plan' && plan_id !== ''"
+        >
           <v-row no-gutters>
-            <v-col cols="8">
-              <v-card-subtitle> Current Plan </v-card-subtitle>
+            <v-col cols="12" class="text-center mb-5">
+              <v-card-subtitle>
+                <h2
+                  style="
+                    background-color: #1976d2;
+                    padding: 8px !important;
+                    color: #fff;
+                  "
+                >
+                  Current Plan
+                </h2>
+              </v-card-subtitle>
               <v-card-title>{{ currentplan.name }}</v-card-title>
             </v-col>
-            <v-col cols="4" class="d-flex justify-end align-center">
-              <v-btn v-if="upgrade_status == 'initiated'" class="bg-error mr-2" @click="cancelupgrade()">Cancel
-                Upgrade</v-btn>
-              <v-btn v-if="currentplan.name" class="bg-primary" @click="changeplan()" :disabled="disabledButton">Change
-                Plan</v-btn>
-              <v-btn v-else class="bg-primary" @click="changeplan()">Buy Plan</v-btn>
+            <v-col cols="12" class="d-flex justify-center align-center mb-5">
+              <v-btn
+                v-if="upgrade_status == 'initiated'"
+                class="bg-error mr-2"
+                @click="cancelupgrade()"
+                >Cancel Upgrade</v-btn
+              >
+              <v-btn
+                v-if="currentplan.name"
+                class="bg-primary"
+                @click="changeplan()"
+                :disabled="disabledButton"
+                >Change Plan</v-btn
+              >
+              <v-btn v-else class="bg-primary" @click="changeplan()"
+                >Buy Plan</v-btn
+              >
             </v-col>
           </v-row>
           <v-row no-gutters>
-            <v-col cols="8">
-              <span v-if="subscription_status == 'active'" :class="{
-          'subtitle-1': true,
-          'font-weight-bold': true,
-          'text-red': subscriptionDetail.remainig_days < 5,
-          'text-green': subscriptionDetail.remainig_days >= 5,
-        }">
+            <v-col cols="12" class="text-center mb-5">
+              <span
+                v-if="subscription_status == 'active'"
+                :class="{
+                  'subtitle-1': true,
+                  'font-weight-bold': true,
+                  'text-red': subscriptionDetail.remainig_days < 5,
+                  'text-green': subscriptionDetail.remainig_days >= 5,
+                }"
+              >
                 {{
-          subscriptionDetail.remainig_days >= 0
-            ? "Your plan will expire in " +
-            subscriptionDetail.remainig_days +
-            " days"
-            : "You don't have an Active Plan"
-        }}</span>
-              <span v-else :class="{
-            'subtitle-1': true,
-            'font-weight-bold': true,
-            'text-red': true,
-          }">
+                  subscriptionDetail.remainig_days >= 0
+                    ? "Your plan will expire in " +
+                      subscriptionDetail.remainig_days +
+                      " days"
+                    : "You don't have an Active Plan"
+                }}</span
+              >
+              <span
+                v-else
+                :class="{
+                  'subtitle-1': true,
+                  'font-weight-bold': true,
+                  'text-red': true,
+                }"
+              >
                 Your Plan will be Activated in 3 to 4 days
               </span>
             </v-col>
-            <v-col cols="4" class="d-flex justify-end align-center">
-              <v-btn class="bg-error" @click="removeplan()">Remove Subscription</v-btn>
+            <v-col cols="12" class="d-flex justify-center align-center mb-5">
+              <v-btn class="bg-error" @click="removeplan()"
+                >Remove Subscription</v-btn
+              >
             </v-col>
           </v-row>
         </v-card>
         <v-card class="no-plan-card" outlined v-else>
-          <v-card-title class="text-center">No Plan</v-card-title>
+          <v-card-title class="text-center">No Plan Selected</v-card-title>
           <v-card-text class="text-center">
-            <v-icon size="64">mdi-emoticon-sad-outline</v-icon>
+            <v-icon size="64" color="ff8400">mdi-emoticon-sad-outline</v-icon>
             <p>You don't have any plan yet.</p>
             <p>
               Please consider subscribing to a plan to unlock premium features.
             </p>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <v-btn color="primary" @click="redirectToPlansPage()">Subscribe Now</v-btn>
+            <v-btn class="b_string_btn" @click="redirectToPlansPage()"
+              >Subscribe Now</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-  <v-dialog v-model="changePlanModal" max-width="800px" class="choose_your_popup">
+  <v-dialog
+    v-model="changePlanModal"
+    max-width="800px"
+    class="choose_your_popup"
+  >
     <v-card width="mx auto">
       <v-card-title class="headline">Choose Your Plan</v-card-title>
       <v-container>
@@ -81,17 +121,24 @@
             <v-row class="choose_your_popup_wor_tw">
               <v-col cols="4" v-for="(plan, key) in plans" :key="key">
                 <v-card>
-                  <v-card-title class="bg-primary" style="font-size: 20px">{{
-          plan.Name
-        }}</v-card-title>
+                  <v-card-title class="bg-primary" style="font-size: 20px">
+                    {{ plan.Name }}
+                  </v-card-title>
                   <v-card-text class="border-right border-left">
                     <v-list>
-                      <v-list-item v-for="(item, key) in plan.details" :key="key">
+                      <v-list-item
+                        v-for="(item, key) in plan.details"
+                        :key="key"
+                      >
                         <v-list-item-title>{{ item }}</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-card-text>
-                  <v-btn v-if="plan.Name" class="bg-primary" @click="buyPlan(plan.id)">
+                  <v-btn
+                    v-if="plan.Name"
+                    class="bg-primary"
+                    @click="buyPlan(plan.id)"
+                  >
                     Buy Now
                   </v-btn>
                   <v-btn v-else class="bg-secondary" disabled>
@@ -124,7 +171,7 @@ export default {
     const userId = ref();
     const disabledButton = ref(false);
     const upgrade_status = ref();
-    const plan_id = ref('');
+    const plan_id = ref("");
     const subscriptionDetail = ref({
       start_date: "",
       end_date: "",
@@ -170,17 +217,17 @@ export default {
       axios
         .get("/get/comapny-admin")
         .then((response) => {
-           plan_id.value = response.data.data[0].plan_id;
+          plan_id.value = response.data.data[0].plan_id;
           userId.value = response.data.data[0].id;
           subscription_status.value = response.data.data[0].subscription_status;
-         
+
           upgrade_status.value = response.data.data[0].upgrade_status;
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     };
-   
+
     const handleUpgradeStatusChange = () => {
       if (upgrade_status.value === "initiated") {
         disabledButton.value = true;
@@ -256,7 +303,6 @@ export default {
       setTimeout(() => {
         handleUpgradeStatusChange();
       }, 1200);
-    
     });
     return {
       userId,
@@ -278,7 +324,8 @@ export default {
       upgrade_status,
       disabledButton,
       handleUpgradeStatusChange,
-      subscription_status, plan_id
+      subscription_status,
+      plan_id,
     };
   },
 };
@@ -318,7 +365,12 @@ export default {
   height: 450px;
 }
 
-.choose_your_popup .v-row .v-col-3 .v-card .v-list-item__content .v-list-item-title {
+.choose_your_popup
+  .v-row
+  .v-col-3
+  .v-card
+  .v-list-item__content
+  .v-list-item-title {
   text-transform: capitalize;
   font-weight: 600;
   font-size: 15px;
