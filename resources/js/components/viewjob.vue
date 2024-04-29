@@ -211,8 +211,8 @@
                     featuredJob.company.created_at
                   "
                 >
-                  <label for="name" class="ps-0">
-                    <v-icon>mdi-calendar-range</v-icon>Company Created:</label
+                  <label for="name" class="ps-0"
+                    ><v-icon>mdi-calendar-range</v-icon>Company Created:</label
                   >
                   <span>
                     {{ formatCreatedAt(featuredJob.company.created_at) }}</span
