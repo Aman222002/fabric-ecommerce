@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('userachievements', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('certification_name');
-            $table->string('company_name');
-            $table->string('certificate_number');
-            $table->date('expiry_date');
+            $table->string('certification_name')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('certificate_number')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->string('certificate_file_path')->nullable();
             $table->timestamps();
         });

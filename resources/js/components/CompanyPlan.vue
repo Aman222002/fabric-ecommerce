@@ -108,7 +108,7 @@
           <v-col cols="3">
             <v-card>
               <v-card-title style="font-size: 20px">Features</v-card-title>
-              <v-card-text class="border-right border-left">
+              <v-card-text >
                 <v-list dense>
                   <v-list-item v-for="feature in features" :key="feature">
                     <v-list-item-title>{{ feature }}</v-list-item-title>
@@ -124,7 +124,7 @@
                   <v-card-title class="bg-primary" style="font-size: 20px">
                     {{ plan.Name }}
                   </v-card-title>
-                  <v-card-text class="border-right border-left">
+                  <v-card-text >
                     <v-list>
                       <v-list-item
                         v-for="(item, key) in plan.details"

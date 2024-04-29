@@ -198,7 +198,7 @@
                 </div>
                 <div>
                   <label class="ps-0">End Date:</label>
-                  <span>{{ educationDetails.starting_year }}</span>
+                  <span>{{ educationDetails.passing_year }}</span>
                 </div>
               </v-card-text>
             </div>

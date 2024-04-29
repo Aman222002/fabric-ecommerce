@@ -49,7 +49,7 @@ class PdfController extends Controller
             'profile' => $user->userProfile,
             'address' => $user->address
         ];
-    
+        
         try {
             $viewName = 'pdf1';
     

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('user_experiences', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('company_name');
-            $table->string('position');
+            $table->string('company_name')->nullable();
+            $table->string('position')->nullable();
             $table->text('description')->nullable();
-            $table->date('start_date');
+            $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();
         });

@@ -110,8 +110,8 @@ export default {
         });
     };
     const truncateDescription = (description) => {
-      if (description && description.length > 200) {
-        return description.substring(0, 200) + "...";
+      if (description && description.length > 65) {
+        return description.substring(0, 65) + "...";
       }
       return description;
     };

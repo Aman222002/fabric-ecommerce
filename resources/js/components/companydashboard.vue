@@ -281,7 +281,7 @@ div.dashboard_info .v-card-item__content .cardtop {
   align-items: flex-end;
 }
 div.dashboard_info {
-  padding: 15px;
+
   border-radius: 10px;
 }
 .dashboard_info .v-card-item__content {

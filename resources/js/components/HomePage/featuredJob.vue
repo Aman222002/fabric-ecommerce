@@ -1,7 +1,7 @@
 <template>
   <div class="featured_jobs">
     <div class="sec-title text-center">
-      <h2>Featured Jobs</h2>
+      <h2>Featured Jobs </h2>
       <div class="text">
         Know your worth and find the job that qualifies your life
       </div>
@@ -18,10 +18,10 @@
           xl="6"
           v-for="job in displayedJobs"
           :key="job.id"
-          @click="openDetailPanel(job)"
+          @click="openDetailPage(job.id)"
         >
-          <v-card class="mx-auto company_info">
-            <div class="company_logo">
+          <v-card class="mx-auto company_info ">
+            <div class="featured_jobs_logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
             </div>
             <v-card class="job_info">
@@ -95,7 +95,7 @@
             </v-row>
           </v-card>
         </v-navigation-drawer> -->
-        <v-btn size="x-large" class="load_more" to="#" @click="searchJob">
+        <v-btn size="x-large" class="load_more"  @click="searchJob">
           Load More Listing
         </v-btn>
       </v-row>
@@ -134,6 +134,10 @@ export default {
       detail.value.created_at = job.company.created_at;
       detail.value.id = job.id;
     };
+    const openDetailPage = (id) => {
+     
+      window.location.href = `/view/${id}`
+    }
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
@@ -229,8 +233,16 @@ export default {
       detailPanelVisible,
       detail,
       usersStore,
-      searchJob,
+      searchJob,openDetailPage
     };
   },
 };
 </script>
+<style>
+.featured_jobs_logo {
+    width: 90px;
+}
+.featured_jobs_logo img.v-img__img {
+    width: 90px;
+}
+</style>

@@ -305,7 +305,7 @@ form.job_search_form .v-input__control .v-field__outline {
 }
 
 .featured_jobs .company_info .company_logo {
-    height: auto;
+    height: unset !important;
 }
 
 .company_logo img {
@@ -531,6 +531,7 @@ footer.v-footer {
     padding: 40px 0;
     background-image: url(https://superio-appdir.vercel.app/_next/static/media/6.0ca96815.png);
     padding-top: 100px;
+    background-size: 100%;
 }
 
 

@@ -101,7 +101,7 @@ class CompanyController extends Controller
                 if ($user->subscription_status == 'active') {
                     $data = [
                         "amount" => $priceCents,
-                        "currency" => "USD",
+                        "currency" => "GBP",
                         "name" => $selected_plan->name,
                         "interval_unit" => $selected_plan->interval_unit,
                         "interval" => $selected_plan->interval,
@@ -217,7 +217,7 @@ class CompanyController extends Controller
         $user->update(['mandate_id' => $redirectFlow->links->mandate, 'gc_customer_id' => $redirectFlow->links->customer, 'plan_id' => $request->planId]);
         $data = [
             "amount" => $priceCents,
-            "currency" => "USD",
+            "currency" => "GBP",
             "name" => $plan->name,
             "interval_unit" => $plan->interval_unit,
             "interval" => $plan->interval,

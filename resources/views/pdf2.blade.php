@@ -27,9 +27,7 @@
 						<tr>
 							<td style="width: 100%;">
 								<h1 style="margin: 0; margin-top: 15px ; font-family:  Biryani;">{{ $userdata['name'] }}</h1>
-								<h2 style="margin: 0; margin-top: 10px ;">
-								{{ $userdata['experience'][0]['position'] }} 
-								 </h2>
+								
 							</td>
 						</tr>
 						<tr>
@@ -44,37 +42,48 @@
 			</div>
 			
 			<!-- Experience -->
-			<div style="border-top: 2px solid;margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0;margin-top: 10px; font-family:  Biryani; text-align: left;">
-									Experience
-								</h2>
-							</th>
-						</tr>
-					</thead>
-					@foreach ($userdata['experience'] as $exp)
-					<tbody>
-						<tr>
-							<td style="width: 60%;">
-								<h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
-							</td>
-							<td style="width: 40%; text-align: right;">
-								<strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
-							</td>
-						</tr>
-						<tr>
-							<td>{{ $exp['position'] }} </td>
-						</tr>
-						<tr>
-							<td colspan="3">{{ $exp['description'] }}</td>
-						</tr>
-					</tbody>
-					@endforeach
-				</table>
-			</div>
+			@if (isset($userdata['experience']) && !empty($userdata['experience']))
+    @php
+        $hasExperience = false;
+    @endphp
+    <div style="border-top: 2px solid; margin-top: 25px;">
+        <table style="width: 90%; text-align: left; margin: 0 auto; font-family: Biryani;">
+            <thead>
+                <tr>
+                    <th>
+                        <h2 style="margin: 0; margin-top: 10px; font-family: Biryani; text-align: left;">
+                            Experience
+                        </h2>
+                    </th>
+                </tr>
+            </thead>
+            @foreach ($userdata['experience'] as $exp)
+                @if ($exp['company_name'] !== null && $exp['company_name'] !== "null")
+                    @php
+                        $hasExperience = true;
+                    @endphp
+                    <tbody>
+                        <tr>
+                            <td style="width: 60%;">
+                                <h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
+                            </td>
+                            <td style="width: 40%; text-align: right;">
+                                <strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ $exp['position'] }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{{ $exp['description'] }}</td>
+                        </tr>
+                    </tbody>
+                @endif
+            @endforeach
+         
+        </table>
+    </div>
+@endif
 			<!-- Education(Qualifications) -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 
@@ -104,40 +113,40 @@
 				</table>
 			</div>
 			<!-- Courses and Certificates -->
-			<div style="border-top: 2px solid;margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0;margin-top: 10px; font-family:  Biryani; text-align: left;">
-									<!-- Courses and Certificates -->Achievements
-								</h2>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-					@foreach ($userdata['achievements'] as $achievement)
-					<tr>
-						<td style="width: 70%;">
-							{{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>, 2019
-							</td>
-						</tr>
+			@if (isset($userdata['achievements']) && !empty($userdata['achievements']))
+    @php
+        $hasAchievements = false;
+    @endphp
+    <div style="border-top: 2px solid; margin-top: 25px;">
+        <table style="width: 90%; text-align: left; margin: 0 auto; font-family: Biryani;">
+            <thead>
+                <tr>
+                    <th>
+                        <h2 style="margin: 0; margin-top: 10px; font-family: Biryani; text-align: left;">
+                            Achievements
+                        </h2>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($userdata['achievements'] as $achievement)
+                @if ($achievement['company_name'] !== null && $achievement['company_name'] !== "null")
+                    @php
+                        $hasAchievements = true;
+                    @endphp
+                    <tr>
+                        <td style="width: 70%;">
+                            {{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
 
-                    @endforeach
-						
-						<!-- <tr>
-							<td style="width: 70%;">
-								PMI Professional in Business Analysis (PBA) — <strong>PMI</strong>, 2019
-							</td>
-						</tr>
-						<tr>
-							<td style="width: 70%;">
-								PMI Professional in Business Analysis (PBA) — <strong>PMI</strong>, 2019
-							</td>
-						</tr> -->
-					</tbody>
-				</table>
-			</div>
+          
+            </tbody>
+        </table>
+    </div>
+@endif 
 			<!-- Adress -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 				<table
