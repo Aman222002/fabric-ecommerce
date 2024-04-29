@@ -168,11 +168,11 @@ export default {
       },
     ]);
     const registerItems = ref([
-      // {
-      //   title: "Register as User",
-      //   icon: "mdi-account-plus",
-      //   href: "/registration",
-      // },
+      {
+        title: "Register as User",
+        icon: "mdi-account-plus",
+        href: "/registration",
+      },
       {
         title: "Register as Company",
         icon: "mdi-account-plus",

@@ -48,7 +48,7 @@ class CheckPlanValidity extends Command
                 $priceCents = $plan->price * 100;
                 $data = [
                     "amount" => $priceCents,
-                    "currency" => "USD",
+                    "currency" => "GBP",
                     "name" => $plan->name,
                     "interval_unit" => $plan->interval_unit,
                     "interval" => $plan->interval,

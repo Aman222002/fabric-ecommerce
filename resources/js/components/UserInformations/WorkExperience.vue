@@ -74,21 +74,15 @@ export default {
 
     if (!workExperience.company_name && !workExperience.position && !workExperience.start_date && !workExperience.end_date && !workExperience.description) {
         console.warn('Cannot remove empty work experience entry');
+        store.removeWorkExperience(index);
         return;
     }
 
     try {
-       
-        await axios.post(`/removedExperience/${experienceId}`);
-        
-      
         store.removeWorkExperience(index);
-
-      
-        const updatedExperience = [
-            ...experience.value.slice(0, index),
-            ...experience.value.slice(index + 1)
-        ];
+        await axios.post(`/removedExperience/${experienceId}`);
+       
+        const updatedExperience = experience.value.filter(exp => exp.id !== experienceId);
         experience.value = updatedExperience;
         
         console.log('Work experience removed successfully');

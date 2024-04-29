@@ -49,6 +49,33 @@ export default {
 const startYear = 1970; 
 const endYear = 2030; 
 const yearOptions = ref(Array.from({length: endYear - startYear + 1}, (_, i) => startYear + i));
+// const removeEducationEntry = async (index) => {
+//     console.log('Before removal - educationDetails:', educationDetails.value);
+//     console.log('Removing index:', index);
+//     const education = educationDetails.value[index];
+//     const educationId = education.id;
+//     if (!education.education_type && !education.school_university && !education.starting_year && !education.passing_year) {
+//         console.warn('Cannot remove empty education entry');
+//         store.removeEducationEntry(index);
+//         return;
+//     }
+//     try {
+//         store.removeEducationEntry(educationId);
+//         const updatedEducationDetails = [
+//             ...educationDetails.value.slice(0, index),
+//             ...educationDetails.value.slice(index + 1)
+//         ];
+//         educationDetails.value = updatedEducationDetails;
+
+
+        
+//         await axios.post(`/removedEducation/${educationId}`);
+//         store.removeEducationEntry(index);
+//         console.log('After removal - educationDetails:', educationDetails.value);
+//     } catch (error) {
+//         console.error('Error deleting education detail:', error);
+//     }
+// };
 const removeEducationEntry = async (index) => {
     console.log('Before removal - educationDetails:', educationDetails.value);
     console.log('Removing index:', index);
@@ -56,23 +83,19 @@ const removeEducationEntry = async (index) => {
     const educationId = education.id;
     if (!education.education_type && !education.school_university && !education.starting_year && !education.passing_year) {
         console.warn('Cannot remove empty education entry');
-        store.removeEducationEntry(index);
         return;
     }
     try {
-        store.removeEducationEntry(educationId);
-        const updatedEducationDetails = [
-            ...educationDetails.value.slice(0, index),
-            ...educationDetails.value.slice(index + 1)
-        ];
-        educationDetails.value = updatedEducationDetails;
-        await axios.post(`/removedEducation/${educationId}`);
         store.removeEducationEntry(index);
+        await axios.post(`/removedEducation/${educationId}`);
+        const updatedEducationDetails = educationDetails.value.filter(edu => edu.id !== educationId);
+        educationDetails.value = updatedEducationDetails;
         console.log('After removal - educationDetails:', educationDetails.value);
     } catch (error) {
         console.error('Error deleting education detail:', error);
     }
 };
+
         const addEducationEntry = () => {
             educationDetails.value.push({
                 education_type: '',
@@ -82,7 +105,7 @@ const removeEducationEntry = async (index) => {
             });
         };
         const getPassingYearOptions = (startingYear) => {
-    return yearOptions.value.filter(year => year >= startingYear || year === '');
+    return yearOptions.value.filter(year => year > startingYear || year === '');
 };
 const availableEducationTypes = computed(() => {
         const selectedTypes = educationDetails.value.map(education => education.education_type);

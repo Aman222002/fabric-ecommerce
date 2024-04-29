@@ -52,7 +52,10 @@
                       </div>
                     </template>
                     <template v-if="currentStep === 3">
-                      <div class="flex-container-1">
+                      <div style="display: flex;">
+                        <v-checkbox label="Fresher" @change="onFresherCheckboxChange" ></v-checkbox>
+                        <v-checkbox label="Experience" @change=" onExperienceCheckboxChange" ></v-checkbox></div>
+                      <div class="flex-container-1" v-if="isExperience">
                         <work-experience></work-experience>
                         <users-achievments></users-achievments>
                       </div>
@@ -62,7 +65,6 @@
                         <user-profile></user-profile>
                       </div>
                       <!-- Replace v-select with iframe -->
-                     
                     </template>
                     <v-stepper-actions
                       :disabled="disabled"
@@ -70,7 +72,6 @@
                       @click:next="goToNext()"
                       color="#006400"
                     ></v-stepper-actions>
-
                     <v-select v-if="currentStep === 4"
                       v-model="selectedTemplate"
                       :items="['Template1', 'Template2','Template3']"
@@ -175,30 +176,31 @@ export default {
       if (currentStep.value <= 0) {
         return;
       }
-
       currentStep.value--;
     }
-
     const disabled = computed(() => {
       const val = e1.value === 1 ? "prev" : false;
-
       return val;
     });
-    
     const downloadcv = () => {
-      if (!selectedTemplate.value) {
-        
+      if (!selectedTemplate.value) { 
         return;
       }
       const url = `/generate-pdf?template=${selectedTemplate.value}`;
       window.location.href = url;
-     
     };
-
     const getTemplatePreview = (template) => {
       return `/template-preview/${template}`;
     };
-
+    const isFresher = ref(true); 
+    const onFresherCheckboxChange = () => {
+   
+      isFresher.value = !isFresher.value;
+    };
+    const isExperience = ref(false); 
+    const onExperienceCheckboxChange = () => {
+      isExperience.value = !isExperience.value;
+    };
     return {
       store,
       maxSteps: 4,
@@ -214,7 +216,7 @@ export default {
       myForm,
       downloadcv, 
       selectedTemplate,
-      getTemplatePreview
+      getTemplatePreview,onFresherCheckboxChange, isFresher,isExperience, onExperienceCheckboxChange
     };
   },
   computed: {

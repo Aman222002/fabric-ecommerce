@@ -38,6 +38,7 @@
 				</tr>
 			</tbody>
 		</table>
+		@if ($userdata['achievements'] !== null && !empty($userdata['achievements']))
 		<div style="border-top: 2px solid;margin-top: 25px;">
 			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 				<thead>
@@ -53,35 +54,15 @@
 				@foreach ($userdata['achievements'] as $achievement)
 					<tr>
 						<td style="width: 70%;">
-						{{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>, 2019
+						{{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>
 						</td>
 					</tr>
 					@endforeach
 				</tbody>
 			</table>
 		</div>
-		<div style="border-top: 2px solid; margin-top: 25px;">
-			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-				<thead>
-					<tr>
-						<th>
-							<h2 style="margin: 0; margin-top: 10px; text-align: left;">
-							Skills(Technical)
-						</h2>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-						@foreach ($userdata['skill_name'] as $skill)
-                    <strong>{{ $skill[0]}}</strong>
-              			  @endforeach	
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		@endif
+		@if ($userdata['experience'] !== null && !empty($userdata['experience']))
 		<div style="border-top: 2px solid;margin-top: 25px;">
 			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 				<thead>
@@ -112,6 +93,7 @@
 				@endforeach
 			</table>
 		</div>
+		@endif
 		<div style="border-top: 2px solid;margin-top: 25px;">
 
 			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
@@ -142,12 +124,7 @@
 				@endforeach
 			</table>
 		</div>
-
-
-
 	</div>
-
-
 </body>
 
-</html> 
+</html>

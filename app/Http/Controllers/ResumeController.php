@@ -45,15 +45,15 @@ class ResumeController extends Controller
                 'educationDetails.*.school_university' => 'nullable|string',
                 'educationDetails.*.starting_year' => 'nullable|integer|min:1900|max:' . date('Y'),
                 'educationDetails.*.passing_year' => 'nullable|integer|min:1900|max:' . date('Y'),
-                'experience.*.company_name' => 'required|string|max:255',
-                'experience.*.position' => 'required|string|max:255',
-                'experience.*.description' => 'required|string',
+                // 'experience.*.company_name' => 'required|string|max:255',
+                // 'experience.*.position' => 'required|string|max:255',
+                // 'experience.*.description' => 'required|string',
                 // 'experience.*.start_date' => 'required|date',
                 // 'experience.*.end_date' => 'nullable|date',
-                'achievements.*.certification_name' => 'required|string|max:255',
-                'achievements.*.company_name' => 'required|string|max:255',
-                'achievements.*.certificate_number' => 'required|string|max:255',
-                'achievements.*.expiry_date' => 'required|date',
+                // 'achievements.*.certification_name' => 'required|string|max:255',
+                // 'achievements.*.company_name' => 'required|string|max:255',
+                // 'achievements.*.certificate_number' => 'required|string|max:255',
+                // 'achievements.*.expiry_date' => 'required|date',
                 // 'achievements.*.certificate_file_path' => 'required|mimes:pdf|max:2048'
 
             ]);
@@ -118,11 +118,11 @@ if (count($alteredSkills)) {
 $existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
 $skillsToDelete = array_diff($existingSkills, $skills);
 
-if (!empty($skillsToDelete)) {
-    UserSkill::where('user_id', $user->id)
-        ->whereIn('skill_id', $skillsToDelete)
-        ->delete();
-}
+// if (!empty($skillsToDelete)) {
+//     UserSkill::where('user_id', $user->id)
+//         ->whereIn('skill_id', $skillsToDelete)
+//         ->delete();
+// }
 UserProfile::updateOrInsert(
                 ['user_id' => $user->id],
                 [

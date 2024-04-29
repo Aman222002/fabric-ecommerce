@@ -133,6 +133,19 @@
 						</tr>
 					</tbody>
 				</table>
+							<!-- Adress -->
+							<table
+					style="width: 90%;margin: 25px auto;margin-bottom: 30px;margin-top: 0px;font-family: Biryani;">
+					@foreach ($userdata['address'] as $addresses)
+				<tbody>
+					<tr>
+						<td style="width: 100%;">
+							{{ $addresses['city'] }} {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
+						</td>
+					</tr>
+				</tbody>
+				@endforeach
+				</table>
 			</div>
 			<!-- Experience -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
@@ -220,21 +233,7 @@
 					</tbody>
 				</table>
 			</div>
-			<!-- Adress -->
-			<div style="border-top: 2px solid;margin-top: 25px;">
-				<table
-					style="width: 90%;text-align: center;margin: 25px auto;margin-bottom: 30px;font-family: Biryani;">
-					@foreach ($userdata['address'] as $addresses)
-				<tbody>
-					<tr>
-						<td style="width: 100%;">
-							{{ $addresses['city'] }} {{ $addresses['state'] }}  {{ $addresses['zip_code'] }}, India
-						</td>
-					</tr>
-				</tbody>
-				@endforeach
-				</table>
-			</div>
+
 		</div>
 
 	</div>

@@ -62,18 +62,19 @@
             >
               <v-row>
                 <v-col
-                  class="cpmany_logo"
+                  class="cpmany_logo pr-0"
                   cols="12"
                   sm="12"
                   md="12"
                   lg="1"
                   xl="1"
                 >
-                  <v-img
+                  <!-- <v-img
                     src="https://superio-appdir.vercel.app/_next/image?url=%2Fimages%2Fresource%2Fcompany-logo%2F1-2.png&w=64&q=75"
-                  ></v-img
-                ></v-col>
-                <v-col cols="12" sm="12" md="12" lg="11" xl="11">
+                  ></v-img -->
+                  <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
+                </v-col>
+                <v-col class="pl-0" cols="12" sm="12" md="12" lg="11" xl="11">
                   <v-card-title>{{ job.company.company_name }}</v-card-title>
                   <v-card-text class="pa-0 ml-3">
                     <div style="display: flex; align-items: center">

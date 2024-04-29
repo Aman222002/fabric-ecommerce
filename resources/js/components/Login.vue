@@ -139,7 +139,7 @@ export default {
           } else if (data.data.roles[0].name == "Company Admin") {
             window.location.href = "/job";
           } else {
-            window.location.href = "/jobs-detail";
+            window.location.href = "/resume";
             usersStore.isLogIn();
           }
         }
