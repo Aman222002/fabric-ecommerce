@@ -104,11 +104,16 @@
                 <v-card-title><a href="#"> Experience</a> </v-card-title>
                 <ul class="company_seat">
                   <li>
-                    <v-icon>mdi-compare</v-icon>{{ experience.company_name }}
+                    <v-icon color="#f16666" class="mr-2">mdi-domain</v-icon
+                    >{{ experience.company_name }}
                   </li>
-                  <li><v-icon>mdi-medal </v-icon>{{ experience.position }}</li>
                   <li>
-                    <v-icon>mdi-card-account-details</v-icon
+                    <v-icon color="#34a853" class="mr-2">mdi-medal </v-icon
+                    >{{ experience.position }}
+                  </li>
+                  <li>
+                    <v-icon color="#f9ab00" class="mr-2"
+                      >mdi-card-account-details</v-icon
                     >{{ experience.description }}
                   </li>
                 </ul>
@@ -124,7 +129,8 @@
         <v-col sm="12" md="6" lg="4" xl="4" class="user_profile_infor_right">
           <v-card>
             <v-card-title
-              ><v-icon>mdi-domain</v-icon> Candidates Information:</v-card-title
+              ><v-icon color="#f16666">mdi-domain</v-icon> Candidates
+              Information:</v-card-title
             >
             <v-card-text>
               <div>
@@ -144,7 +150,8 @@
 
           <v-card>
             <v-card-title
-              ><v-icon>mdi-map-marker</v-icon> Candidates Address:</v-card-title
+              ><v-icon color="#34a853">mdi-map-marker</v-icon> Candidates
+              Address:</v-card-title
             >
             <v-card-text>
               <div>
@@ -164,7 +171,8 @@
 
           <v-card>
             <v-card-title
-              ><v-icon>mdi-briefcase</v-icon> Candidates Skills:</v-card-title
+              ><v-icon color="#f9ab00">mdi-briefcase</v-icon> Candidates
+              Skills:</v-card-title
             >
             <v-card-text>
               <div v-for="skill in skills" :key="skill.id">
@@ -180,7 +188,8 @@
               :key="index"
             >
               <v-card-title
-                ><v-icon>mdi-school</v-icon> Qualifications:<br />
+                ><v-icon color="#1967d2">mdi-school</v-icon>
+                Qualifications:<br />
                 {{ educationDetails.education_type }}</v-card-title
               >
               <v-card-text>
@@ -430,7 +439,7 @@ export default {
 }
 .user_profile_infor_right .v-card {
   padding: 30px 27px;
-  background: #f5f7fc;
+  background: #fff;
   border-radius: 8px;
   margin-bottom: 40px;
   width: 75%;

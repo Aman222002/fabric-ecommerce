@@ -1,6 +1,6 @@
 <template>
   <div v-if="recentNews && recentNews.title" class="single_blog_page">
-    <v-card class="mx-auto my-12">
+    <v-card class="mx-auto py-12">
       <v-card-item>
         <v-card-title>{{ recentNews.title }}</v-card-title>
         <div class="px-4">
@@ -12,7 +12,11 @@
         </div>
       </v-card-item>
 
-      <v-img :src="`/storage/assets/${recentNews.featured_image}`" height="450" cover></v-img>
+      <v-img
+        :src="`/storage/assets/${recentNews.featured_image}`"
+        height="450"
+        cover
+      ></v-img>
       <v-container fluid>
         <v-card>
           <v-card-text class="pb-0">
@@ -89,12 +93,15 @@ export default {
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
     const fetchBlog = () => {
-      axios.get(`/fetch/single/blog/${blogId}`).then((response) => {
-        console.log(response.data.data);
-        recentNews.value = response.data.data;
-      }).catch((err) => {
-        console.log(err);
-      })
+      axios
+        .get(`/fetch/single/blog/${blogId}`)
+        .then((response) => {
+          console.log(response.data.data);
+          recentNews.value = response.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     onMounted(() => {
       fetchBlog();

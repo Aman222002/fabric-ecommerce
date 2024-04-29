@@ -26,22 +26,26 @@
                 </v-card-title>
                 <ul class="company_seat">
                   <li>
-                    <v-icon>mdi-compare</v-icon
+                    <v-icon color="#f16666" class="mr-2">mdi-domain</v-icon
                     >{{ savedJob.company.company_name }}
                   </li>
                   <li>
-                    <v-icon>mdi-map-marker-outline </v-icon
+                    <v-icon color="#34a853" class="mr-2"
+                      >mdi-map-marker-outline </v-icon
                     >{{ savedJob.job.location }}
                   </li>
                   <li>
-                    <v-icon>mdi-email-box</v-icon
+                    <v-icon color="#f9ab00" class="mr-2">mdi-email-box</v-icon
                     >{{ savedJob.company.company_email }}
                   </li>
                   <li>
-                    <v-icon>mdi-school</v-icon>{{ savedJob.job.qualifications }}
+                    <v-icon color="#1967d2" class="mr-2">mdi-school</v-icon
+                    >{{ savedJob.job.qualifications }}
                   </li>
                   <li>
-                    <v-icon>mdi-currency-rupee</v-icon>{{ savedJob.job.salary }}
+                    <v-icon color="#8bc34a" class="mr-2"
+                      >mdi-currency-gbp</v-icon
+                    >{{ savedJob.job.salary }}
                   </li>
                   <!-- <li>
                   <v-icon>mdi-desktop-classic</v-icon
