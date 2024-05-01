@@ -16,7 +16,7 @@
 
 <body>
 
-	<div class="resume_1" style="color: #444;border: solid #666;border-width: 8px 0 2px 0;margin: 30px auto;">
+	<div class="resume_1" style="color: #444;margin: 0px auto;">
 		<div style="width: 70%;float: left;">
 			<!-- Candidates Name -->
 			<div style="margin-top: 25px;">
@@ -117,7 +117,7 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; font-family:  Biryani; text-align: left;">
+								<h2 style="margin: 0; margin-top: 10px; font-family:  Biryani; text-align: left;text-transform: uppercase;font-size:25px;">
 									Education(Qualifications)
 								</h2>
 							</th>
@@ -127,9 +127,9 @@
 					<tbody>
 						<tr>
 							<td style="width: 70%;">
-								<h3 style="margin: 0;">{{ $qualification['school_university'] }}</h3>
+								<h3 style="margin: 0; text-transform: capitalize;">{{ $qualification['school_university'] }}</h3>
 							</td>
-							<td style="width: 30%; text-align: right;"><strong>{{ $qualification['passing_year'] }}</strong></td>
+							<td style="width: 30%; text-align: right; text-transform: capitalize;"><strong>{{ $qualification['passing_year'] }}</strong></td>
 						</tr>
 						<tr>
 							<td>{{ $qualification['education_type'] }}</td>
@@ -159,7 +159,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <h2 style="margin: 0; margin-top: 10px; font-family: Biryani; text-align: left;">
+                            <h2 style="margin: 0; margin-top: 10px; font-family: Biryani; text-align: left;text-transform: uppercase;font-size:25px;">
                                 Achievements
                             </h2>
                         </th>
@@ -169,7 +169,7 @@
                 @foreach ($userdata['achievements'] as $achievement)
                     @if ($achievement['company_name'] !== null && $achievement['company_name'] !== "null")
                         <tr>
-                            <td style="width: 70%;">
+                            <td style="width: 70%; text-transform: capitalize;">
                                 {{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>
                             </td>
                         </tr>
@@ -192,7 +192,7 @@
 					<tbody>
 						<tr>
 							<td colspan="2">
-							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}"  style="width: 120px;height: 120px;">
+							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}"  style="width: 120px;height: 120px;border-radius:50%;">
 									
 									
 							</td>
@@ -206,14 +206,13 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Skills(Technical)</h2>
-							</th>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;text-transform: uppercase;font-size:25px;"> 	 Skills
 						</tr>
 					</thead>
 					<tbody>
 					@foreach ($userdata['skill_name'] as $skill)
                     <tr>
-						<td>
+						<td style="padding-left:10px;color:#e1e1e1; text-transform: capitalize;">
 							<strong>{{ $skill[0]}}, </strong>
 						</td>
 					</tr>
@@ -227,14 +226,14 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies </h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;text-transform: uppercase;font-size:25px;"> Hobbies </h2>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
-							<td>
+							<td  style="padding-left:10px;color:#e1e1e1; text-transform: capitalize;">
 								<strong>{{ $hobbies['hobbies']}}</strong>
 							</td>
 						</tr>
@@ -247,14 +246,14 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Strengths</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;text-transform: uppercase;font-size:25px;">Strengths</h2>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
-							<td>
+							<td style="padding-left:10px;color:#e1e1e1; text-transform: capitalize;">
 								<strong>{{ $hobbies['strengths']}}</strong>
 							</td>
 						</tr>

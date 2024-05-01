@@ -1,8 +1,23 @@
 <template>
-  <DxDataGrid :remote-operations="true" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
-    @content-ready="onContentReady" @row-expanding="onRowExpanding" :onEditingStart="EditStart"
-    @init-new-row="initNewRow" @row-inserted="rowInserted">
-    <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" mode="row" :use-icons="true" />
+  <p style="text-align: center; font-size: 30px; margin-top: 20px">Companies</p>
+  <DxDataGrid
+    :remote-operations="true"
+    :show-borders="true"
+    :data-source="dataSource"
+    :repaint-changes-only="true"
+    @content-ready="onContentReady"
+    @row-expanding="onRowExpanding"
+    :onEditingStart="EditStart"
+    @init-new-row="initNewRow"
+    @row-inserted="rowInserted"
+  >
+    <DxEditing
+      :allow-adding="true"
+      :allow-updating="true"
+      :allow-deleting="true"
+      mode="row"
+      :use-icons="true"
+    />
     <DxSearchPanel :visible="true" />
     <DxColumn data-field="company_name" data-type="string">
       <DxRequiredRule />
@@ -12,18 +27,49 @@
     </DxColumn>
     <DxColumn data-field="description" data-type="string" />
     <DxColumn data-field="phone_number" data-type="string" />
-    <DxColumn data-field="name" data-type="string" caption="User Name" :visible="showColumn">
-      <DxPatternRule :pattern="namePattern" message="Name should of min 3 and max 10 word" />
+    <DxColumn
+      data-field="name"
+      data-type="string"
+      caption="User Name"
+      :visible="showColumn"
+    >
+      <DxPatternRule
+        :pattern="namePattern"
+        message="Name should of min 3 and max 10 word"
+      />
     </DxColumn>
-    <DxColumn data-field="email" data-type="string" caption="User Email" :visible="showColumn">
-      <DxPatternRule :pattern="emailPattern" message="Email should be in email format" />
+    <DxColumn
+      data-field="email"
+      data-type="string"
+      caption="User Email"
+      :visible="showColumn"
+    >
+      <DxPatternRule
+        :pattern="emailPattern"
+        message="Email should be in email format"
+      />
     </DxColumn>
-    <DxColumn data-field="password" data-type="string" caption="User Password" :visible="showColumn">
-      <DxPatternRule :pattern="paswordPattern"
-        message="Pasword should be of min. 8 words and contain one uppercase and one lowercase alphabet with a specila character" />
+    <DxColumn
+      data-field="password"
+      data-type="string"
+      caption="User Password"
+      :visible="showColumn"
+    >
+      <DxPatternRule
+        :pattern="paswordPattern"
+        message="Pasword should be of min. 8 words and contain one uppercase and one lowercase alphabet with a specila character"
+      />
     </DxColumn>
-    <DxColumn data-field="phone" data-type="string" caption="User Phone" :visible="showColumn">
-      <DxPatternRule :pattern="phonePattern" message="Phone number should be in proper format" />
+    <DxColumn
+      data-field="phone"
+      data-type="string"
+      caption="User Phone"
+      :visible="showColumn"
+    >
+      <DxPatternRule
+        :pattern="phonePattern"
+        message="Phone number should be in proper format"
+      />
     </DxColumn>
     <DxColumn type="buttons" caption="Action"></DxColumn>
     <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
@@ -31,8 +77,14 @@
       <masterDetailTemplate :company-info="cellInfo.data" />
     </template>
     <DxPaging :page-size="pageSize" />
-    <DxPager :visible="true" :allowed-page-sizes="[10, 15, 20]" :display-mode="'compact'"
-      :show-page-size-selector="true" :show-navigation-buttons="true" :show-info="true" />
+    <DxPager
+      :visible="true"
+      :allowed-page-sizes="[15, 20, 30]"
+      :display-mode="'compact'"
+      :show-page-size-selector="true"
+      :show-navigation-buttons="true"
+      :show-info="true"
+    />
     <DxSummary>
       <DxTotalItem column="id" summary-type="count" />
     </DxSummary>
@@ -59,7 +111,7 @@ export default {
     const insertURL = `/admin/company/store`;
     const updateURL = `/admin/company/update`;
     const deleteUrl = `/admin/company/destroy`;
-    const pageSize = ref(10);
+    const pageSize = ref(15);
     const { dataSource } = dxGridStore(
       loadURL,
       null,
@@ -126,13 +178,13 @@ export default {
   margin-bottom: 10px;
 }
 
-.option>span {
+.option > span {
   position: relative;
   top: 2px;
   margin-right: 10px;
 }
 
-.option>.dx-widget {
+.option > .dx-widget {
   display: inline-block;
   vertical-align: middle;
 }
@@ -142,11 +194,11 @@ export default {
   padding-top: 7px;
 }
 
-#requests>div {
+#requests > div {
   padding-bottom: 5px;
 }
 
-#requests>div::after {
+#requests > div::after {
   content: "";
   display: table;
   clear: both;

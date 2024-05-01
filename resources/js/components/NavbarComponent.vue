@@ -1,5 +1,10 @@
 <template>
-  <v-navigation-drawer location="left" v-model="drawer" :rail="rail">
+  <v-navigation-drawer
+    class="left_side_bar"
+    location="left"
+    v-model="drawer"
+    :rail="rail"
+  >
     <span>
       <h3 class="title" v-if="!rail">JOBS</h3>
       <v-avatar v-if="rail">
@@ -7,27 +12,40 @@
       </v-avatar>
     </span>
     <v-list>
-      <v-list-item :class="{ 'v-list-item--active': isActiveItem(item) }" @mouseover="setHoverItem(item)"
-        @mouseleave="clearHoverItem()" :prepend-icon="item.icon" v-for="item in items" :key="item.title">
-        <a :href="item.href" style="text-decoration: none; color: black">
-          <v-list-item-title v-if="!rail">{{ item.title }}</v-list-item-title>
-        </a>
+      <v-list-item
+        :class="{ 'v-list-item--active': isActiveItem(item) }"
+        @mouseover="setHoverItem(item)"
+        @mouseleave="clearHoverItem()"
+        :prepend-icon="item.icon"
+        v-for="item in items"
+        :key="item.title"
+        :href="item.href"
+      >
+        <v-list-item-title v-if="!rail">{{ item.title }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
   <v-app-bar height="45" id="header" class="dah_header-bar">
-    <v-app-bar-nav-icon variant="text" @click.stop="rail = !rail"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon
+      variant="text"
+      @click.stop="rail = !rail"
+    ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
     <v-menu transition="slide-y-transition">
       <template v-slot:activator="{ props }">
-        <v-icon v-bind="props" id="account" size="40">mdi-account-circle</v-icon>
+        <v-icon v-bind="props" id="account" size="40"
+          >mdi-account-circle</v-icon
+        >
         <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
       </template>
       <v-list>
-        <v-list-item prepend-icon="mdi-account" title="Login as User" value="Login as User" href="/login"
-          class="dropdown"></v-list-item>
-        <v-list-item class="dropdown" prepend-icon="mdi-logout" title="Logout" value="Dashboard"
-          @click="logout()"></v-list-item>
+        <v-list-item
+          class="dropdown"
+          prepend-icon="mdi-logout"
+          title="Logout"
+          value="Dashboard"
+          @click="logout()"
+        ></v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
@@ -76,12 +94,12 @@ export default {
       },
       {
         title: "Subscription Plans",
-        icon: "mdi-list-box",
+        icon: "mdi-cash-plus",
         href: "/admin/plans",
       },
       {
         title: "Jobs",
-        icon: "mdi-list-box",
+        icon: "mdi-gesture-tap-box",
         href: "/admin/jobs",
       },
       {
@@ -144,9 +162,9 @@ header.dah_header-bar {
   padding-inline: 8px;
 }
 
-.v-list-item__prepend>.v-badge~.v-list-item__spacer,
-.v-list-item__prepend>.v-icon~.v-list-item__spacer,
-.v-list-item__prepend>.v-tooltip~.v-list-item__spacer {
+.v-list-item__prepend > .v-badge ~ .v-list-item__spacer,
+.v-list-item__prepend > .v-icon ~ .v-list-item__spacer,
+.v-list-item__prepend > .v-tooltip ~ .v-list-item__spacer {
   width: 11px;
 }
 
@@ -207,7 +225,7 @@ nav.left_side_bar .v-list--one-line .group {
 nav.left_side_bar .v-list--one-line .group:hover,
 nav.left_side_bar .group a.active,
 nav.left_side_bar .group.active {
-  color: #1967d2;
+  color: #1967d2 !important;
   background: #1967d21a;
 }
 
@@ -219,6 +237,7 @@ nav.left_side_bar .group.active {
   color: black;
   margin-top: 15px;
   font-family: Georgia, "Times New Roman", Times, serif;
+  text-align: center;
 }
 
 .v-list-item:hover,

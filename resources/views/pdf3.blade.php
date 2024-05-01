@@ -39,22 +39,24 @@
 					<thead>
 						<tr>
 							<th>
-							<h1 style="margin: 0; margin-top: 15px ; font-family:  Biryani;">{{ $userdata['name'] }}</h1>
+							<h1 style="margin: 0; margin-top: 15px ; font-family:  Biryani;text-align: left;">{{ $userdata['name'] }}</h1>
 							</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
 			<!-- Skills(Technical) -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
+			<div style=" margin-top: 25px;">
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;margin-bottom:5px;">
+				<thead  style="border-bottom: 2px solid;">
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Skills(Technical)</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;text-transform: uppercase;font-size:20px;">Skills</h2>
 							</th>
 						</tr>
 					</thead>
+			</table>
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
 					<tbody>
 					@foreach ($userdata['skill_name'] as $skill)
                     <tr>
@@ -67,15 +69,17 @@
 				</table>
 			</div>
 			<!-- Hobbies And Strengths -->
-			<div style="border-top: 2px solid; margin-top: 25px;">
+			<div style=" margin-top: 25px;">
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;margin-bottom:5px;">
+					<thead  style="border-bottom: 2px solid;">
+							<tr>
+								<th>
+									<h2 style="margin: 0; margin-top: 10px; text-align: left;text-transform: uppercase;font-size:20px;">Hobbies</h2>
+								</th>
+							</tr>
+						</thead>
+				</table>
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
-						<tr>
-							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;">Hobbies</h2>
-							</th>
-						</tr>
-					</thead>
 					<tbody>
 					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
@@ -87,15 +91,18 @@
 					</tbody>
 				</table>
 			</div>
-			<div style="border-top: 2px solid; margin-top: 25px;">
-				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
-					<thead>
+			<div style=" margin-top: 25px;">
+			<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;margin-bottom:5px;">
+				<thead  style="border-bottom: 2px solid;">
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; text-align: left;"> Strengths</h2>
+								<h2 style="margin: 0; margin-top: 10px; text-align: left;text-transform: uppercase;font-size:20px;">Strengths</h2>
 							</th>
 						</tr>
 					</thead>
+	</table>
+				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+
 					<tbody>
 					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
@@ -107,8 +114,6 @@
 					</tbody>
 				</table>
 			</div>
-		
-			
 		</div>
 		<!-- right side -->
 		<div style="width: 70%;height: 100%;float: left;">
@@ -132,7 +137,7 @@
 					</tbody>
 				</table>
 							<!-- Adress -->
-							<table
+				<table
 					style="width: 90%;margin: 25px auto;margin-bottom: 30px;margin-top: 0px;font-family: Biryani;">
 					@foreach ($userdata['address'] as $addresses)
 				<tbody>
@@ -212,7 +217,7 @@
 					<thead>
 						<tr>
 							<th>
-								<h2 style="margin: 0; margin-top: 10px; font-family:  Biryani; text-align: left;">
+								<h2 style="margin: 0; margin-top: 10px; font-family:  Biryani; text-align: left;text-transform: uppercase;font-size:20px;">
 									Education(Qualifications)
 								</h2>
 							</th>
@@ -222,9 +227,9 @@
 					<tbody>
 						<tr>
 							<td style="width: 70%;">
-								<h3 style="margin: 0;">{{ $qualification['school_university'] }}</h3>
+								<h3 style="margin: 0;text-transform: capitalize;">{{ $qualification['school_university'] }}</h3>
 							</td>
-							<td style="width: 30%; text-align: right;"><strong>{{ $qualification['passing_year'] }}</strong></td>
+							<td style="width: 30%; text-align: right;text-transform: capitalize;"><strong>{{ $qualification['passing_year'] }}</strong></td>
 						</tr>
 						<tr>
 							<td>{{ $qualification['education_type'] }}</td>

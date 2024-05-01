@@ -49,7 +49,7 @@ export default {
         // return;
         const response = await axios.get("/skills");
         skills.value = response.data;
-       
+
         console.log(skills.value);
       } catch (error) {
         console.error("Error fetching skills:", error);

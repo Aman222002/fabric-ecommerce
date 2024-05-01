@@ -905,6 +905,26 @@ button.save_btn {
     text-transform: capitalize;
 }
 
+/* Fill your Personal Details */
+
+.achiev_work_exp {
+    padding: 25px;
+    border: 1px solid #0000001f;
+    margin: 23px;
+    position: relative;
+}
+
+.button_plus_delete {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+
+.button_plus_delete button.v-btn {
+    width: 25px;
+    min-width: 25px;
+    height: 25px !important;
+}
 
 /* responsive start  only */
 

@@ -1,8 +1,25 @@
 <template>
-  <DxDataGrid id="grid" :remote-operations="true" :show-borders="true" :data-source="dataSource"
-    :repaint-changes-only="true" :column-auto-width="true" :allow-column-resizing="true" @init-new-row="initNewRow"
-    @row-inserted="rowInserted">
-    <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" :use-icons="true" mode="row" />
+  <p style="text-align: center; font-size: 30px; margin-top: 20px">
+    User datas
+  </p>
+  <DxDataGrid
+    id="grid"
+    :remote-operations="true"
+    :show-borders="true"
+    :data-source="dataSource"
+    :repaint-changes-only="true"
+    :column-auto-width="true"
+    :allow-column-resizing="true"
+    @init-new-row="initNewRow"
+    @row-inserted="rowInserted"
+  >
+    <DxEditing
+      :allow-adding="true"
+      :allow-updating="true"
+      :allow-deleting="true"
+      :use-icons="true"
+      mode="row"
+    />
     <DxSearchPanel :visible="true" />
     <DxColumn data-field="name" data-type="string">
       <DxRequiredRule />
@@ -12,23 +29,33 @@
       <DxEmailRule message="Email is invalid" />
     </DxColumn>
     <DxColumn data-field="phone" data-type="string">
-      <DxPatternRule :pattern="phonePattern" message="Should be numeric value only" />
+      <DxPatternRule
+        :pattern="phonePattern"
+        message="Should be numeric value only"
+      />
     </DxColumn>
     <DxColumn data-field="password" data-type="password" :visible="showColumn">
-      <DxPatternRule :pattern="passwordPattern"
-        message="Should be of min. seven charcter and must contains a special character only" />
+      <DxPatternRule
+        :pattern="passwordPattern"
+        message="Should be of min. seven charcter and must contains a special character only"
+      />
     </DxColumn>
     <DxColumn type="buttons" caption="Action">
       <DxButton name="edit"></DxButton>
       <DxButton name="delete"></DxButton>
     </DxColumn>
     <DxPaging :page-size="pageSize" />
-    <DxPager :visible="true" :allowed-page-sizes="[10, 15, 20]" :display-mode="'compact'"
-      :show-page-size-selector="true" :show-navigation-buttons="true" :show-info="true" />
+    <DxPager
+      :visible="true"
+      :allowed-page-sizes="[15, 20, 30]"
+      :display-mode="'compact'"
+      :show-page-size-selector="true"
+      :show-navigation-buttons="true"
+      :show-info="true"
+    />
     <DxSummary>
       <DxTotalItem column="id" summary-type="count" />
     </DxSummary>
- 
   </DxDataGrid>
 </template>
 <script>
@@ -40,7 +67,7 @@ export default {
     const phonePattern = ref("^[0-9]{10,13}$");
     const passwordPattern = ref(/^.{7,}$/);
     const showColumn = ref(false);
-    const pageSize = ref(10);
+    const pageSize = ref(15);
     const loadURL = `/admin/user/index`;
     const updateURL = `/admin/user/update`;
     const editItem = (data) => {
@@ -54,10 +81,9 @@ export default {
       null,
       insertURL,
       updateURL,
-      deleteUrl,
-     
+      deleteUrl
     );
-  
+
     const initNewRow = (e) => {
       e.data.status = "1";
       showColumn.value = true;
@@ -75,7 +101,6 @@ export default {
       rowInserted,
       pageSize,
       editItem,
-      
     };
   },
 };
@@ -103,13 +128,13 @@ export default {
   margin-bottom: 10px;
 }
 
-.option>span {
+.option > span {
   position: relative;
   top: 2px;
   margin-right: 10px;
 }
 
-.option>.dx-widget {
+.option > .dx-widget {
   display: inline-block;
   vertical-align: middle;
 }
@@ -119,11 +144,11 @@ export default {
   padding-top: 7px;
 }
 
-#requests>div {
+#requests > div {
   padding-bottom: 5px;
 }
 
-#requests>div::after {
+#requests > div::after {
   content: "";
   display: table;
   clear: both;
