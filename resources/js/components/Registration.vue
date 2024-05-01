@@ -92,14 +92,6 @@
                         variant="outlined"
                         label="Phone"
                       ></v-text-field>
-
-                      <!-- <v-checkbox
-                        label="Remember Me"
-                        class="mt-n1"
-                        color="blue"
-                      >
-                      </v-checkbox> -->
-
                       <v-btn type="submit" dark block tile color="primary"
                         >Register</v-btn
                       >
@@ -114,7 +106,6 @@
     </v-row>
   </v-container>
 </template>
-  
 <script>
 import { ref } from "vue";
 import axios from "axios";
@@ -129,7 +120,7 @@ export default {
       password: "",
       phone: "",
     });
-
+    const form = ref(null);
     const nameRules = [
       (v) => !!v || "Full Name is required",
       (v) => (v && v.length >= 3) || "Full Name must be at least 3 characters",
@@ -147,15 +138,40 @@ export default {
   (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
   (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
     ];
-    const submitForm = () => {
-      if (this.$refs.form.validate()) {
-        console.log(formData.value.phone);
-        axios.post("/registration", formData.value).then((data) => {
-          console.log(data);
-          alert("success");
-        });
+    const submitForm = async () => {
+  try {
+    const valid = await form.value.validate();
+    if (!valid.valid) {
+      const errors = JSON.parse(JSON.stringify(valid.errors));
+      let errorField = form.value[errors[0].id];
+      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+      errorField.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    } else {
+      const response = await axios.post("/registration", formData.value);
+      if (response.data.status === true) {
+        
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Please Verify Your Mail',
+            });
+        window.location.href="/login"
+      } else {
+        console.error("Registration failed:", response.data.message);
       }
-    };
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+    
+  }
+};
     const login = async () => {
       window.location.href = "/login";
     };
@@ -168,27 +184,10 @@ export default {
       passwordRules,
       phoneRules,
       submitForm,
-      login,
+      login,form
     };
   },
-  methods: {
-    submitForm() {
-      if (this.$refs.form.validate()) {
-        console.log(this.formData.phone);
-        axios
-          .post("/registration", this.formData)
-          .then((data) => {
-            if ((data.status = true)) {
-              window.location.href = "./login";
-            } else {
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    },
-  },
+  
 };
 </script>
 <style scoped>

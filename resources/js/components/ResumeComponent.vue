@@ -52,9 +52,10 @@
                       </div>
                     </template>
                     <template v-if="currentStep === 3">
-                      <div style="display: flex;">
-                        <v-checkbox label="Fresher" @change="onFresherCheckboxChange" ></v-checkbox>
-                        <v-checkbox label="Experience" @change=" onExperienceCheckboxChange" ></v-checkbox></div>
+                      
+                        <div style="display: flex;">
+                        <v-switch v-model="isExperience" label="Do you have experience?" dense  color="success" ></v-switch>
+                      </div>
                       <div class="flex-container-1" v-if="isExperience">
                         <work-experience></work-experience>
                         <users-achievments></users-achievments>
@@ -64,7 +65,6 @@
                       <div>
                         <user-profile></user-profile>
                       </div>
-                      <!-- Replace v-select with iframe -->
                     </template>
                     <v-stepper-actions
                       :disabled="disabled"
@@ -192,15 +192,24 @@ export default {
     const getTemplatePreview = (template) => {
       return `/template-preview/${template}`;
     };
-    const isFresher = ref(true); 
-    const onFresherCheckboxChange = () => {
-   
-      isFresher.value = !isFresher.value;
-    };
+
     const isExperience = ref(false); 
+    
     const onExperienceCheckboxChange = () => {
       isExperience.value = !isExperience.value;
     };
+    onMounted(async () => {
+      try {
+        const response = await axios.get("/fetch-user-data");
+        const { workExperienceExists, userAchievementsExists } = response.data;
+        isExperience.value = workExperienceExists && userAchievementsExists;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    });
+   
+
+
     return {
       store,
       maxSteps: 4,
@@ -216,7 +225,8 @@ export default {
       myForm,
       downloadcv, 
       selectedTemplate,
-      getTemplatePreview,onFresherCheckboxChange, isFresher,isExperience, onExperienceCheckboxChange
+  
+      getTemplatePreview,isExperience, onExperienceCheckboxChange
     };
   },
   computed: {

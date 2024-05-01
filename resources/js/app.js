@@ -127,6 +127,13 @@ app.component("resume-component", ResumeComponent);
 import ExpiredComponent from "./components/Expired.vue";
 app.component("expired-component", ExpiredComponent);
 
+
+import Confirm from "./components/Confirm.vue";
+app.component("confirm-component", Confirm);
+
+import ConfirmCompany from "./components/ConfirmCompany.vue";
+app.component("confirmcompany-component", ConfirmCompany);
+
 import AddressTabComponent from "./components/AddressTab.vue";
 app.component("address-component", AddressTabComponent);
 

@@ -21,7 +21,8 @@
             </v-col>
             <v-col md="2">
                 <v-select v-model="education.passing_year" :name="'passing_year_' + index"
-                :items="getPassingYearOptions(education.starting_year)"  label="Passing Year" required :rules="[v => !!v || 'Passing Year is required']"
+                :items="getPassingYearOptions(education.starting_year)"  label="Passing Year" required :rules="[v => !!v || 'Passing Year is required',
+                                             v => !v || v <= currentYear || 'Passing Year cannot be greater than current year']"
                     variant="outlined"></v-select>
             </v-col>
             <v-col v-if="index > 0" md="2">
@@ -44,8 +45,9 @@ export default {
         const store = useMyStore();
         const educationDetails = ref(store.educationDetails ?? []);
         const educationTypes = ref(['High School', 'College', 'University']);
-      
+       
         const currentYear = new Date().getFullYear(); 
+        const maxPassingYear = currentYear;
 const startYear = 1970; 
 const endYear = 2030; 
 const yearOptions = ref(Array.from({length: endYear - startYear + 1}, (_, i) => startYear + i));
@@ -83,6 +85,7 @@ const removeEducationEntry = async (index) => {
     const educationId = education.id;
     if (!education.education_type && !education.school_university && !education.starting_year && !education.passing_year) {
         console.warn('Cannot remove empty education entry');
+        store.removeEducationEntry(index);
         return;
     }
     try {
@@ -117,7 +120,7 @@ const availableEducationTypes = computed(() => {
             removeEducationEntry,
             availableEducationTypes,
             educationDetails,
-            yearOptions,
+            yearOptions,maxPassingYear,
             addEducationEntry,currentYear,getPassingYearOptions
         };
     },

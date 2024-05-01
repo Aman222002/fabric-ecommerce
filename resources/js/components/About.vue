@@ -61,7 +61,7 @@
                 <v-progress-linear color="deep-purple" height="4" indeterminate>
                 </v-progress-linear>
               </template>
-              <v-img cover :src="`http://127.0.0.1:8000/assest/${recentNews.img}`">
+              <v-img cover :src="`assest/${recentNews.img}`">
               </v-img>
               <v-card-item>
                 <v-card-title>{{ recentNews.title }}</v-card-title>

@@ -98,32 +98,32 @@ class ResumeController extends Controller
             // }
             $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
 
-$alteredSkills = [];
-foreach ($skills as $skill) {
-   
-    $existingSkill = Skill::find($skill);
-    if ($existingSkill) {
-        $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
-    } 
-}
-if (count($alteredSkills)) {
-    UserSkill::upsert(
-        $alteredSkills,
-        ['user_id', 'skill_id'],
-        ['skill_id']
-    );
-}
+            $alteredSkills = [];
+            foreach ($skills as $skill) {
+
+                $existingSkill = Skill::find($skill);
+                if ($existingSkill) {
+                    $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
+                }
+            }
+            if (count($alteredSkills)) {
+                UserSkill::upsert(
+                    $alteredSkills,
+                    ['user_id', 'skill_id'],
+                    ['skill_id']
+                );
+            }
 
 
-$existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
-$skillsToDelete = array_diff($existingSkills, $skills);
+            $existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
+            $skillsToDelete = array_diff($existingSkills, $skills);
 
-// if (!empty($skillsToDelete)) {
-//     UserSkill::where('user_id', $user->id)
-//         ->whereIn('skill_id', $skillsToDelete)
-//         ->delete();
-// }
-UserProfile::updateOrInsert(
+            // if (!empty($skillsToDelete)) {
+            //     UserSkill::where('user_id', $user->id)
+            //         ->whereIn('skill_id', $skillsToDelete)
+            //         ->delete();
+            // }
+            UserProfile::updateOrInsert(
                 ['user_id' => $user->id],
                 [
                     'hobbies' => $request->userProfile['hobbies'],
@@ -147,11 +147,9 @@ UserProfile::updateOrInsert(
             // }
             if (is_array($request->educationDetails) && count($request->educationDetails) > 0 && is_array($request->educationDetails[0])) {
                 $qualificationData = [];
-                
                 // Store user_id in a variable
                 $userId = $user->id;
-            
-                $data = array_map(function($educationDetail) use ($userId){
+                $data = array_map(function ($educationDetail) use ($userId) {
                     return [
                         'user_id' => $userId,
                         'education_type' => $educationDetail['education_type'],
@@ -161,13 +159,11 @@ UserProfile::updateOrInsert(
                         'school_university' => $educationDetail['school_university']
                     ];
                 }, $request->educationDetails);
-               
                 Qualification::upsert(
                     $data,
                     ['user_id', 'education_type'],
                 );
             }
-            
             if (is_array($request->experience) && count($request->experience) > 0 && is_array($request->experience[0])) {
                 $experienceData = [];
                 foreach ($request->experience as $experiences) {
@@ -180,19 +176,27 @@ UserProfile::updateOrInsert(
                     }
                     $experienceData[] = $experiences;
                 }
-                // 'company_name' => $experiences['company_name'],
-                Log::info('data' . json_encode($experiences['company_name']));
-                UserExperience::upsert(
-                    $experienceData,
-                    [
-                        'user_id' => $user->id,
-                        'company_name' => $experiences['company_name'],
-                    ],
-                    ['company_name', 'position', 'description', 'start_date', 'end_date']
-                );
-                // dd($experienceData);
+                foreach ($experienceData as $experience) {
+                    $user_id = $user->id;
+                    Log::debug('Experience data:', $experience);
+                    UserExperience::where('user_id', $user_id)
+                        ->whereNull('company_name')
+                        ->delete();
+                    $result =  UserExperience::updateOrCreate(
+                        [
+                            'user_id' => $user->id,
+                            'company_name' => $experience['company_name'],
+                        ],
+                        [
+                            'position' => $experience['position'],
+                            'description' => $experience['description'],
+                            'start_date' => $experience['start_date'],
+                            'end_date' => $experience['end_date'],
+                            'currently_working' => $experience['currently_working'] ?? false
+                        ]
+                    );
+                }
             }
-
             if (is_array($request->achievements) && count($request->achievements) > 0 && is_array($request->achievements[0])) {
                 $achievementData = [];
                 foreach ($request->achievements as $achievement) {
@@ -207,15 +211,21 @@ UserProfile::updateOrInsert(
                     }
                     $achievementData[] = $achievement;
                 }
+                foreach ($achievementData as $achievement) {
 
-                UserAchievement::upsert(
-                    $achievementData,
-                    [
-                        'user_id' => $user->id,
-                        'certification_name' => $achievement['certification_name'],
-                    ],
-                    ['certification_name', 'company_name', 'certificate_number', 'expiry_date', 'certificate_file_path']
-                );
+                    $user_id = $user->id;
+                    UserAchievement::where('user_id', $user_id)
+                        ->whereNull('company_name')
+                        ->delete();
+                    UserAchievement::upsert(
+                        $achievementData,
+                        [
+                            'user_id' => $user->id,
+                            'certification_name' => $achievement['certification_name'],
+                        ],
+                        ['certification_name', 'company_name', 'certificate_number', 'expiry_date', 'certificate_file_path']
+                    );
+                }
             }
             $userSkill = UserSkill::where('user_id', $user->id)->get()->pluck('skill_id');
 

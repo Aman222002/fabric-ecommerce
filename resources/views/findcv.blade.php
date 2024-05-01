@@ -3,4 +3,3 @@
 @section('content')
 <Findcv-component></Findcv-component>
 @endsection
-
