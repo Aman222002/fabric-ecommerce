@@ -130,6 +130,15 @@ Route::get('/contact', function () {
 Route::get('/company-dashboard', function () {
     return view('companydashboard');
 });
+
+
+Route::get('/confirm/user', function () {
+    return view('confirm');
+});
+
+Route::get('/confirm/company', function () {
+    return view('confirmcompany');
+});
 // Route::get('/viewjob{}', function () {
 //     return view('viewjob');
 // });
@@ -287,5 +296,10 @@ Route::get('/dashboard/total-expiredjobs', [CompanyController::class, 'totalExpi
 Route::get('/posts/about-to-expire', [CompanyController::class, 'getPostsAboutToExpire']);
 Route::delete('/destroy/{id}', [LoginController::class, 'destroy']);
 // Route::get('/fetch-users/{type?}', [CompanyController::class, 'fetchusers']);
-Route::get('/verify/{token}', 'RegistrationController@verify')->name('verify');
+Route::get('/verify/{token}', [RegistrationController::class,'verify']);
 Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
+ Route::get('/verify/company/{token}', [CompanyController::class,'verifyuser']);
+
+ Route::post('/webhook/invoice', [WebhookController::class, 'invoiceHandler']);
+ Route::get('/fetch-user-data', [LoginController::class, 'fetchUserData']);
+ Route::get('/work-experiences', [LoginController::class, 'index2']);

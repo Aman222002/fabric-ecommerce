@@ -18,6 +18,7 @@ const expItem = {
     description: "",
     start_date: null,
     end_date: null,
+    currently_working: false
 };
 
 const achievementItem = {
@@ -113,21 +114,31 @@ export const useMyStore = defineStore("myStore", {
         },
         addWorkExperience() {
             this.experience.push(expItem);
+            this.updateIsExperience();
         },
 
         removeWorkExperience(index) {
             if (this.experience.length > 1) {
                 this.experience.splice(index, 1);
+                this.updateIsExperience();
             }
         },
         AddAchievement() {
             this.achievements.push(achievementItem);
+            this.updateIsExperience();
         },
         removeAchievement(index) {
             if (this.achievements.length > 1) {
                 this.achievements.splice(index, 1);
+                this.updateIsExperience();
             }
         },
+        updateIsExperience() {
+            this.isExperience = !!(
+              this.experience.length ||
+              this.achievements.length
+            );
+          },
         addSkill(selectedSkill) {
             if (
                 selectedSkill &&
@@ -496,7 +507,10 @@ export const useWorkExperienceStore = defineStore({
                 description: "",
                 start_date: null,
                 expiry_date: null,
+                currently_working: false
+
             });
+            
         },
         removeWorkExperience(index) {
             if (this.experience.length > 1) {

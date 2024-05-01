@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title> Buy Subscription Confirmation</title>
+    <title> Verification Mail</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
@@ -37,9 +37,9 @@
 
                 <div>
                     <p style="margin:17px 0px 10px 0px;">
-                      <span
+                        Hi <span
                             style="margin:17px 0px 10px 0px;font-size: 16px;font-weight: bold;color: #000;text-transform: capitalize">
-                            Dear Customer
+                            {{ $user->name }},
                         </span>
 
                     </p>
@@ -50,7 +50,8 @@
                                 line-height: 24px;
                                 text-align:left;
                               ">
-                       Please click the link below to open the Buy Subscription:
+                        We would like to confirm that your account has been registered successfully. Click on the button
+                        below to verify your account .
 
                 </div>
                 <div
@@ -62,8 +63,8 @@
                               padding:9px 0;
 
                               border-radius: 20px;">
-                    <a href="{{$url}}"
-                        style="text-decoration:none;color:#FFF;"> Click Here </a>
+                    <a href="{{ url('/verify/company/' . $verificationToken) }}"
+                        style="text-decoration:none;color:#FFF;"> Verify your account </a>
                 </div>
                 <div>
                     <p style="margin: 18px 0px 8px 0; font-size: 16px; color:#000">
@@ -74,11 +75,6 @@
 
                     </h3>
                 </div>
-                <div style="margin-top: 30px;">
-        <p style="font-size: 14px; font-family: Roboto, Helvetica, Arial, sans-serif; color: #000; line-height: 24px; text-align:left;">
-            Don't miss out on our exclusive subscription benefits! Gain access to premium content, special offers, and much more.
-        </p>
-    </div>
             </div>
 
         </div>

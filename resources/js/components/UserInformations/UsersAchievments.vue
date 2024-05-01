@@ -74,19 +74,15 @@ export default {
         certificate_file: null 
     });
 };
-
-
         return {
             removeAchievement,
             achievements,
             dateClicked,
             addAchievement
-
         };
     },
 };
 </script>
-
 <style scoped>
 /* Add your custom styles here if needed */
 </style>

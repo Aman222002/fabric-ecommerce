@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\log;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserExperience;
+use App\Models\UserAchievement;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -18,38 +20,42 @@ class LoginController extends Controller
     {
         return view('login');
     }
-    public function  check(Request $request)
+    public function check(Request $request)
     {
-
-        $credential = $request->validate([
+        $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-        try {
-            if (Auth::attempt($credential)) {
-                $user = Auth::user();
-                if ($user) {
-                    $user->getRoleNames();         
-                    return response()->json(['status' => true, 'data' => $user]);
-                } else {
-                    $response = [
-                        'status' => false,
-                        'message' => 'No data found',
-                    ];
-                    return response()->json($response, 404);
-                }
-            } else {
-                $response = [
-                    'status' => false,
-                    'message' => 'Invalid Credentials',
-                ];
-                return response()->json($response, 500);
+    
+        // Attempt to authenticate the user
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+    
+            if ($user->hasRole('Admin')) {
+               
+                $user->getRoleNames(); 
+                return response()->json(['status' => true, 'data' => $user]);
             }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    
+            if ($user->email_verified_at !== null) {
+                $user->getRoleNames(); 
+                return response()->json(['status' => true, 'data' => $user]);
+            } else {
+             
+                Auth::logout();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email not verified. Please verify your email before logging in.'
+                ], 403);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid Credentials',
+            ], 500);
         }
     }
+    
     public function getUser()
     {
         try {
@@ -117,4 +123,29 @@ class LoginController extends Controller
             return response()->json(['error' => 'Failed to fetch user skills.'], 500);
         }
     }
+    public function fetchUserData()
+    {
+        $workExperienceExists = UserExperience::where('user_id', auth()->id())
+            ->whereNotNull('company_name')
+            ->exists();
+    
+        $userAchievementsExists = UserAchievement::where('user_id', auth()->id())->exists();
+    
+        return response()->json([
+            'workExperienceExists' => $workExperienceExists,
+            'userAchievementsExists' => $userAchievementsExists,
+        ]);
+    }
+    public function index2()
+    {
+       
+        $userId = auth()->id();
+    
+        
+        $experiences = UserExperience::where('user_id', $userId)->get();
+    
+      
+        return response()->json($experiences);
+    }
+    
 }

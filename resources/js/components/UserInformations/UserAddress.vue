@@ -43,7 +43,7 @@
                         item-title="name" item-value="isoCode" label="state" clearable searchable
                         placeholder="Select State"></v-select> -->
                           <v-text-field v-model="address.zip_code"
-                        :rules="[v => !!v || 'Zip Code is required', v => /^[0-9]{6}$/.test(v) || 'Invalid Zip Code (must be 6 digits and numeric)']"
+                        :rules="[v => !!v || 'Zip Code is required']"
                         name="Zip_code" label="Zip Code" variant="outlined">
                     </v-text-field>
                 </v-col>

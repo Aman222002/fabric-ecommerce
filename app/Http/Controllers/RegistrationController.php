@@ -44,20 +44,17 @@ class RegistrationController extends Controller
     }
     public function verify($token)
 {
-    dd($token);
     $user = User::where('verification_token', $token)->first();
-
     if (!$user) {
         return response()->json([
             'status' => false,
             'message' => 'Invalid verification token',
         ], 400);
     }
-
     $user->email_verified_at = now();
     $user->verification_token = null;
     $user->save();
-
+    return redirect('/confirm/user')->with('success', 'Email verified successfully. Please log in.');
     return response()->json([
         'status' => true,
         'message' => 'Email verified successfully',

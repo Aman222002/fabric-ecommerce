@@ -222,18 +222,15 @@ export default {
           subscription_status.value = response.data.data[0].subscription_status;
 
           upgrade_status.value = response.data.data[0].upgrade_status;
+          console.log(upgrade_status.value);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     };
-
     const handleUpgradeStatusChange = () => {
-      if (upgrade_status.value === "initiated") {
-        disabledButton.value = true;
-      } else {
-        disabledButton.value = false;
-      }
+     console.log("Upgrade status:", upgrade_status.value);
+      disabledButton.value = upgrade_status.value === "initiated";
     };
     const buyPlan = (id) => {
       const formData = new FormData();
@@ -252,7 +249,7 @@ export default {
           }
           changePlanModal.value = false;
           changingPlan.value = true;
-          window.location.reload();
+           window.location.reload();
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -297,6 +294,7 @@ export default {
         console.log(error);
       }
     };
+ 
     onMounted(async () => {
       await getPlan();
       await getUser();
@@ -323,7 +321,7 @@ export default {
       getUser,
       upgrade_status,
       disabledButton,
-      handleUpgradeStatusChange,
+    
       subscription_status,
       plan_id,
     };

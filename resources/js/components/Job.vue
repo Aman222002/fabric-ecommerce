@@ -298,7 +298,7 @@ export default {
           timer: 2000,
           showConfirmButton: false,
           icon: "error",
-          title: "User not found",
+          title: "Verify Your Mail",
         });
       }
     };
