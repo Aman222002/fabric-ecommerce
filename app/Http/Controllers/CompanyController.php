@@ -258,8 +258,9 @@ class CompanyController extends Controller
                     'company_id' => $request->company_Id,
                     'verification_token' => $verificationToken,
                 ]);
+                CompanyVerify::dispatch($user, $verificationToken);
                 $user->assignRole('Company Subadmin');
-            
+              
             } else {
                 $user = User::create([
                     'name' => $input['name'],

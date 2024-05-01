@@ -21,18 +21,20 @@
 
 <body>
 
-    <div class="resume_1" style="color: #444;border: solid #666;border-width: 8px 0 2px 0;margin: 30px auto;border-top-left-radius: 15px;border-top-right-radius: 15px;">
+    <div class="resume_1" style="color: #444;border: solid #666;border-width: 0px 0 0px 0;margin: 30px auto;border-top-left-radius: 15px;border-top-right-radius: 15px;">
         <table style="width: 100%;text-align: center;font-family: Biryani;">
             <tbody>
                 <tr>
                     <td colspan="2">
-                        <h1 style="margin: 0; margin: 15px; font-family:  Biryani;">{{ $userdata['name'] }}</h1>
+                        <h1 style="margin: 0; margin: 15px; font-family:  Biryani;    text-transform: capitalize;
+">{{ $userdata['name'] }}</h1>
 
                     </td>
                 </tr>
                 <tr>
-                    <td>{{ $userdata['email'] }}</td>
-                    <td>{{ $userdata['phone'] }}</td>
+                    <td  style="width: 50%;text-align: right;padding-right: 10px;     text-transform: capitalize;
+">{{ $userdata['email'] }}</td>
+                    <td style="width: 50%;text-align: left;padding-left: 10px;text-transform: capitalize;">{{ $userdata['phone'] }}</td>
                 </tr>
             </tbody>
         </table>
@@ -52,25 +54,29 @@
         @endforeach
 
         @if ($hasExperience)
-        <div style="border-top: 2px solid;margin-top: 25px;">
-            <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+        <div style="margin-top: 25px;">
+        <table style="border-bottom: 2px solid;width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
                 <thead>
                     <tr>
                         <th>
-                            <h2 style="margin: 0;margin-top: 10px; font-family: Biryani; text-align: left;">
+                            <h2 style="margin: 0;margin-top: 10px; font-family: Biryani; text-align: cnater;    text-transform: capitalize;
+">
                                 Experience
                             </h2>
                         </th>
                     </tr>
                 </thead>
+           </table>
+            <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+
                 @foreach ($userdata['experience'] as $exp)
                 @if ($exp['company_name'] !== null && $exp['company_name'] !== "null")
                 <tbody>
                     <tr>
                         <td style="width: 70%;">
-                            <h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
+                            <h3 style="margin: 0;text-transform: capitalize;">{{ $exp['company_name'] }}</h3>
                         </td>
-                        <td style="width: 30%; text-align: right;">
+                        <td style="width: 30%; text-align: right;text-transform: capitalize;">
                             @if ($exp['end_date'] !== null)
                             <strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
                             @else
@@ -79,10 +85,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>{{ $exp['position'] }} </td>
+                        <td style="text-transform: capitalize;">{{ $exp['position'] }} </td>
                     </tr>
                     <tr>
-                        <td>{{ $exp['description'] }}</td>
+                        <td style="text-transform: capitalize;">{{ $exp['description'] }}</td>
                     </tr>
                 </tbody>
                 @endif
@@ -95,31 +101,33 @@
 
 
 
-        <div style="border-top: 2px solid;margin-top: 25px;">
-
-            <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+        <div style="margin-top: 25px;">
+        <table style="border-bottom: 2px solid;width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
                 <thead>
                     <tr>
                         <th>
-                            <h2 style="margin: 0; margin-top: 10px; font-family:  Biryani; text-align: left;">
-                                Education (Qualifications)
+                            <h2 style="margin: 0;margin-top: 10px; font-family: Biryani; text-align: center;    text-transform: capitalize;
+">
+                            Education (Qualifications)
                             </h2>
                         </th>
                     </tr>
                 </thead>
+           </table>
+            <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
                 @foreach ($userdata['qualifications'] as $qualification)
                 <tbody>
                     <tr>
                         <td style="width: 70%;">
-                            <h3 style="margin: 0;">{{ $qualification['school_university'] }}</h3>
+                            <h3 style="margin: 0;text-transform: capitalize;">{{ $qualification['school_university'] }}</h3>
                         </td>
-                        <td style="width: 30%; text-align: right;"><strong>{{ $qualification['passing_year'] }}</strong></td>
+                        <td style="width: 30%; text-align: right;text-transform: capitalize;"><strong>{{ $qualification['passing_year'] }}</strong></td>
                     </tr>
                     <!-- <tr>
 						<td>{{ $qualification['school_university'] }}</td>
 					</tr> -->
                     <tr>
-                        <td>{{ $qualification['education_type'] }}</td>
+                        <td style="text-transform: capitalize;">{{ $qualification['education_type'] }}</td>
                     </tr>
                 </tbody>
                 @endforeach
@@ -139,17 +147,20 @@
         @endforeach
 
         @if ($hasAchievements)
-        <div style="border-top: 2px solid;margin-top: 25px;">
-            <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+        <div style="margin-top: 25px;">
+        <table style="border-bottom: 2px solid;width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
                 <thead>
                     <tr>
                         <th>
-                            <h2 style="margin: 0;margin-top: 10px; font-family: Biryani; text-align: left;">
-                                Achievements
+                            <h2 style="margin: 0;margin-top: 10px; font-family: Biryani; text-align: center;    text-transform: capitalize;
+">
+                            Achievements
                             </h2>
                         </th>
                     </tr>
                 </thead>
+           </table>
+            <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
                 <tbody>
                     @foreach ($userdata['achievements'] as $achievement)
                     @if ($achievement['company_name'] !== null && $achievement['company_name'] !== "null")

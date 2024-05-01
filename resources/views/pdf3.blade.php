@@ -17,7 +17,7 @@
 
 <body>
 
-	<div class="resume_1" style="color: #444;margin: 30px auto;">
+	<div class="resume_1" style="color: #444;margin: 0px auto;">
 		<!-- left side -->
 		<div style="width: 30%;height: 100%;float: left;background-color: #006666;color: #fff;">
 			<!-- Candidates Image  -->
