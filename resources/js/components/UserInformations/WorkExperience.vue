@@ -154,7 +154,7 @@ export default {
   <template>
   <div>
     <v-card-title class="text-left"> Work Experience </v-card-title>
-    <v-row v-for="(experiences, index) in experience" :key="index">
+    <v-row class="achiev_work_exp" v-for="(experiences, index) in experience" :key="index">
       <v-col cols="12" v-if="index === 0">
         <v-checkbox
           v-model="experience[index].currently_working"
@@ -218,19 +218,21 @@ export default {
           :rules="index === 0 ? [] : [(v) => !!v || 'description  is required']"
         ></v-textarea>
       </v-col>
-      <v-col md="2">
-        <v-btn
-          @click="removeWorkExperience(index)"
-          color="red"
-          class="custom-button"
-          >Remove</v-btn
-        >
-      </v-col>
-      <v-col cols="12" class="flex-end" md="2" v-if="index == 0">
-        <v-btn @click="addWorkExperience" color="blue" class="custom-button"
-          >Add More</v-btn
-        >
-      </v-col>
+      <div class="button_plus_delete">
+        <span  md="2">
+          <v-btn
+            @click="removeWorkExperience(index)"
+            color="red"
+            class="custom-button"
+            ><v-icon>mdi-trash-can-outline </v-icon></v-btn
+          >
+        </span>
+        <span cols="12" class="flex-end" md="2" v-if="index == 0">
+          <v-btn @click="addWorkExperience" color="blue" class="custom-button">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </span>
+      </div>
     </v-row>
   </div>
 </template>
