@@ -242,12 +242,15 @@ export default {
             .then((response) => {
               console.log(response);
               if (response.data.status == true) {
-                window.Swal.fire({
-                  icon: "success",
-                  title: "Company Registered",
-                  text: "Your company has been successfully registered!",
-                  confirmButtonText: "OK",
-                });
+                
+        window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Please Verify Your Mail',
+            });
                 window.location.href = "/job";
               }
             })

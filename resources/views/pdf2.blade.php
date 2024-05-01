@@ -71,12 +71,12 @@
     @endforeach
 
     @if ($hasExperience)
-        <div style="border-top: 2px solid; margin-top: 25px; text-transform: capitalize;">
+        <div style="border-top: 2px solid; margin-top: 25px;">
             <table style="width: 90%; text-align: left; margin: 0 auto; font-family: Biryani;">
                 <thead>
                     <tr>
                         <th>
-                            <h2 style="margin: 0; margin-top: 10px; font-family: Biryani; text-align: left;text-transform: uppercase;font-size:25px;">
+                            <h2 style="margin: 0; margin-top: 10px; font-family: Biryani; text-align: left;">
                                 Experience
                             </h2>
                         </th>
@@ -87,9 +87,9 @@
                         <tbody>
                             <tr>
                                 <td style="width: 60%;">
-                                    <h3 style="margin: 0; text-transform: capitalize;">{{ $exp['company_name'] }}</h3>
+                                    <h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
                                 </td>
-                                <td style="width: 40%; text-align: right; text-transform: capitalize;">
+                                <td style="width: 40%; text-align: right;">
                                     @if ($exp['end_date'] !== null)
                                         <strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
                                     @else
@@ -110,8 +110,6 @@
         </div>
     @endif
 @endif
-
-
 			<!-- Education(Qualifications) -->
 			<div style="border-top: 2px solid;margin-top: 25px;">
 

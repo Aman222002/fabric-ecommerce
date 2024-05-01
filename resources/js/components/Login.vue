@@ -145,14 +145,17 @@ export default {
         }
       } catch (error) {
         console.error(error);
-        // window.Swal.fire({
-        //       toast: true,
-        //       position: 'top-end',
-        //       timer: 2000,
-        //       showConfirmButton: false,
-        //       icon: 'error',
-        //       title: 'Invalid Credential',
-        //     });
+        if (error.response && error.response.status === 403) {
+      window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: 'Please Verify Your Mail',
+            });
+    }
+       
       }
     };
     const signup = async () => {

@@ -18,12 +18,14 @@ use App\Models\Plan;
 use App\Models\Permissionaccess;
 use App\Models\UserSubscription;
 use App\Http\Requests\CompanyRagistrationRequest;
+use App\Jobs\CompanyVerify;
 use App\Jobs\SendEmailJob;
 use App\Jobs\VerificationMail;
 use App\Jobs\PaymentJob;
 use App\Models\Invitation;
 use Carbon\Carbon;
-
+use Illuminate\Support\Str;
+use App\Jobs\SendVerificationEmail;
 use function PHPSTORM_META\map;
 
 class CompanyController extends Controller
@@ -86,6 +88,7 @@ class CompanyController extends Controller
      */
     public function buyplan(Request $request)
     {
+       
         try {
             $input = $request->all();
             if (!($request->input('user_name'))) {
@@ -108,10 +111,13 @@ class CompanyController extends Controller
                         "metadata" => ['user_id' => strval($user->id)],
                         "links" => ["mandate" => $user->mandate_id]
                     ];
+                    
                     if ($selected_plan->price > $user_plan->price) {
                         $user_subscription = UserSubscription::where('user_id', $user->id)->first();
+                       
                         $this->gocardlessService->createSubscription($data);
                         $user->update(['upgrade_plan_id' => $input['id'], 'upgrade_status' => 'initiated']);
+                       
                         return response()->json([
                             'status' => true,
                             'message' => "Subscription Will be added within 4-5 days in your account"
@@ -239,6 +245,7 @@ class CompanyController extends Controller
     {
         try {
             $input = $request->all();
+            $verificationToken = Str::random(60);
             $existingUser = User::where('email', $input['email'])->first();
             if ($existingUser) {
                 $user = $existingUser;
@@ -249,14 +256,17 @@ class CompanyController extends Controller
                     'password' => $input['password'],
                     'phone' => $input['phone'],
                     'company_id' => $request->company_Id,
+                    'verification_token' => $verificationToken,
                 ]);
                 $user->assignRole('Company Subadmin');
+            
             } else {
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
                     'phone' => $input['phone'],
+                    'verification_token' => $verificationToken,
                 ]);
                 $user->assignRole('Company Admin');
             }
@@ -287,7 +297,8 @@ class CompanyController extends Controller
                     'phone_number' => $input['phone_number'],
                     'logo' => $imageName,
                 ]);
-                dispatch(new VerificationMail($user->email));
+                // dispatch(new VerificationMail($user->email));
+                CompanyVerify::dispatch($user, $verificationToken);
             }
 
             return response()->json([
@@ -555,6 +566,12 @@ class CompanyController extends Controller
                 'password' => $credentials['password'],
             ])) {
                 $user = Auth::user();
+                if ($user->email_verified_at === null) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Email not verified. Please verify your email before logging in.'
+                    ], 403);
+                }
                 if ($user->roles->contains('name', 'Company Subadmin')) {
                     session(['company_id' => $user->company_id]);
                     $companyData = Company::where('id', $user->company_id)->first();
@@ -598,8 +615,6 @@ class CompanyController extends Controller
             ], 500);
         }
     }
-
-
     public function logout()
     {
         Auth::logout();
@@ -1083,4 +1098,23 @@ class CompanyController extends Controller
     //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     //     }
     // }
+
+    public function verifyuser($token)
+    {
+        $user = User::where('verification_token', $token)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid verification token',
+            ], 400);
+        }
+        $user->email_verified_at = now();
+        $user->verification_token = null;
+        $user->save();
+        return redirect('/confirm/company')->with('success', 'Email verified successfully. Please log in.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Email verified successfully',
+        ]);
+    }
 }

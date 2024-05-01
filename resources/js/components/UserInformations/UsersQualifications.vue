@@ -12,7 +12,7 @@
           label="Education Type"
         ></v-select>
       </v-col>
-      <v-col md="4">
+      <v-col md="3">
         <v-text-field
           v-model="education.school_university"
           :name="'school_university_' + index"
@@ -38,21 +38,27 @@
           :items="getPassingYearOptions(education.starting_year)"
           label="Passing Year"
           required
-          :rules="[(v) => !!v || 'Passing Year is required']"
+          :rules="[
+            (v) => !!v || 'Passing Year is required',
+            (v) =>
+              !v ||
+              v <= currentYear ||
+              'Passing Year cannot be greater than current year',
+          ]"
           variant="outlined"
         ></v-select>
       </v-col>
-      <v-col v-if="index > 0" md="1">
+      <v-col v-if="index > 0" md="2">
         <v-btn
           @click="removeEducationEntry(index)"
           color="red"
           class="custom-button"
-          ><v-icon>mdi-trash-can-outline </v-icon></v-btn
+          >Remove</v-btn
         >
       </v-col>
-      <v-col md="1" v-else>
-        <v-btn @click="addEducationEntry" color="blue" class="custom-button">
-          <v-icon>mdi-plus</v-icon></v-btn
+      <v-col md="2" v-else>
+        <v-btn @click="addEducationEntry" color="blue" class="custom-button"
+          >Add More</v-btn
         >
       </v-col>
     </v-row>
@@ -69,6 +75,26 @@ export default {
     const store = useMyStore();
     const educationDetails = ref(store.educationDetails ?? []);
     const educationTypes = ref(["High School", "College", "University"]);
+
+    const maxPassingYear = currentYear;
+
+    // const removeEducationEntry = async (index) => {
+    //     console.log('Before removal - educationDetails:', educationDetails.value);
+    //     console.log('Removing index:', index);
+    //     const education = educationDetails.value[index];
+    //     const educationId = education.id;
+    //     if (!education.education_type && !education.school_university && !education.starting_year && !education.passing_year) {
+    //         console.warn('Cannot remove empty education entry');
+    //         store.removeEducationEntry(index);
+    //         return;
+    //     }
+    //     try {
+    //         store.removeEducationEntry(educationId);
+    //         const updatedEducationDetails = [
+    //             ...educationDetails.value.slice(0, index),
+    //             ...educationDetails.value.slice(index + 1)
+    //         ];
+    //         educationDetails.value = updatedEducationDetails;
 
     const currentYear = new Date().getFullYear();
     const startYear = 1970;
@@ -113,6 +139,7 @@ export default {
         !education.passing_year
       ) {
         console.warn("Cannot remove empty education entry");
+        store.removeEducationEntry(index);
         return;
       }
       try {
@@ -159,6 +186,7 @@ export default {
       availableEducationTypes,
       educationDetails,
       yearOptions,
+      maxPassingYear,
       addEducationEntry,
       currentYear,
       getPassingYearOptions,

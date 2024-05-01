@@ -169,4 +169,26 @@ class WebhookController extends Controller
             return response()->json(['error' => 'Invalid signature'], 498);
         }
     }
+    public function invoiceHandler(Request $request)
+    {
+        $webhookEndpointSecret = config('services.gocardless.webhook_secret');
+        $requestBody = @file_get_contents('php://input');
+        $signatureHeader = $request->header('Webhook-Signature');
+        $data = json_decode($requestBody);
+
+        try {
+            $events = Webhook::parse($requestBody, $signatureHeader, $webhookEndpointSecret);
+
+            foreach ($data->events as $event) {
+                if ($event->resource_type === 'invoices') {
+                   
+                    Log::info('Invoice received: ' . print_r($event, true));
+                }
+            }
+
+            return response()->json(['message' => 'Invoice webhook received and processed successfully', 'data' => $data], 200);
+        } catch (\GoCardlessPro\Core\Exception\InvalidSignatureException $e) {
+            return response()->json(['error' => 'Invalid signature'], 498);
+        }
+    }
 }
