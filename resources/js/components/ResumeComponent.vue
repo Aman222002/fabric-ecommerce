@@ -5,9 +5,11 @@
         <h1 style="margin-top: 30px">Fill your Personal Details</h1>
       </div>
       <div>
-        <v-stepper v-model="e1">
+        <v-stepper v-model="e1" style="position: relative">
           <template v-slot:default="{ prev }">
-            <v-stepper-header>
+            <v-stepper-header
+              style="position: sticky; top: 0; background-color: white"
+            >
               <template
                 v-for="currentStep in steps"
                 :key="`${currentStep}-step`"
@@ -52,10 +54,25 @@
                       </div>
                     </template>
                     <template v-if="currentStep === 3">
-                      <div style="display: flex;">
-                        <v-checkbox label="Fresher" @change="onFresherCheckboxChange" ></v-checkbox>
-                        <v-checkbox label="Experience" @change=" onExperienceCheckboxChange" ></v-checkbox></div>
-                      <div class="flex-container-1" v-if="isExperience">
+                      <div style="display: flex">
+                        <v-checkbox
+                          label="Fresher"
+                          @change="onFresherCheckboxChange"
+                        ></v-checkbox>
+                        <v-checkbox
+                          label="Experience"
+                          @change="onExperienceCheckboxChange"
+                        ></v-checkbox>
+                      </div>
+                      <div
+                        class="flex-container-1"
+                        v-if="isExperience"
+                        style="
+                          position: relative;
+                          height: 100vh;
+                          overflow-y: auto;
+                        "
+                      >
                         <work-experience></work-experience>
                         <users-achievments></users-achievments>
                       </div>
@@ -72,15 +89,24 @@
                       @click:next="goToNext()"
                       color="#006400"
                     ></v-stepper-actions>
-                    <v-select v-if="currentStep === 4"
+                    <v-select
+                      v-if="currentStep === 4"
                       v-model="selectedTemplate"
-                      :items="['Template1', 'Template2','Template3']"
+                      :items="['Template1', 'Template2', 'Template3']"
                       label="Select Template"
                       density="compact"
                       variant="outlined"
                     ></v-select>
-                    <iframe v-if="selectedTemplate && currentStep ===4" :src="getTemplatePreview(selectedTemplate)" width="400" height="300" frameborder="0"></iframe>
-                    <v-btn v-if="currentStep === 4" @click="downloadcv()">Generate CV</v-btn>
+                    <iframe
+                      v-if="selectedTemplate && currentStep === 4"
+                      :src="getTemplatePreview(selectedTemplate)"
+                      width="400"
+                      height="300"
+                      frameborder="0"
+                    ></iframe>
+                    <v-btn v-if="currentStep === 4" @click="downloadcv()"
+                      >Generate CV</v-btn
+                    >
                   </v-form>
                 </v-card>
               </v-stepper-window-item>
@@ -134,7 +160,7 @@ export default {
       "Work Experience",
       "Hobbies",
     ]);
-    const selectedTemplate = ref('');
+    const selectedTemplate = ref("");
 
     const stepBackgrounds = ref([]);
     const formData = ref({});
@@ -183,7 +209,7 @@ export default {
       return val;
     });
     const downloadcv = () => {
-      if (!selectedTemplate.value) { 
+      if (!selectedTemplate.value) {
         return;
       }
       const url = `/generate-pdf?template=${selectedTemplate.value}`;
@@ -192,12 +218,11 @@ export default {
     const getTemplatePreview = (template) => {
       return `/template-preview/${template}`;
     };
-    const isFresher = ref(true); 
+    const isFresher = ref(true);
     const onFresherCheckboxChange = () => {
-   
       isFresher.value = !isFresher.value;
     };
-    const isExperience = ref(false); 
+    const isExperience = ref(false);
     const onExperienceCheckboxChange = () => {
       isExperience.value = !isExperience.value;
     };
@@ -214,9 +239,13 @@ export default {
       valid,
       circularSteps,
       myForm,
-      downloadcv, 
+      downloadcv,
       selectedTemplate,
-      getTemplatePreview,onFresherCheckboxChange, isFresher,isExperience, onExperienceCheckboxChange
+      getTemplatePreview,
+      onFresherCheckboxChange,
+      isFresher,
+      isExperience,
+      onExperienceCheckboxChange,
     };
   },
   computed: {

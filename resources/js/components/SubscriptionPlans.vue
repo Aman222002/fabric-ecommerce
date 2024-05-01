@@ -1,12 +1,31 @@
 <template>
-  <DxDataGrid id="grid" :show-borders="true" :data-source="dataSource" :repaint-changes-only="true"
-    :column-auto-width="true" :allow-column-resizing="true">
+  <p style="text-align: center; font-size: 30px; margin-top: 20px">
+    Subscription Plans
+  </p>
+  <DxDataGrid
+    id="grid"
+    :show-borders="true"
+    :data-source="dataSource"
+    :repaint-changes-only="true"
+    :column-auto-width="true"
+    :allow-column-resizing="true"
+  >
     <DxEditing :allow-updating="true" :use-icons="true" />
     <DxColumn data-field="Name">
-      <DxPatternRule :pattern="namePattern" message="Name Should be more than 3 character or less than 10" />
+      <DxPatternRule
+        :pattern="namePattern"
+        message="Name Should be more than 3 character or less than 10"
+      />
     </DxColumn>
-    <DxColumn data-field="Duration of Job-Post" :allowEditing="false"></DxColumn>
-    <DxColumn data-field="Number of Job-Post" data-type="integer" :allowEditing="false"></DxColumn>
+    <DxColumn
+      data-field="Duration of Job-Post"
+      :allowEditing="false"
+    ></DxColumn>
+    <DxColumn
+      data-field="Number of Job-Post"
+      data-type="integer"
+      :allowEditing="false"
+    ></DxColumn>
     <DxColumn data-field="Price" :allowEditing="false"></DxColumn>
     <DxColumn type="buttons" caption="Action"></DxColumn>
     <DxMasterDetail :enabled="true" template="masterDetailTemplate" />

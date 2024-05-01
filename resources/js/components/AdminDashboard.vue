@@ -3,17 +3,15 @@
     <div id="cardsDiv">
       <v-row>
         <v-col sm="12" md="6" lg="3" xl="3" cols="12">
-          <v-card class="mx-auto card one_dt" id="Card">
+          <v-card class="mx-auto card dashboard_info one_dt" id="Card">
             <v-card-item>
               <div class="flex-container">
-                <v-icon class="bottomicon3" size="48">mdi-account</v-icon>
+                <v-icon class="bottomicon3" size="60">mdi-account</v-icon>
               </div>
               <div class="cardtop">
-                <h6 class="dashboardh6">Total Users</h6>
-
                 <h1 class="numbering">{{ totalUser }}</h1>
+                <h6 class="dashboardh6">Total Users</h6>
               </div>
-
               <div class="cardbottom">
                 <a href="/admin/users" class="link">View all users</a>
               </div>
@@ -22,21 +20,19 @@
         </v-col>
 
         <v-col sm="12" md="6" lg="3" xl="3" cols="12">
-          <v-card class="mx-auto card two_dt" id="Card">
+          <v-card class="mx-auto card dashboard_info two_dt" id="Card">
             <v-card-item>
               <div class="flex-container">
-                <v-icon class="bottomicon3" size="48"
+                <v-icon class="bottomicon3" size="60"
                   >mdi-office-building</v-icon
                 >
               </div>
               <div class="cardtop">
-                <h6 class="dashboardh6">Total Companies</h6>
-
                 <h1 class="numbering">
                   {{ totalCompany }}
                 </h1>
+                <h6 class="dashboardh6">Total Companies</h6>
               </div>
-
               <div class="cardbottom">
                 <a href="/admin/companies" class="link">View all companies</a>
               </div>
@@ -45,17 +41,15 @@
         </v-col>
 
         <v-col sm="12" md="6" lg="3" xl="3" cols="12">
-          <v-card class="mx-auto card three_dt" id="Card">
+          <v-card class="mx-auto card dashboard_info three_dt" id="Card">
             <v-card-item>
               <div class="flex-container">
-                <v-icon class="bottomicon3" size="48">mdi-purse</v-icon>
+                <v-icon class="bottomicon3" size="60">mdi-purse</v-icon>
               </div>
               <div class="cardtop">
-                <h6 class="dashboardh6">Total Jobs Postings</h6>
-
                 <h1 class="numbering">{{ totalJobs }}</h1>
+                <h6 class="dashboardh6">Total Jobs Postings</h6>
               </div>
-
               <div class="cardbottom">
                 <a href="/admin/jobs" class="link">View all jobs</a>
               </div>
@@ -64,17 +58,15 @@
         </v-col>
 
         <v-col sm="12" md="6" lg="3" xl="3" cols="12">
-          <v-card class="mx-auto card four_dt" id="Card">
+          <v-card class="mx-auto card dashboard_info four_dt" id="Card">
             <v-card-item>
               <div class="flex-container">
-                <v-icon class="bottomicon3" size="48">mdi-post</v-icon>
+                <v-icon class="bottomicon3" size="60">mdi-post</v-icon>
               </div>
               <div class="cardtop">
-                <h6 class="dashboardh6">Total Blogs</h6>
-
                 <h1 class="numbering">{{ totalBlog }}</h1>
+                <h6 class="dashboardh6">Total Blogs</h6>
               </div>
-
               <div class="cardbottom">
                 <a href="/admin/blog/view" class="link">View all Blogs</a>
               </div>
@@ -84,7 +76,7 @@
       </v-row>
     </div>
 
-    <div id="chartDiv">
+    <div id="chartDiv" class="mt-6">
       <div class="graph">
         <DxChart
           id="chart"
@@ -260,14 +252,7 @@ export default {
 .company_dashboard_view div.card:hover .cardtop h6.dashboardh6 {
   color: #fff !important;
 }
-.company_dashboard_view div.card .flex-container i.mdi {
-  color: #1976d2;
-  margin-right: 10px;
-  background-color: #1976d24d;
-  border-radius: 25px;
-  font-size: 27px !important;
-  border-bottom: 10px;
-}
+
 .company_dashboard_view div.card:hover .flex-container i.mdi {
   background-color: #0e0f0f4d;
 }
