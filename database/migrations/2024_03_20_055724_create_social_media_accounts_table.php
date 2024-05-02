@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('social_media_accounts')) {
         Schema::create('social_media_accounts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('company_id')->nullable();
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->string('instagram_url')->nullable();
             $table->timestamps();
         });
+    }
     }
 
     /**

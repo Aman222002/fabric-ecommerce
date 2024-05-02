@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class PartnerSeeder extends Seeder
 {
     /**
@@ -12,7 +12,6 @@ class PartnerSeeder extends Seeder
      */
     public function run(): void
     {
-        //
         $partners = [
             [
                 'partner_name' => 'Mencap',
@@ -40,15 +39,16 @@ class PartnerSeeder extends Seeder
             ],
         ];
 
-        // Insert data into database
+        // Insert or update data in the database
         foreach ($partners as $partner) {
-            DB::table('partners')->insert([
-                'partner_name' => $partner['partner_name'],
-                'partner_logo' => $partner['partner_logo'],
-             
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::table('partners')->updateOrInsert(
+                ['partner_name' => $partner['partner_name']],
+                [
+                    'partner_logo' => $partner['partner_logo'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

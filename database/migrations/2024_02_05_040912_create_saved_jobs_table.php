@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('saved_jobs')) {
         Schema::create('saved_jobs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_id')->nullable();
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
+    }
     }
 
     /**

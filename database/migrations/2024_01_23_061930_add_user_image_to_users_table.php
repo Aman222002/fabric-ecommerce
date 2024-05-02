@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('user_image')->nullable();
+            if (!Schema::hasColumn('users', 'user_image')) {
+                $table->string('user_image')->nullable();
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('user_image');
+            if (Schema::hasColumn('users', 'user_image')) {
+                $table->dropColumn('user_image');
+            }
         });
     }
 };

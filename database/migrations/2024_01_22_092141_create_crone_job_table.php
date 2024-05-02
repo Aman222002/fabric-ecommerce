@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('crone_job')) {
         Schema::create('crone_job', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('queue')->index();
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('available_at');
             $table->unsignedInteger('created_at');
         });
+    }
     }
 
     /**

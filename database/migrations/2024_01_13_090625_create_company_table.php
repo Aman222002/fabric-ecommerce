@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('companies')) {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('company_name');
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
+    }
     }
 
     /**

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('addresses')) {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->string('first_line_address');
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->string('postal_code');
             $table->timestamps();
         });
+    }
     }
 
     /**

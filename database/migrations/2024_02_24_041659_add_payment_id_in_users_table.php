@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('payment_id')->after('subscription_status')->nullable();
+            if (!Schema::hasColumn('users', 'payment_id')) {
+                $table->string('payment_id')->after('subscription_status')->nullable();
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('payment_id');
+            if (Schema::hasColumn('users', 'payment_id')) {
+                $table->dropColumn('payment_id');
+            }
         });
     }
 };

@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('reset_token')->nullable();
+            if (!Schema::hasColumn('users', 'reset_token')) {
+                $table->string('reset_token')->nullable();
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('reset_token');
+            if (Schema::hasColumn('users', 'reset_token')) {
+                $table->dropColumn('reset_token');
+            }
         });
     }
 };

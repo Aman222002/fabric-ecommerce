@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('user_subscription')) {
         Schema::create('user_subscription', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('plan_id')->nullable();
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->datetime('end_date')->nullable();
             $table->timestamps();
         });
+    }
     }
 
     /**

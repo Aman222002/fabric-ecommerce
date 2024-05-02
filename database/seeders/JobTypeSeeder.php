@@ -20,7 +20,7 @@ class JobTypeSeeder extends Seeder
             'Freelencer',
         ];
         foreach ($jobTypes as $type) {
-            JobType::create(['name' => $type]);
+            JobType::updateOrCreate(['name' => $type]);
         }
     }
 }

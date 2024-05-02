@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('user_qualifications')) {
         Schema::create('user_qualifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->tinyInteger('still_pursuing')->default(0);
             $table->timestamps();
         });
+    }
     }
 
     /**

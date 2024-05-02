@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('blog_posts')) {
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->text('content');
             $table->timestamps();
         });
+    }
     }
     /**
      * Reverse the migrations.

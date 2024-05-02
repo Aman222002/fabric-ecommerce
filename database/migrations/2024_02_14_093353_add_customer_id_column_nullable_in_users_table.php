@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('gc_customer_id')->after('password')->nullable();
+            if (!Schema::hasColumn('users', 'gc_customer_id')) {
+                $table->string('gc_customer_id')->after('password')->nullable();
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('gc_customer_id');
+            if (Schema::hasColumn('users', 'gc_customer_id')) {
+                $table->dropColumn('gc_customer_id');
+            }
         });
     }
 };
