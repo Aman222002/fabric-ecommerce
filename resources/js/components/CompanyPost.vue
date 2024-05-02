@@ -10,11 +10,7 @@
         </v-breadcrumbs>
       </div>
     </v-card>
-    <!--
-    <v-row>
-     <v-col cols="12" sm="12" md="12" lg="12" xl="12"></v-col> 
-    </v-row>
-    -->
+  
     <div class="body_page_section">
       <v-container class="w-75">
         <v-row>
@@ -69,9 +65,7 @@
                   lg="1"
                   xl="1"
                 >
-                  <!-- <v-img
-                    src="https://superio-appdir.vercel.app/_next/image?url=%2Fimages%2Fresource%2Fcompany-logo%2F1-2.png&w=64&q=75"
-                  ></v-img -->
+               
                   <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
                 </v-col>
                 <v-col class="pl-0" cols="12" sm="12" md="12" lg="11" xl="11">
@@ -192,14 +186,29 @@ export default {
       }
     };
 
-    //getting Jobs posted by company
+   
+    // const fetchJobs = async () => {
+    //   try {
+    //     const response = await axios.get("/company/post");
+     
+    //     jobs.value = response.data.data;
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // };
+
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
-        // console.log(response.data);
-        jobs.value = response.data.data;
+        if (response.data.data.length === 0) {
+          showAlert.value = true;
+        } else {
+          showAlert.value = false; 
+          jobs.value = response.data.data;
+        }
       } catch (err) {
         console.error(err);
+        showAlert.value = true; // Set showAlert to true on error
       }
     };
     const fetchpost = async () => {

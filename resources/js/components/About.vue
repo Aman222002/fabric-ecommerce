@@ -39,7 +39,7 @@
     </v-container>
     <div class="sec-title text-center your_dream_jobs">
       <h2>Your Dream Jobs Are Waiting</h2>
-      <p>Over 1 million interactions, 50,000 success stories Make yours now.</p>
+     
       <div class="search_and_apply">
         <v-btn size="x-large" class="load_more" to="#" @click="searchJob">Search Job</v-btn>
         <v-btn size="x-large" class="load_more" to="#" @click="searchJob">Apply Job Now</v-btn>

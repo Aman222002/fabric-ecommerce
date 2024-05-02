@@ -22,7 +22,7 @@ class CategorySeeder extends Seeder
             'Project manager',
         ];
         foreach ($categories as $category) {
-            Category::create(['name' => $category]);
+            Category::updateOrCreate(['name' => $category]);
         }
     }
 }
