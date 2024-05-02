@@ -45,7 +45,7 @@ class PartnerSeeder extends Seeder
             DB::table('partners')->insert([
                 'partner_name' => $partner['partner_name'],
                 'partner_logo' => $partner['partner_logo'],
-                // You can add more fields here if needed
+             
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

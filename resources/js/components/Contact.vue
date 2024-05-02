@@ -3,19 +3,12 @@
     <div class="container">
       <div class="heading text-center">
         <h2>Contact <span> Us </span></h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor <br />incididunt ut labore et dolore magna aliqua.
-        </p>
+       
       </div>
       <v-row>
         <v-col sm="12" md="5" lg="5" xl="5" cols="12">
           <v-card class="mx-auto">
             <template v-slot:title> Contact details </template>
-            <!-- <v-card-text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor</v-card-text
-            > -->
           </v-card>
           <div class="content">
             <v-card class="mx-auto" prepend-icon="mdi-cellphone-basic">

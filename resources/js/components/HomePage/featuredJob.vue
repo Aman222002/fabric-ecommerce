@@ -43,7 +43,7 @@
                     >mdi-clock-time-two-outline</v-icon
                   >{{ formatCreatedAt(job.company.created_at) }}
                 </li>
-                <!-- <li><v-icon>mdi-cash</v-icon>{{ job.price }}</li> -->
+             
               </ul>
               <ul class="company_time">
                 <li>{{ job.job_type.name }}</li>
@@ -51,50 +51,9 @@
               </ul>
             </v-card>
 
-            <!-- <a href="#" class="bookmark_fr">
-              <v-icon>mdi-bookmark-outline</v-icon>
-            </a> -->
           </v-card>
         </v-col>
-        <!-- <v-navigation-drawer v-model="detailPanelVisible" location="right" class="single_job_search_page">
-          <v-icon style="margin-left: 20px; margin-top: 30px; "
-            @click="detailPanelVisible = false">mdi-arrow-left-top</v-icon>
-          <v-card style="width: 100%">
-            <div class="compamy_infor">
-              <div class="compamy_infor_left">
-                <v-card-title
-                  ><v-icon>mdi-format-title</v-icon>
-                  <span>{{ detail.title }}</span></v-card-title
-                >
-
-                <v-icon color="black">mdi-domain</v-icon>
-                <span>{{ detail.company_name }}</span>
-                <v-icon color="black">mdi-map-marker</v-icon>
-                <span>{{ detail.location }}</span>
-                <v-icon color="black">mdi-desktop-classic</v-icon>
-                <span>{{ detail.experience }}</span>
-                <v-icon color="black">mdi-human</v-icon>
-                <span>{{ detail.vacancy }}</span>
-              </div>
-              <div class="compamy_infor_btn">
-                <v-btn class="apply_for_job" @click="apply(detail.id)"
-                  >Apply For Job</v-btn
-                >
-                <v-btn class="save_btn" color="white" @click="save(detail.id)">
-                  <v-icon color="black">mdi-bookmark-outline</v-icon></v-btn
-                >
-              </div>
-            </div>
-            <v-row class="compamy_infor_description">
-              <v-col cols="12" sm="12" md="12" lg="8" xl="8">
-                <span style="display: block">{{ detail.description }}</span>
-              </v-col>
-              <v-col cols="auto" sm="12" md="12" lg="4" xl="4">
-              
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-navigation-drawer> -->
+        
         <v-btn size="x-large" class="load_more"  @click="searchJob">
           Load More Listing
         </v-btn>

@@ -2,7 +2,7 @@
   <div class="popular_job_categories">
     <div class="sec-title text-center">
       <h2>Popular Job Categories</h2>
-      <div class="text">2024 jobs live - 293 added today.</div>
+     
     </div>
     <v-container class="w-75 mb-6">
       <v-row align="center" justify="center">
