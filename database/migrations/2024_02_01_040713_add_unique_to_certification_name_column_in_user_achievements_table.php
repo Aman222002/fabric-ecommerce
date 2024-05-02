@@ -24,7 +24,7 @@ return new class extends Migration
     {
 
         Schema::table('userachievements', function (Blueprint $table) {
-            $table->dropUnique(['user_id', 'certification_name']);
+            // $table->dropUnique(['user_id', 'certification_name']);
         });
     }
 };

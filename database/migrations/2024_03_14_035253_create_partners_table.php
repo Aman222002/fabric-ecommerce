@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('partners')) {
         Schema::create('partners', function (Blueprint $table) {
             $table->id();
             $table->string('partner_name')->nullable();
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('partner_status')->nullable();
             $table->timestamps();
         });
+    }
     }
 
     /**

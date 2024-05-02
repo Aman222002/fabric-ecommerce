@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::table('companies', function (Blueprint $table) {
             //
-            $table->dropColumn('username');
-            $table->dropColumn('password');
+            if (Schema::hasColumn('companies', 'username')) {
+                $table->dropColumn('username');
+            }
+            if (Schema::hasColumn('companies', 'password')) {
+                $table->dropColumn('password');
+            }
         });
     }
 
@@ -25,8 +29,12 @@ return new class extends Migration
     {
         Schema::table('companies', function (Blueprint $table) {
             //
-            $table->string('username');
-            $table->string('password');
+            if (!Schema::hasColumn('companies', 'username')) {
+                $table->string('username');
+            }
+            if (!Schema::hasColumn('companies', 'password')) {
+                $table->string('password');
+            }
         });
     }
 };

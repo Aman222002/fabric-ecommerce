@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('user_experiences', function (Blueprint $table) {
-            $table->dropUnique(['company_name']);
+            if (Schema::hasIndex('user_experiences', 'user_experiences_company_name_unique')) {
+                $table->dropUnique(['company_name']);
+            }
         });
     }
 
@@ -23,7 +25,9 @@ return new class extends Migration
     {
         Schema::table('user_experiences', function (Blueprint $table) {
             //
-            $table->unique('company_name');
+            if (!Schema::hasIndex('user_experiences', 'user_experiences_company_name_unique')) {
+                $table->unique('company_name');
+            }
         });
     }
 };

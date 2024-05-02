@@ -11,24 +11,25 @@ use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-
+    /**
+     * Seed the application's database.
+     */
+ 
     public function run(): void
     {
-
-
         $this->call([
-			RoleSeeder::class,
-			AdminSeeder::class,
-			CategorySeeder::class,
-			DatabaseSeeder::class,
-			JobPostingPlansTableSeeder::class,
-			JobTypeSeeder::class,
-			PartnerSeeder::class,
-			PermissionSeeder::class,
-			SettingSeeder::class,
-			SkillSeeder::class,
-			SubscriptionPlansTableSeeder::class,
-			UserSkillSeeder::class
+           
+            CategorySeeder::class,
+            JobPostingPlansTableSeeder::class,
+            JobTypeSeeder::class,
+            PartnerSeeder::class,
+            PermissionSeeder::class,
+            SettingSeeder::class,
+            SkillSeeder::class,
+            SubscriptionPlansTableSeeder::class,
+            RoleSeeder::class,
+            AdminSeeder::class,
+          
         ]);
 
     }

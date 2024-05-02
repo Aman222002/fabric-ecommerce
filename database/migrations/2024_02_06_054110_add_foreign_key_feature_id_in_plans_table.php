@@ -25,8 +25,8 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->dropForeign(['plan_id']);
-            $table->dropColumn('plan_id');
+            $table->dropForeign(['feature_id']);
+            $table->dropColumn('feature_id');
         });
     }
 };

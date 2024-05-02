@@ -15,8 +15,10 @@ return new class extends Migration
 
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('company_id')->nullable()->after('id');
-            $table->foreign('company_id')->references('id')->on('companies');
+            if (!Schema::hasColumn('post_jobs', 'company_id')) {
+                $table->unsignedBigInteger('company_id')->nullable()->after('id');
+                $table->foreign('company_id')->references('id')->on('companies');
+            }
         });
     }
 
@@ -29,8 +31,9 @@ return new class extends Migration
 
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->dropForeign(['company_id']);
-            $table->dropColumn('company_id');
+            // if (Schema::hasColumn('post_jobs', 'company_id')) {
+            //     $table->dropForeign(['company_id']);
+            // }
         });
     }
 };

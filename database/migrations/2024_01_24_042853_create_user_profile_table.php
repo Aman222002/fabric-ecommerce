@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('user_profile')) {
         Schema::create('user_profile', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->text('strengths')->nullable();
             $table->timestamps();
         });
+    }
     }
 
     /**

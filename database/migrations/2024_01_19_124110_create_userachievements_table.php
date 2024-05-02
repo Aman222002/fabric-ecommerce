@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('userachievements')) {
         Schema::create('userachievements', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->string('certificate_file_path')->nullable();
             $table->timestamps();
         });
+    }
     }
 
     /**

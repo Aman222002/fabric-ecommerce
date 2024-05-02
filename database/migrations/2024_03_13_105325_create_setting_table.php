@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('setting')) {
         Schema::create('setting', function (Blueprint $table) {
             $table->id();
             $table->string('contact');
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->string('website_address');
             $table->timestamps();
         });
+    }
     }
 
     /**

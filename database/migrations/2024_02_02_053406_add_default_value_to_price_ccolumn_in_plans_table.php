@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->decimal('price', 10, 2)->default(0);
+            if (!Schema::hasColumn('plans', 'price')) {
+                $table->decimal('price', 10, 2)->default(0);
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->dropColumn('price');
+            if (Schema::hasColumn('plans', 'price')) {
+                $table->dropColumn('price');
+            }
         });
     }
 };

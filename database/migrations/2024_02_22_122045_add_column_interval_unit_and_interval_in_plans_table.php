@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->string('interval_unit')->after('price')->nullable();
-            $table->float('interval', 2, 1)->after('interval_unit')->nullable();
+            if (!Schema::hasColumn('plans', 'interval_unit')) {
+                $table->string('interval_unit')->after('price')->nullable();
+            }
+            if (!Schema::hasColumn('plans', 'interval')) {
+                $table->float('interval', 2, 1)->after('interval_unit')->nullable();
+            }
         });
     }
 
@@ -25,8 +29,12 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->dropColumn('interval_unit');
-            $table->dropColumn('interval');
+            if (Schema::hasColumn('plans', 'interval_unit')) {
+                $table->dropColumn('interval_unit');
+            }
+            if (Schema::hasColumn('plans', 'interval')) {
+                $table->dropColumn('interval');
+            }
         });
     }
 };

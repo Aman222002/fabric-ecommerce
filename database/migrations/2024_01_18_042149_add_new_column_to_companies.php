@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('companies', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('user_id')->after('id');
+            if (!Schema::hasColumn('companies', 'user_id')) {
+                $table->unsignedBigInteger('user_id')->after('id');
+            }
         });
     }
 

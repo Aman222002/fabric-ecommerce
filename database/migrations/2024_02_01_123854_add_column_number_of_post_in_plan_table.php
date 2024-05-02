@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->integer('Posts_Allowed');
+           if (!Schema::hasColumn('plans', 'Posts_Allowed')) {
+                $table->integer('Posts_Allowed');
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('plans', function (Blueprint $table) {
             //
-            $table->dropColumn('Posts_Allowed');
+            if (Schema::hasColumn('plans', 'Posts_Allowed')) {
+                $table->dropColumn('Posts_Allowed');
+            }
         });
     }
 };

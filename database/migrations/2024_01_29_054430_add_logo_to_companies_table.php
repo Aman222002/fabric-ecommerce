@@ -14,7 +14,9 @@ return new class extends Migration
 
         Schema::table('companies', function (Blueprint $table) {
             //
-            $table->string('logo')->nullable();
+            if (!Schema::hasColumn('companies', 'logo')) {
+                $table->string('logo')->nullable();
+            }
         });
     }
 
@@ -26,7 +28,9 @@ return new class extends Migration
 
         Schema::table('companies', function (Blueprint $table) {
             //
-            $table->dropColumn('logo');
+            if (Schema::hasColumn('companies', 'logo')) {
+                $table->dropColumn('logo');
+            }
         });
     }
 };

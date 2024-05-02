@@ -24,8 +24,12 @@ return new class extends Migration
     {
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('company_id')->nullable()->after('id');
-            $table->foreign('company_id')->references('id')->on('companies');
+            if (!Schema::hasColumn('post_jobs', 'company_id')) {
+                // Add the 'company_id' column
+                $table->unsignedBigInteger('company_id')->nullable()->after('id');
+                // Add the foreign key constraint
+                $table->foreign('company_id')->references('id')->on('companies');
+            }
         });
     }
 };
