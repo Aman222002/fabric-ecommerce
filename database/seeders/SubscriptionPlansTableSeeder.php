@@ -13,8 +13,7 @@ class SubscriptionPlansTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Insert or update Premium Plan
-        DB::table('plans')->upsert([
+        $plans = [
             [
                 'id' => 1,
                 'name' => 'Premium',
@@ -24,19 +23,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'interval_unit' => 'monthly',
                 'interval' => 1.0,
                 'feature_id' => 1
-            ]
-        ], ['id'], [
-            'name',
-            'duration',
-            'Posts_Allowed',
-            'price',
-            'interval_unit',
-            'interval',
-            'feature_id'
-        ]);
-
-        // Insert or update Standard Plan
-        DB::table('plans')->upsert([
+            ],
             [
                 'id' => 2,
                 'name' => 'Standard',
@@ -46,19 +33,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'interval_unit' => 'monthly',
                 'interval' => 1.0,
                 'feature_id' => 2
-            ]
-        ], ['id'], [
-            'name',
-            'duration',
-            'Posts_Allowed',
-            'price',
-            'interval_unit',
-            'interval',
-            'feature_id'
-        ]);
-
-        // Insert or update Basic Plan
-        DB::table('plans')->upsert([
+            ],
             [
                 'id' => 3,
                 'name' => 'Basic',
@@ -69,7 +44,8 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'interval' => 1.0,
                 'feature_id' => 3
             ]
-        ], ['id'], [
+        ];
+        DB::table('plans')->upsert($plans, ['id'], [
             'name',
             'duration',
             'Posts_Allowed',

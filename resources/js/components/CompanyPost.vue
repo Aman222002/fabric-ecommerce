@@ -2,7 +2,7 @@
   <div class="find_Job_list">
     <v-card class="mx-auto my-12 top_page_section">
       <div class="job_info" align="center" justify="center">
-        <v-card-title>Companies </v-card-title>
+        <v-card-title>Jobs </v-card-title>
         <v-breadcrumbs :items="items">
           <template v-slot:title="{ item }">
             {{ item.title.toUpperCase() }}
@@ -10,7 +10,6 @@
         </v-breadcrumbs>
       </div>
     </v-card>
-  
     <div class="body_page_section">
       <v-container class="w-75">
         <v-row>
