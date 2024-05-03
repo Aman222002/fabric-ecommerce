@@ -6,40 +6,64 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class SkillSeeder extends Seeder
+class JobPostingPlansTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // Array of skills with IDs
-        $skills = [
-            [ 'id' => 1, 'skill_name' => 'Programming'],
-            [ 'id' => 2, 'skill_name' => 'Database Management'],
-            [ 'id' => 3, 'skill_name' => 'Design'],
-            [ 'id' => 4, 'skill_name' => 'SQL proficiency'],
-            [ 'id' => 5, 'skill_name' => 'Scripting Languages'],
-            [ 'id' => 6, 'skill_name' => 'Data Migration'],
-            [ 'id' => 7, 'skill_name' => 'Database Optimization'],
-            [ 'id' => 8, 'skill_name' => 'Version Control Systems'],
-            [ 'id' => 9, 'skill_name' => 'Data Security'],
-            [ 'id' => 10, 'skill_name' => 'Data Validation and Testing'],
-            [ 'id' => 11, 'skill_name' => 'Backup and Recovery'],
-            [ 'id' => 12, 'skill_name' => 'Performance Tuning'],
-            [ 'id' => 13, 'skill_name' => 'Cloud Platforms'],
-            [ 'id' => 14, 'skill_name' => 'Data Privacy Regulations'],
-            [ 'id' => 15, 'skill_name' => 'Troubleshooting Skills'],
-           
+      
+        
+        $features = [
+            [
+                'id' => 1,
+                'Search' => 'Yes',
+                'Mails' => 50,
+                'Validity' => '2 Month',
+                'Post Job' => 'Yes',
+                'Duration of Job-Post' => '1 Month',
+                'Number of Job-Post' => 50,
+                'plan_id' => NULL,
+                'price' => 70.00,
+            ],
+            [
+                'id' => 2,
+                'Search' => 'Yes',
+                'Mails' => 25,
+                'Validity' => '1 Month',
+                'Post Job' => 'Yes',
+                'Duration of Job-Post' => '15 Days',
+                'Number of Job-Post' => 30,
+                'plan_id' => NULL,
+                'price' => 50.00,
+            ],
+            [
+                'id' => 3,
+                'Search' => 'Yes',
+                'Mails' => 12,
+                'Validity' => '15 Days',
+                'Post Job' => 'Yes',
+                'Duration of Job-Post' => '7 Days',
+                'Number of Job-Post' => 10,
+                'plan_id' => NULL,
+                'price' => 20.00,
+            ]
         ];
-
-       
-        foreach ($skills as $skill) {
-            DB::table('skills')->upsert(
-                $skill,
-                ['id'],
-                ['skill_name']
-            );
-        }
+        DB::table('features')->upsert(
+            $features,
+            ['id'], 
+            
+            [
+                'Search',
+                'Mails',
+                'Validity',
+                'Post Job',
+                'Duration of Job-Post',
+                'Number of Job-Post',
+                'plan_id',
+                'price'
+            ]
+        );
     }
 }

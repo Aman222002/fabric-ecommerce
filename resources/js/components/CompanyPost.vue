@@ -2,7 +2,7 @@
   <div class="find_Job_list">
     <v-card class="mx-auto my-12 top_page_section">
       <div class="job_info" align="center" justify="center">
-        <v-card-title>Companies </v-card-title>
+        <v-card-title>Jobs </v-card-title>
         <v-breadcrumbs :items="items">
           <template v-slot:title="{ item }">
             {{ item.title.toUpperCase() }}
@@ -24,7 +24,7 @@
                 label="Job Title"
                 density="compact"
                 variant="solo"
-                :rules="fullNameRules"
+               
                 clearable
                 style="width: 100%"
               ></v-text-field>
@@ -33,7 +33,7 @@
                 label="Location"
                 density="compact"
                 variant="solo"
-                :rules="subjectRules"
+              
                 clearable
                 style="width: 100%"
               ></v-text-field>
@@ -126,18 +126,6 @@ export default {
     },
   },
   setup(props) {
-    // console.log(props.data);
-    // if(props.data){
-    //     jobTitle.value = props.data.title,
-    //     location.value = props.data.location,
-    //   }else{
-
-    //   }
-    const fullNameRules = [
-      (value) => !!value || "Full Name is required",
-      (value) => (value && value.length <= 50) || "Max 50 characters",
-    ];
-    const subjectRules = [(value) => !!value || "Subject is required"];
     const usersStore = useUsersStore();
     const items = [
       {
