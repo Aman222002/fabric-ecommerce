@@ -14,7 +14,9 @@ return new class extends Migration
 
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->dropColumn('skill');
+            if (Schema::hasColumn('post_jobs', 'skill')) {
+                $table->dropColumn('skill');
+            }
         });
     }
 
@@ -25,7 +27,9 @@ return new class extends Migration
     {
         Schema::table('post_jobs', function (Blueprint $table) {
             //
-            $table->string('skill')->after('title');
+            if (!Schema::hasColumn('post_jobs', 'skill')) {
+                $table->string('skill')->after('title');
+            }
         });
     }
 };

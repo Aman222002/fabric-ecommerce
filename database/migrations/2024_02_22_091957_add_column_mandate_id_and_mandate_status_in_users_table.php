@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('mandate_id')->after('gc_customer_id')->nullable();
-            $table->string('mandate_status')->after('mandate_id')->nullable();
+            if (!Schema::hasColumn('users', 'mandate_id')) {
+                $table->string('mandate_id')->after('gc_customer_id')->nullable();
+            }
+            if (!Schema::hasColumn('users', 'mandate_status')) {
+                $table->string('mandate_status')->after('mandate_id')->nullable();
+            }
         });
     }
 
@@ -25,8 +29,12 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('mandate_id');
-            $table->dropColumn('mandate_status');
+            if (Schema::hasColumn('users', 'mandate_id')) {
+                $table->dropColumn('mandate_id');
+            }
+            if (Schema::hasColumn('users', 'mandate_status')) {
+                $table->dropColumn('mandate_status');
+            }
         });
     }
 };

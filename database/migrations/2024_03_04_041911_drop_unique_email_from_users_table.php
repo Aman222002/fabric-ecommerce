@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->unique('email');
+            // $table->unique('email');
         });
     }
 };

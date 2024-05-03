@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('job_application')) {
         Schema::create('job_application', function (Blueprint $table) {
             $table->id();
             $table->foreignId('job_id')->constrained('post_jobs')->onDelete('cascade');
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->timestamp('applied_date');
             $table->timestamps();
         });
+    }
     }
 
     /**

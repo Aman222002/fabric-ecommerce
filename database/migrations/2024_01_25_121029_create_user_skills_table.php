@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('user_skills')) {
         Schema::create('user_skills', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->unique(['user_id', 'skill_id']);
             $table->timestamps();
         });
+    }
     }
 
     /**

@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('job_types', function (Blueprint $table) {
             //
+            if (Schema::hasColumn('job_types', 'status')) {
                 $table->tinyInteger('status')->default(1)->change();
+            }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     {
         Schema::table('job_types', function (Blueprint $table) {
             //
-            $table->integer('status')->default(1)->change();
+            if (Schema::hasColumn('job_types', 'status')) {
+                $table->integer('status')->default(1)->change();
+            }
         });
     }
 };

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('cvs')) {
         Schema::create('cvs', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('location');
             $table->timestamps();
         });
+    }
     }
 
     /**

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('generate_cv')) {
         Schema::create('generate_cv', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->boolean('is_publish')->default(0);
             $table->timestamps();
         });
+    }
     }
 
     /**

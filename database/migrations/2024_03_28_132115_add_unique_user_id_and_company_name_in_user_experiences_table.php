@@ -24,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('user_experiences', function (Blueprint $table) {
             //
+            $table->dropForeign(['user_id']); 
             $table->dropUnique(['user_id', 'company_name']);
         });
     }
