@@ -13,7 +13,8 @@ class SkillSeeder extends Seeder
      */
     public function run(): void
     {
-        // Array of skills with IDs
+       
+        
         $skills = [
             [ 'id' => 1, 'skill_name' => 'Programming'],
             [ 'id' => 2, 'skill_name' => 'Database Management'],
@@ -30,7 +31,6 @@ class SkillSeeder extends Seeder
             [ 'id' => 13, 'skill_name' => 'Cloud Platforms'],
             [ 'id' => 14, 'skill_name' => 'Data Privacy Regulations'],
             [ 'id' => 15, 'skill_name' => 'Troubleshooting Skills'],
-<<<<<<< HEAD
         ];
 
         DB::table('skills')->upsert(
@@ -38,18 +38,5 @@ class SkillSeeder extends Seeder
             ['id'],
             ['skill_name']
         );
-=======
-           
-        ];
-
-       
-        foreach ($skills as $skill) {
-            DB::table('skills')->upsert(
-                $skill,
-                ['id'],
-                ['skill_name']
-            );
-        }
->>>>>>> 8ccaee165d4ea65e06c3904906607d11e2b3dffb
     }
 }
