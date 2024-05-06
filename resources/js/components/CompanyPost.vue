@@ -23,7 +23,7 @@
                 label="Job Title"
                 density="compact"
                 variant="solo"
-                :rules="fullNameRules"
+               
                 clearable
                 style="width: 100%"
               ></v-text-field>
@@ -32,7 +32,7 @@
                 label="Location"
                 density="compact"
                 variant="solo"
-                :rules="subjectRules"
+              
                 clearable
                 style="width: 100%"
               ></v-text-field>
@@ -125,18 +125,6 @@ export default {
     },
   },
   setup(props) {
-    // console.log(props.data);
-    // if(props.data){
-    //     jobTitle.value = props.data.title,
-    //     location.value = props.data.location,
-    //   }else{
-
-    //   }
-    const fullNameRules = [
-      (value) => !!value || "Full Name is required",
-      (value) => (value && value.length <= 50) || "Max 50 characters",
-    ];
-    const subjectRules = [(value) => !!value || "Subject is required"];
     const usersStore = useUsersStore();
     const items = [
       {

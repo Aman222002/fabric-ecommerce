@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class SubscriptionPlansTableSeeder extends Seeder
+class JobPostingPlansTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,19 +16,28 @@ class SubscriptionPlansTableSeeder extends Seeder
         $plans = [
             [
                 'id' => 1,
-                'name' => 'Premium',
-                'duration' => '2Month',
-                'Posts_Allowed' => 50,
+                'Search' => 'Yes',
+                'Mails' => 50,
+                'Validity' => '2 Month',
+                'Post Job' => 'Yes',
+                'Duration of Job-Post' => '1 Month',
+                'Number of Job-Post' => 50,
+                'plan_id' => NULL,
                 'price' => 70.00,
                 'interval_unit' => 'monthly',
                 'interval' => 1.0,
                 'feature_id' => 1
+
             ],
             [
                 'id' => 2,
-                'name' => 'Standard',
-                'duration' => '1Month',
-                'Posts_Allowed' => 30,
+                'Search' => 'Yes',
+                'Mails' => 25,
+                'Validity' => '1 Month',
+                'Post Job' => 'Yes',
+                'Duration of Job-Post' => '15 Days',
+                'Number of Job-Post' => 30,
+                'plan_id' => NULL,
                 'price' => 50.00,
                 'interval_unit' => 'monthly',
                 'interval' => 1.0,
@@ -36,23 +45,32 @@ class SubscriptionPlansTableSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'Basic',
-                'duration' => '3Week',
-                'Posts_Allowed' => 20,
-                'price' => 30.00,
-                'interval_unit' => 'weekly',
+                'Search' => 'Yes',
+                'Mails' => 12,
+                'Validity' => '15 Days',
+                'Post Job' => 'Yes',
+                'Duration of Job-Post' => '7 Days',
+                'Number of Job-Post' => 10,
+                'plan_id' => NULL,
+                'price' => 20.00,
+                'interval_unit' => 'monthly',
                 'interval' => 1.0,
-                'feature_id' => 3
+                'feature_id' => 2
             ]
         ];
-        DB::table('plans')->upsert($plans, ['id'], [
-            'name',
-            'duration',
-            'Posts_Allowed',
-            'price',
-            'interval_unit',
-            'interval',
-            'feature_id'
-        ]);
+        DB::table('features')->upsert(
+            $plans,
+            ['id'], 
+            [
+                'Search',
+                'Mails',
+                'Validity',
+                'Post Job',
+                'Duration of Job-Post',
+                'Number of Job-Post',
+                'plan_id',
+                'price'
+            ]
+        );
     }
 }
