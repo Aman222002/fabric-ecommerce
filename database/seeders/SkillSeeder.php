@@ -12,9 +12,7 @@ class JobPostingPlansTableSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {
-      
-        
+    {   
         $features = [
             [
                 'id' => 1,
@@ -53,7 +51,6 @@ class JobPostingPlansTableSeeder extends Seeder
         DB::table('features')->upsert(
             $features,
             ['id'], 
-            
             [
                 'Search',
                 'Mails',

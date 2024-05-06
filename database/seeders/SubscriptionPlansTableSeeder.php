@@ -13,9 +13,7 @@ class JobPostingPlansTableSeeder extends Seeder
      */
     public function run(): void
     {
-      
-        
-        $features = [
+        $plans = [
             [
                 'id' => 1,
                 'Search' => 'Yes',
@@ -26,6 +24,10 @@ class JobPostingPlansTableSeeder extends Seeder
                 'Number of Job-Post' => 50,
                 'plan_id' => NULL,
                 'price' => 70.00,
+                'interval_unit' => 'monthly',
+                'interval' => 1.0,
+                'feature_id' => 1
+
             ],
             [
                 'id' => 2,
@@ -37,6 +39,9 @@ class JobPostingPlansTableSeeder extends Seeder
                 'Number of Job-Post' => 30,
                 'plan_id' => NULL,
                 'price' => 50.00,
+                'interval_unit' => 'monthly',
+                'interval' => 1.0,
+                'feature_id' => 2
             ],
             [
                 'id' => 3,
@@ -48,12 +53,14 @@ class JobPostingPlansTableSeeder extends Seeder
                 'Number of Job-Post' => 10,
                 'plan_id' => NULL,
                 'price' => 20.00,
+                'interval_unit' => 'monthly',
+                'interval' => 1.0,
+                'feature_id' => 2
             ]
         ];
         DB::table('features')->upsert(
-            $features,
+            $plans,
             ['id'], 
-            
             [
                 'Search',
                 'Mails',

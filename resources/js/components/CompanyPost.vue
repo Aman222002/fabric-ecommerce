@@ -10,7 +10,6 @@
         </v-breadcrumbs>
       </div>
     </v-card>
-  
     <div class="body_page_section">
       <v-container class="w-75">
         <v-row>
