@@ -1,7 +1,7 @@
 <template>
   <div class="featured_jobs">
     <div class="sec-title text-center">
-      <h2>Featured Jobs </h2>
+      <h2>Featured Jobs</h2>
       <div class="text">
         Know your worth and find the job that qualifies your life
       </div>
@@ -20,7 +20,7 @@
           :key="job.id"
           @click="openDetailPage(job.id)"
         >
-          <v-card class="mx-auto company_info ">
+          <v-card class="mx-auto company_info">
             <div class="featured_jobs_logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
             </div>
@@ -36,25 +36,23 @@
                 <li>
                   <v-icon color="#34a853" class="mr-1"
                     >mdi-map-marker-outline</v-icon
-                  >{{ job.location }}
+                  >{{ HomeCountryState(job.location) }}
                 </li>
                 <li>
                   <v-icon color="#f9ab00" class="mr-1"
                     >mdi-clock-time-two-outline</v-icon
                   >{{ formatCreatedAt(job.company.created_at) }}
                 </li>
-             
               </ul>
               <ul class="company_time">
                 <li>{{ job.job_type.name }}</li>
                 <li>{{ job.category.name }}</li>
               </ul>
             </v-card>
-
           </v-card>
         </v-col>
-        
-        <v-btn size="x-large" class="load_more"  @click="searchJob">
+
+        <v-btn size="x-large" class="load_more mt-5" @click="searchJob">
           Load More Listing
         </v-btn>
       </v-row>
@@ -94,9 +92,8 @@ export default {
       detail.value.id = job.id;
     };
     const openDetailPage = (id) => {
-     
-      window.location.href = `/view/${id}`
-    }
+      window.location.href = `/view/${id}`;
+    };
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
@@ -180,6 +177,12 @@ export default {
         });
       }
     };
+    const HomeCountryState = (countryStateName) => {
+      if (countryStateName && countryStateName.length > 15) {
+        return countryStateName.substring(0, 15) + "....";
+      }
+      return countryStateName;
+    };
 
     return {
       jobs,
@@ -192,16 +195,18 @@ export default {
       detailPanelVisible,
       detail,
       usersStore,
-      searchJob,openDetailPage
+      searchJob,
+      openDetailPage,
+      HomeCountryState,
     };
   },
 };
 </script>
 <style>
 .featured_jobs_logo {
-    width: 90px;
+  width: 90px;
 }
 .featured_jobs_logo img.v-img__img {
-    width: 90px;
+  width: 90px;
 }
 </style>

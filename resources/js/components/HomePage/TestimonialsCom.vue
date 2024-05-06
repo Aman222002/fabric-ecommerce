@@ -3,9 +3,9 @@
     <v-container>
       <div class="sec-title text-center">
         <h2>Testimonials From Our Customers</h2>
-        <div class="text">
+        <!-- <div class="text">
           Lorem ipsum dolor sit amet elit, sed do eiusmod tempor
-        </div>
+        </div> -->
       </div>
     </v-container>
     <div class="testimonials_slider">

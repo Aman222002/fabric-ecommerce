@@ -3,6 +3,21 @@ a {
 }
 
 /* Global css */
+.fs_20 {
+    font-size: 20px;
+}
+
+.fs_25 {
+    font-size: 25px;
+}
+
+.fs_30 {
+    font-size: 30px;
+}
+
+.fs_35 {
+    font-size: 35px;
+}
 
 ul {
     list-style: none;
@@ -324,6 +339,7 @@ form.job_search_form .v-input__control .v-field__outline {
     flex-direction: row;
     flex-wrap: wrap;
     padding-left: 13px;
+    text-transform: capitalize;
 }
 
 .job_info ul li {
@@ -530,7 +546,8 @@ footer.v-footer {
     padding: 40px 0;
     background-image: url(https://superio-appdir.vercel.app/_next/static/media/6.0ca96815.png);
     padding-top: 100px;
-    background-size: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 
@@ -961,6 +978,12 @@ section.contact_us_page .form_contact {
     background-color: #fff;
 }
 
+/* single blog page   */
+
+.single_blog_page .v-card-item .sec-title {
+    font-size: 30px;
+}
+
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {
@@ -1032,6 +1055,14 @@ section.contact_us_page .form_contact {
     .find_Job_list .body_page_section {
         padding: 45px 0 0;
     }
+
+    .footer_col {
+        margin-bottom: 30px;
+    }
+
+    .single_blog_page .v-card-item .sec-title {
+        font-size: 25px;
+    }
 }
 
 @media screen and (max-width: 1200px) {
@@ -1078,6 +1109,8 @@ section.contact_us_page .form_contact {
     .find_Job_list_right .v-card-title {
         font-size: 25px;
     }
+
+
 }
 
 
