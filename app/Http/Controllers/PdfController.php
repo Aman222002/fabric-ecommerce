@@ -60,11 +60,7 @@ class PdfController extends Controller
             if ($selectedTemplate === 'Template3') {
                 $viewName = 'pdf3';
             }
-    
-            
             $pdf = Pdf::loadView($viewName, ['userdata' => $userdata]);
-    
-           
             return $pdf->download();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
