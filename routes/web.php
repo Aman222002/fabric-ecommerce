@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\UsersController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\UserAchievementController;
 use App\Http\Controllers\LoginController;
@@ -16,17 +16,12 @@ use App\Http\Controllers\CvController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserSkillController;
 use App\Http\Controllers\UserExperienceController;
-use App\Http\Controllers\AdditionalInformationController;
+
 use App\Http\Controllers\QualificationsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\CompanyLoginController;
-
-use App\Models\Company;
-use App\Models\User;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\DraftController;
@@ -35,10 +30,6 @@ use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
 use App\Http\Controllers\SocialMediaAccountController;
-use App\Http\Controllers\webhookHandler;
-use App\Models\Job;
-use App\Models\Skill;
-use Illuminate\Auth\Events\Login;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +61,6 @@ Route::post('/removedEducation/{educationId}', [ResumeController::class, 'destro
 Route::post('/removedExperience/{experienceId}', [ResumeController::class, 'destroyExperience']);
 Route::post('/removedAchievment/{achievmentId}', [ResumeController::class, 'destroyAchievment']);
 Route::post('/submit', [ResumeController::class, 'store']);
-
 Route::get('/my-profile', [ResumeController::class, 'getUserData']);
 Route::get('/getprofile', [ResumeController::class, 'getProfile']);
 Route::get('/user-skills', [UserSkillController::class, 'index']);
@@ -84,29 +74,15 @@ Route::post('/address', [UserAddressController::class, 'index']);
 Route::post('/users-qualifications', [QualificationsController::class, 'store']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/getuser', [LoginController::class, 'getUser']);
-
-
-Route::get('/header', function () {
-    return view('Header');
-});
-
-
-Route::get('/footer', function () {
-    return view('Footer');
-});
 Route::get('/job', function () {
-    return view('Job');
+    return view('job');
 });
-// Route::get('/companyregister', function () {
-//     return view('companyregister');
-// });
 Route::get('/product', function () {
     return view('product');
 });
 Route::get('/cart', function () {
     return view('cart');
 });
-
 Route::get('/postjob', function () {
     return view('postjob');
 });
@@ -125,28 +101,15 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
-
-
 Route::get('/company-dashboard', function () {
     return view('companydashboard');
 });
-
-
 Route::get('/confirm/user', function () {
     return view('confirm');
 });
-
 Route::get('/confirm/company', function () {
     return view('confirmcompany');
 });
-// Route::get('/viewjob{}', function () {
-//     return view('viewjob');
-// });
-// Route::get('/add-user', function () {
-//     return view('user');
-// });
-
-
 Route::get('/view/{jobid}', [SearchjobController::class, 'viewjob']);
 Route::get('/fetchjob/{jobid}', [SearchjobController::class, 'fetchJobDetails']);
 Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);

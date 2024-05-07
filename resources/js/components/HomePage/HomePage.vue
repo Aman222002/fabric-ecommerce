@@ -57,7 +57,7 @@
                     class="mt-2 btn_search"
                     @click="redirectToJobsDetail"
                     block
-                    >Submit</v-btn
+                    >Search</v-btn
                   >
                 </v-sheet>
               </v-col>
