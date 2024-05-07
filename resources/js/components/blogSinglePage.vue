@@ -2,10 +2,10 @@
   <div v-if="recentNews && recentNews.title" class="single_blog_page">
     <v-card class="mx-auto py-12">
       <v-card-item>
-        <v-card-title>{{ recentNews.title }}</v-card-title>
+        <div class="sec-title">{{ recentNews.title }}</div>
         <div class="px-4">
           <v-chip-group>
-            <v-chip> {{ recentNews.published_by }}</v-chip>
+            <v-chip>{{ recentNews.published_by }}</v-chip>
             <v-chip>{{ formatCreatedAt(recentNews.created_at) }}</v-chip>
             <!-- <v-chip>Comment</v-chip> -->
           </v-chip-group>
@@ -19,9 +19,7 @@
       ></v-img>
       <v-container fluid>
         <v-card>
-          <v-card-text class="pb-0">
-            <div v-html="recentNews.content"></div>
-          </v-card-text>
+          <div v-html="recentNews.content"></div>
         </v-card>
       </v-container>
       <!-- <v-container>
@@ -103,6 +101,7 @@ export default {
           console.log(err);
         });
     };
+
     onMounted(() => {
       fetchBlog();
     });
