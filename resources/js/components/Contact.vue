@@ -1,62 +1,101 @@
 <template>
-  <section class="contact contact_us_page">
-    <div class="container">
-      <div class="heading text-center">
-        <h2>Contact <span> Us </span></h2>
-       
-      </div>
-      <v-row>
-        <v-col sm="12" md="5" lg="5" xl="5" cols="12">
-          <v-card class="mx-auto">
-            <template v-slot:title> Contact details </template>
-          </v-card>
-          <div class="content">
-            <v-card class="mx-auto" prepend-icon="mdi-cellphone-basic">
-              <template v-slot:title> PHONE :</template>
-              <v-card-text>{{ contactDetails.contact }}</v-card-text>
-            </v-card>
-            <v-card class="mx-auto" prepend-icon="mdi-mail">
-              <template v-slot:title> EMAIL :</template>
-              <v-card-text>{{ contactDetails.email }}</v-card-text>
-            </v-card>
-            <v-card class="mx-auto" prepend-icon="mdi-map-marker">
-              <template v-slot:title> ADDRESS :</template>
-              <v-card-text> {{ contactDetails.address }}</v-card-text>
-            </v-card>
-          </div>
-        </v-col>
+  <div class="contact_page_us_form">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9581880.713102693!2d-15.001137513347569!3d54.10341835529073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x25a3b1142c791a9%3A0xc4f8a0433288257a!2sUnited%20Kingdom!5e0!3m2!1sen!2sin!4v1714739395333!5m2!1sen!2sin"
+      width="100%"
+      height="450"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
+  <div class="contact_page_us">
+    <section class="contact_us_page">
+      <div class="container">
+        <v-row>
+          <v-col sm="12" md="12" lg="12" xl="12" cols="12">
+            <div class="content">
+              <div class="heading text-center">
+                <h2>Contact <span> Us </span></h2>
+              </div>
+              <v-row>
+                <v-col sm="12" md="4" lg="4" xl="4" cols="12">
+                  <v-card class="mx-auto text-center">
+                    <v-icon>mdi-phone</v-icon>
+                    <!-- <v-img src="img/contact/letter.svg" /> -->
+                    <v-card-text class="pa-0 my-3 titel_1"> PHONE </v-card-text>
+                    <v-card-text class="pa-0">{{
+                      contactDetails.contact
+                    }}</v-card-text>
+                  </v-card>
+                </v-col>
+                <v-col sm="12" md="4" lg="4" xl="4" cols="12">
+                  <v-card class="mx-auto text-center">
+                    <v-icon>mdi-email-outline</v-icon>
+                    <v-card-text class="pa-0 my-3 titel_1"> EMAIL </v-card-text>
+                    <v-card-text class="pa-0">{{
+                      contactDetails.email
+                    }}</v-card-text>
+                  </v-card>
+                </v-col>
+                <v-col sm="12" md="4" lg="4" xl="4" cols="12">
+                  <v-card class="mx-auto text-center">
+                    <v-icon>mdi-map-marker</v-icon>
+                    <v-card-text class="pa-0 my-3 titel_1">
+                      ADDRESS
+                    </v-card-text>
+                    <v-card-text class="pa-0">
+                      {{ contactDetails.address }}</v-card-text
+                    >
+                  </v-card>
+                </v-col>
+              </v-row>
+            </div>
+          </v-col>
 
-        <v-col sm="12" md="7" lg="7" xl="7" cols="12">
-          <v-form fast-fail @submit.prevent="sendEmail()" ref="form">
-            <v-text-field
-              v-model="fullName"
-              :rules="fullNameRules"
-              label="Full Name"
-            ></v-text-field>
-            <v-text-field
-              v-model="Email"
-              :rules="emailRules"
-              label="Email"
-            ></v-text-field>
-            <v-text-field
-              v-model="Subject"
-              :rules="subjectRules"
-              label="Subject"
-            ></v-text-field>
-            <v-textarea
-              label="Message"
-              v-model="Message"
-              :rules="messageRules"
-              name="input-7-1"
-              variant="filled"
-              auto-grow
-            ></v-textarea>
-            <v-btn class="mt-2" block type="submit">Send Now!</v-btn>
-          </v-form>
-        </v-col>
-      </v-row>
-    </div>
-  </section>
+          <v-col
+            sm="12"
+            md="12"
+            lg="6"
+            xl="6"
+            cols="12"
+            class="mx-auto form_contact"
+          >
+            <v-form fast-fail @submit.prevent="sendEmail()" ref="form">
+              <v-text-field
+                v-model="fullName"
+                :rules="fullNameRules"
+                label="Full Name"
+                variant="solo"
+              ></v-text-field>
+              <v-text-field
+                v-model="Email"
+                :rules="emailRules"
+                label="Email"
+                variant="solo"
+              ></v-text-field>
+              <v-text-field
+                v-model="Subject"
+                :rules="subjectRules"
+                label="Subject"
+                variant="solo"
+              ></v-text-field>
+              <v-textarea
+                label="Message"
+                v-model="Message"
+                :rules="messageRules"
+                name="input-7-1"
+                variant="solo"
+                auto-grow
+              ></v-textarea>
+              <v-btn class="mt-2" block type="submit">Send Now!</v-btn>
+            </v-form>
+          </v-col>
+        </v-row>
+      </div>
+    </section>
+  </div>
 </template>
 <script>
 import { ref, onMounted } from "vue";
@@ -212,8 +251,8 @@ section.contact_us_page {
   padding: 25px;
   background: #fff;
   border-radius: 10px;
+  position: relative;
 }
-
 section.contact_us_page form.v-form button.v-btn {
   min-width: 150px;
   margin: 0 auto;
@@ -226,12 +265,20 @@ section.contact_us_page form.v-form button.v-btn {
 
 section.contact_us_page .v-card {
   box-shadow: unset;
-  border-bottom: 1px solid #1967d2;
+  padding: 25px;
 }
 
 section.contact_us_page .heading {
   background: #e2eaf8;
   padding: 20px 0;
   margin-bottom: 70px;
+}
+section.contact_us_page .v-card .v-card-text.titel_1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+section.contact_us_page .content .v-card i.mdi {
+  font-size: 35px;
+  color: #0146a6;
 }
 </style>

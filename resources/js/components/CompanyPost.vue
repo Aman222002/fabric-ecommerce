@@ -13,48 +13,62 @@
     <div class="body_page_section">
       <v-container class="w-75">
         <v-row>
-          <v-col cols="12" sm="12" md="12" lg="3" xl="3">
+          <v-col cols="12" sm="12" md="12" lg="12" xl="12">
             <v-card class="mx-auto find_Job_list_left">
-              <v-card-title class="font-weight-bold px-0"
+              <!-- <v-card-title class="font-weight-bold px-0"
                 >Search by Keywords
-              </v-card-title>
-              <v-text-field
-                v-model="jobTitle"
-                label="Job Title"
-                density="compact"
-                variant="solo"
-               
-                clearable
-                style="width: 100%"
-              ></v-text-field>
-              <v-text-field
-                v-model="location"
-                label="Location"
-                density="compact"
-                variant="solo"
-              
-                clearable
-                style="width: 100%"
-              ></v-text-field>
-              <v-btn @click="searchJobs" class="b_string_btn">Search</v-btn>
+              </v-card-title> -->
+              <div class="job_search_forms">
+                <v-text-field
+                  prepend-inner-icon="mdi-magnify"
+                  v-model="jobTitle"
+                  label="Job Title"
+                  density="compact"
+                  variant="solo"
+                  :rules="fullNameRules"
+                  clearable
+                  style="width: 100%"
+                ></v-text-field>
+                <div class="line"></div>
+                <v-text-field
+                  prepend-inner-icon="mdi-map-marker-outline"
+                  v-model="location"
+                  label="Location"
+                  density="compact"
+                  variant="solo"
+                  :rules="subjectRules"
+                  clearable
+                  style="width: 100%"
+                ></v-text-field>
+                <v-btn @click="searchJobs" class="b_string_btn">Search</v-btn>
+              </div>
             </v-card>
+          </v-col>
+
+          <v-col
+            cols="auto"
+            sm="12"
+            md="12"
+            lg="12"
+            xl="12"
+            class="find_Job_list_right"
+            v-if="showAlert"
+          >
+            <v-alert type="error"> No job Found. </v-alert>
           </v-col>
           <v-col
             cols="auto"
             sm="12"
             md="12"
-            lg="9"
-            xl="9"
+            lg="6"
+            xl="6"
             class="find_Job_list_right"
+            v-else
+            v-for="job in jobs"
+            :key="job.id"
+            @click="openDetailPanel(job)"
           >
-            <v-alert v-if="showAlert" type="error"> No job Found. </v-alert>
-            <v-card
-              v-else
-              v-for="job in jobs"
-              :key="job.id"
-              class="custom-card"
-              @click="openDetailPanel(job)"
-            >
+            <v-card class="custom-card">
               <v-row>
                 <v-col
                   class="cpmany_logo pr-0"
@@ -64,7 +78,6 @@
                   lg="1"
                   xl="1"
                 >
-               
                   <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
                 </v-col>
                 <v-col class="pl-0" cols="12" sm="12" md="12" lg="11" xl="11">
@@ -173,11 +186,10 @@ export default {
       }
     };
 
-   
     // const fetchJobs = async () => {
     //   try {
     //     const response = await axios.get("/company/post");
-     
+
     //     jobs.value = response.data.data;
     //   } catch (err) {
     //     console.error(err);
@@ -190,7 +202,7 @@ export default {
         if (response.data.data.length === 0) {
           showAlert.value = true;
         } else {
-          showAlert.value = false; 
+          showAlert.value = false;
           jobs.value = response.data.data;
         }
       } catch (err) {
@@ -353,13 +365,7 @@ export default {
   width: 45px;
   margin: 0 auto;
 }
-.find_Job_list_left {
-  position: relative;
-  background: #f5f7fc;
-  border-radius: 8px;
-  margin-bottom: 30px;
-  padding: 7% 7% 10px;
-}
+
 .find_Job_list .top_page_section {
   background: transparent;
   box-shadow: unset;
@@ -376,15 +382,7 @@ export default {
   background: #fff;
   padding: 50px 0 100px;
 }
-.find_Job_list_right .custom-card {
-  padding: 2% 1%;
-  background: #fff;
-  border: 1px solid #ecedf2;
-  box-sizing: border-box;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  margin-bottom: 15px;
-}
+
 .find_Job_list_right .v-card-title {
   font-size: 30px;
   font-weight: bolder;
@@ -392,9 +390,7 @@ export default {
   font-family: sans-serif;
   text-transform: capitalize;
 }
-.find_Job_list_right .custom-card:hover .v-card-title {
-  color: #1967d2;
-}
+
 .single_job_search_page {
   width: 70% !important;
 }

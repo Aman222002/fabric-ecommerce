@@ -131,9 +131,8 @@ export default {
 <style>
 /* / recent_news_articles only / */
 .recent_news_articles {
-  padding: 65px 0 0;
   background: #fff;
-  padding-bottom: 150px;
+  padding-bottom: 1px;
 }
 
 .recent_news_articles .sec-title h2 {
