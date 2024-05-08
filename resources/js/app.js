@@ -147,10 +147,6 @@ app.component("view-job", viewjob);
 import index from "./components/HomePage/index.vue";
 app.component("home-component", index);
 
-// import CKEditor from "./components/CKEditorComponent.vue";
-// app.component()
-// import UserprofileComponent from "./components/UserprofileComponent.vue";
-// app.component("userprofile-component", UserprofileComponent);
 import NavbarComponent from "./components/NavbarComponent.vue";
 app.component("navbar-component", NavbarComponent);
 import AllUser from "./components/AllUser.vue";
@@ -292,9 +288,6 @@ app.component("contact-component", Contact);
 
 import companydashboard from "./components/companydashboard.vue";
 app.component("company-dashboard",companydashboard);
-
-
-
 // import index from "./components/HomePage/index.vue"
 // app.component("home-component",index);
 

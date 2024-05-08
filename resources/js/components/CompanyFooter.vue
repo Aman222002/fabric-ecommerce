@@ -5,7 +5,8 @@
         <v-col class="footer_col" cols="12" sm="12" md="6" lg="4" xl="4">
           <v-toolbar-title v-cloak>
             <a class="logo" href="/" style="cursor: pointer" width="200">
-              {{ appName }}</a>
+              {{ appName }}</a
+            >
           </v-toolbar-title>
           <div class="footer-column about-widget">
             <p class="phone-num">
@@ -15,7 +16,7 @@
             <p class="address">
               {{ contactDetails.address }}<br />
               <a id="emailLink" @click="sendEmail()" class="email">
-                mailto:{{ contactDetails.email }}
+                {{ contactDetails.email }}
               </a>
             </p>
           </div>
@@ -42,16 +43,13 @@
             <ul class="list">
               <!-- <li><a href="/jobs-detail">Browse Candidates</a></li> -->
               <li>
-                <a @click="handleLinks('/findcv')">Employer
-                  Dashboard</a>
+                <a @click="handleLinks('/findcv')">Employer Dashboard</a>
               </li>
               <li>
-                <a @click="handleLinks('/postjob')">Add
-                  Job</a>
+                <a @click="handleLinks('/postjob')">Add Job</a>
               </li>
               <li>
-                <a @click="handleLinks('/product')">Job
-                  Packages</a>
+                <a @click="handleLinks('/product')">Job Packages</a>
               </li>
             </ul>
           </div>
@@ -98,19 +96,18 @@ export default {
       const selectedRoute = employerStore.getPreviousRoute;
       if (employerStore.isloggedin) {
         fetchUserData();
-        if (selectedRoute == '/findcv') {
+        if (selectedRoute == "/findcv") {
           window.location.href = "/findcv";
         }
-        if (selectedRoute == '/postjob') {
-          if (hasPermission('create users') || hasrole('Company Admin')) {
+        if (selectedRoute == "/postjob") {
+          if (hasPermission("create users") || hasrole("Company Admin")) {
             window.location.href = "/postjob";
           } else {
             alert(`You don't have permissions for this action`);
           }
         }
-        if (selectedRoute == '/company/plan') {
-          if (hasPermission('Change Plan') ||
-            hasrole('Company Admin')) {
+        if (selectedRoute == "/company/plan") {
+          if (hasPermission("Change Plan") || hasrole("Company Admin")) {
             window.location.href = "/company/plan";
           } else {
             alert(`You don't have permissions for this action`);
@@ -146,16 +143,16 @@ export default {
     };
     const checkAdress = () => {
       // console.log(window.location.pathname);
-      if (window.location.pathname == '/') {
+      if (window.location.pathname == "/") {
         // window.location. const section = document.getElementById('section');
-        const section = document.getElementById('blogs');
+        const section = document.getElementById("blogs");
         if (section) {
-          section.scrollIntoView({ behavior: 'smooth' });
+          section.scrollIntoView({ behavior: "smooth" });
         }
       } else {
         window.location.href = "/#blogs";
       }
-    }
+    };
     const hasrole = (role) => {
       if (users.value && users.value.roles) {
         return users.value.roles.includes(role);

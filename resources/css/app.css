@@ -3,6 +3,21 @@ a {
 }
 
 /* Global css */
+.fs_20 {
+    font-size: 20px;
+}
+
+.fs_25 {
+    font-size: 25px;
+}
+
+.fs_30 {
+    font-size: 30px;
+}
+
+.fs_35 {
+    font-size: 35px;
+}
 
 ul {
     list-style: none;
@@ -67,7 +82,7 @@ main.v-main {
 }
 
 .banner_st h3 {
-    font-size: 50px;
+    font-size: 40px;
     line-height: 60px;
     color: #202124;
     font-weight: 500;
@@ -82,7 +97,7 @@ main.v-main {
     font-size: 17px;
     color: #696969;
     line-height: 25px;
-    margin: 20px 0px;
+    margin: 15px 0px;
 }
 
 form.job_search_form {
@@ -177,7 +192,6 @@ form.job_search_form .v-input__control .v-field__outline {
 /* // Popular Job Categories only */
 .popular_job_categories {
     padding: 50px 0 45px;
-    background: #fff;
 }
 
 .popular_job_categories .sec-title {
@@ -187,7 +201,7 @@ form.job_search_form .v-input__control .v-field__outline {
 .popular_job_categories .sec-title h2 {
     position: relative;
     display: block;
-    font-size: 30px;
+    font-size: 40px;
     line-height: 1.2em;
     color: #202124;
     font-weight: 500;
@@ -251,7 +265,7 @@ form.job_search_form .v-input__control .v-field__outline {
 
 /* // featured jobs only */
 .featured_jobs {
-    padding: 65px 0;
+    padding: 0 0 65px 0;
 }
 
 .featured_jobs .sec-title {
@@ -261,7 +275,7 @@ form.job_search_form .v-input__control .v-field__outline {
 .featured_jobs .sec-title h2 {
     position: relative;
     display: block;
-    font-size: 30px;
+    font-size: 40px;
     line-height: 1.2em;
     color: #202124;
     font-weight: 500;
@@ -325,6 +339,7 @@ form.job_search_form .v-input__control .v-field__outline {
     flex-direction: row;
     flex-wrap: wrap;
     padding-left: 13px;
+    text-transform: capitalize;
 }
 
 .job_info ul li {
@@ -467,7 +482,7 @@ a.bookmark_fr {
 
 .about_us_page .about_superio .v-card-title {
     font-weight: 500;
-    font-size: 30px;
+    font-size: 40px;
     color: #202124;
     margin-top: 15px;
 }
@@ -523,6 +538,7 @@ button.form_fild_btn,
 }
 
 
+
 /* company form end */
 
 /* footer css only  */
@@ -530,15 +546,13 @@ footer.v-footer {
     padding: 40px 0;
     background-image: url(https://superio-appdir.vercel.app/_next/static/media/6.0ca96815.png);
     padding-top: 100px;
-    background-size: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 
 /* admin css*/
 /* // recent_news_articlesonly */
-.recent_news_articles {
-    padding: 65px 0;
-}
 
 .recent_news_articles .sec-title h2 {
     position: relative;
@@ -568,10 +582,8 @@ footer.v-footer {
 
 .find_Job_list_left {
     position: relative;
-    background: #f5f7fc;
-    border-radius: 8px;
     margin-bottom: 30px;
-    padding: 7% 7% 10px;
+    box-sizing: unset !important;
 }
 
 .find_Job_list .top_page_section {
@@ -894,7 +906,6 @@ button.save_btn {
     padding-top: 0;
 }
 
-
 .employers_search_single_right {
     background: #f5f7fc;
     border-radius: 15px;
@@ -926,7 +937,98 @@ button.save_btn {
     height: 25px !important;
 }
 
+.search_and_apply a.load_more:nth-child(1) {
+    background-color: #ffffff;
+    color: #0146a6;
+}
+
+.about_superio {
+    background-color: #fff;
+}
+
+.your_dream_jobs h2 {
+    position: relative;
+    display: block;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.2em;
+    color: #ffffff;
+}
+
+.nab_burger_menu .nav-linksa.nav-link {
+    border-bottom: 3px solid transparent;
+}
+
+.nab_burger_menu .nav-links a.nav-link:hover {
+    border-bottom: 3px solid #0146a6;
+}
+
+.line {
+    display: none;
+}
+
+section.contact_us_page .form_contact {
+    border: 1px solid #ecedf2;
+    border-radius: 8px;
+    padding: 50px 50px 70px;
+    margin: 20px;
+}
+
+.contact_page_us {
+    background-color: #fff;
+}
+
+/* single blog page   */
+
+.single_blog_page .v-card-item .sec-title {
+    font-size: 30px;
+}
+
 /* responsive start  only */
+@media screen and (min-width: 1200px) {
+    .line {
+        display: block;
+    }
+
+    .job_search_forms {
+        position: relative;
+        display: flex;
+        gap: 15px;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 15px;
+        align-items: center;
+        border: 1px solid #ecedf2;
+        box-shadow: 0 7px 18px rgba(64, 79, 104, .05);
+    }
+
+    .job_search_forms .line {
+        width: 1px;
+        background-color: #999393;
+        height: 49px;
+    }
+
+    .job_search_forms .v-locale--is-ltr {
+        box-shadow: unset;
+    }
+
+    .job_search_forms .v-input__details {
+        position: absolute;
+        bottom: 8px;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    section.contact_us_page .content {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: -240px;
+        background-color: #fff;
+    }
+
+}
+
 
 
 @media screen and (max-width: 1400px) {
@@ -952,6 +1054,14 @@ button.save_btn {
 
     .find_Job_list .body_page_section {
         padding: 45px 0 0;
+    }
+
+    .footer_col {
+        margin-bottom: 30px;
+    }
+
+    .single_blog_page .v-card-item .sec-title {
+        font-size: 25px;
     }
 }
 
@@ -999,6 +1109,8 @@ button.save_btn {
     .find_Job_list_right .v-card-title {
         font-size: 25px;
     }
+
+
 }
 
 

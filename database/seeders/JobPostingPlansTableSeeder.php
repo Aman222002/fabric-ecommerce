@@ -13,8 +13,8 @@ class JobPostingPlansTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Insert or update feature for 2 Month plan
-        DB::table('features')->upsert([
+
+        $features = [
             [
                 'id' => 1,
                 'Search' => 'Yes',
@@ -25,20 +25,7 @@ class JobPostingPlansTableSeeder extends Seeder
                 'Number of Job-Post' => 50,
                 'plan_id' => NULL,
                 'price' => 70.00,
-            ]
-        ], ['id'], [
-            'Search',
-            'Mails',
-            'Validity',
-            'Post Job',
-            'Duration of Job-Post',
-            'Number of Job-Post',
-            'plan_id',
-            'price'
-        ]);
-
-        // Insert or update feature for 1 Month plan
-        DB::table('features')->upsert([
+            ],
             [
                 'id' => 2,
                 'Search' => 'Yes',
@@ -49,20 +36,7 @@ class JobPostingPlansTableSeeder extends Seeder
                 'Number of Job-Post' => 30,
                 'plan_id' => NULL,
                 'price' => 50.00,
-            ]
-        ], ['id'], [
-            'Search',
-            'Mails',
-            'Validity',
-            'Post Job',
-            'Duration of Job-Post',
-            'Number of Job-Post',
-            'plan_id',
-            'price'
-        ]);
-
-        // Insert or update feature for 15 Days plan
-        DB::table('features')->upsert([
+            ],
             [
                 'id' => 3,
                 'Search' => 'Yes',
@@ -74,15 +48,21 @@ class JobPostingPlansTableSeeder extends Seeder
                 'plan_id' => NULL,
                 'price' => 20.00,
             ]
-        ], ['id'], [
-            'Search',
-            'Mails',
-            'Validity',
-            'Post Job',
-            'Duration of Job-Post',
-            'Number of Job-Post',
-            'plan_id',
-            'price'
-        ]);
+        ];
+
+        DB::table('features')->upsert(
+            $features,
+            ['id'], 
+            [
+                'Search',
+                'Mails',
+                'Validity',
+                'Post Job',
+                'Duration of Job-Post',
+                'Number of Job-Post',
+                'plan_id',
+                'price'
+            ]
+        );
     }
 }
