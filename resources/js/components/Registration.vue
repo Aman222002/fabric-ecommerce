@@ -169,7 +169,6 @@ export default {
     }
   } catch (error) {
     console.error("Error during registration:", error);
-    
   }
 };
     const login = async () => {

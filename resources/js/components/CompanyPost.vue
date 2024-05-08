@@ -176,8 +176,11 @@ export default {
             category: category.value,
           },
         });
+        if (response.data.data.length === 0) {
+        showAlert.value = true; 
+      } else {
         jobs.value = response.data.data;
-        console.log(jobs.value);
+      }
       } catch (err) {
         console.error(err);
         if (err.response.status == 404) {
@@ -297,14 +300,14 @@ export default {
     };
 
     const truncateDescription = (description) => {
-      if (description && description.length > 70) {
-        return description.substring(0, 70) + "...";
+      if (description && description.length > 65) {
+        return description.substring(0, 65) + "...";
       }
       return description;
     };
 
     const isDescriptionLong = (description) => {
-      return description && description.length > 70;
+      return description && description.length > 65;
     };
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };

@@ -15,7 +15,7 @@ class SubscriptionPlansTableSeeder extends Seeder
     {
         DB::table('plans')->upsert([
             [
-                'id' => 1, // assuming you want to specify the IDs
+                'id' => 1, 
                 'name' => 'Premium',
                 'duration' => '2Month',
                 'Posts_Allowed' => 50,

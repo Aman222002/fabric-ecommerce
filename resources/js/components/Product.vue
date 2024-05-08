@@ -156,7 +156,7 @@ export default {
       axios
         .get(`/get/plans`)
         .then((response) => {
-          // console.log(response.data.data)
+           console.log(response.data.data)
           const Plans = response.data.data.map((item) => {
             const { id, Name, ...filteredItem } = item;
             return { id, Name, details: filteredItem };

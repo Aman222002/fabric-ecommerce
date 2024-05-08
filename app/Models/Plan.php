@@ -17,8 +17,8 @@ class Plan extends Model
     protected $casts = [
         'price' => 'float',
     ];
-    public function features()
+   public function features()
     {
-        return $this->belongsTo(Feature::class, 'feature_id');
+        return $this->hasOne(Feature::class, 'id', 'feature_id');
     }
 }

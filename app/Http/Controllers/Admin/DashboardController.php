@@ -51,7 +51,7 @@ class DashboardController extends Controller
      */
     public function viewAddBlog()
     {
-        return view('admin/blog');
+        return view('admin.blog');
     }
     /**
      * function to return jobs view
@@ -114,27 +114,28 @@ class DashboardController extends Controller
                 $features = $plan->features;
                 if ($features) {
                     return [
-                        'id' => $plan['id'],
-                        'Name' => $plan['name'],
+                        'id' => $plan->id,
+                        'Name' => $plan->name,
                         'search' => $features->Search,
                         'Mails' => $features->Mails,
                         'Validity' => $features->Validity,
                         'Post Job' => $features->{'Post Job'},
                         'Duration of Job-Post' => $features->{'Duration of Job-Post'},
                         'Number of Job-Post' => $features->{'Number of Job-Post'},
-                        'Price' => '$' . $features->price,
+                        'Price' => '$' . $plan->price,
                     ];
                 } else {
                     return null;
                 }
             });
-            if ($plans) {
+
+            if ($plans->isNotEmpty()) {
                 return response()->json(['status' => true, 'data' => $plans], 200);
             } else {
-                return response()->json(['status' => false, 'message' => 'Plans not Found'], 404);
+                return response()->json(['status' => false, 'message' => 'Plans not found'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'messsage' => $e], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
     public function updatePlans(Request $request, $planId = 0)
