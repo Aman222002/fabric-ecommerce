@@ -297,14 +297,14 @@ export default {
     };
 
     const truncateDescription = (description) => {
-      if (description && description.length > 90) {
-        return description.substring(0, 90) + "...";
+      if (description && description.length > 70) {
+        return description.substring(0, 70) + "...";
       }
       return description;
     };
 
     const isDescriptionLong = (description) => {
-      return description && description.length > 90;
+      return description && description.length > 70;
     };
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
@@ -353,8 +353,6 @@ export default {
       category,
       items,
       showAlert,
-      subjectRules,
-      fullNameRules,
     };
   },
 };

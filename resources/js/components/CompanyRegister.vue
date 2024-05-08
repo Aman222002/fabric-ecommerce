@@ -242,15 +242,14 @@ export default {
             .then((response) => {
               console.log(response);
               if (response.data.status == true) {
-                
-        window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'success',
-              title: 'Please Verify Your Mail',
-            });
+                window.Swal.fire({
+                  toast: true,
+                  position: "top-end",
+                  timer: 2000,
+                  showConfirmButton: false,
+                  icon: "success",
+                  title: "Please Verify Your Mail",
+                });
                 window.location.href = "/job";
               }
             })

@@ -1,8 +1,10 @@
 <template>
-  <v-container>
+  <v-container class="mb-7">
     <div>
       <div style="text-align: center">
-        <h1 style="margin-top: 30px">Fill your Personal Details</h1>
+        <h1 style="margin-top: 20px; margin-bottom: 20px">
+          Fill your Personal Details
+        </h1>
       </div>
       <div>
         <v-stepper v-model="e1" style="position: relative">
