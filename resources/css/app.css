@@ -28,11 +28,11 @@ button.b_string_btn {
     line-height: 20px;
     border-radius: 8px;
     font-weight: 400;
-    padding: 10px 35px;
     background-color: #0146a6;
     color: #fff;
     margin: 0 auto;
     display: table;
+    padding: 2px 35px;
 }
 
 /* Hello World Pushap */
@@ -90,7 +90,7 @@ main.v-main {
 }
 
 .banner_st h3 span.colored {
-    color: #1967d2;
+    color: #0146a6;
 }
 
 .banner_st .text {
@@ -114,7 +114,7 @@ form.job_search_form .btn_search {
     width: 100%;
     min-width: auto;
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     padding: 10px 0;
     text-align: center;
     text-decoration: unset;
@@ -237,7 +237,7 @@ form.job_search_form .v-input__control .v-field__outline {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #1967d2;
+    color: #0146a6;
     font-size: 25px;
     border-radius: 10px;
     padding: 5px;
@@ -297,7 +297,7 @@ form.job_search_form .v-input__control .v-field__outline {
     text-align: center;
     white-space: nowrap;
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     font-size: 15px;
     line-height: 20px;
     border-radius: 8px;
@@ -432,12 +432,12 @@ a.bookmark_fr {
 }
 
 .millions_of_jobs a.theme-btn {
-    font-size: 19px;
+    font-size: 15px;
     line-height: 20px;
     border-radius: 8px;
     font-weight: 400;
-    padding: 15px 28px;
-    background-color: #1967d2;
+    padding: 10px 25px;
+    background-color: #0146a6;
     text-decoration: unset;
     display: table;
     color: #fff;
@@ -459,12 +459,12 @@ a.bookmark_fr {
 }
 
 .search_and_apply a {
-    font-size: 19px;
+    font-size: 17px;
     line-height: 20px;
     border-radius: 8px;
     font-weight: 400;
-    padding: 15px 28px;
-    background-color: #1967d2;
+    padding: 12px 20px;
+    background-color: #0146a6;
     text-decoration: unset;
     display: table;
     color: #fff;
@@ -518,7 +518,7 @@ form.form_fild_com {
 button.form_fild_btn,
 .form_fild_btn {
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     font-size: 15px;
     border-radius: 8px;
     font-weight: 400;
@@ -530,7 +530,7 @@ button.form_fild_btn,
     width: 100%;
     min-width: auto;
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     padding: 10px 0;
     text-align: center;
     text-decoration: unset;
@@ -624,7 +624,7 @@ footer.v-footer {
 }
 
 .find_Job_list_right .custom-card:hover .v-card-title {
-    color: #1967d2;
+    color: #0146a6;
 }
 
 .single_job_search_page {
@@ -647,23 +647,23 @@ footer.v-footer {
 button.apply_for_job {
     text-align: center;
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     font-size: 15px;
     border-radius: 8px;
     font-weight: 400;
-    padding: 18px 35px;
-    height: 50px !important;
+    padding: 11px 28px;
+    height: 43px !important;
 }
 
 button.save_btn {
-    height: 50px !important;
+    height: 43px !important;
     line-height: 50px;
     text-align: center;
     font-size: 16px;
     cursor: pointer;
-    color: #1967d2;
+    color: #0146a6;
     border-radius: 7px;
-    background: #1967d212;
+    background: #0146a612;
     transition: all 0.3s ease;
     margin-left: 20px;
 }
@@ -677,7 +677,7 @@ button.save_btn {
     display: table;
     margin: 0 auto;
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     font-size: 15px;
     border-radius: 8px;
     font-weight: 400;
@@ -735,7 +735,7 @@ button.save_btn {
     border-radius: 8px;
     font-weight: 400;
     padding: 15px 28px;
-    background-color: #1967d2;
+    background-color: #0146a6;
     text-decoration: unset;
     display: table;
     color: #fff;
@@ -749,10 +749,10 @@ button.save_btn {
 
 
 .job_alerts_table button.v-btn {
-    background: #1967d212;
+    background: #0146a612;
     border-radius: 8px;
     font-size: 16px;
-    color: #1967d2;
+    color: #0146a6;
     text-align: center;
     transition: all 0.3s ease;
 }
@@ -795,7 +795,7 @@ button.save_btn {
     border-radius: 8px;
     font-weight: 400;
     padding: 15px 28px;
-    background-color: #1967d2;
+    background-color: #0146a6;
     text-decoration: unset;
     display: table;
     color: #fff;
@@ -864,7 +864,7 @@ button.save_btn {
     border-radius: 8px;
     font-weight: 400;
     padding: 15px 28px;
-    background-color: #1967d2;
+    background-color: #0146a6;
     text-decoration: unset;
     display: table;
     color: #fff;
@@ -888,7 +888,7 @@ button.save_btn {
 
 .save_job_body_page_section .company_info .v-card-actions button.v-btn {
     color: #fff;
-    background-color: #1967d2;
+    background-color: #0146a6;
     font-size: 15px;
     border-radius: 8px;
     font-weight: 400;
@@ -970,7 +970,7 @@ button.save_btn {
 section.contact_us_page .form_contact {
     border: 1px solid #ecedf2;
     border-radius: 8px;
-    padding: 50px 50px 70px;
+    padding: 35px 35px;
     margin: 20px;
 }
 
@@ -1004,6 +1004,12 @@ section.contact_us_page .form_contact {
     top: -4px;
 }
 
+.find_Job_list .find_Job_list_left {
+    border-radius: 15px;
+}
+
+
+
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {
@@ -1015,8 +1021,7 @@ section.contact_us_page .form_contact {
         display: flex;
         gap: 15px;
         background-color: #fff;
-        border-radius: 10px;
-        padding: 15px;
+        padding: 10px 15px;
         align-items: center;
         border: 1px solid #ecedf2;
         box-shadow: 0 7px 18px rgba(64, 79, 104, .05);
@@ -1040,7 +1045,7 @@ section.contact_us_page .form_contact {
 
 @media screen and (min-width: 960px) {
     section.contact_us_page .content {
-        position: absolute;
+
         width: 100%;
         left: 0;
         top: -240px;
@@ -1101,7 +1106,6 @@ section.contact_us_page .form_contact {
 
     .featured_jobs a.load_more,
     .millions_of_jobs a.theme-btn {
-        padding: 11px 28px;
         height: 100%;
     }
 
@@ -1189,9 +1193,7 @@ section.contact_us_page .form_contact {
         height: 100% !important;
     }
 
-    .millions_of_jobs a.theme-btn {
-        padding: 12px 19px;
-    }
+
 
     .popular_job_categories .popular_col,
     .featured_jobs .featured_jobs_col {

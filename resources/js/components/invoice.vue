@@ -95,7 +95,7 @@
                                 <td
                                   style="
                                     font-size: 21px;
-                                    color: #1967d2;
+                                    color: #0146a6;
                                     letter-spacing: -1px;
                                     font-family: 'Open Sans', sans-serif;
                                     line-height: 1;
@@ -246,7 +246,7 @@
                           style="
                             font-size: 12px;
                             font-family: 'Open Sans', sans-serif;
-                            color: #1967d2;
+                            color: #0146a6;
                             line-height: 18px;
                             vertical-align: top;
                             padding: 10px 0px;
@@ -306,7 +306,7 @@
                           style="
                             font-size: 12px;
                             font-family: 'Open Sans', sans-serif;
-                            color: #1967d2;
+                            color: #0146a6;
                             line-height: 18px;
                             vertical-align: top;
                             padding: 10px 0px;
@@ -620,7 +620,7 @@
                                   <a
                                     href="#"
                                     style="
-                                      color: #1967d2;
+                                      color: #0146a6;
                                       text-decoration: underline;
                                     "
                                     >4185939336</a

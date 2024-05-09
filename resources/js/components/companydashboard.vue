@@ -240,9 +240,9 @@ export default {
 .company_dashboard_view div.card .flex-container i.mdi {
   margin-right: 10px;
   font-size: 40px !important;
-  color: #1967d2;
+  color: #0146a6;
   text-align: center;
-  background-color: #1967d21a;
+  background-color: #0146a61a;
   border-bottom: 10px;
 }
 div.dashboard_info .v-card-item__content .cardtop h1.numbering {

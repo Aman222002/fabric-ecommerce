@@ -20,6 +20,7 @@
 import axios from "axios";
 import { ref, onMounted } from "vue";
 export default {
+  name: "brandLogo",
   setup() {
     const brandLogo = ref([]);
     const partnerData = () => {

@@ -39,7 +39,7 @@
                     >{{ jobApplication.company.company_email }}
                   </li>
                   <li>
-                    <v-icon color="#1967d2" class="mr-2">mdi-school</v-icon
+                    <v-icon color="#0146a6" class="mr-2">mdi-school</v-icon
                     >{{ jobApplication.job.qualifications }}
                   </li>
                   <li>

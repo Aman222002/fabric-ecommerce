@@ -45,7 +45,7 @@
               </li>
             </ul>
             <a class="theme-btn" href="/login">
-              <span class="btn-title">Get Started</span>
+              <span class="btn-title">GET STARTED</span>
             </a>
           </div>
         </v-col>
@@ -54,10 +54,8 @@
   </div>
 </template>
 <script>
-
 export default {
   name: "millionsOfJob",
-  
-}
+};
 </script>
 

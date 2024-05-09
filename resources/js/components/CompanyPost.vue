@@ -22,23 +22,25 @@
                 <v-text-field
                   prepend-inner-icon="mdi-magnify"
                   v-model="jobTitle"
-                  label="Job Title"
+                  label="Job title, keywords, or company"
                   density="compact"
                   variant="solo"
                   :rules="fullNameRules"
                   clearable
                   style="width: 100%"
+                  placeholder="Job title, keywords, or company"
                 ></v-text-field>
                 <div class="line"></div>
                 <v-text-field
                   prepend-inner-icon="mdi-map-marker-outline"
                   v-model="location"
-                  label="Location"
+                  label="City or postcode"
                   density="compact"
                   variant="solo"
                   :rules="subjectRules"
                   clearable
                   style="width: 100%"
+                  placeholder="City or postcode"
                 ></v-text-field>
                 <v-btn @click="searchJobs" class="b_string_btn">Search</v-btn>
               </div>
@@ -176,8 +178,11 @@ export default {
             category: category.value,
           },
         });
-        jobs.value = response.data.data;
-        console.log(jobs.value);
+        if (response.data.data.length === 0) {
+          showAlert.value = true;
+        } else {
+          jobs.value = response.data.data;
+        }
       } catch (err) {
         console.error(err);
         if (err.response.status == 404) {
@@ -297,14 +302,14 @@ export default {
     };
 
     const truncateDescription = (description) => {
-      if (description && description.length > 70) {
-        return description.substring(0, 70) + "...";
+      if (description && description.length > 65) {
+        return description.substring(0, 65) + "...";
       }
       return description;
     };
 
     const isDescriptionLong = (description) => {
-      return description && description.length > 70;
+      return description && description.length > 65;
     };
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
@@ -403,28 +408,8 @@ export default {
   padding: 1% 15px;
   align-items: center;
 }
-button.apply_for_job {
-  text-align: center;
-  color: #fff;
-  background-color: #1967d2;
-  font-size: 15px;
-  border-radius: 8px;
-  font-weight: 400;
-  padding: 18px 35px;
-  height: 50px !important;
-}
-button.save_btn {
-  height: 50px !important;
-  line-height: 50px;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  color: #1967d2;
-  border-radius: 7px;
-  background: #1967d212;
-  transition: all 0.3s ease;
-  margin-left: 20px;
-}
+
+
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;
@@ -433,25 +418,14 @@ button.save_btn {
   display: table;
   margin: 0 auto;
   color: #fff;
-  background-color: #1967d2;
+  background-color: #0146a6;
   font-size: 15px;
   border-radius: 8px;
   font-weight: 400;
   padding: 18px 35px;
   height: 50px !important;
 }
-button.save_btn {
-  height: 50px !important;
-  line-height: 50px;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  color: #1967d2;
-  border-radius: 7px;
-  background: #1967d212;
-  transition: all 0.3s ease;
-  margin-left: 20px;
-}
+
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;

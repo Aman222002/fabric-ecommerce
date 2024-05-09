@@ -187,7 +187,7 @@
           >
             <div>
               <v-card-title
-                ><v-icon color="#1967d2">mdi-school</v-icon>
+                ><v-icon color="#0146a6">mdi-school</v-icon>
                 Qualifications:<br />
                 {{ educationDetails.education_type }}</v-card-title
               >

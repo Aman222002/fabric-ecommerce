@@ -53,7 +53,7 @@ export default {
 }
 .page_404_error a {
   color: #fff;
-  background-color: #1967d2;
+  background-color: #0146a6;
   font-size: 15px;
   border-radius: 8px;
   font-weight: 400;

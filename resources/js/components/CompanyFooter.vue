@@ -11,7 +11,9 @@
           <div class="footer-column about-widget">
             <p class="phone-num">
               <span>Call us </span>
-              <a @click="makeCall()">{{ contactDetails.contact }}</a>
+              <a v-bind:href="`tel:${contactDetails.contact}`">{{
+                contactDetails.contact
+              }}</a>
             </p>
             <p class="address">
               {{ contactDetails.address }}<br />
@@ -194,7 +196,7 @@ export default {
 }
 
 .footer p.phone-num a {
-  color: #1967d2;
+  color: #0146a6;
 }
 
 .footer .address {
@@ -237,7 +239,7 @@ export default {
   height: 2px;
   width: 0;
   content: "";
-  border-bottom: 2px solid #1967d2;
+  border-bottom: 2px solid #0146a6;
   transition: all 0.3s ease;
 }
 
@@ -253,7 +255,7 @@ export default {
 
 .footer .list li:hover a {
   transform: translateX(25px);
-  color: #1967d2;
+  color: #0146a6;
 }
 
 a {

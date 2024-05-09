@@ -2,35 +2,34 @@
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <HomePage />
-    <PopularJobCategories />
-    <FeaturedJob />
+    <popularJobCategories />
+    <featuredJob />
     <!-- <Testimonials /> -->
-    <BrandLogo />
-    <MillionsOfJob />
-    <RecentNews id="blogs" />
+    <brandLogo />
+    <millionsOfJob />
+    <recentNews id="blogs" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import HomePage from "./HomePage.vue";
-import PopularJobCategories from "./popularJobCategories.vue";
-import FeaturedJob from "./featuredJob.vue";
+import popularJobCategories from "./popularJobCategories.vue";
+import featuredJob from "./featuredJob.vue";
 // import Testimonials from "./TestimonialsCom.vue";
-import BrandLogo from "./brandLogo.vue";
-import MillionsOfJob from "./millionsOfJob.vue";
-import RecentNews from "./recentNews.vue";
+import brandLogo from "./brandLogo.vue";
+import millionsOfJob from "./millionsOfJob.vue";
+import recentNews from "./recentNews.vue";
 
 export default {
   name: "HomeView",
   components: {
     HomePage,
-    PopularJobCategories,
-    FeaturedJob,
-    // Testimonials,
-    BrandLogo,
-    MillionsOfJob,
-    RecentNews,
+    popularJobCategories,
+    featuredJob,
+    brandLogo,
+    millionsOfJob,
+    recentNews,
   },
 };
 </script>

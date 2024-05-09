@@ -6,7 +6,7 @@
           class="centered-heading"
           style="font-family: sans-serif; font-size: 30px"
         >
-          How JobPath <span style="color: #1967d2">helps you hire!</span>
+          How JobPath <span style="color: #0146a6">helps you hire!</span>
         </p>
         <p style="margin-top: 10px">
           How JobPath helps you hire Indeed helps you connect with talent, on
@@ -63,7 +63,7 @@
           class="centered-heading"
           style="font-family: sans-serif; font-size: 30px"
         >
-          KEY <span style="color: #1967d2"> BENEFITS!</span>
+          KEY <span style="color: #0146a6"> BENEFITS!</span>
         </p>
         <p style="margin-top: 10px">Why Choose Naukri Job Posting?</p>
       </div>
@@ -215,7 +215,7 @@ export default {
 }
 
 .choose_your_plan .packages_price .plan_choose {
-  background: #1967d2;
+  background: #0146a6;
   margin: 12px;
   border-radius: 10px;
 }
@@ -227,7 +227,7 @@ export default {
 }
 .choose_your_plan .packages_price .v-card-title {
   text-align: center;
-  background: #1967d2;
+  background: #0146a6;
   color: #fff;
   text-transform: uppercase;
   padding: 15px 0;
@@ -248,7 +248,7 @@ export default {
 .choose_your_plan .plan_infor .v-card {
   padding: 35px 20px;
   text-align: center;
-  border-left: 2px solid #1967d2;
+  border-left: 2px solid #0146a6;
 }
 .choose_your_plan .packages_price .v-card-text {
   padding: 15px 0;

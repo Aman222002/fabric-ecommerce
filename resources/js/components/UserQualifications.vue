@@ -45,7 +45,7 @@
 import { ref } from 'vue';
 import { useDropzone } from 'vue3-dropzone';
 export default {
-    name: 'UsersQualifications',
+    name: 'UserQualifications',
     data() {
         return {
             formData: {

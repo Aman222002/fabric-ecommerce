@@ -196,7 +196,7 @@ export default {
 }
 
 .contact .heading h2 span {
-  color: #1967d2;
+  color: #0146a6;
 }
 
 .contact .heading p {
@@ -258,7 +258,7 @@ section.contact_us_page form.v-form button.v-btn {
   margin: 0 auto;
   height: 100% !important;
   padding: 11px 13px;
-  background: #1967d2;
+  background: #0146a6;
   color: #fff;
   font-size: 19px;
 }
@@ -271,14 +271,23 @@ section.contact_us_page .v-card {
 section.contact_us_page .heading {
   background: #e2eaf8;
   padding: 20px 0;
-  margin-bottom: 70px;
+  margin-bottom: 25px;
 }
 section.contact_us_page .v-card .v-card-text.titel_1 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 section.contact_us_page .content .v-card i.mdi {
   font-size: 35px;
   color: #0146a6;
+}
+
+@media screen and (min-width: 1500px) {
+  section.contact_us_page .content .v-card i.mdi {
+    font-size: 30px;
+  }
+  section.contact_us_page .v-card {
+    padding: 20px;
+  }
 }
 </style>
