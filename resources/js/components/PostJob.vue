@@ -69,7 +69,6 @@
             density="compact"
           ></v-text-field>
         </v-col>
-
         <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field
             variant="solo"

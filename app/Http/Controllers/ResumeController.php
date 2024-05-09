@@ -287,7 +287,7 @@ class ResumeController extends Controller
             return response()->json($response, 200);
         } catch (\Exception $e) {
 
-            return response()->json(['sttaus' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
 

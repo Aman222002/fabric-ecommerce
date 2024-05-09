@@ -193,7 +193,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .custom-button {
   height: 50px;
