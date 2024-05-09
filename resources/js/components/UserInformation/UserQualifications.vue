@@ -70,7 +70,7 @@ import axios from "axios";
 import { ref, computed } from "vue";
 import { useMyStore } from "../../store";
 export default {
-  name: "UsersQualifications",
+  name: "UserQualifications",
   setup() {
     const store = useMyStore();
     const educationDetails = ref(store.educationDetails ?? []);

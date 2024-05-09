@@ -18,7 +18,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'id' => 1, 
                 'name' => 'Premium',
                 'duration' => '2Month',
-                'Posts_Allowed' => 50,
+                'posts_allowed' => 50,
                 'price' => 70.00,
                 'interval_unit' => 'monthly',
                 'interval' => 1.0,
@@ -28,7 +28,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'id' => 2,
                 'name' => 'Standard',
                 'duration' => '1Month',
-                'Posts_Allowed' => 30,
+                'posts_allowed' => 30,
                 'price' => 50.00,
                 'interval_unit' => 'monthly',
                 'interval' => 1.0,
@@ -38,14 +38,14 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'id' => 3,
                 'name' => 'Basic',
                 'duration' => '3Week',
-                'Posts_Allowed' => 20,
+                'posts_allowed' => 20,
                 'price' => 30.00,
                 'interval_unit' => 'weekly',
                 'interval' => 1.0,
                 'feature_id' => 3
             ]
         ], ['id'], [ 
-            'name','duration','Posts_Allowed','price','interval_unit','interval','feature_id'
+            'name','duration','posts_allowed','price','interval_unit','interval','feature_id'
         ]);
     }
 }

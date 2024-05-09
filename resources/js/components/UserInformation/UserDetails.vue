@@ -28,7 +28,7 @@ import axios from 'axios';
 import { ref, onMounted } from "vue";
 import { useMyStore } from "../../store";
 export default {
-    name: 'UsersDetails',
+    name: 'UserDetails',
     setup() {
         const store = useMyStore();
         const users = ref(store.userDetails);

@@ -124,8 +124,8 @@ app.component("resetpassword-component", ResetPassword);
 import ResumeComponent from "./components/ResumeComponent.vue";
 app.component("resume-component", ResumeComponent);
 
-import ExpiredComponent from "./components/Expired.vue";
-app.component("expired-component", ExpiredComponent);
+import Expired from "./components/Expired.vue";
+app.component("expired-component", Expired);
 
 
 import Confirm from "./components/Confirm.vue";
@@ -134,11 +134,11 @@ app.component("confirm-component", Confirm);
 import ConfirmCompany from "./components/ConfirmCompany.vue";
 app.component("confirmcompany-component", ConfirmCompany);
 
-import AddressTabComponent from "./components/AddressTab.vue";
-app.component("address-component", AddressTabComponent);
+import AddressTab from "./components/AddressTab.vue";
+app.component("address-component", AddressTab);
 
-import BlogPosts from "./components/BlogPost.vue";
-app.component("blog-posts", BlogPosts);
+import BlogPost from "./components/BlogPost.vue";
+app.component("blog-posts", BlogPost);
 // import index from "./components/HomePage/index.vue";
 // app.component("home-component", index);
 import viewjob from "./components/viewjob.vue";
@@ -221,11 +221,11 @@ app.component("company-component", CompanyRegister);
 import Product from "./components/Product.vue";
 app.component("product-component", Product);
 
-import cart from "./components/Cart.vue";
-app.component("cart-component", cart);
+import Cart from "./components/Cart.vue";
+app.component("cart-component", Cart);
 
-import postjob from "./components/postjob.vue";
-app.component("postjob-component", postjob);
+import Postjob from "./components/Postjob.vue";
+app.component("postjob-component", Postjob);
 
 import JobCrud from "./components/Jobcrud.vue";
 app.component("jobcrud-component", JobCrud);
@@ -251,8 +251,8 @@ app.component("company-profile", CompanyProfile);
 import JobApplied from "./components/JobApplied.vue";
 app.component("jobapply-component", JobApplied);
 
-import BuySubscription from "./components/Buy.vue";
-app.component("buy-component", BuySubscription);
+import Buy from "./components/Buy.vue";
+app.component("buy-component", Buy);
 import PostDetail from "./components/PostDetail.vue";
 app.component("job-detail", PostDetail);
 
@@ -274,8 +274,8 @@ app.component("companyuser-component", CompanyUsers);
 import About from "./components/About.vue";
 app.component("about-component", About);
 
-import SingleBlog from "./components/blogSinglePage.vue";
-app.component("single-blog", SingleBlog);
+import blogSinglePage from "./components/blogSinglePage.vue";
+app.component("single-blog", blogSinglePage);
 
 import AdminDashBoard from "./components/AdminDashboard.vue";
 app.component("admindashboard-component", AdminDashBoard);
