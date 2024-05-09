@@ -137,15 +137,6 @@ export default {
   padding-bottom: 1px;
 }
 
-.recent_news_articles .sec-title h2 {
-  position: relative;
-  display: block;
-  font-weight: 500;
-  font-size: 40px;
-  line-height: 1.2em;
-  color: #202124;
-}
-
 .recent_news_articles .sec-title .text {
   position: relative;
   margin-top: 15px;

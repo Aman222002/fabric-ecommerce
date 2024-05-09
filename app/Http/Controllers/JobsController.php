@@ -123,7 +123,7 @@ class JobsController extends Controller
                     'message' => 'User does not have a active subscription plan'
                 ], 402);
             }
-            $posts_allowed = Plan::where('id', $user->plan_id)->value('Posts_Allowed');
+            $posts_allowed = Plan::where('id', $user->plan_id)->value('posts_allowed');
             $job_posted = Job::where('user_id', $user->id)->where('post_status', 'Published')->count();
             if ($posts_allowed < ($job_posted + 1)) {
                 return response()->json([

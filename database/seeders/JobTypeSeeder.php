@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\JobType;
+
 class JobTypeSeeder extends Seeder
 {
     /**
@@ -12,15 +12,16 @@ class JobTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        //
         $jobTypes = [
             'Full Time',
             'Part Time',
             'Remote',
-            'Freelencer',
+            'Freelancer',
         ];
-        foreach ($jobTypes as $type) {
+
+      
+        collect($jobTypes)->map(function ($type) {
             JobType::updateOrCreate(['name' => $type]);
-        }
+        });
     }
 }
