@@ -157,7 +157,7 @@ export default {
 }
 
 .read-more {
-  color: #1967d2;
+  color: #0146a6;
   cursor: pointer;
 }
 

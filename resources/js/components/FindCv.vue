@@ -82,7 +82,7 @@ form.job_search_form .job_search_btn {
   width: 100%;
   min-width: auto;
   color: #fff;
-  background-color: #1967d2;
+  background-color: #0146a6;
   padding: 10px 0;
   text-align: center;
   text-decoration: unset;

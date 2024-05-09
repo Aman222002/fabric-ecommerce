@@ -134,43 +134,42 @@ export default {
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
     const phoneRules = [
-    (v) => !!v || "Phone number is required",
-  (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
-  (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
+      (v) => !!v || "Phone number is required",
+      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+      (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
     ];
     const submitForm = async () => {
-  try {
-    const valid = await form.value.validate();
-    if (!valid.valid) {
-      const errors = JSON.parse(JSON.stringify(valid.errors));
-      let errorField = form.value[errors[0].id];
-      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
-      errorField.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-      });
-    } else {
-      const response = await axios.post("/registration", formData.value);
-      if (response.data.status === true) {
-        
-        window.Swal.fire({
+      try {
+        const valid = await form.value.validate();
+        if (!valid.valid) {
+          const errors = JSON.parse(JSON.stringify(valid.errors));
+          let errorField = form.value[errors[0].id];
+          errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+          errorField.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "center",
+          });
+        } else {
+          const response = await axios.post("/registration", formData.value);
+          if (response.data.status === true) {
+            window.Swal.fire({
               toast: true,
-              position: 'top-end',
+              position: "top-end",
               timer: 2000,
               showConfirmButton: false,
-              icon: 'success',
-              title: 'Please Verify Your Mail',
+              icon: "success",
+              title: "Please Verify Your Mail",
             });
-        window.location.href="/login"
-      } else {
-        console.error("Registration failed:", response.data.message);
+            window.location.href = "/login";
+          } else {
+            console.error("Registration failed:", response.data.message);
+          }
+        }
+      } catch (error) {
+        console.error("Error during registration:", error);
       }
-    }
-  } catch (error) {
-    console.error("Error during registration:", error);
-  }
-};
+    };
     const login = async () => {
       window.location.href = "/login";
     };
@@ -183,10 +182,10 @@ export default {
       passwordRules,
       phoneRules,
       submitForm,
-      login,form
+      login,
+      form,
     };
   },
-  
 };
 </script>
 <style scoped>
@@ -206,13 +205,13 @@ export default {
 .form_page_right button.v-btn {
   min-width: 150px;
   margin: 0 auto;
-  background-color: #1967d2;
+  background-color: #0146a6 !important;
   font-size: 17px;
   line-height: 20px;
   font-weight: 400;
   padding: 11px 0;
   height: 100%;
-  border-radius: 15px;
+  border-radius: 6px !important;
   color: #fff;
 }
 </style>

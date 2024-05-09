@@ -274,7 +274,7 @@ export default {
 }
 
 .btn-dashboard:hover {
-  background: linear-gradient(45deg, #1967d2, #8b8488);
+  background: linear-gradient(45deg, #0146a6, #8b8488);
 }
 
 .v-app-bar {
@@ -282,7 +282,7 @@ export default {
 }
 
 header.header_bar a.nav-link:hover i {
-  color: #1967d2 !important;
+  color: #0146a6 !important;
 }
 
 .v-list-item a {
@@ -314,11 +314,11 @@ header.header_bar a.nav-link i {
   display: table;
   padding: 15px 15px;
   background: #e2eaf8;
-  color: #1967d2;
+  color: #0146a6;
 }
 
 .log_and_reg ul li:hover a {
-  background: #1967d2;
+  background: #0146a6;
   color: #fff;
 }
 .nab_burger_menu .nav-links a.nav-link {
@@ -326,12 +326,12 @@ header.header_bar a.nav-link i {
 }
 .nab_burger_menu .nav-links a.nav-link.active,
 .nab_burger_menu .nav-links a.nav-link:hover {
-  color: #1967d2;
+  color: #0146a6;
 }
 header.header_bar a.login__a_tg,
 header.header_bar a.register_a_tg {
   text-align: center;
-  color: #1967d2;
+  color: #0146a6;
   background-color: #e2eaf8;
   font-size: 15px;
   line-height: 20px;
@@ -344,11 +344,11 @@ header.header_bar a.register_a_tg {
   color: #fff;
 }
 header.header_bar a.login__a_tg i.mdi {
-  color: #1967d2 !important;
+  color: #0146a6 !important;
 }
 header.header_bar a.login__a_tg:hover {
   color: #e2eaf8;
-  background-color: #1967d2;
+  background-color: #0146a6;
 }
 header.header_bar a.login__a_tg:hover i.mdi {
   color: #e2eaf8 !important;
