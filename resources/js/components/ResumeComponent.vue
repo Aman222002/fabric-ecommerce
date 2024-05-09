@@ -1,8 +1,10 @@
 <template>
-  <v-container>
+  <v-container class="mb-7">
     <div>
       <div style="text-align: center">
-        <h1 style="margin-top: 30px">Fill your Personal Details</h1>
+        <h1 style="margin-top: 20px; margin-bottom: 20px">
+          Fill your Personal Details
+        </h1>
       </div>
       <div>
         <v-stepper v-model="e1" style="position: relative">
@@ -120,13 +122,13 @@ import axios from "axios";
 import { ref, computed, onMounted } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import UsersDetails from "./UserInformations/UsersDetails.vue";
-import UsersAchievments from "./UserInformations/UsersAchievments.vue";
-import UserAddress from "./UserInformations/UserAddress.vue";
-import UserSkills from "./UserInformations/UserSkills.vue";
-import WorkExperience from "./UserInformations/WorkExperience.vue";
-import UserProfile from "./UserInformations/UserProfile.vue";
-import UsersQualifications from "./UserInformations/UsersQualifications.vue";
+import UserDetails from "./UserInformation/UserDetails.vue";
+import UserAchievments from "./UserInformation/UserAchievments.vue";
+import UserAddress from "./UserInformation/UserAddress.vue";
+import UserSkills from "./UserInformation/UserSkills.vue";
+import WorkExperience from "./UserInformation/WorkExperience.vue";
+import UserProfile from "./UserInformation/UserProfile.vue";
+import UserQualifications from "./UserInformation/UserQualifications.vue";
 import { useMyStore } from "../store";
 
 export default {
@@ -135,13 +137,13 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    UsersDetails,
+    UserDetails,
     UserSkills,
-    UsersQualifications,
+    UserQualifications,
     UserProfile,
     WorkExperience,
     UserAddress,
-    UsersAchievments,
+    UserAchievments,
   },
   setup() {
     const store = useMyStore();

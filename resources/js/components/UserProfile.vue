@@ -181,11 +181,11 @@
             </v-card-text>
           </v-card>
           <!-- Qualifications  -->
-          <v-card>
-            <div
-              v-for="(educationDetails, index) in educationDetails"
-              :key="index"
-            >
+          <v-card
+            v-for="(educationDetails, index) in educationDetails"
+            :key="index"
+          >
+            <div>
               <v-card-title
                 ><v-icon color="#1967d2">mdi-school</v-icon>
                 Qualifications:<br />

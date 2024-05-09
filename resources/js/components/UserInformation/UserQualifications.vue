@@ -70,12 +70,17 @@ import axios from "axios";
 import { ref, computed } from "vue";
 import { useMyStore } from "../../store";
 export default {
-  name: "UsersQualifications",
+  name: "UserQualifications",
   setup() {
     const store = useMyStore();
     const educationDetails = ref(store.educationDetails ?? []);
     const educationTypes = ref(["High School", "College", "University"]);
-
+    const currentYear = new Date().getFullYear();
+    const startYear = 1970;
+    const endYear = 2030;
+    const yearOptions = ref(
+      Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
+    );
     const maxPassingYear = currentYear;
 
     // const removeEducationEntry = async (index) => {
@@ -96,12 +101,6 @@ export default {
     //         ];
     //         educationDetails.value = updatedEducationDetails;
 
-    const currentYear = new Date().getFullYear();
-    const startYear = 1970;
-    const endYear = 2030;
-    const yearOptions = ref(
-      Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
-    );
     // const removeEducationEntry = async (index) => {
     //     console.log('Before removal - educationDetails:', educationDetails.value);
     //     console.log('Removing index:', index);

@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <v-row class="form_log_reg" align="center" justify="center">
+    <v-row
+      class="form_log_reg form_login_el_cd"
+      align="center"
+      justify="center"
+    >
       <v-col sm="12" md="10" lg="12" xl="10" cols="12">
         <v-card class="elevation-12 mt-3" style="margin-bottom: 10px">
           <v-row class="form_page">
@@ -146,16 +150,15 @@ export default {
       } catch (error) {
         console.error(error);
         if (error.response && error.response.status === 403) {
-      window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: 'Please Verify Your Mail',
-            });
-    }
-       
+          window.Swal.fire({
+            toast: true,
+            position: "top-end",
+            timer: 2000,
+            showConfirmButton: false,
+            icon: "error",
+            title: "Please Verify Your Mail",
+          });
+        }
       }
     };
     const signup = async () => {

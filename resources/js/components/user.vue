@@ -1,7 +1,7 @@
 
 <template>
   <v-container fluid>
-    <v-form @submit.prevent="addUser" class="form_fild_com">
+    <v-form @submit.prevent="addUser" class="form_fild_com" ref="form">
       <v-row>
         <v-col cols="12">
           <h2 class="mb-4 form_fild_title">User add:</h2>
@@ -68,6 +68,7 @@ export default {
       phone: "",
       permission: [],
     });
+    const form = ref(null);
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
       (v) => !!v || "Email is required",
@@ -97,23 +98,63 @@ export default {
 
     onMounted(fetchPermissions);
 
+    // const addUser = async () => {
+    //   try {
+    //     const valid = await form.value.validate();
+    //     await axios.post("/admin/user/addnewuser", userData.value);
+    //     userData.value.permission.forEach((permission) => {
+    //       //console.log(permission);
+    //     });
+    //     window.Swal.fire({
+    //       icon: "success",
+    //       title: "Invitation sent",
+    //       text: "Invitation sent Successfully to the user Email",
+    //       confirmButtonText: "OK",
+    //     });
+    //     window.location.reload();
+    //   } catch (error) {
+    //     console.error("Error adding user:", error);
+    //   }
+    // };
     const addUser = async () => {
       try {
-        await axios.post("/admin/user/addnewuser", userData.value);
-        userData.value.permission.forEach((permission) => {
-          //console.log(permission);
-        });
+        const valid = await form.value.validate();
+    if (!valid.valid) {
+      const errors = JSON.parse(JSON.stringify(valid.errors));
+      let errorField = form.value[errors[0].id];
+      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+      errorField.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+      window.Swal.fire({
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'error',
+              title: 'use valid data',
+            });
+    } else {
+      await axios.post("/admin/user/addnewuser", userData.value);
+      userData.value.permission.forEach((permission) => {
+         //console.log(permission);
+       });
         window.Swal.fire({
-          icon: "success",
-          title: "Invitation sent",
-          text: "Invitation sent Successfully to the user Email",
-          confirmButtonText: "OK",
-        });
+              toast: true,
+              position: 'top-end',
+              timer: 2000,
+              showConfirmButton: false,
+              icon: 'success',
+              title: 'Invitation sent Successfully to the user Email',
+            });
         window.location.reload();
-      } catch (error) {
-        console.error("Error adding user:", error);
-      }
-    };
+    }
+  } catch (error) {
+    console.error("Error during invitation:", error);
+  }
+};
     return {
       userData,
       userPermissions,
@@ -122,7 +163,7 @@ export default {
       nameRules,
       emailRules,
       permissionRules,
-      phoneRules,
+      phoneRules,form
     };
   },
 };

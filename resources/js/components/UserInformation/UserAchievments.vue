@@ -75,7 +75,7 @@ import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useMyStore } from "../../store";
 export default {
-  name: "UsersAchievments",
+  name: "UserAchievments",
   setup() {
     const store = useMyStore();
     const achievements = ref(store.achievements);

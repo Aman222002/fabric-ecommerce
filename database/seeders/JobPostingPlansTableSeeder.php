@@ -13,7 +13,6 @@ class JobPostingPlansTableSeeder extends Seeder
      */
     public function run(): void
     {
-
         $features = [
             [
                 'id' => 1,
@@ -49,7 +48,6 @@ class JobPostingPlansTableSeeder extends Seeder
                 'price' => 20.00,
             ]
         ];
-
         DB::table('features')->upsert(
             $features,
             ['id'], 

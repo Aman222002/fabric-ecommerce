@@ -984,6 +984,26 @@ section.contact_us_page .form_contact {
     font-size: 30px;
 }
 
+/* Home page */
+.recent_news_articles .sec-title {
+    margin-bottom: 50px;
+}
+
+.about_us_page .recent_news_articles .sec-title {
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+/* form login  */
+
+.form_login_el_cd {
+    margin-top: 0%;
+}
+
+.v-stepper-item__avatar.v-avatar .v-icon {
+    top: -4px;
+}
+
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {

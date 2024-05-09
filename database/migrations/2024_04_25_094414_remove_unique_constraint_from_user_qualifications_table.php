@@ -26,9 +26,9 @@ return new class extends Migration
     {
         Schema::table('user_qualifications', function (Blueprint $table) {
             //
-            if (!Schema::hasIndex('user_qualifications', 'user_qualifications_user_id_unique')) {
-                $table->unique(['user_id']);
-            }
+            // if (!Schema::hasIndex('user_qualifications', 'user_qualifications_user_id_unique')) {
+            //     $table->unique(['user_id']);
+            // }
         });
     }
 };
