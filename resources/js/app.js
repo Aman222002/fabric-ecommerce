@@ -224,8 +224,8 @@ app.component("product-component", Product);
 import Cart from "./components/Cart.vue";
 app.component("cart-component", Cart);
 
-import Postjob from "./components/Postjob.vue";
-app.component("postjob-component", Postjob);
+import PostJob from "./components/PostJob.vue";
+app.component("postjob-component", PostJob);
 
 import JobCrud from "./components/Jobcrud.vue";
 app.component("jobcrud-component", JobCrud);
