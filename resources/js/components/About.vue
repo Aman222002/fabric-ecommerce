@@ -47,12 +47,8 @@
       <h2>Your Dream Jobs Are Waiting</h2>
 
       <div class="search_and_apply">
-        <v-btn size="x-large" class="load_more" to="#" @click="searchJob"
-          >Search Job</v-btn
-        >
-        <v-btn size="x-large" class="load_more" to="#" @click="searchJob"
-          >Apply Job Now</v-btn
-        >
+        <v-btn class="load_more" to="#" @click="searchJob">Search Job</v-btn>
+        <v-btn class="load_more" to="#" @click="searchJob">Apply Job Now</v-btn>
       </div>
     </div>
 

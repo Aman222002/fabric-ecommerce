@@ -396,20 +396,20 @@ export default {
 .form_page_right button.v-btn {
   min-width: 150px;
   margin: 0 auto;
-  background-color: #1967d2;
+  background-color: #0146a6 !important;
   font-size: 17px;
   line-height: 20px;
   font-weight: 400;
   padding: 11px 0;
   height: 100%;
-  border-radius: 15px;
+  border-radius: 6px !important;
   color: #fff;
 }
 .v-list-item--density-default.v-list-item--one-line .v-list-item-title {
   text-transform: capitalize;
 }
 .which_company .v-list .v-list-item {
-  color: #1967d2;
+  color: #0146a6;
   background-color: #e2eaf8;
   font-size: 15px;
   line-height: 20px;
@@ -419,7 +419,7 @@ export default {
 }
 .which_company .v-list .v-list-item:hover {
   color: #e2eaf8;
-  background-color: #1967d2;
+  background-color: #0146a6;
   padding-left: 20px;
 }
 .form_log_reg .v-card {

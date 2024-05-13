@@ -18,6 +18,7 @@ class LoginController extends Controller
     // protected $redirectTo = '/cv';
     public function index()
     {
+        
         return view('login');
     }
     public function check(Request $request)

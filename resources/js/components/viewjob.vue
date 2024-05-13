@@ -439,7 +439,7 @@ export default {
 
   <style>
 button.save_btn {
-  color: #1967d2 !important;
+  color: #0146a6 !important;
   background: #d6e2f7 !important;
 }
 .employers_search_single_top {
@@ -457,7 +457,7 @@ button.save_btn {
 }
 .employers_search_single_right a.v-btn--variant-elevated {
   background: #e2eaf8;
-  color: #1967d2;
+  color: #0146a6;
 }
 .social-media-icons {
   display: flex;
@@ -490,7 +490,7 @@ h2.job_overview {
   padding: 15px;
 }
 .job_overview_info label i.mdi {
-  color: #1967d2;
+  color: #0146a6;
   margin-right: 10px;
 }
 </style>

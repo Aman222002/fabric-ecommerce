@@ -196,13 +196,13 @@ export default {
 .form_page_right button.v-btn {
   min-width: 150px;
   margin: 0 auto;
-  background-color: #1967d2;
+  background-color: #0146a6 !important;
   font-size: 17px;
   line-height: 20px;
   font-weight: 400;
   padding: 11px 0;
   height: 100%;
-  border-radius: 15px;
+  border-radius: 6px !important;
   color: #fff;
 }
 .form_log_reg .v-card {

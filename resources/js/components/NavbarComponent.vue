@@ -225,8 +225,8 @@ nav.left_side_bar .v-list--one-line .group {
 nav.left_side_bar .v-list--one-line .group:hover,
 nav.left_side_bar .group a.active,
 nav.left_side_bar .group.active {
-  color: #1967d2 !important;
-  background: #1967d21a;
+  color: #0146a6 !important;
+  background: #0146a61a;
 }
 
 .main {
@@ -242,8 +242,8 @@ nav.left_side_bar .group.active {
 
 .v-list-item:hover,
 .v-list-item--active {
-  color: #1967d2;
-  background: #1967d21a;
+  color: #0146a6;
+  background: #0146a61a;
 }
 
 nav.left_side_bar .v-list--one-line {
@@ -262,7 +262,7 @@ nav.left_side_bar .v-list .v-list-item {
 
 nav.left_side_bar .v-list .v-list-item.v-list-item--active,
 nav.left_side_bar .v-list .v-list-item:hover {
-  color: #1967d2;
-  background: #1967d21a;
+  color: #0146a6;
+  background: #0146a61a;
 }
 </style>
