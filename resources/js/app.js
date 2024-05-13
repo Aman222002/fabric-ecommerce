@@ -288,6 +288,10 @@ app.component("contact-component", Contact);
 
 import companydashboard from "./components/companydashboard.vue";
 app.component("company-dashboard",companydashboard);
+
+
+import Parteners from "./components/Parteners.vue";
+app.component("partener-component",Parteners);
 // import index from "./components/HomePage/index.vue"
 // app.component("home-component",index);
 

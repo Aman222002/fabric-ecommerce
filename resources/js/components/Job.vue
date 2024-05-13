@@ -48,7 +48,10 @@
                         density="compact"
                         color="blue"
                         autocomplete="false"
-                        type="password"
+                       
+                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+  @click:append="showPassword = !showPassword"
+               :type="showPassword ? 'text' : 'password'"
                         style="margin-top: 10px; font-size: 10px"
                       />
                       <v-row>
@@ -159,6 +162,8 @@ export default {
       (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",
     ];
     const companyNames = ref([]);
+
+    const showPassword = ref(false);
     const submitForm = async () => {
       if (!formData.value.company_name) {
         return;
@@ -370,7 +375,7 @@ export default {
       selectedCompany,
       employerStore,
       fetchUserData,
-      users,
+      users,showPassword
     };
   },
 };

@@ -78,11 +78,25 @@
                         density="compact"
                         color="blue"
                         autocomplete="false"
-                        type="password"
                         v-model="formData.password"
+                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="showPassword = !showPassword"
+                        :type="showPassword ? 'text' : 'password'"
                         :rules="passwordRules"
                         style="margin-bottom: 10px"
                       />
+                      <v-text-field
+                        label="Confirm Password"
+                        variant="outlined"
+                        density="compact"
+                        color="blue"
+                        autocomplete="false"
+                        v-model="confirmPassword"
+                        :rules="confirmPasswordRules"
+                        style="margin-bottom: 10px"
+                        :type="showPassword ? 'text' : 'password'"
+                      >
+                      </v-text-field>
                       <v-text-field
                         v-model="formData.phone"
                         :rules="phoneRules"
@@ -120,6 +134,11 @@ export default {
       password: "",
       phone: "",
     });
+    const confirmPassword = ref("");
+    const confirmPasswordRules = [
+      (v) => !!v || "Confirm password is required",
+      (v) => v === formData.value.password || "Passwords do not match",
+    ];
     const form = ref(null);
     const nameRules = [
       (v) => !!v || "Full Name is required",
@@ -134,10 +153,16 @@ export default {
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
     const phoneRules = [
-      (v) => !!v || "Phone number is required",
-      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
-      (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
-    ];
+  (v) => !!v || "Phone number is required",
+  (v) =>
+    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number and should contain only numbers",
+  (v) =>
+    !/^[a-zA-Z]/.test(v) ||
+    "Phone number should not contain alphabetic characters",
+];
+
+    const showPassword = ref(false);
+
     const submitForm = async () => {
       try {
         const valid = await form.value.validate();
@@ -153,14 +178,6 @@ export default {
         } else {
           const response = await axios.post("/registration", formData.value);
           if (response.data.status === true) {
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: "Please Verify Your Mail",
-            });
             window.location.href = "/login";
           } else {
             console.error("Registration failed:", response.data.message);
@@ -184,6 +201,9 @@ export default {
       submitForm,
       login,
       form,
+      showPassword,
+      confirmPassword,
+      confirmPasswordRules,
     };
   },
 };
