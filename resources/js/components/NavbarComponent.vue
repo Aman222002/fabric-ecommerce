@@ -107,11 +107,12 @@ export default {
         icon: "mdi-post",
         href: "/admin/blog/view",
       },
-      // {
-      //   title: "Add New Blog",
-      //   icon: "mdi-post",
-      //   href: "/admin/add/blog",
-      // },
+      {
+        title: "Partner",
+        icon: "mdi-handshake-outline",
+        href: "/admin/parteners",
+      },
+      
     ]);
     const isActiveItem = (item) => {
       return window.location.pathname === item.href;

@@ -44,8 +44,11 @@
                     label="Password"
                     :rules="passwordRules"
                     density="compact"
-                    type="password"
+        
                     outlined
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+  @click:append="showPassword = !showPassword"
+               :type="showPassword ? 'text' : 'password'"
                   ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
@@ -184,6 +187,7 @@ export default {
     ];
     const showCompanyDetails = ref(true);
     const disabledFields = ref(false);
+    const showPassword = ref(false);
     onMounted(() => {
       const value = props.data;
       console.log(value);
@@ -242,14 +246,7 @@ export default {
             .then((response) => {
               console.log(response);
               if (response.data.status == true) {
-                window.Swal.fire({
-                  toast: true,
-                  position: "top-end",
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: "success",
-                  title: "Please Verify Your Mail",
-                });
+                
                 window.location.href = "/job";
               }
             })
@@ -272,7 +269,7 @@ export default {
       stateRules,
       usersStore,
       showCompanyDetails,
-      disabledFields,
+      disabledFields,showPassword
     };
   },
 };

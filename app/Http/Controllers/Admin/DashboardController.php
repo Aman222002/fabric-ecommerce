@@ -60,6 +60,11 @@ class DashboardController extends Controller
     {
         return view('admin.jobs');
     }
+
+    public function viewpartener()
+    {
+        return view('admin.partener');
+    }
     /**
      * function to get all jobs
      */
@@ -493,4 +498,89 @@ class DashboardController extends Controller
     public function destroy(string $id)
     {  //
     }
+
+    public function fetchAllPartener(Request $request)
+    {
+        try {
+            $blogs = Partner::select('id', 'partner_name as title', 'partner_status as status', 'partner_title as content', 'partner_logo as featured_image');
+    
+           
+            $blogs = $blogs->get()->map(function ($blog) {
+                if ($blog->featured_image) {
+                    $blog->featured_image = Storage::disk('public')->url('/assets/' . $blog->featured_image);
+                }
+                return $blog;
+            });
+    
+            $totalCount = $blogs->count();
+    
+            return response()->json(['status' => true, 'data' => $blogs, 'totalCount' => $totalCount], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function storePartner(Request $request)
+    {
+        
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+               
+            ]);
+            // dd(Auth::user()->name);
+            // dd($request->hasFile('featured_image'));
+            if ($request->hasFile('featured_image')) {
+                $image = $request->file('featured_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/assets', $imageName);
+                
+            }
+            $blogPost = new Partner();
+            $blogPost->partner_name = $request->input('title');
+            $blogPost->partner_title = $request->input('htmlContent');
+            $blogPost->partner_logo = $imageName;
+
+            $blogPost->save();
+            return response()->json(['status' => true, 'message' => 'Partner saved successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    public function deletePartner(Request $request)
+    {
+        try {
+            $blogPost = Partner::findOrFail($request->id);
+            $blogPost->delete();
+            return response()->json(['status' => true, 'message' => 'Partner deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    public function updatePartner(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'htmlContent' => 'required|string'
+            ]);
+            if ($request->hasFile('featured_image')) {
+                $image = $request->file('featured_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/assets', $imageName);
+            }
+            $blogPost = Partner::findOrFail($request->id);
+            // Update the blog post fields
+            $blogPost->partner_name = $request->input('title');
+            $blogPost->partner_title = $request->input('htmlContent');
+            $blogPost->partner_logo = empty($imageName) ? $blogPost->partner_logo : $imageName;
+            $blogPost->save();
+            return response()->json(['status' => true, 'message' => 'Partner updated successfully'], 200);
+            // dd($request->id);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e], 500);
+        }
+    }
+    
 }
