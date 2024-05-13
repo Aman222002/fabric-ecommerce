@@ -167,6 +167,8 @@ Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::get('/add/blog', [DashboardController::class, 'viewAddBlog']);
     Route::get('/blog/view', [DashboardController::class, 'viewAllBlogs']);
     Route::get('/blog/fetch/{type?}', [DashboardController::class, 'fetchAllBlogs']);
+
+    Route::get('/partner/fetch', [DashboardController::class, 'fetchAllPartener']);
     Route::get('/profile/getProfile', [UserController::class, 'getProfile']);
     Route::get('/users', [DashboardController::class, 'viewUsers']);
     Route::get('/companies', [DashboardController::class, 'viewCompanies']);
@@ -179,11 +181,15 @@ Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
     Route::delete('/delete/blog/{id}', [DashboardController::class, 'deleteBlog']);
     Route::post('/blog/draft/{id?}/{type?}', [DashboardController::class, 'draftBlog']);
     Route::post('/blog/post/{id?}/{type?}', [DashboardController::class, 'postBlog']);
+
+    Route::post('/partner/post', [DashboardController::class, 'storePartner']);
+    Route::post('/update/partner/{id}', [DashboardController::class, 'updatePartner']);
+    Route::delete('/delete/partner/{id}', [DashboardController::class, 'deletePartner']);
     Route::get('/jobs', [DashboardController::class, 'viewJobs']);
     Route::get('/get/jobs', [DashboardController::class, 'getAllJobs']);
     Route::get('/graph/data', [DashboardController::class, 'getGraphData']);
     //user route in admin
-  
+    Route::get('/parteners', [DashboardController::class, 'viewpartener']);
     Route::group(["prefix" => "/user"], function () {
         Route::get('/index', [UserController::class, 'index']);
         Route::get('/edit/{id}', [UserController::class, 'edit']);

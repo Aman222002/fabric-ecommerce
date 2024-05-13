@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             JobPostingPlansTableSeeder::class,
             JobTypeSeeder::class,
-            PartnerSeeder::class,
             PermissionSeeder::class,
             SettingSeeder::class,
             SkillSeeder::class,

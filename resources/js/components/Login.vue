@@ -44,10 +44,13 @@
                         v-model="formData.password"
                         :rules="passwordRules"
                         dense
+                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+  @click:append="showPassword = !showPassword"
+               :type="showPassword ? 'text' : 'password'"
                         density="compact"
                         color="blue"
                         autocomplete="false"
-                        type="password"
+                        
                         style="margin-top: 10px; font-size: 10px"
                       />
                       <v-row>
@@ -128,7 +131,7 @@ export default {
       (v) => !!v || "Password is required",
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
-
+    const showPassword = ref(false);
     const submitForm = async () => {
       try {
         const response = await axios.post("/login", formData.value);
@@ -170,7 +173,7 @@ export default {
       emailRules,
       passwordRules,
       submitForm,
-      signup,
+      signup,showPassword
     };
   },
 };

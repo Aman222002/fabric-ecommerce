@@ -1,6 +1,6 @@
 
 @extends('layouts.app')
-
+@section('title', 'Company Post')
 @section('content')
     @if($data)
         <company-post :data="{{ json_encode($data) }}"></company-post>

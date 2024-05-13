@@ -45,13 +45,13 @@
                   <v-form @submit.prevent="goToNext(id)" ref="myForm">
                     <template v-if="currentStep === 1">
                       <v-row>
-                        <v-col cols="6"> <users-details></users-details></v-col>
+                        <v-col cols="6"> <user-details></user-details></v-col>
                         <v-col cols="6"> <user-address></user-address></v-col>
                       </v-row>
                     </template>
                     <template v-if="currentStep === 2">
                       <div class="flex-container-1">
-                        <users-qualifications></users-qualifications>
+                        <user-qualifications></user-qualifications>
                         <user-skills></user-skills>
                       </div>
                     </template>
