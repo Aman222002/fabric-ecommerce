@@ -48,10 +48,10 @@
                 <a @click="handleLinks('/findcv')">Employer Dashboard</a>
               </li>
               <li>
-                <a @click="handleLinks('/postjob')">Add Job</a>
+                <a @click="handleLinks('/postjob')">Available Job</a>
               </li>
               <li>
-                <a @click="handleLinks('/product')">Job Packages</a>
+                <a @click="handleLinks('/product')">Purchase</a>
               </li>
             </ul>
           </div>
