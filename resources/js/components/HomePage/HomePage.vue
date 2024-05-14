@@ -90,7 +90,7 @@ export default {
     const location = ref("");
     const redirectToJobsDetail = () => {
       window.location.href =
-        "/jobs-detail?jobTitle=" +
+        "/job-search?jobTitle=" +
         jobTitle.value +
         "&location=" +
         location.value;

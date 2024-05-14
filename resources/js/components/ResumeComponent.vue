@@ -74,7 +74,7 @@
                         "
                       >
                         <work-experience></work-experience>
-                        <users-achievments></users-achievments>
+                        <user-achievments></user-achievments>
                       </div>
                     </template>
                     <template v-if="currentStep === 4">

@@ -61,6 +61,9 @@
                     density="compact"
                     outlined
                     :disabled="disabledFields"
+                    mask="##########"
+                        hide-details="auto"
+                    @input="filterNonNumeric"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -96,6 +99,9 @@
                       label="Phone Number"
                       :rules="phoneRules"
                       density="compact"
+                      mask="##########"
+                        hide-details="auto"
+                      @input="filterNonNumerical"
                       outlined
                     ></v-text-field>
                   </v-col>
@@ -174,10 +180,11 @@ export default {
     ];
     const passwordRules = [(v) => !!v || "Password is required"];
     const phoneRules = [
-      (v) => !!v || "Phone number is required",
-      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
-      (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
-    ];
+ 
+  (v) =>
+    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+ 
+];
     const stateRules = [(v) => !!v || "State is required"];
     const cityRules = [(v) => !!v || "city is required"];
 
@@ -185,6 +192,12 @@ export default {
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
     ];
+    const filterNonNumeric = (event) => {
+      company.value.phone = event.target.value.replace(/\D/g, '');
+    };
+    const filterNonNumerical = (event) => {
+      company.value.phone_number = event.target.value.replace(/\D/g, '');
+    };
     const showCompanyDetails = ref(true);
     const disabledFields = ref(false);
     const showPassword = ref(false);
@@ -269,7 +282,7 @@ export default {
       stateRules,
       usersStore,
       showCompanyDetails,
-      disabledFields,showPassword
+      disabledFields,showPassword,filterNonNumeric,filterNonNumerical
     };
   },
 };

@@ -193,7 +193,7 @@
               <div class="editor">
                 <ckeditor v-model="content" :editor="editor"></ckeditor>
               </div>
-              <v-btn type="submit">Add Post</v-btn>
+              <v-btn type="submit">Add Partner</v-btn>
             </v-form>
           </v-card-text>
           <v-card-actions>

@@ -77,55 +77,11 @@ export default {
     const educationTypes = ref(["High School", "College", "University"]);
     const currentYear = new Date().getFullYear();
     const startYear = 1970;
-    const endYear = 2030;
+    const endYear = 2024;
     const yearOptions = ref(
       Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
     );
     const maxPassingYear = currentYear;
-
-    // const removeEducationEntry = async (index) => {
-    //     console.log('Before removal - educationDetails:', educationDetails.value);
-    //     console.log('Removing index:', index);
-    //     const education = educationDetails.value[index];
-    //     const educationId = education.id;
-    //     if (!education.education_type && !education.school_university && !education.starting_year && !education.passing_year) {
-    //         console.warn('Cannot remove empty education entry');
-    //         store.removeEducationEntry(index);
-    //         return;
-    //     }
-    //     try {
-    //         store.removeEducationEntry(educationId);
-    //         const updatedEducationDetails = [
-    //             ...educationDetails.value.slice(0, index),
-    //             ...educationDetails.value.slice(index + 1)
-    //         ];
-    //         educationDetails.value = updatedEducationDetails;
-
-    // const removeEducationEntry = async (index) => {
-    //     console.log('Before removal - educationDetails:', educationDetails.value);
-    //     console.log('Removing index:', index);
-    //     const education = educationDetails.value[index];
-    //     const educationId = education.id;
-    //     if (!education.education_type && !education.school_university && !education.starting_year && !education.passing_year) {
-    //         console.warn('Cannot remove empty education entry');
-    //         store.removeEducationEntry(index);
-    //         return;
-    //     }
-    //     try {
-    //         store.removeEducationEntry(educationId);
-    //         const updatedEducationDetails = [
-    //             ...educationDetails.value.slice(0, index),
-    //             ...educationDetails.value.slice(index + 1)
-    //         ];
-    //         educationDetails.value = updatedEducationDetails;
-
-    //         await axios.post(`/removedEducation/${educationId}`);
-    //         store.removeEducationEntry(index);
-    //         console.log('After removal - educationDetails:', educationDetails.value);
-    //     } catch (error) {
-    //         console.error('Error deleting education detail:', error);
-    //     }
-    // };
     const removeEducationEntry = async (index) => {
       console.log("Before removal - educationDetails:", educationDetails.value);
       console.log("Removing index:", index);
@@ -166,9 +122,14 @@ export default {
       });
     };
     const getPassingYearOptions = (startingYear) => {
-      return yearOptions.value.filter(
-        (year) => year > startingYear || year === ""
+      const options = yearOptions.value.filter(
+        (year) => year >= startingYear || year === ""
       );
+    
+      if (startingYear === 2024 && !options.includes(2024)) {
+        options.unshift(2024);
+      }
+      return options;
     };
     const availableEducationTypes = computed(() => {
       const selectedTypes = educationDetails.value.map(

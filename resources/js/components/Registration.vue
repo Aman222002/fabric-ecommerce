@@ -105,7 +105,11 @@
                         style="margin-bottom: 10px"
                         variant="outlined"
                         label="Phone"
+                        mask="##########"
+                        hide-details="auto"
+                        @input="filterNonNumeric"
                       ></v-text-field>
+                   
                       <v-btn type="submit" dark block tile color="primary"
                         >Register</v-btn
                       >
@@ -123,6 +127,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+
 export default {
   name: "Registration",
   setup() {
@@ -153,14 +158,13 @@ export default {
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
     const phoneRules = [
-  (v) => !!v || "Phone number is required",
   (v) =>
-    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number and should contain only numbers",
-  (v) =>
-    !/^[a-zA-Z]/.test(v) ||
-    "Phone number should not contain alphabetic characters",
+    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+  
 ];
-
+const filterNonNumeric = (event) => {
+      formData.value.phone = event.target.value.replace(/\D/g, '');
+    };
     const showPassword = ref(false);
 
     const submitForm = async () => {
@@ -203,7 +207,7 @@ export default {
       form,
       showPassword,
       confirmPassword,
-      confirmPasswordRules,
+      confirmPasswordRules,filterNonNumeric
     };
   },
 };

@@ -136,10 +136,8 @@ export default {
       try {
         const response = await axios.post("/login", formData.value);
         const data = response.data;
-
         if (data.status === true) {
           console.log(data.data.roles[0].name);
-
           if (data.data.roles[0].name == "Admin") {
             window.location.href = "/admin/users";
             usersStore.isLogIn();
@@ -150,6 +148,16 @@ export default {
             usersStore.isLogIn();
           }
         }
+        else {
+      window.Swal.fire({
+        toast: true,
+        position: "top-end",
+        timer: 2000,
+        showConfirmButton: false,
+        icon: "error",
+        title: "User not found",
+      });
+    }
       } catch (error) {
         console.error(error);
         if (error.response && error.response.status === 403) {

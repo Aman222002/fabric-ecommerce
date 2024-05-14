@@ -45,7 +45,7 @@ export default {
       console.log(name);
       var newName = name.trim();
       window.location.href =
-        "/jobs-detail?category=" + encodeURIComponent(newName);
+        "/job-search?category=" + encodeURIComponent(newName);
       // window.location.href = "/jobs-detail?category=" + name;
     };
     const fetchCategories = async () => {

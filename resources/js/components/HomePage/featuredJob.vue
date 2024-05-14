@@ -51,15 +51,16 @@
             </v-card>
           </v-card>
         </v-col>
-        <v-btn size="x-large" class="load_more mt-5" @click="searchJob" v-if="jobs.length > 0">
-          Load More Listing
-        </v-btn>
+        <div class="load_more_div" v-if="jobs.length > 0">
+          <v-btn size="x-large" class="load_more mt-5" @click="searchJob">
+            Load More Listing
+          </v-btn>
+        </div>
         <div v-else class="text-center">
       <p>No jobs found.</p>
     </div>
       </v-row>
     </v-container>
-    
   </div>
 </template>
 
@@ -101,7 +102,7 @@ export default {
       detailPanelVisible.value = false;
     };
     const searchJob = () => {
-      window.location.href = "/jobs-detail";
+      window.location.href = "/job-search";
     };
     const fetchJobs = async () => {
       try {
@@ -211,5 +212,9 @@ export default {
 }
 .featured_jobs_logo img.v-img__img {
   width: 90px;
+}
+.load_more_div {
+    width: 100%;
+    text-align: center;
 }
 </style>
