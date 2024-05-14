@@ -45,7 +45,7 @@
               </li>
             </ul>
             <a class="theme-btn" href="/login">
-              <span class="btn-title">GET STARTED</span>
+              <span class="btn-title">Get Started</span>
             </a>
           </div>
         </v-col>

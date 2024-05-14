@@ -57,38 +57,49 @@
           <v-col
             sm="12"
             md="12"
-            lg="6"
-            xl="6"
+            lg="12"
+            xl="12"
             cols="12"
             class="mx-auto form_contact"
           >
             <v-form fast-fail @submit.prevent="sendEmail()" ref="form">
-              <v-text-field
-                v-model="fullName"
-                :rules="fullNameRules"
-                label="Full Name"
-                variant="solo"
-              ></v-text-field>
-              <v-text-field
-                v-model="Email"
-                :rules="emailRules"
-                label="Email"
-                variant="solo"
-              ></v-text-field>
-              <v-text-field
-                v-model="Subject"
-                :rules="subjectRules"
-                label="Subject"
-                variant="solo"
-              ></v-text-field>
-              <v-textarea
-                label="Message"
-                v-model="Message"
-                :rules="messageRules"
-                name="input-7-1"
-                variant="solo"
-                auto-grow
-              ></v-textarea>
+              <v-row>
+                <v-col sm="12" md="4" lg="4" xl="4" cols="12">
+                  <v-text-field
+                    v-model="fullName"
+                    :rules="fullNameRules"
+                    label="Full Name"
+                    variant="outlined"
+                  ></v-text-field
+                ></v-col>
+                <v-col sm="12" md="4" lg="4" xl="4" cols="12">
+                  <v-text-field
+                    v-model="Email"
+                    :rules="emailRules"
+                    label="Email"
+                    variant="outlined"
+                  ></v-text-field>
+                </v-col>
+                <v-col sm="12" md="4" lg="4" xl="4" cols="12">
+                  <v-text-field
+                    v-model="Subject"
+                    :rules="subjectRules"
+                    label="Subject"
+                    variant="outlined"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-col sm="12" md="12" lg="12" xl="12" cols="12" class="pa-0">
+                <v-textarea
+                  label="Message"
+                  v-model="Message"
+                  :rules="messageRules"
+                  name="input-7-1"
+                  auto-grow
+                  variant="outlined"
+                ></v-textarea>
+              </v-col>
+
               <v-btn class="mt-2" block type="submit">Send Now!</v-btn>
             </v-form>
           </v-col>
@@ -253,14 +264,20 @@ section.contact_us_page {
   border-radius: 10px;
   position: relative;
 }
+
 section.contact_us_page form.v-form button.v-btn {
-  min-width: 150px;
-  margin: 0 auto;
-  height: 100% !important;
-  padding: 11px 13px;
-  background: #0146a6;
-  color: #fff;
+  text-align: center;
+  color: #e2eaf8;
+  background-color: #0146a6;
   font-size: 19px;
+  line-height: 20px;
+  border-radius: 8px;
+  font-weight: 400;
+  padding: 10px 35px;
+  min-width: 220px;
+  margin: 0 auto;
+  height: 48px;
+  text-transform: capitalize;
 }
 
 section.contact_us_page .v-card {

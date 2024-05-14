@@ -4,9 +4,7 @@
       <div class="sec-title text-center">
         <h2>About Us</h2>
         <v-breadcrumbs :items="items">
-          <template v-slot:prepend>
-            <v-icon>mdi-home</v-icon>
-          </template>
+          <template v-slot:prepend> </template>
         </v-breadcrumbs>
       </div>
     </div>
@@ -18,7 +16,7 @@
           </v-card-item>
 
           <v-card-text>
-            <p>
+            <p class="text-justify">
               Far much that one rank beheld bluebird after outside ignobly
               allegedly more when oh arrogantly vehement irresistibly fussy
               penguin insect additionally wow absolutely crud meretriciously
@@ -28,7 +26,7 @@
               across highhandedly much.
             </p>
 
-            <p>
+            <p class="text-justify">
               Repeatedly dreamed alas opossum but dramatically despite
               expeditiously that jeepers loosely yikes that as or eel underneath
               kept and slept compactly far purred sure abidingly up above
