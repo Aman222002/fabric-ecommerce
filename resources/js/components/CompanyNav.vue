@@ -264,7 +264,7 @@ nav.left_side_bar {
 }
 
 .dropdown:hover {
-  background-color: #1976d2;
+  background-color: #0146a6;
 }
 
 .v-app-bar {
@@ -276,7 +276,7 @@ nav.left_side_bar {
 }
 
 #header {
-  background-color: #1976d2;
+  background-color: #0146a6;
 }
 
 .links {
@@ -315,7 +315,7 @@ nav.left_side_bar {
 }
 
 .log_and_reg_drop .v-list .v-list-item:hover {
-  background-color: #1976d2;
+  background-color: #0146a6;
   color: #fff;
 }
 </style>

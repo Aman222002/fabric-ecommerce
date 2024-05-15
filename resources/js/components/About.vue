@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="about_superio">
-      <v-container class="w-75">
+      <v-container fluid>
         <v-card class="mx-auto my-8" elevation="16">
           <v-card-item>
             <v-card-title> About Job Search</v-card-title>
@@ -88,6 +88,9 @@
     </div>
 
     <div class="brand_Logo">
+      <div class="sec-title site_title text-center">
+        <h2>Partners Logo</h2>
+      </div>
       <v-container class="w-75">
         <v-sheet class="mx-auto">
           <v-slide-group class="pa-4" selected-class="bg-success" show-arrows>

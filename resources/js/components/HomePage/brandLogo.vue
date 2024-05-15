@@ -1,18 +1,31 @@
 <template>
   <div class="brand_Logo" v-if="brandLogo.length > 0">
+    <div class="sec-title site_title text-center">
+      <h2>Partners Logo</h2>
+    </div>
     <v-container class="w-75">
       <v-sheet class="mx-auto">
         <!-- Add v-if directive to conditionally render the slider -->
-        <v-slide-group v-if="brandLogo.length > 0" class="pa-4" selected-class="bg-success" show-arrows>
-          <v-slide-group-item v-for="brandLogoItem in brandLogo" :key="brandLogoItem.id">
+        <v-slide-group
+          v-if="brandLogo.length > 0"
+          class="pa-4"
+          selected-class="bg-success"
+          show-arrows
+        >
+          <v-slide-group-item
+            v-for="brandLogoItem in brandLogo"
+            :key="brandLogoItem.id"
+          >
             <div class="brand_logo_slide">
               <a :href="brandLogoItem.website_link" target="_blank">
-                <v-img aspect-ratio="16/9" :src="`/storage/assets/${brandLogoItem.partner_logo}`"></v-img>
+                <v-img
+                  aspect-ratio="16/9"
+                  :src="`/storage/assets/${brandLogoItem.partner_logo}`"
+                ></v-img>
               </a>
             </div>
           </v-slide-group-item>
         </v-slide-group>
-       
       </v-sheet>
     </v-container>
   </div>

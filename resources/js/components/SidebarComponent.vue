@@ -123,7 +123,7 @@ export default {
 
 .v-list-item:hover,
 .v-list-item--active {
-    background-color: #1976D2;
+    background-color: #0146a6;
     color: white;
 }
 </style>

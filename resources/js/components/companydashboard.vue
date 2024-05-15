@@ -1,6 +1,6 @@
 
   <template>
-  <v-container class="company_dashboard_view">
+  <v-container fluid class="company_dashboard_view">
     <div id="cardsDiv">
       <v-row>
         <v-col sm="12" md="6" lg="3" xl="3" cols="12">
@@ -66,7 +66,7 @@
         <v-col sm="12" md="6" lg="6" xl="6" cols="12">
           <div id="SupplierDiv">
             <v-card>
-              <v-card-title style="background-color: #1976d2; color: white"
+              <v-card-title style="background-color: #0146a6; color: white"
                 >Recent Job Post</v-card-title
               >
               <v-card-text>
@@ -95,7 +95,7 @@
         <v-col sm="12" md="6" lg="6" xl="6" cols="12">
           <div id="SupplierDiv" v-if="expiredPosts.length > 0">
             <v-card>
-              <v-card-title style="background-color: #1976d2; color: white"
+              <v-card-title style="background-color: #0146a6; color: white"
                 >Post Expired Soon</v-card-title
               >
               <v-card-text>
@@ -225,7 +225,7 @@ export default {
   width: 100%;
 }
 .company_dashboard_view div.card:hover {
-  background: #1976d2;
+  background: #0146a6;
   color: #fff;
 }
 .flex-container {
@@ -246,7 +246,7 @@ export default {
   border-bottom: 10px;
 }
 div.dashboard_info .v-card-item__content .cardtop h1.numbering {
-  color: #1976d2;
+  color: #0146a6;
 }
 .company_dashboard_view div.card:hover .flex-container i.mdi {
   background-color: #0e0f0f4d;

@@ -51,15 +51,16 @@
             </v-card>
           </v-card>
         </v-col>
-        <v-btn size="x-large" class="load_more mt-5" @click="searchJob" v-if="jobs.length > 0">
-          Load More Listing
-        </v-btn>
+        <div class="load_more_div" v-if="jobs.length > 0">
+          <v-btn size="x-large" class="load_more mt-5" @click="searchJob">
+            Load More Listing
+          </v-btn>
+        </div>
         <div v-else class="text-center">
-      <p>No jobs found.</p>
-    </div>
+          <p>No jobs found.</p>
+        </div>
       </v-row>
     </v-container>
-    
   </div>
 </template>
 

@@ -48,10 +48,9 @@
                         density="compact"
                         color="blue"
                         autocomplete="false"
-                       
                         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-  @click:append="showPassword = !showPassword"
-               :type="showPassword ? 'text' : 'password'"
+                        @click:append="showPassword = !showPassword"
+                        :type="showPassword ? 'text' : 'password'"
                         style="margin-top: 10px; font-size: 10px"
                       />
                       <v-row>
@@ -107,7 +106,7 @@
                   dark
                   @click="signup()"
                   style="margin-top: 20px"
-                  >SIGN UP</v-btn
+                  >Sign Up</v-btn
                 >
               </v-card-text>
             </v-col>
@@ -375,7 +374,8 @@ export default {
       selectedCompany,
       employerStore,
       fetchUserData,
-      users,showPassword
+      users,
+      showPassword,
     };
   },
 };
@@ -409,6 +409,7 @@ export default {
   height: 100%;
   border-radius: 6px !important;
   color: #fff;
+  text-transform: capitalize;
 }
 .v-list-item--density-default.v-list-item--one-line .v-list-item-title {
   text-transform: capitalize;

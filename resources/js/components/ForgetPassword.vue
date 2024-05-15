@@ -6,26 +6,45 @@
           <v-row class="text-center">
             <v-col cols="12" md="12">
               <v-form ref="form" @submit.prevent="submitForm">
-                <h5 class="text-primary mt-2 mb-2">Forgot Password?</h5>
+                <h5 class="text_color mt-2 mb-2">Forgot Password?</h5>
 
                 <p class="text-muted mb-2">Candidates Reset password</p>
-                <v-icon icon="mdi-lock-reset" color="teal-darken-2" class="icon">
+                <v-icon
+                  icon="mdi-lock-reset"
+                  color="teal-darken-2"
+                  class="icon"
+                >
                 </v-icon>
-                <div class="alert_msg border-0 mb-2 ml-8 d-flex align-center justify-center">
+                <div
+                  class="alert_msg border-0 mb-2 ml-8 d-flex align-center justify-center"
+                >
                   Enter your email and instructions will be sent to you!
                 </div>
 
-                <v-text-field label="Enter registered email only" v-model="formData.email" variant="outlined" dense
-                  density="compact" color="blue" :rules="emailRules" autocomplete="false" class="mt-8"
-                  style="font-size: 10px" />
+                <v-text-field
+                  label="Enter registered email only"
+                  v-model="formData.email"
+                  variant="outlined"
+                  dense
+                  density="compact"
+                  color="blue"
+                  :rules="emailRules"
+                  autocomplete="false"
+                  class="mt-8"
+                  style="font-size: 10px"
+                />
 
-                <v-btn type="submit" class="bg-primary mb-2 email-button" width="100%">
+                <v-btn
+                  type="submit"
+                  class="btn_cts mb-2 email-button"
+                  width="100%"
+                >
                   Send Reset Link
                 </v-btn>
 
                 <p class="mb-0 remember_psd">
                   Wait, I remember my password...
-                  <a href="/login" class="text-primary"> Login </a>
+                  <a href="/login" class="text_color"> Login </a>
                 </p>
               </v-form>
             </v-col>
@@ -37,7 +56,7 @@
 </template>
 <script>
 import { ref, onMounted, computed } from "vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "ForgetPassword",
   setup() {

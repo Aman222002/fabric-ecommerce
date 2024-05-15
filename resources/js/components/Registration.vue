@@ -153,13 +153,14 @@ export default {
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
     const phoneRules = [
-  (v) => !!v || "Phone number is required",
-  (v) =>
-    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number and should contain only numbers",
-  (v) =>
-    !/^[a-zA-Z]/.test(v) ||
-    "Phone number should not contain alphabetic characters",
-];
+      (v) => !!v || "Phone number is required",
+      (v) =>
+        /^[0-9]{10}$/.test(v) ||
+        "Enter a valid 10-digit phone number and should contain only numbers",
+      (v) =>
+        !/^[a-zA-Z]/.test(v) ||
+        "Phone number should not contain alphabetic characters",
+    ];
 
     const showPassword = ref(false);
 
@@ -233,6 +234,7 @@ export default {
   height: 100%;
   border-radius: 6px !important;
   color: #fff;
+  text-transform: capitalize;
 }
 </style>
  

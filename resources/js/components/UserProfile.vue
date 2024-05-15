@@ -1,7 +1,7 @@
 <template>
   <v-card class="user_profile" style="display: flex; flex-direction: column">
     <div class="user_profile_top_bar">
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-icon @click="goToEditPage()" style="margin-left: 97%"
             >mdi-pencil</v-icon
@@ -49,7 +49,7 @@
         </v-row>
       </v-container>
     </div>
-    <v-container>
+    <v-container fluid>
       <v-row class="user_profile_infor">
         <v-col
           sm="12"
