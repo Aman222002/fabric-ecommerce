@@ -20,7 +20,7 @@ a.dx-link-edit {
 
 
 .w_90 {
-    width: 90%;
+    max-width: 90%;
 }
 
 .v-btn {
@@ -543,7 +543,7 @@ a.bookmark_fr {
     background-color: transparent;
 }
 
-.popular_job_categories .v-breadcrumbs {
+.v-breadcrumbs {
     justify-content: center;
     text-transform: uppercase;
 }
@@ -1088,6 +1088,45 @@ button.load_more {
     text-align: center;
 }
 
+
+.fill_your_personal_details .v-stepper-header button.v-stepper-item .v-avatar {
+    background-color: #0146a6;
+}
+
+.fill_your_personal_details .v-stepper-header button.v-stepper-item .v-stepper-item__title {
+    color: #0146a6;
+}
+
+.fill_your_personal_details .v-stepper-header hr.v-divider {
+    border-color: #0146a6;
+}
+
+.personal_details_btn button.v-btn--variant-tonal {
+    background-color: #0146a6;
+    color: #fff !important;
+}
+
+.button_plus_delete button.bg-blue {
+    background-color: #0146a6 !important;
+    margin-left: 3px;
+}
+
+.personal_details_btn button.v-btn--variant-text {
+    color: #205db1;
+    background-color: #e2eaf8;
+}
+
+.fill_your_personal_details button.bg-blue {
+    background-color: #0146a6 !important;
+}
+
+.vue_date_picker_ct .dp__input_wrap input.dp__pointer {
+    height: 56px;
+}
+
+.dx-datagrid .dx-link {
+    color: #0146a6;
+}
 
 /* responsive start  only */
 @media screen and (min-width: 1200px) {

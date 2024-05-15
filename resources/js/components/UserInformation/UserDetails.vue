@@ -36,8 +36,12 @@
           accept="image/*"
         ></v-file-input>
       </v-col>
-      <v-col cols="12">
-        <img v-if="imagePreview" :src="imagePreview" style="max-width: 100%; height: auto;" />
+      <v-col class="ml-10 user_image" cols="12">
+        <img
+          v-if="imagePreview"
+          :src="imagePreview"
+          style="width: 200px; height: 200px; border-radius: 15px"
+        />
       </v-col>
     </v-row>
   </div>
@@ -58,34 +62,36 @@ export default {
     //     console.log(store.userDetails.user_image);
     //     console.log(e)
     // }
-    const imagePreview = ref('');
-console.log(store.userDetails.user_image)
-const handleImage = (e)=>{
-    const file = e.target.files[0];
-    console.log(file.name);
-    store.userDetails.user_image = file;
+    const imagePreview = ref("");
     console.log(store.userDetails.user_image);
-    console.log(e);
-    const reader = new FileReader();
-    reader.onload = () => {
-      imagePreview.value = reader.result;
+    const handleImage = (e) => {
+      const file = e.target.files[0];
+      console.log(file.name);
+      store.userDetails.user_image = file;
+      console.log(store.userDetails.user_image);
+      console.log(e);
+      const reader = new FileReader();
+      reader.onload = () => {
+        imagePreview.value = reader.result;
+      };
+      reader.readAsDataURL(file);
     };
-    reader.readAsDataURL(file);
-}
-onMounted(() => {
-  const storedImage = store.userDetails.user_image;
-  if (storedImage instanceof Blob) { 
-    const reader = new FileReader();
-    reader.onload = () => {
-      imagePreview.value = reader.result;
-    };
-    reader.readAsDataURL(storedImage);
-  }
-});
+    onMounted(() => {
+      const storedImage = store.userDetails.user_image;
+      if (storedImage instanceof Blob) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          imagePreview.value = reader.result;
+        };
+        reader.readAsDataURL(storedImage);
+      }
+    });
 
     return {
       users,
-      handleImage,imagePreview,selectedImage
+      handleImage,
+      imagePreview,
+      selectedImage,
     };
   },
 };

@@ -18,7 +18,7 @@
     <DxColumn data-field="title" data-type="string" :visible="!showcolumn">
     </DxColumn>
 
-    <DxColumn cell-template="Dxbutton"></DxColumn>
+    <DxColumn cell-template="Dxbutton" width="auto"></DxColumn>
     <DxColumn
       data-field="content"
       cell-template="ckeditor"
@@ -32,13 +32,13 @@
     <template #Dxbutton="{ data }">
       <v-btn
         prepend-icon="mdi-pencil"
-        class="edit-btn btn_cts"
+        class="edit-btn"
         @click="editBlog(data.data)"
       ></v-btn>
       <!-- <v-spacer></v-spacer> -->
       <v-btn
         prepend-icon="mdi-delete"
-        class="btn_cts"
+        class="btn_delete"
         @click="deleteBlog(data.data.id)"
       ></v-btn>
     </template>
@@ -114,7 +114,7 @@
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="savePost(updateId)" ref="form">
-            <h2>Edit Partner</h2>
+            <h2 class="mb-2">Edit Partner</h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -147,17 +147,17 @@
             <div class="editor">
               <ckeditor v-model="content" :editor="editor"></ckeditor>
             </div>
-            <v-btn type="submit">Save Post</v-btn>
+            <v-card-actions>
+              <v-btn class="btn_cts" type="submit">Save Post</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                class="btn_cts"
+                text="Close Dialog"
+                @click="showDialog = false"
+              ></v-btn>
+            </v-card-actions>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="btn_cts"
-            text="Close Dialog"
-            @click="showDialog = false"
-          ></v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog max-width="1000" v-model="showAddDialog" persistent>

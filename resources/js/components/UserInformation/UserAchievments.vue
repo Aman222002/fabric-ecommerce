@@ -41,6 +41,7 @@
           :name="'expiry_date' + index"
           @internal-model-change="(e) => dateClicked(index, 'expiry_date', e)"
           :rules="index === 0 ? [] : [(v) => !!v || 'expiry date  is required']"
+          class="vue_date_picker_ct"
         />
       </v-col>
       <v-col cols="12" md="12">
@@ -49,6 +50,7 @@
           :name="'certificate_file_' + index"
           label="Certificate File"
           accept="application/pdf"
+          variant="outlined"
         ></v-file-input>
       </v-col>
 

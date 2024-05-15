@@ -843,6 +843,8 @@ export default {
   display: flex;
   justify-content: end;
   margin-bottom: 15px;
+  position: absolute;
+  right: 15px;
 }
 
 .company_profile_top_bar {

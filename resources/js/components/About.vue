@@ -1,6 +1,6 @@
 <template>
   <div class="about_us_page">
-    <div class="popular_job_categories">
+    <div class="popular_job_categories pb-0">
       <div class="sec-title text-center">
         <h2>About Us</h2>
         <v-breadcrumbs :items="items">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="about_superio">
-      <v-container fluid>
+      <v-container class="w_90">
         <v-card class="mx-auto my-8" elevation="16">
           <v-card-item>
             <v-card-title> About Job Search</v-card-title>
@@ -95,8 +95,8 @@
         <v-sheet class="mx-auto">
           <v-slide-group class="pa-4" selected-class="bg-success" show-arrows>
             <v-slide-group-item
-           
-              v-for="brandLogoItem in brandLogo" :key="brandLogoItem.id"
+              v-for="brandLogoItem in brandLogo"
+              :key="brandLogoItem.id"
             >
               <div class="brand_logo_slide">
                 <v-img
