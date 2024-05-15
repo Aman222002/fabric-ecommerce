@@ -20,9 +20,9 @@
                   >Home</a
                 >
                 <a
-                  href="/jobs-detail"
+                  href="/job-search"
                   class="nav-link"
-                  :class="{ active: isActive('/jobs-detail') }"
+                  :class="{ active: isActive('/job-search') }"
                   >Jobs</a
                 >
                 <a

@@ -27,7 +27,7 @@
           <h4 class="widget-title">For Candidates</h4>
           <div class="widget-content">
             <ul class="list">
-              <li><a href="/jobs-detail">Browse Jobs</a></li>
+              <li><a href="/job-search">Browse Jobs</a></li>
               <!-- <li><a href="#" @click="scrollToSection()">Browse Categories</a></li> -->
               <!-- <li>
                 <a href="#">Candidate Dashboard</a>

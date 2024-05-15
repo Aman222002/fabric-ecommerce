@@ -95,13 +95,13 @@
         <v-sheet class="mx-auto">
           <v-slide-group class="pa-4" selected-class="bg-success" show-arrows>
             <v-slide-group-item
-              v-for="brandLogo in brandLogo"
-              :key="brandLogo.id"
+           
+              v-for="brandLogoItem in brandLogo" :key="brandLogoItem.id"
             >
               <div class="brand_logo_slide">
                 <v-img
                   aspect-ratio="16/9"
-                  :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"
+                  :src="`/storage/assets/${brandLogoItem.partner_logo}`"
                 ></v-img>
               </div>
             </v-slide-group-item>
@@ -150,7 +150,7 @@ export default {
       },
     ]);
     const searchJob = () => {
-      window.location.href = "/jobs-detail";
+      window.location.href = "/job-search";
     };
     const brandLogo = ref([]);
 

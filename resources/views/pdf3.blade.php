@@ -269,7 +269,7 @@
                     @if ($achievement['company_name'] !== null && $achievement['company_name'] !== "null")
                     <tr>
                         <td style="width: 70%;">
-                            {{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>, 2019
+                            {{ $achievement['company_name'] }} — <strong>{{ $achievement['certification_name'] }}</strong>
                         </td>
                     </tr>
 					@endif

@@ -102,7 +102,7 @@ export default {
       detailPanelVisible.value = false;
     };
     const searchJob = () => {
-      window.location.href = "/jobs-detail";
+      window.location.href = "/job-search";
     };
     const fetchJobs = async () => {
       try {
@@ -212,5 +212,9 @@ export default {
 }
 .featured_jobs_logo img.v-img__img {
   width: 90px;
+}
+.load_more_div {
+    width: 100%;
+    text-align: center;
 }
 </style>

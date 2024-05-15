@@ -112,7 +112,7 @@ Route::get('/confirm/company', function () {
 });
 Route::get('/view/{jobid}', [SearchjobController::class, 'viewjob']);
 Route::get('/fetchjob/{jobid}', [SearchjobController::class, 'fetchJobDetails']);
-Route::get('/jobs-detail/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
+Route::get('/job-search/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/company/job', [SearchjobController::class, 'fetchJob']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
@@ -128,7 +128,7 @@ Route::get('/resume', [CvController::class, 'index']);
 Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
-Route::prefix('company')->group(function () {
+Route::prefix('company')->group(function (){
     Route::get('/register/{id?}/{name?}/{email?}/{phone?}/{company?}/{permission?}', [CompanyController::class, 'index']);
     Route::post('/post/{permission?}', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);

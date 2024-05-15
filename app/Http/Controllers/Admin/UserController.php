@@ -365,7 +365,6 @@ class UserController extends Controller
     {
         try {
             $user = Invitation::find($request->id);
-
             if (!$user) {
                 return response()->json(['status' => false, 'message' => 'Invitation not found'], 404);
             }

@@ -122,14 +122,6 @@ class CompanyController extends Controller
                             'status' => true,
                             'message' => "Subscription Will be added within 4-5 days in your account"
                         ], 200);
-                        // } else if ($selected_plan->name == 'Standard' && $user_plan->name == 'Basic') {
-                        //     $this->gocardlessService->createSubscription($data);
-                        //     $user->update(['plan_id' => $input['id']]);
-                        //     return response()->json([
-                        //         'status' => true,
-                        //         'message' => "Subscription Will be added soon in your account"
-                        //     ], 200);
-                        // } 
                     } else {
                         $users_subscription = UserSubscription::where('user_id', $user->id)->first();
                         $users_subscription->update(['next_plan_id' => $input['id']]);

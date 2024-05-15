@@ -70,7 +70,7 @@
           <v-col cols="12" sm="12" md="6" lg="4" xl="4">
             <v-card>
               <v-img
-                src="/storage/assest/31.webp"
+                src="assest/img/product/31.webp"
                 alt="Cinque Terre"
                 style="height: 140px"
               ></v-img>
@@ -86,7 +86,7 @@
           <v-col cols="12" sm="12" md="6" lg="4" xl="4">
             <v-card>
               <v-img
-                src="/storage/assest/32.png"
+                src="assest/img/product/32.png"
                 alt="Cinque Terre"
                 style="height: 140px"
               ></v-img>
@@ -102,7 +102,7 @@
           <v-col cols="12" sm="12" md="6" lg="4" xl="4">
             <v-card>
               <v-img
-                src="/storage/assest/33.webp"
+                src="assest/img/product/33.webp"
                 alt="Cinque Terre"
                 style="height: 140px"
               ></v-img>

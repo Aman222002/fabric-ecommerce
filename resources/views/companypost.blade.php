@@ -1,6 +1,6 @@
 
 @extends('layouts.app')
-@section('title', 'Company Post')
+@section('title', 'Find-Job')
 @section('content')
     @if($data)
         <company-post :data="{{ json_encode($data) }}"></company-post>
