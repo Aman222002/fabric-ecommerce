@@ -109,7 +109,6 @@
                         hide-details="auto"
                         @input="filterNonNumeric"
                       ></v-text-field>
-
                       <v-btn type="submit" dark block tile color="primary"
                         >Register</v-btn
                       >

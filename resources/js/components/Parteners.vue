@@ -74,6 +74,7 @@
           </v-btn>
         </template>
         <v-card>
+
           <v-list v-for="item in blogActions" :key="item.text">
             <template v-if="selectedStatus === 'Draft'">
               <v-list-item

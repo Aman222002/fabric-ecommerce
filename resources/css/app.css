@@ -1088,7 +1088,6 @@ button.load_more {
     text-align: center;
 }
 
-
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {
