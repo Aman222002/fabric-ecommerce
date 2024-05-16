@@ -126,7 +126,6 @@ export default {
       const options = yearOptions.value.filter(
         (year) => year >= startingYear || year === ""
       );
-
       if (startingYear === 2024 && !options.includes(2024)) {
         options.unshift(2024);
       }

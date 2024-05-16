@@ -1088,8 +1088,7 @@ button.load_more {
     text-align: center;
 }
 
-
-.fill_your_personal_details .v-stepper-header button.v-stepper-item .v-avatar {
+HEAD .fill_your_personal_details .v-stepper-header button.v-stepper-item .v-avatar {
     background-color: #0146a6;
 }
 
@@ -1128,6 +1127,7 @@ button.load_more {
     color: #0146a6;
 }
 
+=======>>>>>>>3341825e31b6a647854d80c0c9a9711be6df3e50
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {
