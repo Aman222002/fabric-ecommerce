@@ -409,7 +409,6 @@ export default {
   align-items: center;
 }
 
-
 .compamy_infor_description {
   width: 90%;
   margin: 2% auto;

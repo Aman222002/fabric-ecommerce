@@ -58,13 +58,13 @@
     <template #Dxbutton="{ data }">
       <v-btn
         prepend-icon="mdi-pencil"
-        class="edit-btn bg-primary"
+        class="edit-btn btn_cts"
         @click="editBlog(data.data)"
       ></v-btn>
       <!-- <v-spacer></v-spacer> -->
       <v-btn
         prepend-icon="mdi-delete"
-        class="bg-primary"
+        class="btn_cts"
         @click="deleteBlog(data.data.id)"
       ></v-btn>
     </template>
@@ -179,7 +179,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            class="bg-primary"
+            class="btn_cts"
             text="Close Dialog"
             @click="showDialog = false"
           ></v-btn>
@@ -224,7 +224,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            class="bg-primary"
+            class="btn_cts"
             text="Close Dialog"
             @click="closeAddDialog"
           ></v-btn>

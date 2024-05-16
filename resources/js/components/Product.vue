@@ -1,6 +1,6 @@
 <template>
   <div class="choose_your_plan">
-    <v-container>
+    <v-container fluid>
       <div class="section_titme">
         <p
           class="centered-heading"
@@ -49,9 +49,7 @@
                   >
                 </v-list-item>
               </v-list>
-              <v-btn class="bg-primary" @click="buySubs(plan.id)"
-                >Buy Now</v-btn
-              >
+              <v-btn class="btn_cts" @click="buySubs(plan.id)">Buy Now</v-btn>
             </v-card-text>
           </v-card>
         </v-col>
@@ -242,8 +240,10 @@ export default {
 }
 .choose_your_plan .packages_price .v-list-item-title {
   text-transform: capitalize;
-  flex-wrap: wrap;
   display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
 }
 .choose_your_plan .plan_infor .v-card {
   padding: 35px 20px;

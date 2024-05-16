@@ -109,7 +109,6 @@
                         hide-details="auto"
                         @input="filterNonNumeric"
                       ></v-text-field>
-                   
                       <v-btn type="submit" dark block tile color="primary"
                         >Register</v-btn
                       >
@@ -158,12 +157,10 @@ export default {
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
     const phoneRules = [
-  (v) =>
-    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
-  
-];
-const filterNonNumeric = (event) => {
-      formData.value.phone = event.target.value.replace(/\D/g, '');
+      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+    ];
+    const filterNonNumeric = (event) => {
+      formData.value.phone = event.target.value.replace(/\D/g, "");
     };
     const showPassword = ref(false);
 
@@ -207,7 +204,8 @@ const filterNonNumeric = (event) => {
       form,
       showPassword,
       confirmPassword,
-      confirmPasswordRules,filterNonNumeric
+      confirmPasswordRules,
+      filterNonNumeric,
     };
   },
 };
@@ -237,6 +235,7 @@ const filterNonNumeric = (event) => {
   height: 100%;
   border-radius: 6px !important;
   color: #fff;
+  text-transform: capitalize;
 }
 </style>
  

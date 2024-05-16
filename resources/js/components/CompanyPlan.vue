@@ -9,10 +9,10 @@
         >
           <v-row no-gutters>
             <v-col cols="12" class="text-center mb-5">
-              <v-card-subtitle>
+              <v-card-subtitle class="current_plan">
                 <h2
                   style="
-                    background-color: #1976d2;
+                    background-color: #0146a6;
                     padding: 8px !important;
                     color: #fff;
                   "
@@ -31,12 +31,12 @@
               >
               <v-btn
                 v-if="currentplan.name"
-                class="bg-primary"
+                class="btn_cts"
                 @click="changeplan()"
                 :disabled="disabledButton"
                 >Change Plan</v-btn
               >
-              <v-btn v-else class="bg-primary" @click="changeplan()"
+              <v-btn v-else class="btn_cts" @click="changeplan()"
                 >Buy Plan</v-btn
               >
             </v-col>
@@ -108,7 +108,7 @@
           <v-col cols="3">
             <v-card>
               <v-card-title style="font-size: 20px">Features</v-card-title>
-              <v-card-text >
+              <v-card-text>
                 <v-list dense>
                   <v-list-item v-for="feature in features" :key="feature">
                     <v-list-item-title>{{ feature }}</v-list-item-title>
@@ -121,10 +121,10 @@
             <v-row class="choose_your_popup_wor_tw">
               <v-col cols="4" v-for="(plan, key) in plans" :key="key">
                 <v-card>
-                  <v-card-title class="bg-primary" style="font-size: 20px">
+                  <v-card-title class="btn_cts" style="font-size: 20px">
                     {{ plan.Name }}
                   </v-card-title>
-                  <v-card-text >
+                  <v-card-text>
                     <v-list>
                       <v-list-item
                         v-for="(item, key) in plan.details"
@@ -136,14 +136,12 @@
                   </v-card-text>
                   <v-btn
                     v-if="plan.Name"
-                    class="bg-primary"
+                    class="btn_cts"
                     @click="buyPlan(plan.id)"
                   >
                     Buy Now
                   </v-btn>
-                  <v-btn v-else class="bg-secondary" disabled>
-                    Current Plan
-                  </v-btn>
+                  <v-btn class="btn_cts" v-else disabled> Current Plan </v-btn>
                 </v-card>
               </v-col>
             </v-row>
@@ -229,7 +227,7 @@ export default {
         });
     };
     const handleUpgradeStatusChange = () => {
-     console.log("Upgrade status:", upgrade_status.value);
+      console.log("Upgrade status:", upgrade_status.value);
       disabledButton.value = upgrade_status.value === "initiated";
     };
     const buyPlan = (id) => {
@@ -249,7 +247,7 @@ export default {
           }
           changePlanModal.value = false;
           changingPlan.value = true;
-           window.location.reload();
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -294,7 +292,7 @@ export default {
         console.log(error);
       }
     };
- 
+
     onMounted(async () => {
       await getPlan();
       await getUser();
@@ -321,7 +319,7 @@ export default {
       getUser,
       upgrade_status,
       disabledButton,
-    
+
       subscription_status,
       plan_id,
     };
@@ -373,7 +371,9 @@ export default {
   font-weight: 600;
   font-size: 15px;
 }
-
+.current_plan {
+  opacity: 1 !important;
+}
 @media screen and (max-width: 980px) {
   .choose_your_popup .v-row.choose_your_popup_wor_on {
     flex-wrap: unset;

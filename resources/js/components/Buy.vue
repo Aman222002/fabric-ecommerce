@@ -220,6 +220,7 @@ export default {
                   title: "Email Sent",
                   text: "We sent a mail to add subscription",
                   confirmButtonText: "OK",
+                  cancelButtonColor: "#6e7d88",
                 });
               }
             })

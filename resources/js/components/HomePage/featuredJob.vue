@@ -57,8 +57,8 @@
           </v-btn>
         </div>
         <div v-else class="text-center">
-      <p>No jobs found.</p>
-    </div>
+          <p>No jobs found.</p>
+        </div>
       </v-row>
     </v-container>
   </div>

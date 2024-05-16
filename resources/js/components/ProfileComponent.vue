@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-card class="card">
-        <v-card-title class="bg-primary text-center"
+        <v-card-title class="btn_cts text-center"
           >Personal Information</v-card-title
         >
         <v-form @submit.prevent="updateProfile(formData.id)">
@@ -62,7 +62,7 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn class="bg-primary mx-auto" color="white" type="submit">
+                  <v-btn class="btn_cts mx-auto" color="white" type="submit">
                     Update
                   </v-btn>
                 </v-card-actions>
@@ -76,7 +76,7 @@
   <v-row>
     <v-col cols="12">
       <v-card class="card">
-        <v-card-title class="bg-primary text-center"
+        <v-card-title class="btn_cts text-center"
           >Password and Security</v-card-title
         >
         <v-form @submit.prevent="updatePassword()">
@@ -126,7 +126,7 @@
                   </v-row>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn class="bg-primary mx-auto" type="submit" color="white"
+                  <v-btn class="btn_cts mx-auto" type="submit" color="white"
                     >Save</v-btn
                   >
                 </v-card-actions>

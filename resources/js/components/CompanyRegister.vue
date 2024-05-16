@@ -44,11 +44,10 @@
                     label="Password"
                     :rules="passwordRules"
                     density="compact"
-        
                     outlined
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-  @click:append="showPassword = !showPassword"
-               :type="showPassword ? 'text' : 'password'"
+                    @click:append="showPassword = !showPassword"
+                    :type="showPassword ? 'text' : 'password'"
                   ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
@@ -259,7 +258,6 @@ export default {
             .then((response) => {
               console.log(response);
               if (response.data.status == true) {
-                
                 window.location.href = "/job";
               }
             })
@@ -316,6 +314,7 @@ export default {
   height: 100%;
   border-radius: 5px !important;
   color: #fff;
+  text-transform: capitalize;
 }
 
 .form_page_left button.v-btn {
@@ -334,7 +333,6 @@ a.company_loging {
   border-radius: 5px;
   color: #fff;
   justify-content: center;
-  text-transform: uppercase;
 }
 .form_log_reg {
   border-radius: 15px;

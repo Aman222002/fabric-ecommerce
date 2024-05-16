@@ -45,12 +45,11 @@
                         :rules="passwordRules"
                         dense
                         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-  @click:append="showPassword = !showPassword"
-               :type="showPassword ? 'text' : 'password'"
+                        @click:append="showPassword = !showPassword"
+                        :type="showPassword ? 'text' : 'password'"
                         density="compact"
                         color="blue"
                         autocomplete="false"
-                        
                         style="margin-top: 10px; font-size: 10px"
                       />
                       <v-row>
@@ -97,7 +96,7 @@
                   dark
                   @click="signup()"
                   style="margin-top: 20px"
-                  >SIGN UP</v-btn
+                  >Sign Up</v-btn
                 >
               </v-card-text>
             </v-col>
@@ -181,7 +180,8 @@ export default {
       emailRules,
       passwordRules,
       submitForm,
-      signup,showPassword
+      signup,
+      showPassword,
     };
   },
 };
@@ -215,6 +215,7 @@ export default {
   height: 100%;
   border-radius: 6px !important;
   color: #fff;
+  text-transform: capitalize;
 }
 .form_log_reg .v-card {
   border-radius: 15px;
