@@ -25,7 +25,7 @@
                   label="Job title, keywords, or company"
                   density="compact"
                   variant="solo"
-                  :rules="fullNameRules"
+                  
                   clearable
                   style="width: 100%"
                   placeholder="Job title, keywords, or company"
@@ -37,7 +37,7 @@
                   label="City or postcode"
                   density="compact"
                   variant="solo"
-                  :rules="subjectRules"
+                
                   clearable
                   style="width: 100%"
                   placeholder="City or postcode"

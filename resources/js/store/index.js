@@ -402,6 +402,7 @@ export const useMyStore = defineStore("myStore", {
                 });
         },
     },
+    persist: true,
 });
 export const useUserDetailsStore = defineStore({
     id: "userDetails",
@@ -424,6 +425,7 @@ export const useUserDetailsStore = defineStore({
             this.user_image=[];
         },
     },
+    persist: true,
 });
 export const useResumeStore = defineStore("resume", {
     state: () => ({
@@ -437,6 +439,7 @@ export const useResumeStore = defineStore("resume", {
     actions: {
         submitForm(submittedData) {},
     },
+    persist: true,
 });
 export const useEducationDetailsStore = defineStore("educationDetails", {
     state: () => ({
@@ -484,6 +487,7 @@ export const useEducationDetailsStore = defineStore("educationDetails", {
             Object.assign(this, defaultState());
         },
     },
+    persist: true,
 });
 
 export const useWorkExperienceStore = defineStore({
@@ -532,6 +536,7 @@ export const useWorkExperienceStore = defineStore({
             this.expiry_date = null;
         },
     },
+    persist: true,
 });
 
 export const useUserProfileStore = defineStore({
@@ -550,6 +555,7 @@ export const useUserProfileStore = defineStore({
             this.fields = "";
         },
     },
+    persist: true,
 });
 export const useUserSkillsStore = defineStore({
     id: "userSkills",
@@ -575,6 +581,7 @@ export const useUserSkillsStore = defineStore({
             this.selectedSkills = [];
         },
     },
+    persist: true,
 });
 
 export const useUserAchievementsStore = defineStore({
@@ -598,6 +605,7 @@ export const useUserAchievementsStore = defineStore({
             this.certificate_file_path = null;
         },
     },
+persist: true,
 });
 
 export default useMyStore;
