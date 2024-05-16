@@ -11,11 +11,11 @@ a.dx-link-edit {
     color: #0146a6 !important;
 }
 
-.dx-widget[aria-label="Save"] {
+.dx-widget[aria-label="Save"],
+.dx-popup .dx-toolbar-center .dx-dialog-button[aria-label="Yes"] {
     background-color: #012a64;
     color: #fff;
 }
-
 
 
 
@@ -28,10 +28,17 @@ a.dx-link-edit {
 }
 
 .btn_cancel,
-.dx-button[aria-label="Cancel"] {
+.dx-button[aria-label="Cancel"],
+.dx-popup .dx-toolbar-center .dx-dialog-button[aria-label="No"] {
     background-color: #ff000026;
     color: #ff0000;
 }
+
+.swal2-cancel {
+    background-color: #ff000026 !important;
+    color: #ff0000 !important;
+}
+
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
     background-color: #012a64;
@@ -44,6 +51,12 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
 .btn_cts {
     background-color: #0146a6;
     color: #fff;
+    text-transform: capitalize;
+}
+
+.swal2-confirm {
+    background-color: #0146a6 !important;
+    color: #fff !important;
     text-transform: capitalize;
 }
 
@@ -1127,7 +1140,7 @@ HEAD .fill_your_personal_details .v-stepper-header button.v-stepper-item .v-avat
     color: #0146a6;
 }
 
-=======>>>>>>>3341825e31b6a647854d80c0c9a9711be6df3e50
+
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {

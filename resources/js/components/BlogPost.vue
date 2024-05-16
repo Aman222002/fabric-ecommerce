@@ -193,7 +193,7 @@
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="addPost(selectedImage)" ref="form">
-            <h2>Add Blog</h2>
+            <h2 class="mb-2">Add Blog</h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -221,17 +221,17 @@
             <div class="editor">
               <ckeditor v-model="content" :editor="editor"></ckeditor>
             </div>
-            <v-btn type="submit">Add Post</v-btn>
+            <v-card-actions>
+              <v-btn class="btn_cts" type="submit">Add Blog</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                class="btn_cts"
+                text="Close Dialog"
+                @click="closeAddDialog"
+              ></v-btn>
+            </v-card-actions>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="btn_cts"
-            text="Close Dialog"
-            @click="closeAddDialog"
-          ></v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
@@ -455,7 +455,7 @@ export default {
     const deleteBlog = (id) => {
       window.Swal.fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
+        text: "Are you sure you want to delete this blog?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
