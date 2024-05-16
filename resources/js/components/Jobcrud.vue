@@ -22,6 +22,7 @@
     <DxLoadPanel :enabled="true" />
     <DxSearchPanel :visible="true" />
     <DxColumn
+      width="auto"
       caption="Action"
       :allow-editing="false"
       cell-template="customButtonTemplate"

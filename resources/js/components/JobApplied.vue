@@ -2,16 +2,21 @@
   <div class="job-applied">
     <div class="sec-title text-center">
       <h2>Job Applied</h2>
+      <v-breadcrumbs class="breadcrumbs_li" divider="/">
+        <v-breadcrumbs-item> Home </v-breadcrumbs-item>
+        <v-breadcrumbs-item> / </v-breadcrumbs-item>
+        <v-breadcrumbs-item disabled> Job Applied </v-breadcrumbs-item>
+      </v-breadcrumbs>
       <div class="text">
         Know your worth and find the job that qualify your life
       </div>
     </div>
     <div class="job_applied_body_page_section">
       <v-container class="w-75 mb-6">
-        <v-row align="center" justify="center">
+        <v-row class="job_box">
           <v-col
             cols="12"
-            class="job-applied_col job-card"
+            class="job-applied_col job_box_child"
             sm="12"
             md="12"
             lg="6"
@@ -19,30 +24,31 @@
             v-for="jobApplication in jobApplications"
             :key="jobApplication.id"
           >
-            <v-card class="mx-auto my-0 company_info">
+            <v-card class="mx-auto my-0 company_info job_box_card">
               <div class="job_info">
                 <v-card-title
                   ><a href="#"> {{ jobApplication.job.title }}</a>
                 </v-card-title>
                 <ul class="company_seat">
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#f16666" class="mr-2">mdi-domain</v-icon
                     >{{ jobApplication.company.company_name }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#34a853" class="mr-2"
-                      >mdi-map-marker-outline </v-icon
-                    >{{ jobApplication.job.location }}
+                      >mdi-map-marker-outline
+                    </v-icon>
+                    {{ HomeCountryState(jobApplication.job.location) }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#f9ab00" class="mr-2">mdi-email-box</v-icon
                     >{{ jobApplication.company.company_email }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#0146a6" class="mr-2">mdi-school</v-icon
                     >{{ jobApplication.job.qualifications }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#8bc34a" class="mr-2"
                       >mdi-currency-gbp</v-icon
                     >{{ jobApplication.job.salary }}
@@ -81,7 +87,12 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
-
+const HomeCountryState = (countryStateName) => {
+  if (countryStateName && countryStateName.length > 15) {
+    return countryStateName.substring(0, 15) + "....";
+  }
+  return countryStateName;
+};
 export default {
   name: "JobApplied",
   props: {
@@ -90,6 +101,7 @@ export default {
       default: () => [],
     },
   },
+
   setup(props) {
     const jobApplications = ref(props.data);
     console.log(jobApplications.value);
@@ -129,8 +141,30 @@ export default {
     return {
       jobApplications,
       deleteItem,
+      HomeCountryState,
     };
   },
 };
 </script>
 
+<style>
+.job_box {
+  gap: 20px;
+}
+.job_box_child {
+  height: auto;
+  box-shadow: 0px 1px 8px 0px #888888;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.job_box .job_box_child .job_box_card {
+  box-shadow: unset;
+}
+
+@media (min-width: 1920px) {
+  .job_box_child.v-col-xl-6 {
+    flex: 0 0 50%;
+    max-width: calc(max(48%, 50% - 20px));
+  }
+}
+</style>

@@ -11,16 +11,16 @@ a.dx-link-edit {
     color: #0146a6 !important;
 }
 
-.dx-widget[aria-label="Save"] {
+.dx-widget[aria-label="Save"],
+.dx-popup .dx-toolbar-center .dx-dialog-button[aria-label="Yes"] {
     background-color: #012a64;
     color: #fff;
 }
 
 
 
-
 .w_90 {
-    width: 90%;
+    max-width: 90%;
 }
 
 .v-btn {
@@ -28,10 +28,17 @@ a.dx-link-edit {
 }
 
 .btn_cancel,
-.dx-button[aria-label="Cancel"] {
+.dx-button[aria-label="Cancel"],
+.dx-popup .dx-toolbar-center .dx-dialog-button[aria-label="No"] {
     background-color: #ff000026;
     color: #ff0000;
 }
+
+.swal2-cancel {
+    background-color: #ff000026 !important;
+    color: #ff0000 !important;
+}
+
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
     background-color: #012a64;
@@ -44,6 +51,12 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
 .btn_cts {
     background-color: #0146a6;
     color: #fff;
+    text-transform: capitalize;
+}
+
+.swal2-confirm {
+    background-color: #0146a6 !important;
+    color: #fff !important;
     text-transform: capitalize;
 }
 
@@ -543,7 +556,7 @@ a.bookmark_fr {
     background-color: transparent;
 }
 
-.popular_job_categories .v-breadcrumbs {
+.v-breadcrumbs {
     justify-content: center;
     text-transform: uppercase;
 }
@@ -1087,6 +1100,46 @@ button.load_more {
     width: 100%;
     text-align: center;
 }
+
+HEAD .fill_your_personal_details .v-stepper-header button.v-stepper-item .v-avatar {
+    background-color: #0146a6;
+}
+
+.fill_your_personal_details .v-stepper-header button.v-stepper-item .v-stepper-item__title {
+    color: #0146a6;
+}
+
+.fill_your_personal_details .v-stepper-header hr.v-divider {
+    border-color: #0146a6;
+}
+
+.personal_details_btn button.v-btn--variant-tonal {
+    background-color: #0146a6;
+    color: #fff !important;
+}
+
+.button_plus_delete button.bg-blue {
+    background-color: #0146a6 !important;
+    margin-left: 3px;
+}
+
+.personal_details_btn button.v-btn--variant-text {
+    color: #205db1;
+    background-color: #e2eaf8;
+}
+
+.fill_your_personal_details button.bg-blue {
+    background-color: #0146a6 !important;
+}
+
+.vue_date_picker_ct .dp__input_wrap input.dp__pointer {
+    height: 56px;
+}
+
+.dx-datagrid .dx-link {
+    color: #0146a6;
+}
+
 
 /* responsive start  only */
 @media screen and (min-width: 1200px) {

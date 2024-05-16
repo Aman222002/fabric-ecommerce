@@ -10,6 +10,7 @@
           :name="'education_type_' + index"
           :rules="[(v) => !!v || 'Education Type is required']"
           label="Education Type"
+          variant="outlined"
         ></v-select>
       </v-col>
       <v-col md="3">
@@ -125,7 +126,6 @@ export default {
       const options = yearOptions.value.filter(
         (year) => year >= startingYear || year === ""
       );
-    
       if (startingYear === 2024 && !options.includes(2024)) {
         options.unshift(2024);
       }

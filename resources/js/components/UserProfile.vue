@@ -1,7 +1,7 @@
 <template>
   <v-card class="user_profile" style="display: flex; flex-direction: column">
     <div class="user_profile_top_bar">
-      <v-container fluid>
+      <v-container class="w_90">
         <v-row>
           <v-icon @click="goToEditPage()" style="margin-left: 97%"
             >mdi-pencil</v-icon
@@ -49,7 +49,7 @@
         </v-row>
       </v-container>
     </div>
-    <v-container fluid>
+    <v-container class="w_90">
       <v-row class="user_profile_infor">
         <v-col
           sm="12"
@@ -74,15 +74,15 @@
               <div class="job_info">
                 <v-card-title><a href="#">Experience</a></v-card-title>
                 <ul class="company_seat">
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#f16666" class="mr-2">mdi-domain</v-icon
                     >{{ experience.company_name }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#34a853" class="mr-2">mdi-medal </v-icon
                     >{{ experience.position }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#f9ab00" class="mr-2"
                       >mdi-card-account-details</v-icon
                     >{{ experience.description }}
@@ -129,8 +129,9 @@
         <v-col sm="12" md="6" lg="4" xl="4" class="user_profile_infor_right">
           <v-card>
             <v-card-title
-              ><v-icon color="#f16666">mdi-domain</v-icon> Candidates
-              Information:</v-card-title
+              ><v-icon color="#f16666" style="margin-top: -5px"
+                >mdi-domain</v-icon
+              ><span class="pt-1"> Candidates Information:</span></v-card-title
             >
             <v-card-text>
               <div>
