@@ -40,7 +40,7 @@ class JobPostingPlansTableSeeder extends Seeder
                 'id' => 3,
                 'Search' => 'Yes',
                 'Mails' => 12,
-                'Validity' => '15 Days',
+                'Validity' => '3 Week',
                 'Post Job' => 'Yes',
                 'Duration of Job-Post' => '7 Days',
                 'Number of Job-Post' => 10,

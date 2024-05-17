@@ -123,10 +123,8 @@ class SearchjobController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
     public function searchJobs(Request $request)
     {
-
         try {
             $jobs = Job::with("company");
             if ($request->has('jobTitle')) {
@@ -145,8 +143,18 @@ class SearchjobController extends Controller
                 })
                     ->get();;
             }
+            if ($request->has('experience')) {
+                $jobs->where('experience', 'like', '%' . $request->input('experience') . '%')->where(function ($query) {
+                    $query->whereHas('user', function ($query) {
+                        $query->where('subscription_status', 'active');
+                    })->where('post_status', 'Published');
+                })
+                    ->get();;
+            }
             if ($request->has('category')) {
+               
                 $category_id = Category::where('name', $request->category)->value('id');
+              
                 $jobs = $jobs->where('category_id', 'like', '%' . $category_id . '%')
                     ->where(function ($query) {
                         $query->whereHas('user', function ($query) {
@@ -163,13 +171,8 @@ class SearchjobController extends Controller
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
+        
     }
-
-
-
-
-
-
     /**
      * Show the form for creating a new resource.
      */

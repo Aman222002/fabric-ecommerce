@@ -272,3 +272,4 @@ Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
  Route::post('/webhook/invoice', [WebhookController::class, 'invoiceHandler']);
  Route::get('/fetch-user-data', [LoginController::class, 'fetchUserData']);
  Route::get('/work-experiences', [LoginController::class, 'index2']);
+ Route::post('subscription-plan/{userId}', [UserController::class, 'getSubscription']);

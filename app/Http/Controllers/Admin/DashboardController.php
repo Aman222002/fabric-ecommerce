@@ -162,7 +162,7 @@ class DashboardController extends Controller
     {
         // dd($request->planID);
         try {
-            $users = User::where('plan_id', $request->planID)->where('subscription_status', 'active')->get();
+            $users = User::where('plan_id', $request->planID)->get();
             // dd($users);
             return response()->json(['status' => true, 'data' => $users], 200);
         } catch (\Exception $e) {

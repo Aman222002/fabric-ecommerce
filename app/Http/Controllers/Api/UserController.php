@@ -19,8 +19,11 @@ use App\Models\Category;
 use App\Models\JobType;
 use App\Models\Qualification;
 use App\Models\Permissionaccess;
+use App\Models\UserSubscription;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+
 class UserController extends Controller
 {
     
@@ -56,7 +59,9 @@ class UserController extends Controller
         }
     }
     public function login(Request $request)
+  
     {
+       
         try {
             $credentials = $request->validate([
                 'email' => 'required',
@@ -104,6 +109,7 @@ class UserController extends Controller
                 Auth::logout();
             }
             return response()->json([
+               
                 'status' => false,
                 'message' => 'Authentication failed',
             ], 401);
@@ -373,9 +379,84 @@ public function destroy($slug)
         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
 }
-public function getSubscription(Request $request,$id)
+
+public function getSubscription(Request $request)
 {
-   
+    try {
+     
+        $user = auth()->user();
+        
+        if (!$user) {
+            return response()->json(['status' => false, 'message' => 'Unauthenticated'], 401);
+        }
+        $userSubscription = UserSubscription::where('user_id', $user->id)->first();
+        if (!$userSubscription) {
+            return response()->json(['status' => false, 'message' => 'No subscription found for the user'], 404);
+        }
+        $plan = Plan::find($userSubscription->plan_id);
+        if (!$plan) {
+            return response()->json(['status' => false, 'message' => 'No plan found for the user subscription'], 404);
+        }
+        $startDate = Carbon::now();
+        $endDate = $this->calculateEndDate($startDate, $plan->duration);
+        $userSubscription->update([
+            'subscription_status' => 'active',
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
+        $user->update(['subscription_status' => 'active']);
+
+        $response = [
+            'status' => true,
+            'message' => 'Subscription activated successfully',
+            'data' => [
+                'userDetails' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'user_image' => $user->user_image,
+                    'status' => $user->status,
+                    'subscription_status' => $user->subscription_status,
+                ],
+                'subscriptionDetails' => $userSubscription,
+            ],
+        ];
+        return response()->json($response, 200);
+
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    }
 }
 
+
+private function calculateEndDate($startDate, $duration)
+{
+    $durationParts = [];
+    preg_match('/(\d+)(\w+)/', $duration, $durationParts);
+
+    if (count($durationParts) === 3) {
+        $amount = (int)$durationParts[1];
+        $unit = strtolower($durationParts[2]);
+
+        switch ($unit) {
+            case 'day':
+            case 'days':
+                return $startDate->copy()->addDays($amount);
+            case 'week':
+            case 'weeks':
+                return $startDate->copy()->addWeeks($amount);
+            case 'month':
+            case 'months':
+                return $startDate->copy()->addMonths($amount);
+            case 'year':
+            case 'years':
+                return $startDate->copy()->addYears($amount);
+            default:
+                throw new \Exception("Invalid duration unit: $unit");
+        }
+    } else {
+        throw new \Exception("Invalid duration format: $duration");
+    }
+}
 }
