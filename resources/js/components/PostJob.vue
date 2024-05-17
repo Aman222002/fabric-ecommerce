@@ -9,7 +9,7 @@
     >
       <v-row>
         <v-col cols="12">
-          <h2 class="mb-4 form_fild_title">Post Detail:</h2>
+          <h2 class="form_fild_title">Post Detail:</h2>
         </v-col>
         <v-col sm="12" md="6" lg="6" xl="6" cols="12" class="pb-0">
           <v-text-field

@@ -1,5 +1,5 @@
 <template>
-  <p style="text-align: center; font-size: 30px; margin-top: 20px">
+  <p style="text-align: center; font-size: 30px; margin-top: 20px" class="mb-4">
     Subscription Plans
   </p>
   <DxDataGrid

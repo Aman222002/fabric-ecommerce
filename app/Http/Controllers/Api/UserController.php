@@ -148,10 +148,6 @@ class UserController extends Controller
             return response()->json(['sttaus' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
-    
-
-    
     public function store(Request $request)
     {
         try {
@@ -180,7 +176,6 @@ class UserController extends Controller
             if (!$permissionAccess) {
                 return response()->json(['status' => false, 'message' => 'User does not have permission to post a job'], 403);
             }
-            
            }
             $validator = Validator::make($request->all(), [
                 'title' => 'required',
@@ -377,6 +372,10 @@ public function destroy($slug)
         Log::error($e->getMessage());
         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
+}
+public function getSubscription(Request $request,$id)
+{
+   
 }
 
 }

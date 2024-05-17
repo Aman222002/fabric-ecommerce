@@ -44,11 +44,10 @@
                     label="Password"
                     :rules="passwordRules"
                     density="compact"
-        
                     outlined
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-  @click:append="showPassword = !showPassword"
-               :type="showPassword ? 'text' : 'password'"
+                    @click:append="showPassword = !showPassword"
+                    :type="showPassword ? 'text' : 'password'"
                   ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
@@ -61,6 +60,9 @@
                     density="compact"
                     outlined
                     :disabled="disabledFields"
+                    mask="##########"
+                        hide-details="auto"
+                    @input="filterNonNumeric"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -96,6 +98,9 @@
                       label="Phone Number"
                       :rules="phoneRules"
                       density="compact"
+                      mask="##########"
+                        hide-details="auto"
+                      @input="filterNonNumerical"
                       outlined
                     ></v-text-field>
                   </v-col>
@@ -174,10 +179,11 @@ export default {
     ];
     const passwordRules = [(v) => !!v || "Password is required"];
     const phoneRules = [
-      (v) => !!v || "Phone number is required",
-      (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
-      (v) => /^[0-9]+$/.test(v) || "Phone number should contain only numbers",
-    ];
+ 
+  (v) =>
+    /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
+ 
+];
     const stateRules = [(v) => !!v || "State is required"];
     const cityRules = [(v) => !!v || "city is required"];
 
@@ -185,6 +191,12 @@ export default {
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
     ];
+    const filterNonNumeric = (event) => {
+      company.value.phone = event.target.value.replace(/\D/g, '');
+    };
+    const filterNonNumerical = (event) => {
+      company.value.phone_number = event.target.value.replace(/\D/g, '');
+    };
     const showCompanyDetails = ref(true);
     const disabledFields = ref(false);
     const showPassword = ref(false);
@@ -246,7 +258,6 @@ export default {
             .then((response) => {
               console.log(response);
               if (response.data.status == true) {
-                
                 window.location.href = "/job";
               }
             })
@@ -269,7 +280,7 @@ export default {
       stateRules,
       usersStore,
       showCompanyDetails,
-      disabledFields,showPassword
+      disabledFields,showPassword,filterNonNumeric,filterNonNumerical
     };
   },
 };
@@ -303,6 +314,7 @@ export default {
   height: 100%;
   border-radius: 5px !important;
   color: #fff;
+  text-transform: capitalize;
 }
 
 .form_page_left button.v-btn {
@@ -321,7 +333,6 @@ a.company_loging {
   border-radius: 5px;
   color: #fff;
   justify-content: center;
-  text-transform: uppercase;
 }
 .form_log_reg {
   border-radius: 15px;

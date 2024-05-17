@@ -8,10 +8,10 @@
     </div>
 
     <v-container class="w-75 mb-6">
-      <v-row align="center" justify="center">
+      <v-row class="job_box">
         <v-col
           cols="12"
-          class="featured_jobs_col"
+          class="featured_jobs_col job_box_child"
           sm="12"
           md="12"
           lg="6"
@@ -20,7 +20,7 @@
           :key="job.id"
           @click="openDetailPage(job.id)"
         >
-          <v-card class="mx-auto company_info">
+          <v-card class="mx-auto company_info job_box_card">
             <div class="featured_jobs_logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
             </div>
@@ -29,16 +29,16 @@
                 <a href="#">{{ job.title }}</a>
               </v-card-title>
               <ul class="company_seat">
-                <li>
+                <li class="mr-2">
                   <v-icon color="#f16666" class="mr-1">mdi-domain</v-icon
                   >{{ job.company.company_name }}
                 </li>
-                <li>
+                <li class="mr-2">
                   <v-icon color="#34a853" class="mr-1"
                     >mdi-map-marker-outline</v-icon
                   >{{ HomeCountryState(job.location) }}
                 </li>
-                <li>
+                <li class="mr-2">
                   <v-icon color="#f9ab00" class="mr-1"
                     >mdi-clock-time-two-outline</v-icon
                   >{{ formatCreatedAt(job.company.created_at) }}
@@ -51,15 +51,16 @@
             </v-card>
           </v-card>
         </v-col>
-        <v-btn size="x-large" class="load_more mt-5" @click="searchJob" v-if="jobs.length > 0">
-          Load More Listing
-        </v-btn>
+        <div class="load_more_div" v-if="jobs.length > 0">
+          <v-btn size="x-large" class="load_more mt-5" @click="searchJob">
+            Load More Listing
+          </v-btn>
+        </div>
         <div v-else class="text-center">
-      <p>No jobs found.</p>
-    </div>
+          <p>No jobs found.</p>
+        </div>
       </v-row>
     </v-container>
-    
   </div>
 </template>
 
@@ -101,7 +102,7 @@ export default {
       detailPanelVisible.value = false;
     };
     const searchJob = () => {
-      window.location.href = "/jobs-detail";
+      window.location.href = "/job-search";
     };
     const fetchJobs = async () => {
       try {
@@ -211,5 +212,9 @@ export default {
 }
 .featured_jobs_logo img.v-img__img {
   width: 90px;
+}
+.load_more_div {
+  width: 100%;
+  text-align: center;
 }
 </style>

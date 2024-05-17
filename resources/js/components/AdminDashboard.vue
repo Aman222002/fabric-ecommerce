@@ -1,5 +1,5 @@
 <template>
-  <v-container class="company_dashboard_view">
+  <v-container fluid class="company_dashboard_view">
     <div id="cardsDiv">
       <v-row>
         <v-col sm="12" md="6" lg="3" xl="3" cols="12">
@@ -104,7 +104,7 @@
 
       <div id="SupplierDiv">
         <v-card>
-          <v-card-title class="bg-primary">Recent Jobs</v-card-title>
+          <v-card-title class="btn_cts">Recent Jobs</v-card-title>
           <v-card-text>
             <v-table>
               <thead>
@@ -240,7 +240,7 @@ export default {
   width: 100%;
 }
 .company_dashboard_view div.card:hover {
-  background: #1976d2;
+  background: #0146a6;
   color: #fff;
 }
 .flex-container {
@@ -287,7 +287,7 @@ export default {
 }
 
 .company_dashboard_view .cardbottom a {
-  color: #1976d2;
+  color: #0146a6;
   text-decoration: none;
   font-weight: bold;
 }

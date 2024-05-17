@@ -1,24 +1,22 @@
 <template>
   <div class="about_us_page">
-    <div class="popular_job_categories">
+    <div class="popular_job_categories pb-0">
       <div class="sec-title text-center">
         <h2>About Us</h2>
         <v-breadcrumbs :items="items">
-          <template v-slot:prepend>
-            <v-icon>mdi-home</v-icon>
-          </template>
+          <template v-slot:prepend> </template>
         </v-breadcrumbs>
       </div>
     </div>
     <div class="about_superio">
-      <v-container class="w-75">
+      <v-container class="w_90">
         <v-card class="mx-auto my-8" elevation="16">
           <v-card-item>
             <v-card-title> About Job Search</v-card-title>
           </v-card-item>
 
           <v-card-text>
-            <p>
+            <p class="text-justify">
               Far much that one rank beheld bluebird after outside ignobly
               allegedly more when oh arrogantly vehement irresistibly fussy
               penguin insect additionally wow absolutely crud meretriciously
@@ -28,7 +26,7 @@
               across highhandedly much.
             </p>
 
-            <p>
+            <p class="text-justify">
               Repeatedly dreamed alas opossum but dramatically despite
               expeditiously that jeepers loosely yikes that as or eel underneath
               kept and slept compactly far purred sure abidingly up above
@@ -90,17 +88,20 @@
     </div>
 
     <div class="brand_Logo">
+      <div class="sec-title site_title text-center">
+        <h2>Partners Logo</h2>
+      </div>
       <v-container class="w-75">
         <v-sheet class="mx-auto">
           <v-slide-group class="pa-4" selected-class="bg-success" show-arrows>
             <v-slide-group-item
-              v-for="brandLogo in brandLogo"
-              :key="brandLogo.id"
+              v-for="brandLogoItem in brandLogo"
+              :key="brandLogoItem.id"
             >
               <div class="brand_logo_slide">
                 <v-img
                   aspect-ratio="16/9"
-                  :src="`/storage/assest/img/brand-logo/${brandLogo.partner_logo}`"
+                  :src="`/storage/assets/${brandLogoItem.partner_logo}`"
                 ></v-img>
               </div>
             </v-slide-group-item>
@@ -149,7 +150,7 @@ export default {
       },
     ]);
     const searchJob = () => {
-      window.location.href = "/jobs-detail";
+      window.location.href = "/job-search";
     };
     const brandLogo = ref([]);
 

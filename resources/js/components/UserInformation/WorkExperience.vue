@@ -2,13 +2,17 @@
   <template>
   <div>
     <v-card-title class="text-left"> Work Experience </v-card-title>
-    <v-row class="achiev_work_exp" v-for="(experiences, index) in experience" :key="index">
+    <v-row
+      class="achiev_work_exp"
+      v-for="(experiences, index) in experience"
+      :key="index"
+    >
       <v-col cols="12" v-if="index === 0">
         <v-checkbox
           v-model="experience[index].currently_working"
           label="Currently Working"
           dense
-          color="success"
+          color="#0146a6"
           @change="handleCurrentlyWorkingChange(index)"
         ></v-checkbox>
       </v-col>
@@ -43,6 +47,7 @@
           :name="'start_date_' + index"
           @internal-model-change="(e) => dateClicked(index, 'start_date', e)"
           :rules="index === 0 ? [] : [(v) => !!v || 'start date  is required']"
+          class="vue_date_picker_ct"
         />
       </v-col>
       <v-col cols="10" md="3">
@@ -55,6 +60,7 @@
           :name="'end_date' + index"
           @internal-model-change="(e) => dateClicked(index, 'end_date', e)"
           :rules="index === 0 ? [] : [(v) => !!v || 'end date  is required']"
+          class="vue_date_picker_ct"
         />
       </v-col>
       <v-col cols="12" md="50">
@@ -67,7 +73,7 @@
         ></v-textarea>
       </v-col>
       <div class="button_plus_delete">
-        <span  md="2">
+        <span md="2">
           <v-btn
             @click="removeWorkExperience(index)"
             color="red"

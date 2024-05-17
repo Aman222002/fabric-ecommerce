@@ -4,7 +4,7 @@
     style="margin-top: 10px; display: flex; flex-direction: column"
   >
     <div class="company_profile_top_bar">
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-icon @click="goToEditPage()" style="margin-left: 97%"
             >mdi-pencil</v-icon
@@ -36,7 +36,7 @@
       </v-container>
     </div>
 
-    <v-container>
+    <v-container fluid>
       <v-row class="company_profile_infor">
         <v-col sm="12" md="6" lg="8" xl="8" class="company_profile_infor_left">
           <v-card class="card2" style="margin-bottom: 20px">
@@ -96,7 +96,7 @@
                   placeholder="Instagram"
                 ></v-text-field>
               </div>
-              <v-btn color="primary" @click="saveSocialMedia()">Save</v-btn>
+              <v-btn class="btn_cts" @click="saveSocialMedia()">Save</v-btn>
             </v-card-text>
           </v-card>
 
@@ -114,18 +114,8 @@
                 ></v-textarea>
               </v-card-text>
               <v-card-actions>
-                <v-btn
-                  style="background: #34a85326; color: #34a853"
-                  color="primary"
-                  @click="saveDescription"
-                  >Save</v-btn
-                >
-                <v-btn
-                  style="background: #ff000026; color: #ff0000"
-                  color="error"
-                  @click="closeModal"
-                  >Close</v-btn
-                >
+                <v-btn class="btn_cts" @click="saveDescription">Save</v-btn>
+                <v-btn class="btn_cancel" @click="closeModal">Close</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -139,7 +129,7 @@
                 >mdi-pencil</v-icon
               >
             </div>
-            <v-card-title> Company: </v-card-title>
+            <v-card-title class="pl-0"> Company: </v-card-title>
             <v-card-text>
               <div>
                 <label for="name" class="ps-0"> Name:</label>
@@ -200,14 +190,8 @@
                 ></v-file-input>
               </v-card-text>
               <v-card-actions>
-                <v-btn
-                  style="background: #34a85326; color: #34a853"
-                  @click="saveEditedCompany"
-                  >Save</v-btn
-                >
-                <v-btn
-                  style="background: #ff000026; color: #ff0000"
-                  @click="closeEditCompanyModal"
+                <v-btn class="btn_cts" @click="saveEditedCompany">Save</v-btn>
+                <v-btn class="btn_cancel" @click="closeEditCompanyModal"
                   >Cancel</v-btn
                 >
               </v-card-actions>
@@ -222,7 +206,10 @@
                 mdi-pencil
               </v-icon>
             </div>
-            <v-card-title style="font-family: Poppins, sans-serif" class="pt-0">
+            <v-card-title
+              style="font-family: Poppins, sans-serif"
+              class="pt-0 pl-0"
+            >
               Address:
             </v-card-title>
 
@@ -355,14 +342,8 @@
                         placeholder="Select Country"></v-select> -->
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            style="background: #34a85326; color: #34a853"
-            @click="saveEditedAddress"
-            >Save</v-btn
-          >
-          <v-btn
-            style="background: #ff000026; color: #ff0000"
-            @click="closeEditAddressModal"
+          <v-btn class="btn_cts" @click="saveEditedAddress">Save</v-btn>
+          <v-btn class="btn_cancel" @click="closeEditAddressModal"
             >Cancel</v-btn
           >
         </v-card-actions>
@@ -395,16 +376,8 @@
           ></v-text-field>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            style="background: #34a85326; color: #34a853"
-            @click="saveEditedJob"
-            >Save</v-btn
-          >
-          <v-btn
-            style="background: #ff000026; color: #ff0000"
-            @click="closeEditModal"
-            >Close</v-btn
-          >
+          <v-btn class="btn_cts" @click="saveEditedJob">Save</v-btn>
+          <v-btn class="btn_cancel" @click="closeEditModal">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -870,6 +843,8 @@ export default {
   display: flex;
   justify-content: end;
   margin-bottom: 15px;
+  position: absolute;
+  right: 15px;
 }
 
 .company_profile_top_bar {
@@ -893,8 +868,8 @@ export default {
   font-weight: 600;
 }
 .title_edit {
-  color: #1867c0 !important;
-  background: #e3ecf8;
+  color: #fff !important;
+  background: #0146a6;
   text-align: center;
 }
 </style>

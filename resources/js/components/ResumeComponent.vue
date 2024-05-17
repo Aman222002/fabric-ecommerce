@@ -1,6 +1,6 @@
 <template>
-  <v-container class="mb-7">
-    <div>
+  <v-container class="w_90 mb-7">
+    <div class="fill_your_personal_details">
       <div style="text-align: center">
         <h1 style="margin-top: 20px; margin-bottom: 20px">
           Fill your Personal Details
@@ -61,7 +61,7 @@
                           v-model="isExperience"
                           label="Do you have experience?"
                           dense
-                          color="success"
+                          color="#0146a6"
                         ></v-switch>
                       </div>
                       <div
@@ -74,7 +74,7 @@
                         "
                       >
                         <work-experience></work-experience>
-                        <users-achievments></users-achievments>
+                        <user-achievments></user-achievments>
                       </div>
                     </template>
                     <template v-if="currentStep === 4">
@@ -83,6 +83,7 @@
                       </div>
                     </template>
                     <v-stepper-actions
+                      class="personal_details_btn mb-5"
                       :disabled="disabled"
                       @click:prev="prev"
                       @click:next="goToNext()"
@@ -103,7 +104,10 @@
                       height="300"
                       frameborder="0"
                     ></iframe>
-                    <v-btn v-if="currentStep === 4" @click="downloadcv()"
+                    <v-btn
+                      class="btn_cts"
+                      v-if="currentStep === 4"
+                      @click="downloadcv()"
                       >Generate CV</v-btn
                     >
                   </v-form>

@@ -11,6 +11,7 @@
         chips
         multiple
         @update:modelValue="updateSkills"
+        variant="outlined"
       ></v-select>
     </v-col>
   </v-row>

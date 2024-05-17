@@ -25,7 +25,6 @@
                   label="Job title, keywords, or company"
                   density="compact"
                   variant="solo"
-                  :rules="fullNameRules"
                   clearable
                   style="width: 100%"
                   placeholder="Job title, keywords, or company"
@@ -37,7 +36,6 @@
                   label="City or postcode"
                   density="compact"
                   variant="solo"
-                  :rules="subjectRules"
                   clearable
                   style="width: 100%"
                   placeholder="City or postcode"
@@ -385,7 +383,9 @@ export default {
   background: #fff;
   padding: 50px 0 100px;
 }
-
+.find_Job_list_right {
+  cursor: pointer;
+}
 .find_Job_list_right .v-card-title {
   font-size: 30px;
   font-weight: bolder;
@@ -408,7 +408,6 @@ export default {
   padding: 1% 15px;
   align-items: center;
 }
-
 
 .compamy_infor_description {
   width: 90%;

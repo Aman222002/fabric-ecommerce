@@ -27,7 +27,7 @@
           <h4 class="widget-title">For Candidates</h4>
           <div class="widget-content">
             <ul class="list">
-              <li><a href="/jobs-detail">Browse Jobs</a></li>
+              <li><a href="/job-search">Browse Jobs</a></li>
               <!-- <li><a href="#" @click="scrollToSection()">Browse Categories</a></li> -->
               <!-- <li>
                 <a href="#">Candidate Dashboard</a>
@@ -48,10 +48,10 @@
                 <a @click="handleLinks('/findcv')">Employer Dashboard</a>
               </li>
               <li>
-                <a @click="handleLinks('/postjob')">Add Job</a>
+                <a @click="handleLinks('/postjob')">Available Job</a>
               </li>
               <li>
-                <a @click="handleLinks('/product')">Job Packages</a>
+                <a @click="handleLinks('/product')">Purchase</a>
               </li>
             </ul>
           </div>

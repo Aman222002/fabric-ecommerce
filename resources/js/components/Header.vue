@@ -1,6 +1,6 @@
 <template>
   <v-toolbar app fixed class="toolbar nav_bar custom-app-bar header_bar">
-    <v-container>
+    <v-container class="w_90">
       <v-row align="center" justify="space-between">
         <v-col class="nab_burger_menu">
           <button class="burger_menu" @click="showSection()">
@@ -20,9 +20,9 @@
                   >Home</a
                 >
                 <a
-                  href="/jobs-detail"
+                  href="/job-search"
                   class="nav-link"
-                  :class="{ active: isActive('/jobs-detail') }"
+                  :class="{ active: isActive('/job-search') }"
                   >Jobs</a
                 >
                 <a

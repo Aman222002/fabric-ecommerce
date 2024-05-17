@@ -3,6 +3,63 @@ a {
 }
 
 /* Global css */
+a.dx-link-delete {
+    color: #b00020 !important;
+}
+
+a.dx-link-edit {
+    color: #0146a6 !important;
+}
+
+.dx-widget[aria-label="Save"],
+.dx-popup .dx-toolbar-center .dx-dialog-button[aria-label="Yes"] {
+    background-color: #012a64;
+    color: #fff;
+}
+
+
+
+.w_90 {
+    max-width: 90%;
+}
+
+.v-btn {
+    text-transform: capitalize;
+}
+
+.btn_cancel,
+.dx-button[aria-label="Cancel"],
+.dx-popup .dx-toolbar-center .dx-dialog-button[aria-label="No"] {
+    background-color: #ff000026;
+    color: #ff0000;
+}
+
+.swal2-cancel {
+    background-color: #ff000026 !important;
+    color: #ff0000 !important;
+}
+
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+    background-color: #012a64;
+}
+
+.text_color {
+    color: #0146a6;
+}
+
+.btn_cts {
+    background-color: #0146a6;
+    color: #fff;
+    text-transform: capitalize;
+}
+
+.swal2-confirm {
+    background-color: #0146a6 !important;
+    color: #fff !important;
+    text-transform: capitalize;
+}
+
 .fs_20 {
     font-size: 20px;
 }
@@ -33,6 +90,7 @@ button.b_string_btn {
     margin: 0 auto;
     display: table;
     padding: 2px 35px;
+    text-transform: capitalize;
 }
 
 /* Hello World Pushap */
@@ -120,6 +178,8 @@ form.job_search_form .btn_search {
     text-decoration: unset;
     border-bottom: 15px;
     border-radius: 10px;
+    text-transform: capitalize;
+    font-size: 16px;
 }
 
 form.job_search_form .v-sheet {
@@ -344,7 +404,6 @@ form.job_search_form .v-input__control .v-field__outline {
 
 .job_info ul li {
     font-size: 16px;
-    margin-right: 15px;
 }
 
 .job_info ul li i {
@@ -468,6 +527,7 @@ a.bookmark_fr {
     text-decoration: unset;
     display: table;
     color: #fff;
+    text-transform: capitalize;
 }
 
 .search_and_apply a.load_more:nth-child(2) {
@@ -496,8 +556,9 @@ a.bookmark_fr {
     background-color: transparent;
 }
 
-.popular_job_categories .v-breadcrumbs {
+.v-breadcrumbs {
     justify-content: center;
+    text-transform: uppercase;
 }
 
 .recent_news_articles.how_it_works .v-card .v-img {
@@ -519,11 +580,12 @@ button.form_fild_btn,
 .form_fild_btn {
     color: #fff;
     background-color: #0146a6;
-    font-size: 15px;
+    font-size: 17px;
     border-radius: 8px;
     font-weight: 400;
-    padding: 18px 35px 15px;
+    padding: 13px 32px;
     height: 100% !important;
+    text-transform: capitalize;
 }
 
 .find_Job_list_left .search_company_post {
@@ -536,6 +598,7 @@ button.form_fild_btn,
     text-decoration: unset;
     border-bottom: 15px;
 }
+
 
 
 
@@ -1008,6 +1071,74 @@ section.contact_us_page .form_contact {
     border-radius: 15px;
 }
 
+button.load_more {
+    text-transform: capitalize;
+}
+
+.bg-error {
+    background-color: #f0dedd !important;
+    color: #000 !important;
+    display: flex;
+    text-transform: capitalize;
+}
+
+.brand_Logo .v-slide-group__container .v-slide-group__content {
+    justify-content: center;
+    align-items: center;
+}
+
+.site_title h2 {
+    position: relative;
+    display: block;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.2em;
+    color: #202124;
+}
+
+.load_more_div {
+    width: 100%;
+    text-align: center;
+}
+
+HEAD .fill_your_personal_details .v-stepper-header button.v-stepper-item .v-avatar {
+    background-color: #0146a6;
+}
+
+.fill_your_personal_details .v-stepper-header button.v-stepper-item .v-stepper-item__title {
+    color: #0146a6;
+}
+
+.fill_your_personal_details .v-stepper-header hr.v-divider {
+    border-color: #0146a6;
+}
+
+.personal_details_btn button.v-btn--variant-tonal {
+    background-color: #0146a6;
+    color: #fff !important;
+}
+
+.button_plus_delete button.bg-blue {
+    background-color: #0146a6 !important;
+    margin-left: 3px;
+}
+
+.personal_details_btn button.v-btn--variant-text {
+    color: #205db1;
+    background-color: #e2eaf8;
+}
+
+.fill_your_personal_details button.bg-blue {
+    background-color: #0146a6 !important;
+}
+
+.vue_date_picker_ct .dp__input_wrap input.dp__pointer {
+    height: 56px;
+}
+
+.dx-datagrid .dx-link {
+    color: #0146a6;
+}
 
 
 /* responsive start  only */

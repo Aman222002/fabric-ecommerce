@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Resume Page')
+@section('title', 'Resume-Page')
 @section('content')
 <resume-component></resume-component>
 @endsection

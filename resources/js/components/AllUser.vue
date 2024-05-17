@@ -1,6 +1,6 @@
 <template>
   <p style="text-align: center; font-size: 30px; margin-top: 20px">
-    User datas
+    Users
   </p>
   <DxDataGrid
     id="grid"

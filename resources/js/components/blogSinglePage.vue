@@ -1,27 +1,37 @@
 <template>
   <div v-if="recentNews && recentNews.title" class="single_blog_page">
     <v-card class="mx-auto py-12">
-      <v-card-item>
-        <div class="sec-title">{{ recentNews.title }}</div>
-        <div class="px-4">
-          <v-chip-group>
-            <v-chip>{{ recentNews.published_by }}</v-chip>
-            <v-chip>{{ formatCreatedAt(recentNews.created_at) }}</v-chip>
-            <!-- <v-chip>Comment</v-chip> -->
-          </v-chip-group>
-        </div>
-      </v-card-item>
+      <v-row>
+        <v-col sm="12" md="12" lg="12" xl="12" cols="12" class="blog_writer">
+          <v-card-item class="pb-0 mb-0">
+            <div class="sec-title">{{ recentNews.title }}</div>
+            <div class="px-4">
+              <v-chip-group>
+                <v-chip>by {{ recentNews.published_by }}</v-chip>
+                <v-chip>{{ formatCreatedAt(recentNews.created_at) }}</v-chip>
+                <!-- <v-chip>Comment</v-chip> -->
+              </v-chip-group>
+            </div>
+          </v-card-item>
+        </v-col>
+        <v-col sm="12" md="12" lg="12" xl="12" cols="12" class="blog_img">
+          <v-img
+            src="/assest/img/RecentNewsArticles/1.webp"
+            height="450"
+            cover
+          ></v-img>
+        </v-col>
 
-      <v-img
+        <v-col sm="12" md="12" lg="12" xl="12" cols="12">
+          <div class="blog_text" v-html="recentNews.content"></div>
+        </v-col>
+      </v-row>
+      <!-- <v-img
         :src="`/storage/assets/${recentNews.featured_image}`"
         height="450"
         cover
-      ></v-img>
-      <v-container fluid>
-        <v-card>
-          <div v-html="recentNews.content"></div>
-        </v-card>
-      </v-container>
+      ></v-img> -->
+
       <!-- <v-container>
         <div class="d-flex py-3 justify-space-between">
           <v-list-item density="compact">
@@ -114,6 +124,9 @@ export default {
 };
 </script>
 <style>
+.blog_text {
+  text-align: justify;
+}
 .single_blog_page .v-card .v-card-item__content {
   display: flex;
   flex-direction: column;
@@ -149,5 +162,58 @@ export default {
 
 .single_blog_page .v-card .v-list .v-list-item {
   width: 50%;
+}
+.single_blog_page .v-row {
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* two  */
+.single_blog_page .blog_writer .sec-title {
+  position: relative;
+  font-weight: 600;
+}
+.single_blog_page .blog_text ol,
+.single_blog_page .blog_text ul {
+  margin-left: 25px;
+  list-style: unset;
+}
+
+.single_blog_page .blog_writer .sec-title:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #0146a6;
+  left: 0;
+  bottom: 0;
+}
+.blog_text h2:after {
+  content: "";
+  position: absolute;
+  width: 210px;
+  height: 4px;
+  background: #0146a6;
+  left: 0;
+  bottom: 0;
+}
+
+.blog_text h1,
+.blog_text h2,
+.blog_text h3,
+.blog_text h4,
+.blog_text h5,
+.blog_text h6 {
+  margin: 20px 0;
+  position: relative;
+  padding-bottom: 5px;
+}
+.blog_text p {
+  margin-bottom: 15px;
+}
+
+/* three */
+.single_blog_page .blog_text a {
+  color: #0146a6;
 }
 </style>

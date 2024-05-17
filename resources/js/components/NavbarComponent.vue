@@ -31,7 +31,7 @@
       @click.stop="rail = !rail"
     ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-    <v-menu transition="slide-y-transition">
+    <v-menu transition="slide-y-transition" class="log_and_reg_drop">
       <template v-slot:activator="{ props }">
         <v-icon v-bind="props" id="account" size="40"
           >mdi-account-circle</v-icon
@@ -112,7 +112,6 @@ export default {
         icon: "mdi-handshake-outline",
         href: "/admin/parteners",
       },
-      
     ]);
     const isActiveItem = (item) => {
       return window.location.pathname === item.href;
@@ -157,6 +156,8 @@ export default {
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;
+  background-color: #0146a6 !important;
+  color: #fff !important;
 }
 
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
@@ -200,10 +201,6 @@ header.dah_header-bar {
 
 .dropdown:hover {
   color: #175e56;
-}
-
-.menu {
-  color: #030303;
 }
 
 .links {

@@ -506,7 +506,7 @@ export default {
 
 .dropdown:hover {
   color: white;
-  background-color: #1976d2;
+  background-color: #0146a6;
 }
 
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
@@ -518,6 +518,6 @@ export default {
 }
 
 .border {
-  border: 2px dashed #1976d2;
+  border: 2px dashed #0146a6;
 }
 </style>

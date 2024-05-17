@@ -209,10 +209,12 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style >
 header.dah_header-bar {
   box-shadow: 0 6px 15px rgba(64, 79, 104, 0.05);
   border-bottom: 1px solid #ecedf2;
+  background-color: #0146a6 !important;
+  color: #fff !important;
 }
 
 a {
@@ -264,19 +266,16 @@ nav.left_side_bar {
 }
 
 .dropdown:hover {
-  background-color: #1976d2;
+  background-color: #0146a6;
+  color: #fff;
 }
 
 .v-app-bar {
   border-bottom: 1px solid #161414;
 }
 
-.menu {
-  color: #030303;
-}
-
 #header {
-  background-color: #1976d2;
+  background-color: #0146a6;
 }
 
 .links {
@@ -315,7 +314,7 @@ nav.left_side_bar {
 }
 
 .log_and_reg_drop .v-list .v-list-item:hover {
-  background-color: #1976d2;
+  background-color: #0146a6;
   color: #fff;
 }
 </style>

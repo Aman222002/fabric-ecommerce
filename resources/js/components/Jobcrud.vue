@@ -1,83 +1,192 @@
 <template>
-  <p style="text-align: center; font-size: 20px; margin-top: 20px">My Jobs</p>
-  <DxDataGrid :show-borders="true" :data-source="dataSource" ref="dataGridRef" @editing-start="logEvent"
-    @saving="saveEvent">
+  <p style="text-align: center; font-size: 30px; margin-top: 20px">My Jobs</p>
+  <DxDataGrid
+    :show-borders="true"
+    :data-source="dataSource"
+    ref="dataGridRef"
+    @editing-start="logEvent"
+    @saving="saveEvent"
+  >
     <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
-    <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" :use-icons="true" mode="popup" />
+    <DxEditing
+      :allow-adding="true"
+      :allow-updating="true"
+      :allow-deleting="true"
+      :use-icons="true"
+      mode="popup"
+    />
     <DxToolbar>
       <DxGridItem template="dropDown2" :location="'before'" />
       <DxGridItem name="searchPanel" :location="'after'"></DxGridItem>
     </DxToolbar>
     <DxLoadPanel :enabled="true" />
     <DxSearchPanel :visible="true" />
-    <DxColumn caption="Action" :allow-editing="false" cell-template="customButtonTemplate" :visible="noeditcolumn">
-</DxColumn>
+    <DxColumn
+      width="auto"
+      caption="Action"
+      :allow-editing="false"
+      cell-template="customButtonTemplate"
+      :visible="noeditcolumn"
+    >
+    </DxColumn>
     <DxColumn data-field="title" data-type="string"> </DxColumn>
     <DxColumn data-field="location" data-type="string"></DxColumn>
     <DxColumn data-field="vacancy" data-type="string"> </DxColumn>
-    <DxColumn data-field="salary" edit-cell-template="salarytemplate"> </DxColumn>
+    <DxColumn data-field="salary" edit-cell-template="salarytemplate">
+    </DxColumn>
     <DxColumn data-field="description" data-type="string"> </DxColumn>
     <DxColumn data-field="company_website" data-type="url"> </DxColumn>
-    <DxColumn caption="Select Category" edit-cell-template="categorydropdown" :visible="showcolumn">
+    <DxColumn
+      caption="Select Category"
+      edit-cell-template="categorydropdown"
+      :visible="showcolumn"
+    >
     </DxColumn>
     <template #salarytemplate="{ data }">
       <div>
-        <v-select v-model="salaryType" :items="['fixed', 'range']" label="Salary Type" density="compact"
-          variant="outlined"></v-select>
+        <v-select
+          v-model="salaryType"
+          :items="['fixed', 'range']"
+          label="Salary Type"
+          density="compact"
+          variant="outlined"
+        ></v-select>
         <template v-if="shouldDisplayRangeInput(data)">
-          <v-text-field variant="outlined" v-model="minSalary" label="Minimum Salary" placeholder="Minimum Salary"
-            density="compact" style="margin-top: 10px;"></v-text-field>
-          <v-text-field variant="outlined" v-model="maxSalary" label="Maximum Salary" placeholder="Maximum Salary"
-            density="compact" style="margin-top: 10px;"></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="minSalary"
+            label="Minimum Salary"
+            placeholder="Minimum Salary"
+            density="compact"
+            style="margin-top: 10px"
+          ></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="maxSalary"
+            label="Maximum Salary"
+            placeholder="Maximum Salary"
+            density="compact"
+            style="margin-top: 10px"
+          ></v-text-field>
         </template>
         <template v-else>
-          <v-text-field variant="outlined" v-model="salary" label="Salary" placeholder="Salary"
-            density="compact"></v-text-field>
+          <v-text-field
+            variant="outlined"
+            v-model="salary"
+            label="Salary"
+            placeholder="Salary"
+            density="compact"
+          ></v-text-field>
         </template>
       </div>
     </template>
 
     <template #categorydropdown>
-      <DxDropDownBox :accept-custom-value="true" label="Select Category" data-type="dropdown" labelMode="floating"
-        v-model:value="selectedCategory" v-model:opened="datadropdown" @value-change="selectCategory">
-        <DxList :data-source="categories" selection-mode="single" @item-click="selectCategory" />
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select Category"
+        data-type="dropdown"
+        labelMode="floating"
+        v-model:value="selectedCategory"
+        v-model:opened="datadropdown"
+        @value-change="selectCategory"
+      >
+        <DxList
+          :data-source="categories"
+          selection-mode="single"
+          @item-click="selectCategory"
+        />
       </DxDropDownBox>
     </template>
-    <DxColumn caption="Select JobType" cell-template="jobtypedropdown" edit-cell-template="jobtypedropdown"
-      :visible="showcolumn">
+    <DxColumn
+      caption="Select JobType"
+      cell-template="jobtypedropdown"
+      edit-cell-template="jobtypedropdown"
+      :visible="showcolumn"
+    >
     </DxColumn>
 
     <template #jobtypedropdown>
-      <DxDropDownBox :accept-custom-value="true" label="Select JobType" labelMode="floating"
-        v-model:value="selectedJobType" v-model:opened="jobtypedropdown">
-        <DxList :data-source="jobTypes" selection-mode="single" @item-click="selectJobType" />
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select JobType"
+        labelMode="floating"
+        v-model:value="selectedJobType"
+        v-model:opened="jobtypedropdown"
+      >
+        <DxList
+          :data-source="jobTypes"
+          selection-mode="single"
+          @item-click="selectJobType"
+        />
       </DxDropDownBox>
     </template>
-    <DxColumn caption="Select Skill" cell-template="skilldropdown" edit-cell-template="skilldropdown"
-      :visible="showcolumn">
+    <DxColumn
+      caption="Select Skill"
+      cell-template="skilldropdown"
+      edit-cell-template="skilldropdown"
+      :visible="showcolumn"
+    >
     </DxColumn>
 
     <template #skilldropdown>
-      <DxDropDownBox :accept-custom-value="true" label="Select skill" labelMode="floating" v-model:value="selectedSkill"
-        v-model:opened="skilldropdown">
-        <DxList :data-source="jobSkills" selection-mode="single" @item-click="selectSkill" />
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select skill"
+        labelMode="floating"
+        v-model:value="selectedSkill"
+        v-model:opened="skilldropdown"
+      >
+        <DxList
+          :data-source="jobSkills"
+          selection-mode="single"
+          @item-click="selectSkill"
+        />
       </DxDropDownBox>
     </template>
-    <DxColumn caption="Select Experience" cell-template="experiencedropdown" edit-cell-template="experiencedropdown"
-      :visible="showcolumn">
+    <DxColumn
+      caption="Select Experience"
+      cell-template="experiencedropdown"
+      edit-cell-template="experiencedropdown"
+      :visible="showcolumn"
+    >
     </DxColumn>
 
     <template #experiencedropdown>
-      <DxDropDownBox :accept-custom-value="true" label="Select skill" labelMode="floating"
-        v-model:value="selectedExperience" v-model:opened="experiencedropdown">
-        <DxList :data-source="experienceOptions" selection-mode="single" @item-click="selectExperience" />
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select skill"
+        labelMode="floating"
+        v-model:value="selectedExperience"
+        v-model:opened="experiencedropdown"
+      >
+        <DxList
+          :data-source="experienceOptions"
+          selection-mode="single"
+          @item-click="selectExperience"
+        />
       </DxDropDownBox>
     </template>
-    <DxColumn caption="Qualification" data-field="qualifications" data-type="string" :visible="showcolumn"></DxColumn>
+    <DxColumn
+      caption="Qualification"
+      data-field="qualifications"
+      data-type="string"
+      :visible="showcolumn"
+    ></DxColumn>
     <template #dropDown2>
-      <DxDropDownBox :accept-custom-value="true" @value-change="selectStatus" label="Select status" labelMode="floating"
-        v-model:value="selectedStatus" v-model:opened="DropDown2">
-        <DxList :data-source="items" selection-mode="single" @item-click="selectStatus">
+      <DxDropDownBox
+        :accept-custom-value="true"
+        @value-change="selectStatus"
+        label="Select status"
+        labelMode="floating"
+        v-model:value="selectedStatus"
+        v-model:opened="DropDown2"
+      >
+        <DxList
+          :data-source="items"
+          selection-mode="single"
+          @item-click="selectStatus"
+        >
         </DxList>
       </DxDropDownBox>
     </template>
@@ -91,13 +200,19 @@
         <v-card>
           <v-list v-for="item in jobActions" :key="item.text">
             <template v-if="selectedStatus === 'Draft'">
-              <v-list-item class="dropdown" @click="duplicateJob(data.row.data.id, item.text)">
+              <v-list-item
+                class="dropdown"
+                @click="duplicateJob(data.row.data.id, item.text)"
+              >
                 {{ item.text }}
               </v-list-item>
             </template>
             <template v-else>
-              <v-list-item v-if="item.text !== 'Post Job'" class="dropdown"
-                @click="duplicateJob(data.row.data.id, item.text)">
+              <v-list-item
+                v-if="item.text !== 'Post Job'"
+                class="dropdown"
+                @click="duplicateJob(data.row.data.id, item.text)"
+              >
                 {{ item.text }}
               </v-list-item>
             </template>
@@ -177,7 +292,9 @@ export default {
     const selectCategory = (e) => {
       let value = e.itemData;
       selectedCategory.value = value;
-      const foundCategory = allCategories.value.find(item => item.name === selectedCategory.value);
+      const foundCategory = allCategories.value.find(
+        (item) => item.name === selectedCategory.value
+      );
       if (foundCategory) {
         value = foundCategory.id;
       } else {
@@ -191,7 +308,9 @@ export default {
     const selectJobType = (e) => {
       let value = e.itemData;
       selectedJobType.value = value;
-      const foundJobType = allJobType.value.find(item => item.name === selectedJobType.value);
+      const foundJobType = allJobType.value.find(
+        (item) => item.name === selectedJobType.value
+      );
       if (foundJobType) {
         value = foundJobType.id;
       } else {
@@ -203,7 +322,9 @@ export default {
     const selectSkill = (e) => {
       let value = e.itemData;
       selectedSkill.value = value;
-      const foundSkill = allSkills.value.find(item => item.skill_name === selectedSkill.value);
+      const foundSkill = allSkills.value.find(
+        (item) => item.skill_name === selectedSkill.value
+      );
       // console.log(foundSkill);
       if (foundSkill) {
         value = foundSkill.id;
@@ -263,7 +384,9 @@ export default {
       const JobTypeId = e.data.job_type_id;
       // console.log(categoryId);
       // console.log(allCategories.value);
-      const foundCategory = allCategories.value.find(item => item.id === categoryId);
+      const foundCategory = allCategories.value.find(
+        (item) => item.id === categoryId
+      );
       if (foundCategory) {
         selectedCategory.value = foundCategory.name;
       } else {
@@ -278,14 +401,16 @@ export default {
         salary.value = e.data.salary;
         salaryType.value = "fixed";
       }
-      const foundSkill = allSkills.value.find(item => item.id === skillId);
+      const foundSkill = allSkills.value.find((item) => item.id === skillId);
       // console.log(foundSkill);
       if (foundSkill) {
         selectedSkill.value = foundSkill.skill_name;
       } else {
         null;
       }
-      const foundJobType = allJobType.value.find(item => item.id === JobTypeId);
+      const foundJobType = allJobType.value.find(
+        (item) => item.id === JobTypeId
+      );
       if (foundJobType) {
         selectedJobType.value = foundJobType.name;
       } else {
@@ -293,86 +418,90 @@ export default {
       }
     };
     const saveEvent = (e) => {
-      if (salaryType.value === 'range') {
-    salary.value = `${minSalary.value}-${maxSalary.value}`;
-    
-  } 
-  params.value.salary = salary.value;
-  console.log(params.value.salary);
-      if (e.changes == 0) {
-        if (params.value.category_id || params.value.skill_id || params.value.job_type_id  || params.value.salary) {
-         
-      console.log(params.value);
-          axios.post(`/post/jobs/${job_Id.value}`, {
-            params: params.value,
-         
-          }).then((response) => {
-            const keys = Object.keys(params.value);
-            for (let i = 1; i < keys.length; i++) {
-              delete params.value[keys[i]];
-            }
-            // console.log(params.value);
-            refreshTable(dataGridRef);
-          })
-
-        };
+      if (salaryType.value === "range") {
+        salary.value = `${minSalary.value}-${maxSalary.value}`;
       }
-    }
+      params.value.salary = salary.value;
+      console.log(params.value.salary);
+      if (e.changes == 0) {
+        if (
+          params.value.category_id ||
+          params.value.skill_id ||
+          params.value.job_type_id ||
+          params.value.salary
+        ) {
+          console.log(params.value);
+          axios
+            .post(`/post/jobs/${job_Id.value}`, {
+              params: params.value,
+            })
+            .then((response) => {
+              const keys = Object.keys(params.value);
+              for (let i = 1; i < keys.length; i++) {
+                delete params.value[keys[i]];
+              }
+              // console.log(params.value);
+              refreshTable(dataGridRef);
+            });
+        }
+      }
+    };
     const duplicateJob = (id, value) => {
       // console.log('hello');
       try {
-        axios.post("/jobs/draft/", {
-          params: {
-            id: id,
-            type: value,
-          },
-        }).then((response) => {
-          if (response.data.status === true) {
-            window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'success',
-              title: 'Added',
-            });
-            refreshTable(dataGridRef);
-          }
-        }).catch((error) => {
-          console.log(error);
-          if (error.response.status == '402') {
-            window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: `You don't have a active plan buy a plan or renew your plan`,
-            });
-          }
-          else if (error.response.status == '403') {
-            window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: `You have posted number of allowed post can't post more`,
-            });
-          }
-          else if (error.response.status == '406') {
-            window.Swal.fire({
-              toast: true,
-              position: 'top-end',
-              timer: 2000,
-              showConfirmButton: false,
-              icon: 'error',
-              title: `You already posted this job`,
-            });
-          }
-        });
+        axios
+          .post("/jobs/draft/", {
+            params: {
+              id: id,
+              type: value,
+            },
+          })
+          .then((response) => {
+            if (response.data.status === true) {
+              window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "success",
+                title: "Added",
+              });
+              refreshTable(dataGridRef);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            if (error.response.status == "402") {
+              window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "error",
+                title: `You don't have a active plan buy a plan or renew your plan`,
+              });
+            } else if (error.response.status == "403") {
+              window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "error",
+                title: `You have posted number of allowed post can't post more`,
+              });
+            } else if (error.response.status == "406") {
+              window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "error",
+                title: `You already posted this job`,
+              });
+            }
+          });
         console.log(response);
-      } catch (err) { }
+      } catch (err) {}
     };
     const postJob = (id) => {
       const response = axios.post(`/jobs/draft/${id}`);
@@ -468,13 +597,10 @@ export default {
       salaryType.value = newValue;
     };
     const shouldDisplayRangeInput = (data) => {
-
       const salaryContainsRange = data.row.data.salary.includes("-");
       if (salaryContainsRange) {
-
         salaryType.value = "range";
       } else {
-
         salaryType.value = "fixed";
       }
       return salaryContainsRange;
@@ -524,7 +650,8 @@ export default {
       fetchJobs,
       duplicateJob,
       postJob,
-      dataGridRef, updateSalaryType,
+      dataGridRef,
+      updateSalaryType,
       DropDown2,
       jobActions,
       logEvent,
@@ -541,9 +668,13 @@ export default {
       allCategories,
       allSkills,
       allJobType,
-      salary, maxSalary, minSalary, salaryType, shouldDisplayRangeInput,
+      salary,
+      maxSalary,
+      minSalary,
+      salaryType,
+      shouldDisplayRangeInput,
       saveEvent,
-      job_Id
+      job_Id,
     };
   },
 };
@@ -558,7 +689,7 @@ export default {
 
 .dropdown:hover {
   color: white;
-  background-color: #1976d2;
+  background-color: #0146a6;
 }
 
 .v-list-item--density-default:not(.v-list-item--nav).v-list-item--one-line {
@@ -570,6 +701,6 @@ export default {
 }
 
 .border {
-  border: 2px dashed #1976d2;
+  border: 2px dashed #0146a6;
 }
 </style>

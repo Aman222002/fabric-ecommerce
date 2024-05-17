@@ -2,16 +2,21 @@
   <div class="save_Jobs">
     <div class="sec-title text-center">
       <h2>Save Jobs</h2>
+      <v-breadcrumbs class="breadcrumbs_li" divider="/">
+        <v-breadcrumbs-item> Home </v-breadcrumbs-item>
+        <v-breadcrumbs-item> / </v-breadcrumbs-item>
+        <v-breadcrumbs-item disabled> Save Jobs </v-breadcrumbs-item>
+      </v-breadcrumbs>
       <div class="text">
         Know your worth and find the job that qualify your life
       </div>
     </div>
     <div class="save_job_body_page_section">
       <v-container class="w-75 mb-6">
-        <v-row align="center" justify="center">
+        <v-row class="job_box">
           <v-col
             cols="auto"
-            class="save_Jobs_col job-card"
+            class="save_Jobs_col job_box_child"
             sm="12"
             md="12"
             lg="6"
@@ -19,30 +24,31 @@
             v-for="savedJob in savedJobs"
             :key="savedJob.id"
           >
-            <v-card class="mx-auto my-0 company_info">
+            <v-card class="mx-auto my-0 company_info job_box_card">
               <div class="job_info">
                 <v-card-title
                   ><a href="#"> {{ savedJob.job.title }}</a>
                 </v-card-title>
                 <ul class="company_seat">
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#f16666" class="mr-2">mdi-domain</v-icon
                     >{{ savedJob.company.company_name }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#34a853" class="mr-2"
-                      >mdi-map-marker-outline </v-icon
-                    >{{ savedJob.job.location }}
+                      >mdi-map-marker-outline
+                    </v-icon>
+                    {{ HomeCountryState(savedJob.job.location) }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#f9ab00" class="mr-2">mdi-email-box</v-icon
                     >{{ savedJob.company.company_email }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#0146a6" class="mr-2">mdi-school</v-icon
                     >{{ savedJob.job.qualifications }}
                   </li>
-                  <li>
+                  <li class="mr-2">
                     <v-icon color="#8bc34a" class="mr-2"
                       >mdi-currency-gbp</v-icon
                     >{{ savedJob.job.salary }}
@@ -88,7 +94,12 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
-
+const HomeCountryState = (countryStateName) => {
+  if (countryStateName && countryStateName.length > 15) {
+    return countryStateName.substring(0, 15) + "....";
+  }
+  return countryStateName;
+};
 export default {
   name: "JobSaved",
   props: {
@@ -161,6 +172,7 @@ export default {
       savedJobs,
       deleteItem,
       apply,
+      HomeCountryState,
     };
   },
 };
