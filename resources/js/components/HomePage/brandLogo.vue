@@ -65,6 +65,8 @@ export default {
 .brand_logo_slide,
 .brand_Logo .v-img {
   width: 137px;
+  height: 100px;
+  overflow: hidden;
 }
 .brand_Logo .v-img img {
   width: 100%;

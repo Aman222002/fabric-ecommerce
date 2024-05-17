@@ -16,12 +16,11 @@
         </v-col>
         <v-col sm="12" md="12" lg="12" xl="12" cols="12" class="blog_img">
           <v-img
-            src="/assest/img/RecentNewsArticles/1.webp"
+            :src="`/storage/assets/${recentNews.featured_image}`"
             height="450"
             cover
           ></v-img>
         </v-col>
-
         <v-col sm="12" md="12" lg="12" xl="12" cols="12">
           <div class="blog_text" v-html="recentNews.content"></div>
         </v-col>

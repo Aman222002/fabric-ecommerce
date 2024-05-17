@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-card class="card">
-        <v-card-title class="btn_cts text-center"
+        <v-card-title class="admin_profile text-center"
           >Personal Information</v-card-title
         >
         <v-form @submit.prevent="updateProfile(formData.id)">
@@ -76,7 +76,7 @@
   <v-row>
     <v-col cols="12">
       <v-card class="card">
-        <v-card-title class="btn_cts text-center"
+        <v-card-title class="admin_profile text-center"
           >Password and Security</v-card-title
         >
         <v-form @submit.prevent="updatePassword()">
@@ -344,5 +344,9 @@ export default {
 
 .v-input--horizontal .v-input__append {
   margin-inline-start: -28px;
+}
+.admin_profile {
+  background-color: #e2eaf8;
+  color: #0146a6;
 }
 </style>

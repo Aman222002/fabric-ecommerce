@@ -136,6 +136,7 @@ export default {
   height: 80px;
   width: 80px;
   margin: 25px 0;
+  color: #0146a6 !important;
 }
 
 .forget_password form.v-form h5 {

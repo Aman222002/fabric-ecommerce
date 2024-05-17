@@ -193,7 +193,12 @@
     <template #customButtonTemplate="{ data }">
       <v-menu>
         <template v-slot:activator="{ props }">
-          <v-btn height="30" color="primary" v-bind="props">
+          <v-btn
+            class="action_button"
+            height="30"
+            color="primary"
+            v-bind="props"
+          >
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
         </template>
@@ -702,5 +707,9 @@ export default {
 
 .border {
   border: 2px dashed #0146a6;
+}
+.action_button {
+  min-width: 18px;
+  max-width: 18px;
 }
 </style>

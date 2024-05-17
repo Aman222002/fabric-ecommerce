@@ -12,15 +12,10 @@
       </div>
     </div>
     <div class="job_applied_body_page_section">
-      <v-container class="w-75 mb-6">
+      <v-container class="w_90 mb-6">
         <v-row class="job_box">
           <v-col
-            cols="12"
             class="job-applied_col job_box_child"
-            sm="12"
-            md="12"
-            lg="6"
-            xl="6"
             v-for="jobApplication in jobApplications"
             :key="jobApplication.id"
           >
@@ -79,6 +74,10 @@
               </v-card-actions>
             </v-card>
           </v-col>
+          <!-- 
+          <v-alert type="error" class="no_job_found w-100">
+            No job Found.
+          </v-alert> -->
         </v-row>
       </v-container>
     </div>
@@ -149,22 +148,33 @@ export default {
 
 <style>
 .job_box {
-  gap: 20px;
+  gap: 30px;
 }
 .job_box_child {
   height: auto;
-  box-shadow: 0px 1px 8px 0px #888888;
+  box-shadow: 0px 1px 8px 0px #c7c4c4;
   border-radius: 5px;
   background-color: #fff;
+  flex: 0 0 50%;
+  max-width: calc(max(48%, 50% - 20px));
+  margin: 0 auto;
 }
+
 .job_box .job_box_child .job_box_card {
   box-shadow: unset;
 }
 
-@media (min-width: 1920px) {
-  .job_box_child.v-col-xl-6 {
-    flex: 0 0 50%;
-    max-width: calc(max(48%, 50% - 20px));
+@media (max-width: 1200px) {
+  .job_box_child {
+    flex: 0 0 100%;
+    max-width: calc(max(100%, 100% - 20px));
+  }
+}
+@media (max-width: 650px) {
+  .job_box_child {
+    flex: 0 0 90%;
+    max-width: calc(max(90%, 90% - 20px));
+    margin: 0 auto;
   }
 }
 </style>
