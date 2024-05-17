@@ -11,27 +11,14 @@
       </div>
     </v-card>
     <div class="body_page_section featured_jobs">
-      <v-container class="w_90">
-        <v-row v-if="showAlert">
-          <v-col
-            cols="auto"
-            sm="12"
-            md="12"
-            lg="12"
-            xl="12"
-            class="find_Job_list_right"
-          >
-            <v-alert type="error" class="no_job_found"> No job Found. </v-alert>
-          </v-col>
-        </v-row>
-        <v-row v-else>
-          <v-col cols="12" sm="12" md="3" lg="3" xl="3">
+      <v-container class="w-75">
+        <v-row>
+          <v-col cols="12" sm="12" md="12" lg="12" xl="12">
             <v-card class="mx-auto find_Job_list_left">
               <!-- <v-card-title class="font-weight-bold px-0"
                 >Search by Keywords
               </v-card-title> -->
               <div class="job_search_forms">
-                <h4 class="my-2">Job search</h4>
                 <v-text-field
                   prepend-inner-icon="mdi-magnify"
                   v-model="jobTitle"
@@ -42,8 +29,7 @@
                   style="width: 100%"
                   placeholder="Job title, keywords, or company"
                 ></v-text-field>
-                <!-- <div class="line"></div> -->
-                <h4 class="my-2 mt-4">City or postcode</h4>
+                <div class="line"></div>
                 <v-text-field
                   prepend-inner-icon="mdi-map-marker-outline"
                   v-model="location"
@@ -54,62 +40,28 @@
                   style="width: 100%"
                   placeholder="City or postcode"
                 ></v-text-field>
-                <h4 class="my-2 mt-4">Category</h4>
-                <v-select
-                  :items="items"
-                  density="compact"
-                  label="Category"
-                  variant="solo"
-                ></v-select>
-                <h4 class="my-2 mt-4">Qualification</h4>
-                <v-select
-                  :items="items"
-                  density="compact"
-                  label="Qualification"
-                  variant="solo"
-                ></v-select>
-                <h4 class="my-2 mt-4">Experience</h4>
-                <v-select
-                  :items="items"
-                  density="compact"
-                  label="Experience"
-                  variant="solo"
-                ></v-select>
-                <v-btn @click="searchJobs" class="b_string_btn mt-5"
-                  >Search</v-btn
-                >
+                <v-btn @click="searchJobs" class="b_string_btn">Search</v-btn>
               </div>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="12" md="9" lg="9" xl="9">
+          <v-col cols="12" sm="12" md="12" lg="12" xl="12">
             <v-row class="ma-0 job_box">
-              <v-col cols="12" sm="12" md="12" lg="12" xl="12">
-                <div class="job_filter">
-                  <div class="job_left">
-                    <span><b>20</b> jobs</span>
-                    <v-btn class="filter_btn"
-                      ><v-icon>mdi-filter-variant</v-icon>filter</v-btn
-                    >
-                  </div>
-                  <div class="job_right">
-                    <v-select
-                      :items="items"
-                      density="compact"
-                      label="Comfortable"
-                      variant="outlined"
-                    ></v-select>
-                    <v-select
-                      :items="items"
-                      density="compact"
-                      label="Comfortable"
-                      variant="outlined"
-                    ></v-select>
-                  </div>
-                </div>
+              <v-col
+                cols="auto"
+                sm="12"
+                md="12"
+                lg="12"
+                xl="12"
+                class="find_Job_list_right"
+                v-if="showAlert"
+              >
+                <v-alert type="error" class="no_job_found">
+                  No job Found.
+                </v-alert>
               </v-col>
-
               <v-col
                 class="featured_jobs_col job_box_child"
+                v-else
                 v-for="job in jobs"
                 :key="job.id"
                 @click="openDetailPanel(job)"
@@ -143,9 +95,10 @@
                     </v-card-text>
                     <v-card-actions>
                       <div style="display: flex; align-items: center">
+                        <v-icon color="#f9ab00" class="mr-2"
+                          >mdi-account</v-icon
+                        >
                         <span
-                          ><v-icon color="#f9ab00" class="mr-2"
-                            >mdi-account</v-icon
                           >{{ job.vacancy }}
                           <v-icon color="#f16666" class="mr-2"
                             >mdi-clipboard-text-clock-outline</v-icon
@@ -482,28 +435,5 @@ span.read-more:hover i.mdi {
 }
 span.read-more i.mdi {
   transition: all 0.3s ease;
-}
-.job_filter {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
-.job_right {
-  display: flex;
-  gap: 25px;
-}
-.job_right .v-input {
-  width: 155px;
-}
-.filter_btn {
-  background: #e2eaf8;
-  color: #0146a6;
-  margin-left: 15px;
-  display: none;
-}
-@media screen and (max-width: 992px) {
-  .filter_btn {
-    display: block;
-  }
 }
 </style>

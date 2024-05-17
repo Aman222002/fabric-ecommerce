@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <v-container class="w-75 mb-6">
+    <v-container class="w_90 mb-6">
       <v-row align="center" justify="center">
         <v-table fixed-header class="job_alerts_table w-100">
           <thead>

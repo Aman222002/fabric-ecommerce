@@ -128,9 +128,9 @@
               v-model="selectedImage"
               @change="previewImage"
               accept="image/*"
-              variant="outlined"
-              density="compact"
               outlined
+              variant="outlined"
+              density="comfortable"
             ></v-file-input>
             <v-row class="mb-2" v-if="imagePreview">
               <p style="font: bold; margin-left: 11px">
@@ -148,7 +148,7 @@
               <ckeditor v-model="content" :editor="editor"></ckeditor>
             </div>
             <v-card-actions>
-              <v-btn class="btn_cts" type="submit">Save Post</v-btn>
+              <v-btn class="btn_cts" type="submit">Save Partner</v-btn>
               <v-spacer></v-spacer>
               <v-btn
                 class="btn_cts"
@@ -179,6 +179,8 @@
               @change="previewImage"
               accept="image/*"
               :rules="imageRules"
+              variant="outlined"
+              density="comfortable"
             ></v-file-input>
             <v-row v-if="imagePreview">
               <v-col cols="12">
@@ -193,7 +195,7 @@
               <ckeditor v-model="content" :editor="editor"></ckeditor>
             </div>
             <v-card-actions>
-              <v-btn class="btn_cts" type="submit">Add Post</v-btn>
+              <v-btn class="btn_cts" type="submit">Add Partner</v-btn>
               <v-spacer></v-spacer>
               <v-btn
                 class="btn_cts"
@@ -205,9 +207,6 @@
             <!-- <v-btn type="submit">Add Post</v-btn> -->
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
