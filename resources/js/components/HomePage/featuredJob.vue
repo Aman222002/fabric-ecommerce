@@ -10,12 +10,7 @@
     <v-container class="w-75 mb-6">
       <v-row class="job_box">
         <v-col
-          cols="12"
           class="featured_jobs_col job_box_child"
-          sm="12"
-          md="12"
-          lg="6"
-          xl="6"
           v-for="job in displayedJobs"
           :key="job.id"
           @click="openDetailPage(job.id)"
@@ -56,8 +51,10 @@
             Load More Listing
           </v-btn>
         </div>
-        <div v-else class="text-center">
-          <p>No jobs found.</p>
+        <div class="w-100" v-else>
+          <v-alert type="error" class="no_job_found w-100">
+            No job Found.
+          </v-alert>
         </div>
       </v-row>
     </v-container>
@@ -212,6 +209,7 @@ export default {
 }
 .featured_jobs_logo img.v-img__img {
   width: 90px;
+  border-radius: 15px;
 }
 .load_more_div {
   width: 100%;

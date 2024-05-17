@@ -12,15 +12,10 @@
       </div>
     </div>
     <div class="save_job_body_page_section">
-      <v-container class="w-75 mb-6">
+      <v-container class="w_90 mb-6">
         <v-row class="job_box">
           <v-col
-            cols="auto"
             class="save_Jobs_col job_box_child"
-            sm="12"
-            md="12"
-            lg="6"
-            xl="6"
             v-for="savedJob in savedJobs"
             :key="savedJob.id"
           >
@@ -81,6 +76,10 @@
               </v-card-actions>
             </v-card>
           </v-col>
+          <!--           
+          <v-alert type="error" class="no_job_found w-100">
+            No job Found.
+          </v-alert> -->
         </v-row>
       </v-container>
     </div>

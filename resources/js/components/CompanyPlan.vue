@@ -107,7 +107,9 @@
         <v-row class="choose_your_popup_wor_on">
           <v-col cols="3">
             <v-card>
-              <v-card-title style="font-size: 20px">Features</v-card-title>
+              <v-card-title class="features_on" style="font-size: 20px"
+                >Features</v-card-title
+              >
               <v-card-text>
                 <v-list dense>
                   <v-list-item v-for="feature in features" :key="feature">
@@ -373,6 +375,10 @@ export default {
 }
 .current_plan {
   opacity: 1 !important;
+}
+.features_on {
+  background-color: #0146a6;
+  color: #fff;
 }
 @media screen and (max-width: 980px) {
   .choose_your_popup .v-row.choose_your_popup_wor_on {

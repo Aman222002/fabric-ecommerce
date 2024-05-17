@@ -72,7 +72,7 @@
       ></v-btn>
     </template>
     <template #ckeditor>
-      <h2>Edit Blog</h2>
+      <h2 class="mb-3">Edit Blog</h2>
       <!-- <v-text-field v-model="title" variant="outlined" label="Title" density="compact" outlined></v-text-field> -->
       <div class="editor">
         <ckeditor v-model="content" :editor="editor"></ckeditor>
@@ -98,7 +98,7 @@
     <template #customButtonTemplate="{ data }">
       <v-menu>
         <template v-slot:activator="{ props }">
-          <v-btn height="30" class="btn_cts" v-bind="props">
+          <v-btn height="30" class="btn_cts action_button" v-bind="props">
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
         </template>
@@ -143,7 +143,7 @@
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="savePost(updateId)" ref="form">
-            <h2>Edit Blog</h2>
+            <h2 class="mb-3">Edit Blog</h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -176,17 +176,19 @@
             <div class="editor">
               <ckeditor v-model="content" :editor="editor"></ckeditor>
             </div>
-            <v-btn type="submit">Save Post</v-btn>
+
+            <v-card-actions>
+              <v-btn class="btn_cts" type="submit">Add Blog</v-btn>
+              <v-spacer></v-spacer>
+
+              <v-btn
+                class="btn_cts"
+                text="Close Dialog"
+                @click="showDialog = false"
+              ></v-btn>
+            </v-card-actions>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="btn_cts"
-            text="Close Dialog"
-            @click="showDialog = false"
-          ></v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog max-width="1000" v-model="showAddDialog" persistent>
@@ -208,6 +210,8 @@
               @change="previewImage"
               accept="image/*"
               :rules="imageRules"
+              variant="outlined"
+              density="comfortable"
             ></v-file-input>
             <v-row v-if="imagePreview">
               <v-col cols="12">
@@ -691,5 +695,9 @@ button.edit-btn {
 .edit-btn:hover {
   box-shadow: unset;
   background-color: transparent !important;
+}
+.action_button {
+  min-width: 18px;
+  max-width: 18px;
 }
 </style>
