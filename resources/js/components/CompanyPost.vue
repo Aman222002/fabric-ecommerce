@@ -56,21 +56,24 @@
                 ></v-text-field>
                 <h4 class="my-2 mt-4">Category</h4>
                 <v-select
-                  :items="items"
+                  v-model="category"
+                  :items="categories"
+                  item-title="name"
                   density="compact"
                   label="Category"
                   variant="solo"
                 ></v-select>
-                <h4 class="my-2 mt-4">Qualification</h4>
+                <!-- <h4 class="my-2 mt-4">Qualification</h4>
                 <v-select
                   :items="items"
                   density="compact"
                   label="Qualification"
                   variant="solo"
-                ></v-select>
+                ></v-select> -->
                 <h4 class="my-2 mt-4">Experience</h4>
                 <v-select
-                  :items="items"
+                  v-model="experience"
+                  :items="experienceOptions"
                   density="compact"
                   label="Experience"
                   variant="solo"
@@ -86,31 +89,31 @@
               <v-col cols="12" sm="12" md="12" lg="12" xl="12">
                 <div class="job_filter">
                   <div class="job_left">
-                    <span><b>20</b> jobs</span>
                     <v-btn class="filter_btn"
                       ><v-icon>mdi-filter-variant</v-icon>filter</v-btn
                     >
                   </div>
                   <div class="job_right">
                     <v-select
-                      :items="items"
+                      v-model="statusFilter"
+                      :items="filterdata"
                       density="compact"
-                      label="Comfortable"
+                      label="Sort by"
                       variant="outlined"
                     ></v-select>
                     <v-select
-                      :items="items"
+                      v-model="pageFilter"
+                      :items="filterpagedata"
                       density="compact"
-                      label="Comfortable"
+                      label="Page Number"
                       variant="outlined"
                     ></v-select>
                   </div>
                 </div>
               </v-col>
-
               <v-col
                 class="featured_jobs_col job_box_child"
-                v-for="job in jobs"
+                v-for="job in jobs "
                 :key="job.id"
                 @click="openDetailPanel(job)"
               >
@@ -167,7 +170,7 @@
   </div>
 </template>
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import axios from "axios";
 import { useUsersStore } from "../store/user";
 export default {
@@ -180,6 +183,24 @@ export default {
   },
   setup(props) {
     const usersStore = useUsersStore();
+    const experienceOptions = ref([
+      "Fresher",
+      "1 Year",
+      "2 Years",
+      "3 Years",
+      "4 Years",
+      "5 Years",
+      "6 Years",
+      "7 Years",
+      "8 Years",
+      "9 Years",
+      "10 Years",
+      "10+ Years",
+    ]);
+    const filterdata = ref(["All", "Newest", "Oldest"]);
+    const statusFilter = ref("All");
+    const filterpagedata = ref(["All", "5", "10", "15"]);
+    const pageFilter = ref("All");
     const items = [
       {
         title: "Home",
@@ -191,6 +212,7 @@ export default {
         disabled: true,
       },
     ];
+    const totalJobPostings = ref(0);
     const jobs = ref({});
     const detail = ref({
       title: "",
@@ -201,12 +223,21 @@ export default {
       vacancy: "",
       id: "",
     });
-
+    const job = ref({
+      category: "",
+      experience: "",
+    });
     const jobTitle = ref("");
     const location = ref("");
     const category = ref("");
+    const experience = ref("");
     const detailPanelVisible = ref(false);
     const showAlert = ref(false);
+    const paginatedJobs = computed(() => {
+    const perPage = parseInt(pageFilter.value);
+    const startIndex = (parseInt(pageFilter.value) - 1) * perPage;
+    return jobs.value.slice(startIndex, startIndex + perPage);
+  });
     const searchJobs = async () => {
       try {
         showAlert.value = false;
@@ -215,12 +246,24 @@ export default {
             jobTitle: jobTitle.value,
             location: location.value,
             category: category.value,
+            experience: experience.value,
           },
         });
-        if (response.data.data.length === 0) {
+        let fetchedJobs = response.data.data;
+
+        if (fetchedJobs.length === 0) {
           showAlert.value = true;
         } else {
-          jobs.value = response.data.data;
+          if (statusFilter.value === "Newest") {
+            fetchedJobs.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at)
+            );
+          } else if (statusFilter.value === "Oldest") {
+            fetchedJobs.sort(
+              (a, b) => new Date(a.created_at) - new Date(b.created_at)
+            );
+          }
+          jobs.value = fetchedJobs;
         }
       } catch (err) {
         console.error(err);
@@ -229,6 +272,9 @@ export default {
         }
       }
     };
+    watch(statusFilter, (newValue) => {
+      searchJobs();
+    });
 
     // const fetchJobs = async () => {
     //   try {
@@ -239,7 +285,6 @@ export default {
     //     console.error(err);
     //   }
     // };
-
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
@@ -263,7 +308,15 @@ export default {
         console.error(err);
       }
     };
-
+    const fetchTotalJobPostings = async () => {
+      try {
+        const response = await fetch("/total-published-jobs");
+        const data = await response.json();
+        totalJobPostings.value = data.totalPublishedJobs;
+      } catch (error) {
+        console.error("Error fetching total job postings:", error);
+      }
+    };
     const openDetailPanel = (job) => {
       console.log(job);
       window.location.href = `/view/${job.id}`;
@@ -354,9 +407,25 @@ export default {
       const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
+    const categories = ref([]);
 
+    const fetchCategories = async () => {
+      try {
+        axios.get("/categories").then((response) => {
+          categories.value = response.data;
+          console.log(response.data);
+        });
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    const selectCategory = (selectedCategory) => {
+      job.category = selectedCategory.name;
+    };
     onMounted(() => {
       // companypost();
+      fetchTotalJobPostings();
+      fetchCategories();
       if (!usersStore.isloggedin) {
         fetchJobs();
       } else {
@@ -379,24 +448,36 @@ export default {
       //   fetchJobs();
       //  }
     });
+   
     return {
       jobs,
       jobTitle,
       location,
       searchJobs,
+      statusFilter,
       // companypost,
       usersStore,
       closeDetailDialog,
+      experience,
       apply,
       save,
+      job,
+      categories, paginatedJobs ,
       openDetailPanel,
       detailPanelVisible,
+      paginatedJobs,
       detail,
       truncateDescription,
       isDescriptionLong,
       category,
       items,
       showAlert,
+      totalJobPostings,
+      experienceOptions,
+      filterdata,
+      pageFilter,
+      filterpagedata,
+      
     };
   },
 };

@@ -160,7 +160,7 @@ export default {
             return { id, Name, details: filteredItem };
           });
           plans.value = Plans;
-          // console.log(plans.value);
+           console.log(plans.value);
           // console.log(plan.value);
           features.value = Object.keys(response.data.data[0]);
           features.value.splice(0, 1);
