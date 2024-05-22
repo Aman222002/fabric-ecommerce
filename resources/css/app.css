@@ -1156,7 +1156,11 @@ main.v-main .no_job_found {
 
 
 
-
+.featured_jobs_logo, .featured_jobs_logo img.v-img__img {
+    width: 90px;
+    max-width: 90px;
+    min-width: 90px;
+}
 /* responsive start  only */
 @media screen and (min-width: 1200px) {
     .line {

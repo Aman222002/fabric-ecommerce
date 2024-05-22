@@ -10,10 +10,29 @@
         </DxColumn>
         <DxColumn data-field="phone" data-type="string">
         </DxColumn>
+        <DxColumn
+      caption="Action"
+      cell-template="ButtonTemplate"
+    ></DxColumn>
+    <template #ButtonTemplate="{ data }">
+        <div>
+        <!-- <v-btn   color="primary" @click="approve(data)" :disabled="data.data.subscription_status === 'active'">Approve</v-btn> -->
+        <v-btn 
+          color="primary" 
+          @click="approve(data)" 
+          :disabled="data.data.subscription_status === 'active' || isApproved[data.data.id]">
+          {{ isApproved[data.data.id] ? 'Approved' : 'Approve' }}
+        </v-btn>
+        
+    </div>
+    </template>
+
     </DxDataGrid>
 </template>
 <script>
 import dxGridStore from '../composition/dxGridStore';
+import axios from 'axios';
+import { reactive } from 'vue';
 export default {
     name: 'RepresentativeTab',
     props: {
@@ -26,9 +45,34 @@ export default {
         // console.log(props.planId);
         const loadURL = `/admin/company/plan/${props.planId}`;
         // const updateURL = `/admin/user/update`;
-        const { dataSource } = dxGridStore(loadURL);
+        const isApproved = reactive({});
+        const approve = (data) => {
+    console.log(data);
+    const userId = data.data.id;
+    const requestData = {
+        id:data.data.id,
+        name: data.data.name,
+        email: data.data.email,
+        phone: data.data.phone
+    };
+    console.log('Approved:', requestData);
+    axios.post(`/subscription-plan/${userId}`, requestData)
+        .then(response => {
+            console.log('API Response:', response.data);
+            isApproved[userId] = false;
+            // refreshTable(dataGridRef);
+            window.location.reload();
+        })
+       
+        .catch(error => {
+            console.error('API Error:', error);
+        });
+};
+const { dataSource,refreshTable } = dxGridStore(loadURL);
         return {
             dataSource,
+            approve,
+            isApproved,
         };
     },
 }

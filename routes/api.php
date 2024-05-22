@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\UsersController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\API\UserCotroller;
 use GuzzleHttp\Middleware;
 // use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -22,13 +23,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-
 Route::group(['middleware' =>'auth:api'],function(){
+    Route::post('/login',[UserController::class,'login']);
     Route::get('/my-profile', [UserController::class, 'getUserData']);
-   
     Route::post('/post', [UserController::class, 'store']);
     Route::post('/post/jobs/{slug}', [UserController::class, 'update']);
     Route::delete('/post/delete/{slug}', [UserController::class, 'destroy']);   
+    Route::post('subscription-plan/{userId}', [UserController::class, 'getSubscription']);
 });
-Route::post('/subscription-plan/{id}', [UserController::class, 'getSubscription']);
+
