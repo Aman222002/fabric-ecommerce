@@ -74,10 +74,10 @@
               </v-card-actions>
             </v-card>
           </v-col>
-          <!-- 
-          <v-alert type="error" class="no_job_found w-100">
-            No job Found.
-          </v-alert> -->
+          
+          <v-alert type="error" class="no_job_found w-100" v-if="noJobsApplied">
+            Not Applied For Any Job.
+          </v-alert>
         </v-row>
       </v-container>
     </div>
@@ -137,10 +137,14 @@ export default {
         }
       });
     };
+    const noJobsApplied = ref(false);
+    if (jobApplications.value.length === 0) {
+      noJobsApplied.value = true;
+    }
     return {
       jobApplications,
       deleteItem,
-      HomeCountryState,
+      HomeCountryState,noJobsApplied
     };
   },
 };

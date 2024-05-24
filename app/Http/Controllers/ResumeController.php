@@ -22,7 +22,7 @@ class ResumeController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
+      
         try {
             $user = auth()->user();
 
@@ -236,7 +236,11 @@ class ResumeController extends Controller
             $userQualification = Qualification::where('user_id', $user->id)->get();
             $userAddress = UserAddress::where('user_id', auth()->id())->first();
             //dd( $userExperience);
-
+            $user->name = $request->userDetails['name'];
+            $user->email = $request->userDetails['email'];
+            $user->phone = $request->userDetails['phone']; // Update phone number here
+          
+            $user->save();
             $response = [
                 "status" => true,
                 "data" => [

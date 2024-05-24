@@ -13,6 +13,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import VueTelInput from 'vue3-tel-input'
 import "vue3-tel-input/dist/vue3-tel-input.css";
 import mitt from "mitt";
 import "devextreme/dist/css/dx.common.css";
@@ -36,9 +37,9 @@ const pinia = createPinia({
 pinia.use(piniaPluginPersistedstate);
 
 const VueTelInputOptions = {
-    mode: "national",
-    onlyCountries: ["NG", "GH", "GB", "US", "CA", "IN"],
+    mode: "international",
 };
+
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -101,7 +102,7 @@ app.use(vuetify);
 app.use(pinia);
 app.use(VueSweetalert2);
 // app.use(CKEditor);
-//app.use(VueTelInput, VueTelInputOptions);
+app.use(VueTelInput, VueTelInputOptions);
 
 import Registration from "./components/Registration.vue";
 app.component("registration-component", Registration);

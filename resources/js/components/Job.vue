@@ -166,14 +166,7 @@ export default {
     const submitForm = async () => {
       if (!formData.value.company_name) {
         return;
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "error",
-          title: "User not found",
-        });
+       
       }
       try {
         const response = await axios.post("/company/login", formData.value);
@@ -298,18 +291,31 @@ export default {
             }
           }
         }
+        
       } catch (err) {
-        console.error(err);
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "error",
-          title: "Verify Your Mail",
-        });
-      }
-    };
+        if (err.response && err.response.data && err.response.data.message === "Email not verified. Please verify your email before logging in.") {
+            
+            window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "warning",
+                title: "Please verify your email before logging in.",
+            });
+        } else {
+          
+            window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "error",
+                title: "Invalid Credentials.",
+            });
+        }
+    }
+      };
     const showCompanyListDialog = async () => {
       try {
         const response = await axios.get("/company/names", {

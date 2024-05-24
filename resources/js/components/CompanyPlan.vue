@@ -179,17 +179,30 @@ export default {
     });
     const planName = ref([]);
     const plans = ref({});
-    const removeplan = () => {
-      console.log(userId.value);
-      try {
+   
+     const removeplan = () => {
+       window.Swal.fire({
+         title: "Are you sure?",
+         text: "Are you sure?",
+         icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+         cancelButtonColor: "#d33",
+         confirmButtonText: "Yes, delete it!",
+       }).then((result) => {
+         if (result.isConfirmed) {
+           try {
         axios.post(`/remove/subscription/${userId.value}`).then((response) => {
           console.log(user.id);
-          window.location.reload();
+        
         });
+        window.location.reload();
       } catch (error) {
         console.log(error);
       }
-    };
+    }
+       });
+     };
     const changeplan = () => {
       changePlanModal.value = true;
       try {

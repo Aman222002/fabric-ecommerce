@@ -36,7 +36,6 @@ class PdfController extends Controller
                 return $data->skill_name;
             });
         });
-    
         $userdata = [
             'name' => $user->name,
             'email' => $user->email,
@@ -114,8 +113,6 @@ class PdfController extends Controller
         } elseif ($template === 'Template3') {
             $viewName = 'pdf3';
         }
-
-        
         try {
             $pdf = PDF::loadView($viewName, ['userdata' => $userdata]);
             return $pdf->stream(); 

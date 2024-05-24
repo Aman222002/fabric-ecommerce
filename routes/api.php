@@ -29,6 +29,6 @@ Route::group(['middleware' =>'auth:api'],function(){
     Route::post('/post', [UserController::class, 'store']);
     Route::post('/post/jobs/{slug}', [UserController::class, 'update']);
     Route::delete('/post/delete/{slug}', [UserController::class, 'destroy']);   
-    Route::post('subscription-plan/{userId}', [UserController::class, 'getSubscription']);
+   
 });
-
+ Route::post('subscription/{userId}', [UserController::class, 'Subscription']);

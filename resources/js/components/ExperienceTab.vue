@@ -15,7 +15,7 @@
       />
       <DxColumn data-field="start_date" caption="Starting Year" data-type="int">
       </DxColumn>
-      <DxColumn data-field="end_date" caption="Passing Year" data-type="int">
+      <DxColumn data-field="end_date" caption="Passing Year" :calculate-cell-value="calculateEndDate">
       </DxColumn>
     </DxDataGrid>
   </div>
@@ -35,8 +35,12 @@ export default {
     console.log(props.userId);
     const loadURL = `/jobs/experience/${props.userId}`;
     const { dataSource } = dxGridStore(loadURL, null, null, null);
+    const calculateEndDate = (rowData) => {
+      return rowData.end_date ? rowData.end_date : "Currently Working";
+    };
     return {
       dataSource,
+      calculateEndDate
     };
   },
 };

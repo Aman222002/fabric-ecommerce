@@ -97,7 +97,7 @@
                         :type="showPassword ? 'text' : 'password'"
                       >
                       </v-text-field>
-                      <v-text-field
+                      <!-- <v-text-field
                         v-model="formData.phone"
                         :rules="phoneRules"
                         color="blue"
@@ -108,7 +108,26 @@
                         mask="##########"
                         hide-details="auto"
                         @input="filterNonNumeric"
-                      ></v-text-field>
+                      ></v-text-field> -->
+
+                      <vue-tel-input
+                        v-model="formData.phone"
+                      
+                       
+                        @validate="telValidate"
+
+                        color="blue"
+                        density="compact"
+                        style="margin-bottom: 10px"
+                        variant="outlined"
+                        label="Phone"
+                        hide-details="auto"
+                     
+                        mode="international"
+                      ></vue-tel-input>
+                      <span v-if="formData.phoneError" class="error-message">{{
+                        formData.phoneError
+                      }}</span>
 
                       <v-btn type="submit" dark block tile color="primary"
                         >Register</v-btn
@@ -125,7 +144,7 @@
   </v-container>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import axios from "axios";
 
 export default {
@@ -138,7 +157,9 @@ export default {
       email: "",
       password: "",
       phone: "",
+      phoneError: "",
     });
+    const phoneError = ref("");
     const confirmPassword = ref("");
     const confirmPasswordRules = [
       (v) => !!v || "Confirm password is required",
@@ -160,13 +181,110 @@ export default {
     const phoneRules = [
       (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
     ];
-    const filterNonNumeric = (event) => {
-      formData.value.phone = event.target.value.replace(/\D/g, "");
-    };
+    const phoneValidationRule = computed(() => {
+      return validatePhone() || "Enter a valid phone number";
+    });
+    // const filterNonNumeric = (value) => {
+    //   formData.value.phone = value.replace(/\D/g, "");
+    // };
+    // const filterNonNumeric = (value) => {
+    //   if (typeof value === 'string') {
+    //     formData.value.phone = value.replace(/\D/g, "");
+    //   }
+    // };
     const showPassword = ref(false);
+    const checkUsername = async () => {
+      try {
+        const response = await axios.post("/check-username", {
+          username: formData.value.name,
+        });
+        return response.data.available;
+      } catch (error) {
+        console.error("Error checking username availability:", error);
+        return false;
+      }
+    };
+    
+    const telValidate = (telnumber) => {
+  if (telnumber && telnumber.valid) {
+    formData.value.phone = telnumber.number;
+    if (/[a-zA-Z]/.test(telnumber.number)) {
+    
+      formData.value.phoneError = "Phone number cannot contain alphabets";
+    } else {
+      formData.value.phoneError = "";
+    }
+  } else {
+    formData.value.phone = null;
+    formData.value.phoneError = "Enter a valid phone number";
+  }
+};
+//     const telValidate = (telnumber) => {
+//   if (telnumber && telnumber.number) {
+//     const countryCodeMatch = telnumber.number.match(/^\+\d{1,3}/);
+//     console.log(countryCodeMatch);
+//     if (countryCodeMatch) {
+//       const countryCode = countryCodeMatch[0];
+//       const digitsAfterCountryCode = telnumber.number
+//         .replace(countryCode, "")
+//         .replace(/\D/g, "");
+//         console.log(digitsAfterCountryCode);
+//       if (digitsAfterCountryCode.length >= 10) {
+//         const formattedPhoneNumber = countryCode + digitsAfterCountryCode;
+//         formData.value.phone = formattedPhoneNumber;
+//         console.log( formData.value.phone)
+//         formData.value.phoneError = "";
+//       } else {
+//         formData.value.phone = "";
+//         formData.value.phoneError =
+//           "Enter a valid phone numbe";
+//       }
+//     }
+//   } else {
+//     formData.value.phone = "";
+//     formData.value.phoneError = "Enter a valid phone number";
+//   }
+// };
+
+// const filterNonNumeric = (value) => {
+//   if (typeof value === "string") {
+//     const numericValue = value.replace(/\D/g, "");
+//     const digitsAfterCountryCode = value.replace(/^\+\d{1,3}/, "").replace(/\D/g, "");
+    
+//     if (digitsAfterCountryCode.length < 6) {
+//       formData.value.phoneError = "Enter a valid phone numbe";
+//     } else if (digitsAfterCountryCode.length > 10 || /[^\d]/.test(numericValue.substring(10))) {
+//       formData.value.phoneError = " phone number not valid";
+//     } else if (/[a-zA-Z]/.test(value)) {
+//       formData.value.phoneError = "Alphabets are not allowed";
+//     } else if (/[^\d]/.test(value.substring(10))) {
+//       formData.value.phoneError = "Alphabets are not allowed ";
+//     } else {
+//       formData.value.phoneError = "";
+//     }
+//     formData.value.phone = numericValue;
+//   }
+// };
+
 
     const submitForm = async () => {
+      telValidate({ valid: true, number: formData.value.phone });
+      if (formData.value.phoneError) {
+        return;
+      }
       try {
+        const usernameAvailable = await checkUsername();
+        if (!usernameAvailable) {
+          window.Swal.fire({
+            toast: true,
+            position: "top-end",
+            timer: 2000,
+            showConfirmButton: false,
+            icon: "error",
+            title: "Username already exist",
+          });
+          return;
+        }
         const valid = await form.value.validate();
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
@@ -178,6 +296,7 @@ export default {
             inline: "center",
           });
         } else {
+          console.log(formData.value);
           const response = await axios.post("/registration", formData.value);
           if (response.data.status === true) {
             window.location.href = "/login";
@@ -206,7 +325,10 @@ export default {
       showPassword,
       confirmPassword,
       confirmPasswordRules,
-      filterNonNumeric,
+     
+      telValidate,
+      phoneValidationRule,
+      phoneError,
     };
   },
 };
@@ -237,6 +359,10 @@ export default {
   border-radius: 6px !important;
   color: #fff;
   text-transform: capitalize;
+}
+.error-message {
+  color: rgb(204, 65, 65);
+  font-size: 13px;
 }
 </style>
  

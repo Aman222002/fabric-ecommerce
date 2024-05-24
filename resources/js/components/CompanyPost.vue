@@ -27,9 +27,6 @@
         <v-row v-else>
           <v-col cols="12" sm="12" md="3" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
-              <!-- <v-card-title class="font-weight-bold px-0"
-                >Search by Keywords
-              </v-card-title> -->
               <div class="job_search_forms">
                 <h4 class="my-2">Job search</h4>
                 <v-text-field
@@ -42,7 +39,7 @@
                   style="width: 100%"
                   placeholder="Job title, keywords, or company"
                 ></v-text-field>
-                <!-- <div class="line"></div> -->
+
                 <h4 class="my-2 mt-4">City or postcode</h4>
                 <v-text-field
                   prepend-inner-icon="mdi-map-marker-outline"
@@ -63,13 +60,7 @@
                   label="Category"
                   variant="solo"
                 ></v-select>
-                <!-- <h4 class="my-2 mt-4">Qualification</h4>
-                <v-select
-                  :items="items"
-                  density="compact"
-                  label="Qualification"
-                  variant="solo"
-                ></v-select> -->
+
                 <h4 class="my-2 mt-4">Experience</h4>
                 <v-select
                   v-model="experience"
@@ -101,28 +92,19 @@
                       label="Sort by"
                       variant="outlined"
                     ></v-select>
-                    <v-select
-                      v-model="pageFilter"
-                      :items="filterpagedata"
-                      density="compact"
-                      label="Page Number"
-                      variant="outlined"
-                    ></v-select>
                   </div>
                 </div>
               </v-col>
               <v-col
                 class="featured_jobs_col job_box_child"
-                v-for="job in jobs "
+                v-for="job in paginatedTickets"
                 :key="job.id"
                 @click="openDetailPanel(job)"
               >
                 <v-card class="mx-auto company_info job_box_card">
                   <div class="featured_jobs_logo">
                     <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
-                    <!-- <v-img src="/assest/img/job-alerts/1-1.webp"></v-img> -->
                   </div>
-
                   <v-card class="job_info">
                     <v-card-title>{{ job.company.company_name }}</v-card-title>
                     <v-card-text class="pa-0 ml-3">
@@ -166,6 +148,17 @@
           </v-col>
         </v-row>
       </v-container>
+
+      <div style="text-align: center;margin-top: 20px">
+        <v-pagination
+          v-if="jobs.length > 0"
+          v-model="currentPage"
+          :length="totalPages"
+          @input="paginate"
+          rounded="circle"
+          :total-visible="4"
+        ></v-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -213,7 +206,7 @@ export default {
       },
     ];
     const totalJobPostings = ref(0);
-    const jobs = ref({});
+    const jobs = ref([]);
     const detail = ref({
       title: "",
       company_name: "",
@@ -233,14 +226,9 @@ export default {
     const experience = ref("");
     const detailPanelVisible = ref(false);
     const showAlert = ref(false);
-    const paginatedJobs = computed(() => {
-    const perPage = parseInt(pageFilter.value);
-    const startIndex = (parseInt(pageFilter.value) - 1) * perPage;
-    return jobs.value.slice(startIndex, startIndex + perPage);
-  });
     const searchJobs = async () => {
       try {
-        showAlert.value = false;
+        showAlert.value = false; 
         const response = await axios.get("/search-jobs", {
           params: {
             jobTitle: jobTitle.value,
@@ -249,65 +237,73 @@ export default {
             experience: experience.value,
           },
         });
-        let fetchedJobs = response.data.data;
-
-        if (fetchedJobs.length === 0) {
+        const fetchedJobs = response.data.data;
+        if (!Array.isArray(fetchedJobs)) {
           showAlert.value = true;
+          jobs.value = [];
         } else {
-          if (statusFilter.value === "Newest") {
+          if (statusFilter.value === "All") {
+            jobs.value = fetchedJobs;
+          } else if (statusFilter.value === "Newest") {
             fetchedJobs.sort(
               (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
+            jobs.value = fetchedJobs;
           } else if (statusFilter.value === "Oldest") {
             fetchedJobs.sort(
               (a, b) => new Date(a.created_at) - new Date(b.created_at)
             );
+            jobs.value = fetchedJobs;
           }
-          jobs.value = fetchedJobs;
+          if (jobs.value.length === 0) {
+            showAlert.value = true;
+          }
         }
       } catch (err) {
         console.error(err);
-        if (err.response.status == 404) {
-          showAlert.value = true;
-        }
+        showAlert.value = true;
       }
     };
-    watch(statusFilter, (newValue) => {
+
+    watch(statusFilter, () => {
       searchJobs();
     });
 
-    // const fetchJobs = async () => {
-    //   try {
-    //     const response = await axios.get("/company/post");
-
-    //     jobs.value = response.data.data;
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-    // };
     const fetchJobs = async () => {
       try {
+        showAlert.value = false;
         const response = await axios.get("/company/post");
-        if (response.data.data.length === 0) {
+        const fetchedJobs = response.data.data;
+        if (typeof fetchedJobs !== "object" || Array.isArray(fetchedJobs)) {
           showAlert.value = true;
+          jobs.value = [];
         } else {
-          showAlert.value = false;
-          jobs.value = response.data.data;
+          jobs.value = Object.values(fetchedJobs);
+          totalJobPostings.value = response.data.total;
+          if (jobs.value.length === 0) {
+            showAlert.value = true;
+          }
         }
-      } catch (err) {
-        console.error(err);
-        showAlert.value = true; // Set showAlert to true on error
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+        showAlert.value = true;
       }
     };
+    
     const fetchpost = async () => {
-      try {
-        const response = await axios.get("/company/job");
-        console.log(response.data);
-        jobs.value = response.data.data;
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  try {
+    const response = await axios.get("/company/job");
+    const fetchedJobs = response.data.data;
+    if (Array.isArray(fetchedJobs)) {
+      jobs.value = fetchedJobs;
+    } else {
+      jobs.value = []; 
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
     const fetchTotalJobPostings = async () => {
       try {
         const response = await fetch("/total-published-jobs");
@@ -333,7 +329,7 @@ export default {
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
-    //For job apply
+
     const apply = async (id) => {
       if (!usersStore.isloggedin) {
         window.Swal.fire({
@@ -422,18 +418,34 @@ export default {
     const selectCategory = (selectedCategory) => {
       job.category = selectedCategory.name;
     };
+    const currentPage = ref(1);
+    const ticketsPerPage = 6;
+    const totalPages = computed(() =>
+      Math.ceil(jobs.value.length / ticketsPerPage)
+    );
+    const paginatedTickets = computed(() => {
+      const startIndex = (currentPage.value - 1) * ticketsPerPage;
+      const endIndex = startIndex + ticketsPerPage;
+      return jobs.value.slice(startIndex, endIndex);
+    });
+    const paginate = (page) => {
+      currentPage.value = page;
+    };
+
     onMounted(() => {
-      // companypost();
-      fetchTotalJobPostings();
-      fetchCategories();
       if (!usersStore.isloggedin) {
         fetchJobs();
       } else {
         fetchpost();
       }
+      fetchTotalJobPostings();
+      fetchCategories();
+      // if (usersStore.isloggedin) {
+      //   fetchpost();
+      // } else if(!usersStore.isloggedin) {
+      //   fetchJobs();
+      // }
 
-      // const value =props.data ;
-      // console.log(value);
       if (props.data.title || props.data.location) {
         console.log(props.data.title || props.data.location);
         jobTitle.value = props.data.title;
@@ -444,31 +456,31 @@ export default {
         category.value = props.data.category;
         searchJobs();
       }
-      //  else{
-      //   fetchJobs();
-      //  }
     });
-   
+
     return {
       jobs,
       jobTitle,
       location,
       searchJobs,
       statusFilter,
-      // companypost,
       usersStore,
       closeDetailDialog,
       experience,
       apply,
       save,
       job,
-      categories, paginatedJobs ,
+      categories,
+      currentPage,
       openDetailPanel,
       detailPanelVisible,
-      paginatedJobs,
+
       detail,
+      paginatedTickets,
+      totalPages,
       truncateDescription,
       isDescriptionLong,
+      paginate,
       category,
       items,
       showAlert,
@@ -477,12 +489,10 @@ export default {
       filterdata,
       pageFilter,
       filterpagedata,
-      
     };
   },
 };
 </script>
-
 <style>
 .cpmany_logo .v-img {
   width: 45px;

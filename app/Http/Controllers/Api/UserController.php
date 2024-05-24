@@ -380,7 +380,7 @@ public function destroy($slug)
     }
 }
 
-public function getSubscription(Request $request)
+public function Subscription(Request $request)
 {
     try {
      
