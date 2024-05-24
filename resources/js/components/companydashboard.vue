@@ -159,7 +159,6 @@ export default {
         console.log(err);
       }
     };
-
     const fetchTotalUser = async () => {
       try {
         const response = await axios.get("/fetch-user");
@@ -169,7 +168,6 @@ export default {
         console.log(err);
       }
     };
-
     const fetchExpiredJobs = async () => {
       try {
         const response = await axios.get("/dashboard/total-expiredjobs");
@@ -178,7 +176,6 @@ export default {
         console.log(err);
       }
     };
-
     const fetchRecentlyExpired = async () => {
       try {
         const response = await axios.get("/posts/about-to-expire");
@@ -187,11 +184,9 @@ export default {
         console.log(err);
       }
     };
-
     const toggleShowMore = () => {
       showMore.value = !showMore.value;
     };
-
     onMounted(() => {
       fetchRecentPosts();
       fetchTotalJobs();
@@ -199,7 +194,6 @@ export default {
       fetchExpiredJobs();
       fetchRecentlyExpired();
     });
-
     return {
       recentPosts,
       totalJobs,

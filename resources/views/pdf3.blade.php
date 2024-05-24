@@ -5,8 +5,6 @@
 	<title>resume 3</title>
 	<style>
 
-		/* font-family:  Biryani;
-  font-family: Biryani; */
 
 		* {
 			margin: 0;
@@ -20,19 +18,7 @@
 	<div class="resume_1" style="color: #444;margin: 0px auto;">
 		<!-- left side -->
 		<div style="width: 30%;height: 100%;float: left;background-color: #006666;color: #fff;">
-			<!-- Candidates Image  -->
-			<!-- <div style="width: 100%;">
-				<table style="width: 100%;text-align: center;font-family: Biryani;margin-top: 20px;">
-					<tbody>
-						<tr>
-							<td colspan="2">
-								<img style="width: 120px;height: 120px;text-align: center;border-radius: 56px;"
-									src="https://static.vecteezy.com/system/resources/thumbnails/024/095/208/small/happy-young-man-smiling-free-png.png" />
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div> -->
+		
 			<!-- Hobbies And Strengths -->
 			<div>
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">

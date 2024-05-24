@@ -367,16 +367,31 @@
             density="compact"
             :rules="[(value) => !!value || 'User email is required']"
           ></v-text-field>
-          <v-text-field
+          <!-- <v-text-field
             v-model="editedJob.phone"
             label="User Phone"
             variant="solo"
             density="compact"
             :rules="[(value) => !!value || 'User phone is required']"
-          ></v-text-field>
+          ></v-text-field> -->
+          <vue-tel-input
+          @input="handlePhoneInput"
+          :value="editedJob.phone"
+          @validate="telValidate"
+                        color="blue"
+                        density="compact"
+                        style="margin-bottom: 10px"
+                        variant="outlined"
+                        label="Phone"
+                        hide-details="auto"
+                        mode="international"
+                      
+                      ></vue-tel-input>
+                      <span v-if="errorMessage" class="error">{{ errorMessage }}</span>    
         </v-card-text>
         <v-card-actions>
-          <v-btn class="btn_cts" @click="saveEditedJob">Save</v-btn>
+         
+          <v-btn class="btn_cts" @click="saveEditedJob" >Save</v-btn>
           <v-btn class="btn_cancel" @click="closeEditModal">Close</v-btn>
         </v-card-actions>
       </v-card>
@@ -399,6 +414,8 @@ export default {
       state: "",
       postal_code: "",
     });
+     
+    const errorMessage = ref("");
     const countriesList = ref(countries);
     const facebook = ref("");
     const twitter = ref("");
@@ -421,6 +438,8 @@ export default {
       company_name: "",
       company_email: "",
       logo: null,
+    
+    
     });
     const editedAddress = ref({
       first_line_address: "",
@@ -470,6 +489,38 @@ export default {
         console.error("Error fetching company profile:", error);
       }
     };
+
+const handlePhoneInput = (event) => {
+      try {
+        if (typeof event === "string") {
+          editedJob.value.phone = event;
+        } else if (event && event.target && event.target.value) {
+          editedJob.value.phone = event.target.value;
+        } else {
+          console.error("Invalid event:", event);
+        }
+      } catch (error) {
+        console.error("Error handling phone input:", error);
+      }
+    };
+   
+    const telValidate = (isValid) => {
+    console.log("Is Valid:", isValid);
+  
+    if (isValid.valid===true) {
+
+console.log( isValid.value,"Valid Phone Number");
+errorMessage.value = "";
+return true;
+    } else {
+    
+      console.log("Invalid Phone Number");
+        errorMessage.value = "Enter a valid phone number";
+      return false
+    }
+   
+};
+
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
@@ -479,20 +530,26 @@ export default {
       editedJob.value.logo = null;
       isEditModalOpen.value = true;
     };
-
     const closeEditModal = () => {
       isEditModalOpen.value = false;
     };
 
     const saveEditedJob = async () => {
+     
+      if (errorMessage.value) {
+        telValidate({ isValid: false, number: editedJob.value.phone });
+        return;
+      }
       try {
-        const formData = new FormData();
+          const formData = new FormData();
         formData.append("name", editedJob.value.name);
         formData.append("email", editedJob.value.email);
         formData.append("phone", editedJob.value.phone);
         formData.append("company_name", editedJob.value.company_name);
         formData.append("company_email", editedJob.value.company_email);
         formData.append("logo", editedJob.value.logo);
+        
+     
         const response = await axios.post("/company/update", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -507,11 +564,12 @@ export default {
           icon: "success",
           title: "User  Updated",
         });
-        window.location.reload();
+         window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
     };
+    
     const openEditCompanyModal = () => {
       const isAdmin = user.value.roles.some(
         (role) => role.name === "Company Admin"
@@ -806,7 +864,7 @@ export default {
       closeEditCompanyModal,
       saveEditedCompany,
       handleCompanyLogoChange,
-      countries: countriesList,
+      countries: countriesList,handlePhoneInput,telValidate,errorMessage,
     };
   },
 };
@@ -871,5 +929,9 @@ export default {
   color: #fff !important;
   background: #0146a6;
   text-align: center;
+}
+.error {
+  color: rgb(204, 65, 65);
+  font-size: 13px;
 }
 </style>

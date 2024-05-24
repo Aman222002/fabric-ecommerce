@@ -33,6 +33,7 @@
 					</td>
 				</tr>
 				<tr>
+				
 					<td>{{ $userdata['email'] }}</td>
 					<td>{{ $userdata['phone'] }}</td>
 				</tr>

@@ -147,27 +147,27 @@ export default {
             usersStore.isLogIn();
           }
         }
-        else {
-      window.Swal.fire({
-        toast: true,
-        position: "top-end",
-        timer: 2000,
-        showConfirmButton: false,
-        icon: "error",
-        title: "User not found",
-      });
-    }
-      } catch (error) {
-        console.error(error);
-        if (error.response && error.response.status === 403) {
-          window.Swal.fire({
-            toast: true,
-            position: "top-end",
-            timer: 2000,
-            showConfirmButton: false,
-            icon: "error",
-            title: "Please Verify Your Mail",
-          });
+       
+      } catch (err) {
+        if (err.response && err.response.data && err.response.data.message === "Email not verified. Please verify your email before logging in.") {
+            
+            window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "warning",
+                title: "Please verify your email before logging in.",
+            });
+        } else {
+            window.Swal.fire({
+                toast: true,
+                position: "top-end",
+                timer: 2000,
+                showConfirmButton: false,
+                icon: "error",
+                title: "Invalid Credentials.",
+            });
         }
       }
     };
