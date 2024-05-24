@@ -19,12 +19,22 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12">
-        <v-text-field
+        <!-- <v-text-field
           label="Phone"
           v-model="users.phone"
           name="phone"
           variant="outlined"
-        ></v-text-field>
+        ></v-text-field> -->
+        <vue-tel-input
+        @input="handlePhoneInput"
+          :value="users.phone"
+          name="phone"
+          variant="outlined"
+          label="Phone"
+          mode="international"
+          @validate="telValidate"
+        ></vue-tel-input>
+        <span v-if="errorMessage" class="error">{{ errorMessage }}</span> 
       </v-col>
       <v-col cols="12">
         <v-file-input
@@ -53,6 +63,7 @@ import { useMyStore } from "../../store";
 export default {
   name: "UserDetails",
   setup() {
+    const errorMessage = ref("");
     const store = useMyStore();
     const users = ref(store.userDetails);
     const selectedImage = ref(null);
@@ -62,6 +73,33 @@ export default {
     //     console.log(store.userDetails.user_image);
     //     console.log(e)
     // }
+    const handlePhoneInput = (event) => {
+      try {
+        if (typeof event === "string") {
+          users.value.phone = event;
+        } else if (event && event.target && event.target.value) {
+          users.value.phone = event.target.value;
+        } else {
+          console.error("Invalid event:", event);
+        }
+      } catch (error) {
+        console.error("Error handling phone input:", error);
+      }
+    };
+    const telValidate = (isValid, phoneNumber, country) => {
+      console.log("Is Valid:", isValid);
+      console.log("Phone Number:", phoneNumber);
+      console.log("Country:", country);
+      if (isValid.valid==false) {
+        console.log("Invalid Phone Number");
+        errorMessage.value = "Enter a valid phone number";
+      } else {
+      
+        console.log("Valid Phone Number");
+        errorMessage.value = ""; 
+       
+      }
+    };
     const imagePreview = ref("");
     console.log(store.userDetails.user_image);
     const handleImage = (e) => {
@@ -91,7 +129,7 @@ export default {
       users,
       handleImage,
       imagePreview,
-      selectedImage,
+      selectedImage,errorMessage,telValidate,handlePhoneInput
     };
   },
 };

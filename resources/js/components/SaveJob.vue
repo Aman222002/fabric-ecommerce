@@ -76,20 +76,14 @@
               </v-card-actions>
             </v-card>
           </v-col>
-          <!--           
-          <v-alert type="error" class="no_job_found w-100">
-            No job Found.
-          </v-alert> -->
+          <v-alert type="error" class="no_job_found w-100" v-if="noJobsApplied">
+            Not Save Any Job.
+          </v-alert>
         </v-row>
       </v-container>
     </div>
   </div>
 </template>
-
-
-
-
-
 <script>
 import { ref } from "vue";
 import axios from "axios";
@@ -166,12 +160,15 @@ export default {
         });
       }
     };
-
+    const noJobsApplied = ref(false);
+    if ( savedJobs.value.length === 0) {
+      noJobsApplied.value = true;
+    }
     return {
       savedJobs,
       deleteItem,
       apply,
-      HomeCountryState,
+      HomeCountryState,noJobsApplied
     };
   },
 };

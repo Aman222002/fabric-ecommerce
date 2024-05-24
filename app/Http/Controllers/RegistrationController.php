@@ -18,14 +18,17 @@ class RegistrationController extends Controller
     public function  store(Request $request)
     {
         try {
-
+            
             $input = $request->all();
             $verificationToken = Str::random(60);
+           
+            $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
+          
             $user = User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-                'phone' => $input['phone'],
+                'phone' => $phone,
                 'verification_token' => $verificationToken,
             ]);
             $user->assignRole('User');
@@ -59,5 +62,16 @@ class RegistrationController extends Controller
         'status' => true,
         'message' => 'Email verified successfully',
     ]);
+}
+public function checkUsername(Request $request)
+{
+    $username = $request->input('username');
+    $user = User::where('name', $username)->first();
+
+    if ($user) {
+        return response()->json(['available' => false]);
+    }
+
+    return response()->json(['available' => true]);
 }
 }

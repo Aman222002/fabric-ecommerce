@@ -51,7 +51,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                  <v-text-field
+                  <!-- <v-text-field
                     variant="outlined"
                     v-model="company.phone"
                     label="Phone"
@@ -63,7 +63,26 @@
                     mask="##########"
                         hide-details="auto"
                     @input="filterNonNumeric"
-                  ></v-text-field>
+                  ></v-text-field> -->
+                  <vue-tel-input
+                    variant="outlined"
+                    v-model="company.phone"
+                      :value="disabledFields ? company.phone : ''"
+                    @validate="teluser"
+                    label="Phone"
+                    :rules="phoneRules"
+                    type="phone"
+                    density="compact"
+                    :disabled="disabledFields"
+                    mask="##########"
+                    v-if="showCompanyDetails"
+                        hide-details="auto"
+                    
+                        mode="international"
+                      ></vue-tel-input>
+                      <span v-if="company.phoneErrors" class="error-message">{{
+                        company.phoneErrors
+                      }}</span>
                 </v-col>
               </v-row>
               <div v-if="showCompanyDetails">
@@ -92,7 +111,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
-                    <v-text-field
+                    <!-- <v-text-field
                       variant="outlined"
                       v-model="company.phone_number"
                       label="Phone Number"
@@ -102,7 +121,23 @@
                         hide-details="auto"
                       @input="filterNonNumerical"
                       outlined
-                    ></v-text-field>
+                    ></v-text-field> -->
+                    <vue-tel-input
+                    variant="outlined"
+                      v-model="company.phone_number"
+                      label="Phone Number"
+                      :rules="phoneRules"
+                      @validate="telValidate"
+                      density="compact"
+                      mask="##########"
+                        hide-details="auto"
+                    
+                      outlined
+                        mode="international"
+                      ></vue-tel-input>
+                      <span v-if="company.phoneError" class="error-message">{{
+                        company.phoneError
+                      }}</span>
                   </v-col>
                   <v-col sm="12" md="12" lg="6" xl="6" cols="12">
                     <v-file-input
@@ -146,7 +181,7 @@
   </v-container>
 </template>
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,computed } from "vue";
 import { useUsersStore } from "../store/user";
 import axios from "axios";
 
@@ -171,6 +206,8 @@ export default {
       phone_number: "",
       status: "1",
       logo: [],
+      phoneError: "",
+      phoneErrors: "",
     });
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
@@ -191,12 +228,44 @@ export default {
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
     ];
-    const filterNonNumeric = (event) => {
-      company.value.phone = event.target.value.replace(/\D/g, '');
-    };
-    const filterNonNumerical = (event) => {
-      company.value.phone_number = event.target.value.replace(/\D/g, '');
-    };
+ 
+    const phoneValidationRule = computed(() => {
+      return validatePhone() || "Enter a valid phone numbe";
+    });
+   
+
+    const telValidate = (telnumber) => {
+  if (telnumber && telnumber.valid) {
+    company.value.phone_number = telnumber.number;
+    if (/[a-zA-Z]/.test(telnumber.number)) {
+      console.log("Alphabets detected in phone number");
+      company.value.phoneError = "Phone number cannot contain alphabets";
+    } else {
+      company.value.phoneError = "";
+    }
+  } else {
+    company.value.phone_number = null;
+    company.value.phoneError = "Enter a valid phone number";
+  }
+};
+    
+    
+    const teluser = (telnumber) => {
+  if (telnumber && telnumber.valid) {
+    company.value.phone = telnumber.number;
+    if (/[a-zA-Z]/.test(telnumber.number)) {
+      console.log("Alphabets detected in phone number");
+      company.value.phoneErrors = "Phone number cannot contain alphabets";
+    } else {
+      company.value.phoneErrors = "";
+    }
+  } else {
+    company.value.phone = null;
+    company.value.phoneErrors = "Enter a valid phone number";
+  }
+};
+
+
     const showCompanyDetails = ref(true);
     const disabledFields = ref(false);
     const showPassword = ref(false);
@@ -206,7 +275,7 @@ export default {
       company.value.name = props.data.name;
       company.value.email = props.data.email;
       company.value.phone = props.data.phone;
-
+    
       if (props.data.name) {
         company.value.name = props.data.name.replace(/\+/g, " ");
         company.value.email = props.data.email;
@@ -220,53 +289,80 @@ export default {
       }
     });
     const submitForm = () => {
-      form.value.validate().then((valid) => {
-        // console.log(valid.errors);
-        if (!valid.valid) {
-          const errors = JSON.parse(JSON.stringify(valid.errors));
-
-          let errorField = form.value[errors[0].id];
-
-          errorField = Array.isArray(errorField) ? errorField[0] : errorField;
-          errorField.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "center",
-          });
-        } else {
-          const formData = new FormData();
-          for (let key in company.value) {
-            if (key !== "logo") {
-              formData.append(key, company.value[key]);
-              console.log(key, company.value[key]);
-            } else {
-              console.log(key, company.value[key][0]);
-              formData.append("logo", company.value[key][0]);
-            }
-          }
-          if (props.data.permission) {
-            formData.append("company_Id", props.data.company);
-            formData.append("permission", props.data.permission);
-          }
-          console.log(props.data.permission);
-          axios
-            .post("/company/post", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
-            .then((response) => {
-              console.log(response);
-              if (response.data.status == true) {
-                window.location.href = "/job";
-              }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        }
+      telValidate({ valid: true, number: company.value.phone_number });
+      if (company.value.phoneError) {
+        return;
+      }
+      teluser({ valid: true, number: company.value.phone });
+      if (company.value.phoneErrors) {
+        return;
+      }
+  form.value.validate().then((valid) => {
+    if (!valid.valid) {
+      
+      const errors = JSON.parse(JSON.stringify(valid.errors));
+      let errorField = form.value[errors[0].id];
+      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+      errorField.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
       });
-    };
+    } else {
+      
+      axios
+        .post("/company/check", {
+          company_name: company.value.company_name,
+          company_email: company.value.company_email,
+        })
+        .then((response) => {
+          if (response.data.exists) {
+            window.Swal.fire({
+          toast: true,
+          position: "top-end",
+          timer: 2000,
+          showConfirmButton: false,
+          icon: "error",
+          title: "Company Email And Company Name Already Exist",
+        });
+          } else {
+          
+            const formData = new FormData();
+            for (let key in company.value) {
+              if (key !== "logo") {
+                formData.append(key, company.value[key]);
+              } else {
+                formData.append("logo", company.value[key][0]);
+              }
+            }
+            if (props.data.permission) {
+              formData.append("company_Id", props.data.company);
+              formData.append("permission", props.data.permission);
+            }
+            axios
+              .post("/company/post", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then((response) => {
+                if (response.data.status == true) {
+                  window.location.href = "/job";
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  });
+};
+
+
     return {
       form,
       company,
@@ -280,7 +376,7 @@ export default {
       stateRules,
       usersStore,
       showCompanyDetails,
-      disabledFields,showPassword,filterNonNumeric,filterNonNumerical
+      disabledFields,showPassword,telValidate ,phoneValidationRule,teluser, 
     };
   },
 };
@@ -336,5 +432,9 @@ a.company_loging {
 }
 .form_log_reg {
   border-radius: 15px;
+}
+.error-message {
+  color: rgb(204, 65, 65);
+  font-size: 13px;
 }
 </style>

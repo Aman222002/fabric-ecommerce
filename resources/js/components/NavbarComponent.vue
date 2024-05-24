@@ -9,6 +9,7 @@
       <h3 class="title" v-if="!rail">JOBS</h3>
       <v-avatar v-if="rail">
         <img src="/storage/assets/15.jpg" alt="" />
+      
       </v-avatar>
     </span>
     <v-list>
@@ -33,9 +34,20 @@
     <v-spacer></v-spacer>
     <v-menu transition="slide-y-transition" class="log_and_reg_drop">
       <template v-slot:activator="{ props }">
-        <v-icon v-bind="props" id="account" size="40"
+        <!-- <v-icon v-bind="props" id="account" size="40"
           >mdi-account-circle</v-icon
-        >
+        > -->
+        <span>  <v-img :src="imageUrl" alt="" v-if="imageUrl" style="
+    width: 35px;
+    border-radius: 15px;
+    overflow: hidden;
+" />
+<v-icon style="
+    width: 35px;
+    border-radius: 15px;
+    overflow: hidden;
+" v-else>mdi-account-circle</v-icon></span>
+
         <v-icon v-bind="props" class="menu" size="35"> mdi-menu-down</v-icon>
       </template>
       <v-list>
@@ -63,6 +75,7 @@ export default {
     const currentRoute = ref(window.location.pathname);
     const drawer = ref(true);
     const rail = ref(false);
+    const imageUrl = ref();
     const hoveredItem = ref({
       item: null,
     });
@@ -130,16 +143,27 @@ export default {
       axios.get("/admin/logout");
       window.location.href = "/job";
     };
-
+    const fetchProfile = () => {
+      axios
+        .get("profile/getProfile")
+        .then((response) => {
+       
+          imageUrl.value = response.data.user.user_image;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
     onMounted(() => {
       window.addEventListener("popstate", updateRoute);
+      fetchProfile();
     });
 
     return {
       users,
       usersStore,
       currentRoute,
-      drawer,
+      drawer,imageUrl,
       rail,
       requests,
       updateRoute,
@@ -262,5 +286,8 @@ nav.left_side_bar .v-list .v-list-item.v-list-item--active,
 nav.left_side_bar .v-list .v-list-item:hover {
   color: #0146a6;
   background: #0146a61a;
+}
+.img{
+  border-radius: 50%;
 }
 </style>

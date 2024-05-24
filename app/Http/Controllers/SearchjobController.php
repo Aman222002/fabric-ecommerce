@@ -102,10 +102,10 @@ class SearchjobController extends Controller
     //     }
 
     // }
-    public function fetchData()
+    public function fetchData(Request $request)
     {
         try {
-
+        // $perPage = $request->input('perPage', 10); 
             $jobs = Job::with('company', 'jobType', 'category')->get();
             $jobs = $jobs->filter(function ($job) {
                 $user_id = $job->user_id;
@@ -123,6 +123,26 @@ class SearchjobController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    
+
+// public function fetchData(Request $request)
+// {
+//     try {
+//         $perPage = $request->input('perPage', 10); 
+
+//         $jobs = Job::with('company', 'jobType', 'category')
+//                     ->where('post_status', 'Published')
+//                     ->join('users', 'jobs.user_id', '=', 'users.id')
+//                     ->where('users.subscription_status', 'active')
+//                     ->paginate($perPage);
+
+//         return response()->json(['status' => true, 'data' => $jobs], 200);
+//     } catch (\Exception $e) {
+//         Log::error($e->getMessage());
+//         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+//     }
+// }
+
     public function searchJobs(Request $request)
     {
         try {

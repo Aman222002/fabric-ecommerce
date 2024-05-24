@@ -25,13 +25,27 @@
           ></v-text-field>
         </v-col>
         <v-col sm="12" md="6" lg="6" xl="6" cols="12">
-          <v-text-field
+          <!-- <v-text-field
             v-model="userData.phone"
             label="Phone"
             variant="solo"
             density="compact"
             :rules="phoneRules"
-          ></v-text-field>
+          ></v-text-field> -->
+          <vue-tel-input
+                        v-model="userData.phone"
+                      
+                       
+                        @validate="telValidate"
+
+                        variant="solo"
+            density="compact"
+                     
+                        mode="international"
+                      ></vue-tel-input>
+                      <span v-if="userData.phoneError" class="error-message">{{
+                        userData.phoneError
+                      }}</span>
         </v-col>
         <v-col sm="12" md="6" lg="6" xl="6" cols="12">
           <v-select
@@ -67,6 +81,7 @@ export default {
       email: "",
       phone: "",
       permission: [],
+      phoneError: "",
     });
     const form = ref(null);
     const nameRules = [(v) => !!v || "Name is required"];
@@ -82,6 +97,20 @@ export default {
     const permissionRules = [
       (v) => (!!v && v.length > 0) || "Permission is required",
     ];
+    const telValidate = (telnumber) => {
+  if (telnumber && telnumber.valid) {
+    userData.value.phone = telnumber.number;
+    if (/[a-zA-Z]/.test(telnumber.number)) {
+    
+      userData.value.phoneError = "Phone number cannot contain alphabets";
+    } else {
+      userData.value.phoneError = "";
+    }
+  } else {
+    userData.value.phone = null;
+    userData.value.phoneError = "Enter a valid phone number";
+  }
+};
     const userPermissions = ref([]);
     const fetchPermissions = async () => {
       try {
@@ -97,26 +126,11 @@ export default {
     };
 
     onMounted(fetchPermissions);
-
-    // const addUser = async () => {
-    //   try {
-    //     const valid = await form.value.validate();
-    //     await axios.post("/admin/user/addnewuser", userData.value);
-    //     userData.value.permission.forEach((permission) => {
-    //       //console.log(permission);
-    //     });
-    //     window.Swal.fire({
-    //       icon: "success",
-    //       title: "Invitation sent",
-    //       text: "Invitation sent Successfully to the user Email",
-    //       confirmButtonText: "OK",
-    //     });
-    //     window.location.reload();
-    //   } catch (error) {
-    //     console.error("Error adding user:", error);
-    //   }
-    // };
     const addUser = async () => {
+      telValidate({ valid: true, number: userData.value.phone });
+      if (userData.value.phoneError) {
+        return;
+      }
       try {
         const valid = await form.value.validate();
     if (!valid.valid) {
@@ -163,8 +177,14 @@ export default {
       nameRules,
       emailRules,
       permissionRules,
-      phoneRules,form
+      phoneRules,form,telValidate
     };
   },
 };
 </script>
+<style scoped>
+.error-message {
+  color: rgb(204, 65, 65);
+  font-size: 13px;
+}
+</style>

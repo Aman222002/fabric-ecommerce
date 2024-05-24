@@ -412,7 +412,7 @@ class UserController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    public function getSubscription(Request $request, $userId)
+    public function getSubscription($userId)
     {
         try {
             $user = User::findOrFail($userId);

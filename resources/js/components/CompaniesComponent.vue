@@ -25,7 +25,7 @@
     <DxColumn data-field="company_email" data-type="string">
       <DxRequiredRule />
     </DxColumn>
-    <DxColumn data-field="description" data-type="string" />
+    <!-- <DxColumn data-field="description" data-type="string" /> -->
     <DxColumn data-field="phone_number" data-type="string" />
     <DxColumn
       data-field="name"

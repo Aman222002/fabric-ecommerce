@@ -239,6 +239,7 @@ class CompanyController extends Controller
             $input = $request->all();
             $verificationToken = Str::random(60);
             $existingUser = User::where('email', $input['email'])->first();
+            $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
             if ($existingUser) {
                 $user = $existingUser;
             } else if ($request->company_Id) {
@@ -246,7 +247,7 @@ class CompanyController extends Controller
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
-                    'phone' => $input['phone'],
+                    'phone' => $phone,
                     'company_id' => $request->company_Id,
                     'verification_token' => $verificationToken,
                 ]);
@@ -254,11 +255,12 @@ class CompanyController extends Controller
                 $user->assignRole('Company Subadmin');
               
             } else {
+                $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
-                    'phone' => $input['phone'],
+                    'phone' => $phone,
                     'verification_token' => $verificationToken,
                 ]);
                 $user->assignRole('Company Admin');
@@ -282,12 +284,12 @@ class CompanyController extends Controller
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assest', $imageName);
                 }
-
+                $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone_number']);
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
                     'company_email' => $input['company_email'],
-                    'phone_number' => $input['phone_number'],
+                    'phone_number' => $phone ,
                     'logo' => $imageName,
                 ]);
                 // dispatch(new VerificationMail($user->email));
@@ -595,12 +597,12 @@ class CompanyController extends Controller
                     'data' => $user,
                 ], 200);
             } else {
-                Auth::logout();
+                
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Incorrect email or password. Please try again.',
+                ], 401);
             }
-            return response()->json([
-                'status' => false,
-                'message' => 'Authentication failed',
-            ], 401);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -949,23 +951,50 @@ class CompanyController extends Controller
     //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     //     }
     // }
-    public function removeSubscription(Request $request)
+//     public function removeSubscription(Request $request)
+// {
+//     try {
+//         $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
+// dd($user_subscription);
+//         if (!$user_subscription || !$user_subscription->subscription_id) {
+//             throw new \Exception('Subscription ID is not set or null.');
+//         }
+
+//         $user = User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
+//         $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
+
+//         return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
+//     } catch (\Exception $e) {
+//         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+//     }
+// }
+public function removeSubscription(Request $request)
 {
     try {
         $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
-
-        if (!$user_subscription || !$user_subscription->subscription_id) {
-            throw new \Exception('Subscription ID is not set or null.');
+        
+        if ($user_subscription) {
+            if ($user_subscription->subscription_id) {
+             
+                $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
+                
+                User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
+            } else {
+               
+                User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
+               
+            }
+        } else {
+            throw new \Exception('User subscription not found.');
         }
-
-        $user = User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
-        $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
 
         return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
     } catch (\Exception $e) {
+       
         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
 }
+
 
     public function getTotalPublishedJobs()
     {
@@ -1007,7 +1036,7 @@ class CompanyController extends Controller
         try {
             $companyId = $request->session()->get('company_id');
             $totalJobs = Job::where('company_id', $companyId)
-                ->where('post_status', 'published')
+                ->where('post_status', 'Published')
                 ->count();
             return response()->json(['status' => true, 'totalJobs' => $totalJobs], 200);
         } catch (\Exception $e) {
@@ -1020,7 +1049,7 @@ class CompanyController extends Controller
         try {
             $companyId = $request->session()->get('company_id');
             $totalJobs = Job::where('company_id', $companyId)
-                ->where('post_status', 'expired')
+                ->where('post_status', 'Expired')
                 ->count();
             return response()->json(['status' => true, 'totalJobs' => $totalJobs], 200);
         } catch (\Exception $e) {
@@ -1029,28 +1058,41 @@ class CompanyController extends Controller
     }
 
 
+    // public function getPostsAboutToExpire(Request $request)
+    // {
+    //     $companyId = $request->session()->get('company_id');
+    //     $startDate = Carbon::now()->subDays(30); 
+    //     $endDate = Carbon::now()->subDays(23);
+    
+    //     $posts = Job::where('created_at', '<=', $startDate)
+    //         ->where('created_at', '>=', $endDate)
+    //         ->where('company_id', $companyId)
+    //         ->where('post_status', 'Published')
+    //         ->get();
+           
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Successfully fetched posts about to expire',
+    //         'data' => $posts
+    //     ], 200);
+    // }
     public function getPostsAboutToExpire(Request $request)
-    {
-      
-        $companyId = $request->session()->get('company_id');
-    
-        $startDate = Carbon::now()->subDays(30);
-        $endDate = Carbon::now()->subDays(23);
-    
-      
-        $posts = Job::where('created_at', '>', $endDate)
-            ->where('created_at', '<=', $startDate)
-            ->where('company_id', $companyId)
-            ->where('post_status', 'published')
-            ->get();
-    
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Successfully fetched posts about to expire',
-            'data' => $posts
-        ], 200);
-    }
+{
+    $companyId = $request->session()->get('company_id');
+    $startDate = Carbon::now()->subDays(23);
+
+    $posts = Job::where('created_at', '<=', $startDate)
+        ->where('company_id', $companyId)
+        ->where('post_status', 'Published')
+        ->get();
+       
+    return response()->json([
+        'success' => true,
+        'message' => 'Successfully fetched posts about to expire',
+        'data' => $posts
+    ], 200);
+}
+
     
     // public function fetchusers(Request $request)
     // {
@@ -1109,5 +1151,21 @@ class CompanyController extends Controller
             'status' => true,
             'message' => 'Email verified successfully',
         ]);
+    }
+    public function checkCompanyExists(Request $request)
+    {
+        $companyName = $request->input('company_name');
+        $companyEmail = $request->input('company_email');
+
+       
+        $existingCompany = Company::where('company_name', $companyName)
+                                  ->orWhere('company_email', $companyEmail)
+                                  ->first();
+
+        if ($existingCompany) {
+            return response()->json(['exists' => true]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
     }
 }
