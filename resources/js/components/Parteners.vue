@@ -4,21 +4,46 @@
     :show-borders="true"
     :data-source="dataSource"
     ref="dataGridRef"
+    :column-auto-width="true"
+
     @editing-start="logEvent"
     @edit-canceling="cancelEdit(data)"
+    data-row-template="dataRowTemplate"
   >
     <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
+
     <DxToolbar>
       <DxGridItem template="addButton" :location="'after'"></DxGridItem>
       <DxGridItem name="searchPanel" :location="'after'"></DxGridItem>
     </DxToolbar>
     <DxLoadPanel :enabled="true" />
     <DxSearchPanel :visible="true" />
-
-    <DxColumn data-field="title" data-type="string" :visible="!showcolumn">
+    <DxColumn caption="Logo" data-type="string" :visible="!showcolumn"></DxColumn>
+    <DxColumn caption="Title" data-type="string" :visible="!showcolumn">
     </DxColumn>
+    <DxColumn  caption="Action"  width="auto"></DxColumn>
+  <!-- <template #cell-template="{ data }">
+    <v-img :src="data.featured_image" max-width="100" max-height="100"></v-img>
+  </template> -->
+  <template #dataRowTemplate="{ data: rowInfo }">
+         <tr >
+          <td ><v-img :src="rowInfo.data.featured_image" max-width="60" max-height="40"></v-img></td>
+          <td>{{ rowInfo.data.title }}</td>
+         <td> <v-btn
+        prepend-icon="mdi-pencil"
+        class="edit-btn"
+        @click="editBlog( rowInfo.data)"
+      ></v-btn>
+     
+      <v-btn
+        prepend-icon="mdi-delete"
+        class="btn_delete"
+        @click="deleteBlog( rowInfo.data.id)"
+      ></v-btn></td>
+        </tr>
+      </template>
 
-    <DxColumn cell-template="Dxbutton" width="auto"></DxColumn>
+   
     <DxColumn
       data-field="content"
       cell-template="ckeditor"
@@ -29,22 +54,9 @@
     <template #addButton>
       <DxButton icon="add" @click="openAddDialog"></DxButton>
     </template>
-    <template #Dxbutton="{ data }">
-      <v-btn
-        prepend-icon="mdi-pencil"
-        class="edit-btn"
-        @click="editBlog(data.data)"
-      ></v-btn>
-      <!-- <v-spacer></v-spacer> -->
-      <v-btn
-        prepend-icon="mdi-delete"
-        class="btn_delete"
-        @click="deleteBlog(data.data.id)"
-      ></v-btn>
-    </template>
+   
     <template #ckeditor>
       <h2>Edit Partner</h2>
-      <!-- <v-text-field v-model="title" variant="outlined" label="Title" density="compact" outlined></v-text-field> -->
       <div class="editor">
         <ckeditor v-model="content" :editor="editor"></ckeditor>
       </div>
@@ -92,8 +104,6 @@
                 {{ item.text }}
               </v-list-item>
             </template>
-            <!-- <v-list-item v-for="item in blogActions" :key="item.text" class="dropdown"
-                              @click="duplicateBlog(data.row.data.id, item.text)">{{ item.text }}</v-list-item> -->
           </v-list>
         </v-card>
       </v-menu>
@@ -110,11 +120,12 @@
   </DxDataGrid>
 
   <v-container>
-    <v-dialog max-width="1000" v-model="showDialog" persistent>
+    <v-dialog max-width="600" v-model="showDialog" persistent>
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="savePost(updateId)" ref="form">
-            <h2 class="mb-2">Edit Partner</h2>
+            <h2 class="mb-2">Edit Partner
+            <v-icon style="float: right" @click="showDialog = false">mdi-close</v-icon></h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -144,27 +155,22 @@
                 ></v-img>
               </v-col>
             </v-row>
-            <div class="editor">
-              <ckeditor v-model="content" :editor="editor"></ckeditor>
-            </div>
+      
             <v-card-actions>
-              <v-btn class="btn_cts" type="submit">Save Partner</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                class="btn_cts"
-                text="Close Dialog"
-                @click="showDialog = false"
-              ></v-btn>
+              <v-btn class="btn_cts" type="submit">Edit Partner</v-btn>
+             
+            
             </v-card-actions>
           </v-form>
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-dialog max-width="1000" v-model="showAddDialog" persistent>
+    <v-dialog max-width="600" v-model="showAddDialog" persistent>
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="addPost(selectedImage)" ref="form">
-            <h2 class="mb-2">Add Partner</h2>
+            <h2 class="mb-2">Add Partner
+            <v-icon style="float: right" @click="closeAddDialog">mdi-close</v-icon></h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -191,20 +197,13 @@
                 ></v-img>
               </v-col>
             </v-row>
-            <div class="editor">
-              <ckeditor v-model="content" :editor="editor"></ckeditor>
-            </div>
+         
             <v-card-actions>
               <v-btn class="btn_cts" type="submit">Add Partner</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                class="btn_cts"
-                text="Close Dialog"
-                @click="closeAddDialog"
-              ></v-btn>
+            
             </v-card-actions>
 
-            <!-- <v-btn type="submit">Add Post</v-btn> -->
+          
           </v-form>
         </v-card-text>
       </v-card>
@@ -340,27 +339,16 @@ export default {
         }
       });
     };
-    // const deleteBlog = (id) => {
-
-    //     axios.delete(`/admin/delete/blog/${id}`).then((response) => {
-    //         // console.log(response.data);
-    //         if (response.data.status == true) {
-    //             // fetchBlogs();
-    //             refreshTable(dataGridRef);
-    //         }
-    //     }).catch((error) => {
-    //         console.log(error);
-    //     })
-    // }
+   
     const editBlog = (blog) => {
       console.log(blog);
       showDialog.value = true;
       title.value = blog.title;
       content.value = blog.content;
       updateId.value = blog.id;
-      // selectedImage.value = blog.featured_image;
+     
       imagePreview.value = blog.featured_image;
-      // selectedImage
+   
       console.log(imagePreview.value);
     };
     const openAddDialog = () => {
@@ -377,7 +365,7 @@ export default {
     };
     const savePost = (id) => {
       form.value.validate().then((valid) => {
-        // console.log(valid.errors);
+      
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
 
@@ -397,10 +385,10 @@ export default {
           } else {
             formData.append("featured_image", selectedImage.value);
           }
-          // console.log('featured_image', selectedImage.value[0]);
+         
           formData.append("title", title.value);
           formData.append("htmlContent", content.value);
-          // console.log()
+       
           axios
             .post(`/admin/update/partner/${id}`, formData, {
               headers: {
@@ -408,10 +396,10 @@ export default {
               },
             })
             .then((response) => {
-              // console.log(response.data);
+              
               if (response.data.status == true) {
                 showDialog.value = false;
-                // fetchBlogs();
+                
                 refreshTable(dataGridRef);
                 window.Swal.fire({
                   toast: true,

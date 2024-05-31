@@ -1141,7 +1141,7 @@ main.v-main .no_job_found {
 }
 
 .single_blog_page .blog_img .v-img__img--cover {
-    object-fit: unset;
+    object-fit: none;
 }
 
 .find_Job_list .find_Job_list_left {

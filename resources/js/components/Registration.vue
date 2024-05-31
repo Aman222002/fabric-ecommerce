@@ -1,6 +1,15 @@
 
   <template>
   <v-container>
+    <v-alert
+      v-if="errorMessage"
+      :value="true"
+      type="error"
+      dense
+      outlined
+    >
+      {{ errorMessage }}
+    </v-alert>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="10">
         <v-card class="elevation-6 mt-3" style="margin-bottom: 10px">
@@ -165,6 +174,7 @@ export default {
       (v) => !!v || "Confirm password is required",
       (v) => v === formData.value.password || "Passwords do not match",
     ];
+    const errorMessage = ref(""); 
     const form = ref(null);
     const nameRules = [
       (v) => !!v || "Full Name is required",
@@ -275,14 +285,15 @@ export default {
       try {
         const usernameAvailable = await checkUsername();
         if (!usernameAvailable) {
-          window.Swal.fire({
-            toast: true,
-            position: "top-end",
-            timer: 2000,
-            showConfirmButton: false,
-            icon: "error",
-            title: "Username already exist",
-          });
+          // window.Swal.fire({
+          //   toast: true,
+          //   position: "top-end",
+          //   timer: 2000,
+          //   showConfirmButton: false,
+          //   icon: "error",
+          //   title: "Username already exist",
+          // });
+          errorMessage.value = "Username already exist.";
           return;
         }
         const valid = await form.value.validate();
@@ -325,7 +336,7 @@ export default {
       showPassword,
       confirmPassword,
       confirmPasswordRules,
-     
+      errorMessage,
       telValidate,
       phoneValidationRule,
       phoneError,

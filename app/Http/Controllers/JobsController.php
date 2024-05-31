@@ -50,13 +50,14 @@ class JobsController extends Controller
             }
             $jobs = $jobs->get();
             // $jobs = Job::all();
+            dd($jobs);
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
+  
     /**
      * Show the form for creating a new resource.
      */

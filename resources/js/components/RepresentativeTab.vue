@@ -5,7 +5,25 @@
     :repaint-changes-only="true"
     :remote-operations="true"
   >
-    <DxEditing :allow-updating="true" mode="row" :use-icons="true" />
+    <DxEditing :allow-updating="true" mode="popup" :use-icons="true" >
+      <DxPopup
+          :show-title="true"
+          :width="600"
+          :height="300"
+          title="Representative Info"
+        />
+        <DxForm>
+          <DxFormItem
+            :col-count="2"
+            :col-span="2"
+            item-type="group"
+          >
+            <DxFormItem data-field="name"/>
+            <DxFormItem data-field="email"/>
+            <DxFormItem data-field="phone"/>
+    </DxFormItem>
+        </DxForm>
+      </DxEditing>
     <DxSearchPanel :visible="true" />
     <DxColumn data-field="name" data-type="string">
       <DxRequiredRule />
@@ -30,7 +48,7 @@ export default {
     },
   },
   setup(props) {
-    // console.log(props.userId);
+     console.log(props.userId);
     const loadURL = `/admin/company/representative/${props.userId}`;
     const updateURL = `/admin/user/update`;
     console.log(updateURL);

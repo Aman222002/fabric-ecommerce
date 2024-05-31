@@ -1,5 +1,34 @@
 <template>
   <v-container>
+    <v-alert
+      v-if="errorMessage"
+      :value="true"
+      type="error"
+      dense
+      outlined
+    >
+      {{ errorMessage }}
+    </v-alert>
+
+    <v-alert
+      v-if="errorMessages"
+      :value="true"
+      type="error"
+      dense
+      outlined
+    >
+      {{ errorMessages }}
+    </v-alert>
+    <v-alert
+      v-if="warningMessage"
+      :value="true"
+      type="warning"
+      color="blue"
+      dense
+      outlined
+    >
+      {{ warningMessage }}
+    </v-alert>
     <v-row
       class="form_log_reg form_login_el_cd"
       align="center"
@@ -131,6 +160,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+   
   </v-container>
 </template>
 
@@ -161,7 +191,9 @@ export default {
       (v) => /.+@.+\..+/.test(v) || "Enter a valid email address",
     ];
     const companyNames = ref([]);
-
+    const errorMessage = ref(""); 
+    const errorMessages = ref(""); 
+    const warningMessage = ref("");
     const showPassword = ref(false);
     const submitForm = async () => {
       if (!formData.value.company_name) {
@@ -185,33 +217,33 @@ export default {
             if (selectedRoute == "/postjob") {
               // console.log('hello');
               if (hasPermission("Create Users") || hasrole("Company Admin")) {
-                window.location.href = "/postjob";
+                window.location.href = "/company-dashboard";
                 employerStore.removePreviousRoute();
               } else {
                 if (hasrole("Company Admin")) {
-                  window.location.href = "/postjob";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasrole("Company Subadmin")) {
                   if (hasPermission("Create Users")) {
-                    window.location.href = "/add-user";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Change Plan")) {
-                    window.location.href = "/company/plan";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("View Users")) {
-                    window.location.href = "/users";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Post Job")) {
-                    window.location.href = "/postjob";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Edit Job")) {
-                    window.location.href = "/posted-jobs";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Buy Subscription")) {
-                    window.location.href = "/product";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Change Profile")) {
-                    window.location.href = "/company/profile";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   }
                 }
@@ -221,33 +253,33 @@ export default {
             }
             if (selectedRoute == "/company/plan") {
               if (hasPermission("Change Plan") || hasrole("Company Admin")) {
-                window.location.href = "/company/plan";
+                window.location.href = "/company-dashboard";
                 employerStore.removePreviousRoute();
               } else {
                 if (hasrole("Company Admin")) {
-                  window.location.href = "/postjob";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasrole("Company Subadmin")) {
                   if (hasPermission("Create Users")) {
-                    window.location.href = "/add-user";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Change Plan")) {
-                    window.location.href = "/company/plan";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("View Users")) {
-                    window.location.href = "/users";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Post Job")) {
-                    window.location.href = "/postjob";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Edit Job")) {
-                    window.location.href = "/posted-jobs";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Buy Subscription")) {
-                    window.location.href = "/product";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   } else if (hasPermission("Change Profile")) {
-                    window.location.href = "/company/profile";
+                    window.location.href = "/company-dashboard";
                     employerStore.removePreviousRoute();
                   }
                 }
@@ -262,29 +294,29 @@ export default {
             // employerStore.removePreviousRoute();
             else if (!selectedRoute) {
               if (hasrole("Company Admin")) {
-                window.location.href = "/postjob";
+                window.location.href = "/company-dashboard";
                 employerStore.removePreviousRoute();
               } else if (hasrole("Company Subadmin")) {
                 if (hasPermission("Create Users")) {
-                  window.location.href = "/add-user";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasPermission("Change Plan")) {
-                  window.location.href = "/company/plan";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasPermission("View Users")) {
-                  window.location.href = "/users";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasPermission("Post Job")) {
-                  window.location.href = "/postjob";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasPermission("Edit Job")) {
-                  window.location.href = "/posted-jobs";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasPermission("Buy Subscription")) {
-                  window.location.href = "/product";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 } else if (hasPermission("Change Profile")) {
-                  window.location.href = "/company/profile";
+                  window.location.href = "/company-dashboard";
                   employerStore.removePreviousRoute();
                 }
               }
@@ -295,24 +327,29 @@ export default {
       } catch (err) {
         if (err.response && err.response.data && err.response.data.message === "Email not verified. Please verify your email before logging in.") {
             
-            window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "warning",
-                title: "Please verify your email before logging in.",
-            });
-        } else {
+            // window.Swal.fire({
+            //     toast: true,
+            //     position: "top-end",
+            //     timer: 2000,
+            //     showConfirmButton: false,
+            //     icon: "warning",
+            //     title: "Please verify your email before logging in.",
+            // });
+            warningMessage.value = "Please verify your email before logging in.";
+        } else if(err.response && err.response.data && err.response.data.message === "Incorrect email or password. Please try again.") {
           
-            window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "error",
-                title: "Invalid Credentials.",
-            });
+            // window.Swal.fire({
+            //     toast: true,
+            //     position: "top-end",
+            //     timer: 2000,
+            //     showConfirmButton: false,
+            //     icon: "error",
+            //     title: "Invalid Credentials.",
+            // });
+            errorMessage.value = "Invalid Credentials.";
+        }
+        else{
+          errorMessages.value = "Company Block Contact support.";
         }
     }
       };
@@ -381,7 +418,7 @@ export default {
       employerStore,
       fetchUserData,
       users,
-      showPassword,
+      showPassword,warningMessage,errorMessage,errorMessages
     };
   },
 };

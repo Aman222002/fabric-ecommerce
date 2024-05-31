@@ -76,7 +76,8 @@
       </v-row>
     </div>
 
-    <div id="chartDiv" class="mt-6">
+    <!-- <div id="chartDiv" class="mt-6"> -->
+      <v-col cols="12" md="6" lg="6">
       <div class="graph">
         <DxChart
           id="chart"
@@ -101,7 +102,8 @@
           <DxExport :enabled="true" />
         </DxChart>
       </div>
-
+      </v-col>
+      <v-col cols="12" lg="6">
       <div id="SupplierDiv">
         <v-card>
           <v-card-title class="btn_cts">Recent Jobs</v-card-title>
@@ -114,7 +116,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in recentPosts" :key="item.name">
+                <tr v-for="item in recentPost" :key="item.id">
                   <td>{{ item.title }}</td>
                   <td>{{ item.location }}</td>
                 </tr>
@@ -123,7 +125,9 @@
           </v-card-text>
         </v-card>
       </div>
-    </div>
+      </v-col>
+
+    <!-- </div> -->
   </v-container>
 </template>
 <script>
@@ -137,6 +141,7 @@ export default {
     const totalCompany = ref("0");
     const totalBlog = ref("0");
     const recentPosts = ref([]);
+    const recentPost = ref([]);
     const grossProductData = ref([]);
     const fetchTotalUsers = () => {
       try {
@@ -169,10 +174,10 @@ export default {
     };
     const fetchRecentPosts = () => {
       try {
-        axios.get("/company/recent-posts").then((response) => {
+        axios.get("/company/recent-posted").then((response) => {
           console.log(response.data.data);
-          recentPosts.value = response.data.data;
-          totalposted.value = response.data.total_posts;
+          recentPost.value = response.data.data;
+         console.log(recentPost.value)
         });
       } catch (err) {
         console.log(err);
@@ -215,6 +220,7 @@ export default {
     });
 
     return {
+      recentPost,
       recentPosts,
       totalJobs,
       fetchTotalUsers,

@@ -235,6 +235,7 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
+        
         try {
             $input = $request->all();
             $verificationToken = Str::random(60);
@@ -307,64 +308,14 @@ class CompanyController extends Controller
             ], 500);
         }
     }
-    //     public function store(CompanyRagistrationRequest $request)
-    // {
-    //     $request->validated();
-    //     try {
-    //         $input = $request->all();
-    //         $existingUser = User::where('email', $input['email'])->first();
-    //         if ($existingUser) {
-    //             $user = $existingUser;
-    //         } else {
-    //             $user = User::create([
-    //                 'name' => $input['name'],
-    //                 'email' => $input['email'],
-    //                 'password' => $input['password'],
-    //                 'phone' => $input['phone'],
-    //             ]);
-    //             $user->assignRole('Company Admin');
-    //         }
-
-
-    //         $existingCompany = Company::where('company_email', $input['company_email'])->first();
-    //         if ($existingCompany) {
-
-    //             $companyId = $existingCompany->id;
-    //         } else {
-
-    //             $image = $request->file('logo');
-    //             $imageName = time() . '.' . $image->getClientOriginalExtension();
-    //             $image->storeAs('public/assest', $imageName);
-    //             $company = Company::create([
-    //                 'user_id' => $user->id,
-    //                 'company_name' => $input['company_name'],
-    //                 'company_email' => $input['company_email'],
-    //                 'phone_number' => $input['phone_number'],
-    //                 'logo' => $imageName,
-    //             ]);
-
-    //             $companyId = $company->id;
-    //         }
-
-    //         dispatch(new VerificationMail($user->email));
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => "Registration Successful",
-    //             'company_id' => $companyId 
-    //         ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
+   
 
     /**
      * function to find company representative
      */
     public function findRepresentative($userId = 0)
     {
+        
         try {
             $user = User::find($userId);
             return response()->json(['status' => true, 'data' => $user]);
@@ -372,6 +323,35 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    // public function findsubadmin($userId = 0)
+    // {
+       
+    //     try {
+    //         $user = User::find($userId);
+    //         return response()->json(['status' => true, 'data' => $user]);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
+    public function findsubadmin($subadminId = 0)
+    {
+        try {
+            
+            $subadmin = User::where('company_id', $subadminId)->first();
+            if (!$subadmin) {
+                return response()->json(['status' => false, 'message' => 'Subadmin not found for company'], 404);
+            }
+            $users = User::where('company_id', $subadmin->company_id)->get();
+            return response()->json(['status' => true, 'data' => $users]);
+        } catch (\Exception $e) {
+            // Return an error response if any exception occurs
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    
+    
+    
+
     /**
      * to get address details
      */
@@ -386,6 +366,7 @@ class CompanyController extends Controller
     // }
     public function getAddress(Request $request,  $addressId = 0)
 {
+    // dd($addressId);
     try {
         
         $company = Company::find( $addressId);
@@ -444,7 +425,7 @@ class CompanyController extends Controller
                     $search = !blank($filters[2]) ? $filters[2] : false;
 
                     if ($search) {
-                        $companies->where('name', 'like', "%$search%");
+                        $companies->where('company_name', 'like', "%$search%");
                     }
                 }
             }
@@ -548,68 +529,157 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    // public function check(Request $request)
+    // {
+    //     try {
+    //         $credentials = $request->validate([
+    //             'email' => 'required',
+    //             'password' => 'required',
+    //             'company_name' => 'required',
+    //         ]);
+    //         if (Auth::attempt([
+    //             'email' => $credentials['email'],
+    //             'password' => $credentials['password'],
+    //         ])) {
+    //             $user = Auth::user();
+    //             if ($user->email_verified_at === null) {
+    //                 return response()->json([
+    //                     'status' => false,
+    //                     'message' => 'Email not verified. Please verify your email before logging in.'
+    //                 ], 403);
+    //             }
+    //             if ($user->roles->contains('name', 'Company Subadmin')) {
+    //                 session(['company_id' => $user->company_id]);
+    //                 $companyData = Company::where('id', $user->company_id)->first();
+    //                 return response()->json([
+    //                     'status' => true,
+    //                     'message' => 'Logged in Successfully!',
+    //                     'user_data' => $user,
+    //                     'company_data' => $companyData
+    //                 ], 200);
+    //             }
+    //             if ($user->companies->isNotEmpty()) {
+    //                 foreach ($user->companies as $company) {
+    //                     if ($company->company_name === $credentials['company_name']) {
+    //                         session(['company_id' => $company->id]);
+    //                         $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
+    //                         return response()->json([
+    //                             'status' => true,
+    //                             'message' => 'Logged in Successfully!',
+    //                             'user_data' => $user,
+    //                             'company_data' => $companyData
+    //                         ], 200);
+    //                     }
+    //                 }
+    //             }
+    //             return response()->json([
+    //                 'status' => true,
+    //                 'message' => 'Logged in Successfully!',
+    //                 'data' => $user,
+    //             ], 200);
+    //         } else {
+                
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Incorrect email or password. Please try again.',
+    //             ], 401);
+    //         }
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'An error occurred: ' . $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
     public function check(Request $request)
-    {
-        try {
-            $credentials = $request->validate([
-                'email' => 'required',
-                'password' => 'required',
-                'company_name' => 'required',
-            ]);
-            if (Auth::attempt([
-                'email' => $credentials['email'],
-                'password' => $credentials['password'],
-            ])) {
-                $user = Auth::user();
-                if ($user->email_verified_at === null) {
+{
+    try {
+        $credentials = $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+            'company_name' => 'required',
+        ]);
+        
+        if (Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+        ])) {
+            $user = Auth::user();
+            
+            if ($user->email_verified_at === null) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email not verified. Please verify your email before logging in.'
+                ], 403);
+            }
+            
+            if ($user->roles->contains('name', 'Company Subadmin')) {
+                $companyData = Company::where('id', $user->company_id)->first();
+                
+                // Check if the company status is active
+                if ($companyData->status != 1) {
+                    Auth::logout();
                     return response()->json([
                         'status' => false,
-                        'message' => 'Email not verified. Please verify your email before logging in.'
+                        'message' => 'Company is not active. Please contact support.'
                     ], 403);
                 }
-                if ($user->roles->contains('name', 'Company Subadmin')) {
-                    session(['company_id' => $user->company_id]);
-                    $companyData = Company::where('id', $user->company_id)->first();
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'Logged in Successfully!',
-                        'user_data' => $user,
-                        'company_data' => $companyData
-                    ], 200);
-                }
-                if ($user->companies->isNotEmpty()) {
-                    foreach ($user->companies as $company) {
-                        if ($company->company_name === $credentials['company_name']) {
-                            session(['company_id' => $company->id]);
-                            $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->get();
-                            return response()->json([
-                                'status' => true,
-                                'message' => 'Logged in Successfully!',
-                                'user_data' => $user,
-                                'company_data' => $companyData
-                            ], 200);
-                        }
-                    }
-                }
+                
+                session(['company_id' => $user->company_id]);
+                
                 return response()->json([
                     'status' => true,
                     'message' => 'Logged in Successfully!',
-                    'data' => $user,
+                    'user_data' => $user,
+                    'company_data' => $companyData
                 ], 200);
-            } else {
-                
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Incorrect email or password. Please try again.',
-                ], 401);
             }
-        } catch (\Exception $e) {
+            
+            if ($user->companies->isNotEmpty()) {
+                foreach ($user->companies as $company) {
+                    if ($company->company_name === $credentials['company_name']) {
+                        session(['company_id' => $company->id]);
+                        $companyData = Company::where('user_id', auth()->id())->where('company_name', $company->company_name)->first();
+                       
+                        if ($companyData->status != 1) {
+                            Auth::logout();
+                            return response()->json([
+                                'status' => false,
+                                'message' => 'Company is not active. Please contact support.'
+                            ], 403);
+                        }
+                        
+                        session(['company_id' => $company->id]);
+                        
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Logged in Successfully!',
+                            'user_data' => $user,
+                            'company_data' => $companyData
+                        ], 200);
+                    }
+                }
+            }
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Logged in Successfully!',
+                'data' => $user,
+            ], 200);
+        } else {
             return response()->json([
                 'status' => false,
-                'message' => 'An error occurred: ' . $e->getMessage(),
-            ], 500);
+                'message' => 'Incorrect email or password. Please try again.',
+            ], 401);
         }
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'An error occurred: ' . $e->getMessage(),
+        ], 500);
     }
+}
+
     public function logout()
     {
         Auth::logout();
@@ -1020,7 +1090,7 @@ public function removeSubscription(Request $request)
             ->take(5)
             ->get();
         
-        // $totalPosts = $company->jobs()->where('post_status', 'Published')->count();
+        
         $totalPosts = $company->jobs()->count(); 
     
             return response()->json(['status' => true, 'data' => $recentPosts, 'total_posts' => $totalPosts], 200);
@@ -1029,7 +1099,24 @@ public function removeSubscription(Request $request)
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-
+    public function recentPosted(Request $request)
+    {
+        try {
+            $recentPosts = Job::where('post_status', 'Published')
+                ->with('company')
+                ->latest()
+                ->take(5)
+                ->get();
+    
+            $totalPosts = Job::where('post_status', 'Published')->count();
+    
+            return response()->json(['status' => true, 'data' => $recentPosts, 'total_posts' => $totalPosts], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+    
     public function totalJobs(Request $request)
 
     {

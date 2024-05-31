@@ -239,9 +239,9 @@ class ProfileController extends Controller
     {
         try {
            
-            if (!auth()->user()->hasRole('Company Admin')) {
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
+            // if (!auth()->user()->hasRole('Company Admin')|| !auth()->user()->hasRole('Admin')) {
+            //     return response()->json(['error' => 'Unauthorized'], 403);
+            // }
     
             $companyId = session('company_id');
     

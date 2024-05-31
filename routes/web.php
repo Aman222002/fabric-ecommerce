@@ -194,11 +194,14 @@ Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
         Route::get('/index', [UserController::class, 'index']);
         Route::get('/edit/{id}', [UserController::class, 'edit']);
         Route::post('/store/{permission?}', [UserController::class, 'store']);
+        Route::post('/storing', [UserController::class, 'storing']);
+        Route::get('/companies', [UserController::class, 'fetchCompanies']);
         Route::post('/addnewuser', [UserController::class, 'addnewuser']);
         Route::post('/update/{id}', [UserController::class, 'update']);
         Route::post('/update-profile/{id}', [UserController::class, 'updateProfile']);
         Route::post('/update-password', [UserController::class, 'updatePassword']);
         Route::delete('/destroy/{id}', [UserController::class, 'destroy']);
+        Route::post('/updated/{userId}', [UserController::class, 'updateUser']);
     });
 
     //company route in admin
@@ -207,6 +210,7 @@ Route::group(["prefix" => "/admin", "middleware" => "auth"], function () {
         Route::get('/address/{addressId?}', [CompanyController::class, 'getAddress']);
         Route::post('/address/update/{addressId?}', [CompanyController::class, 'updateAddress']);
         Route::get('/representative/{userId?}', [CompanyController::class, 'findRepresentative']);
+        Route::get('/subadmin/{subadminId?}', [CompanyController::class, 'findsubadmin']);
         Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
         Route::post('/store', [CompanyController::class, 'store']);
         Route::post('/update/{id}', [CompanyController::class, 'update']);
@@ -260,6 +264,7 @@ Route::post('/company/updateSocialMedia', [SocialMediaAccountController::class, 
 Route::get('/total-published-jobs', [CompanyController::class, 'getTotalPublishedJobs']);
 Route::get('/template-preview/{template}', [PdfController::class, 'preview']);
 Route::get('/company/recent-posts', [CompanyController::class, 'recentPosts']);
+Route::get('/company/recent-posted', [CompanyController::class, 'recentPosted']);
 Route::get('/dashboard/total-jobs', [CompanyController::class, 'totalJobs']);
 Route::get('/dashboard/total-expiredjobs', [CompanyController::class, 'totalExpiredJobs']);
 Route::get('/posts/about-to-expire', [CompanyController::class, 'getPostsAboutToExpire']);
@@ -275,3 +280,5 @@ Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
  Route::post('subscription-plan/{userId}', [UserController::class, 'getSubscription']);
  Route::post('/check-username', [RegistrationController::class, 'checkUsername']);
  Route::post('/company/check', [CompanyController::class, 'checkCompanyExists']);
+ Route::post('block-company/{userId}', [UserController::class, 'blockcompany']);
+ Route::post('unblock-company/{userId}', [UserController::class, 'unblockcompany']);

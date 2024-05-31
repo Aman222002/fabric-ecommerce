@@ -68,47 +68,133 @@ class DashboardController extends Controller
     /**
      * function to get all jobs
      */
-    public function getAllJobs()
-    {
-        try {
-            $publishedJobsQuery = Job::getTotalPublishedJobs();
-            $publishedJobs = $publishedJobsQuery->with('company')->get();
-            $recentJobs = $publishedJobsQuery->with('company')->latest()->take(5)->get();;
-            $modifiedPublishedJobs = $publishedJobs->map(function ($job) {
-                return [
-                    'id' => $job->id,
-                    'company_name' => $job->company->company_name,
-                    'company_email' => $job->company->company_email,
-                    'company_phone' => $job->company->phone_number,
-                    'title' => $job->title,
-                    'location' => $job->location,
-                    'salary' => $job->salary,
-                    'vacancy' => $job->vacancy,
-                    'company_website' => $job->company_website,
-                    // Include other company fields if needed
-                ];
-            });
-            // $totalJobData = $publishedJobs->map(function ($job) {
-            //     return [
-            //         'Month' => $job->
-            //     ];
-            // });
-            $recentJobs = $recentJobs->map(function ($job) {
-                return [
-                    'id' => $job->id,
-                    'title' => $job->title,
-                    'location' => $job->location,
-                    // Include other company fields if needed
-                ];
-            });
-            Log::info('data' . json_encode($publishedJobs));
-            $totalCount = $publishedJobs->count();
-            return response()->json(['status' => true, 'data' => $modifiedPublishedJobs, 'recentJobs' => $recentJobs, 'totalCount' => $totalCount], 200);
-        } catch (\Exception $e) {
-            // Return error response if any exception occurs
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+   
+//     public function getAllJobs(Request $request)
+// {
+//     try {
+//         $user = auth()->user();
+//         if ($user->hasRole('Admin')) {
+//             $publishedJobsQuery = Job::getTotalPublishedJobs()->with('company');
+//         }
+       
+
+     
+//         if (in_array($request->type, ['Published', 'Expired', 'Draft'])) {
+//             $publishedJobsQuery->where('post_status', $request->type);
+//         }
+//         else if(in_array($request->type,['All'])){
+//             $publishedJobsQuery;
+//         }
+//         $publishedJobs = $publishedJobsQuery->get();
+//         $recentJobs = $publishedJobsQuery->latest()->take(5)->get();
+//         $modifiedPublishedJobs = $publishedJobs->map(function ($job) {
+//             return [
+//                 'id' => $job->id,
+//                 'company_name' => $job->company->company_name,
+//                 'company_email' => $job->company->company_email,
+//                 'company_phone' => $job->company->phone_number,
+//                 'title' => $job->title,
+//                 'location' => $job->location,
+//                 'salary' => $job->salary,
+//                 'vacancy' => $job->vacancy,
+//                 'company_website' => $job->company_website,
+//                 'category_id' => $job->category_id,
+//                 'job_type_id' => $job->job_type_id,
+//                 'description' => $job->description,
+//                 'qualifications' => $job->qualifications,
+//                 'skill_id' => $job->skill_id,
+//                 'experience' => $job->experience,
+              
+//             ];
+//         });
+
+       
+//         $recentJobs = $recentJobs->map(function ($job) {
+//             return [
+//                 'id' => $job->id,
+//                 'title' => $job->title,
+//                 'location' => $job->location,
+              
+//             ];
+//         });
+
+      
+//         $totalCount = $publishedJobs->count();
+
+     
+//         Log::info('data' . json_encode($publishedJobs));
+
+      
+//         return response()->json([
+//             'status' => true,
+//             'data' => $modifiedPublishedJobs,
+//             'recentJobs' => $recentJobs,
+//             'totalCount' => $totalCount
+//         ], 200);
+//     } catch (\Exception $e) {
+       
+//         Log::error($e->getMessage());
+//         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+//     }
+// }
+public function getAllJobs(Request $request)
+{
+    try {
+        $user = auth()->user();
+        $publishedJobsQuery = Job::with('company');
+
+        if ($user->hasRole('Admin')) {
+          
+            $publishedJobsQuery = Job::query()->with('company');
+        } 
+      
+        if (in_array($request->type, ['Published', 'Expired', 'Draft'])) {
+            $publishedJobsQuery->where('post_status', ucfirst($request->type));
         }
+        else if(in_array($request->type,['All'])){
+                        $publishedJobsQuery;
+                    }
+        $publishedJobs = $publishedJobsQuery->get();
+        $modifiedPublishedJobs = $publishedJobs->map(function ($job) {
+            return [
+                'id' => $job->id,
+                'company_name' => $job->company->company_name,
+                'company_email' => $job->company->company_email,
+                'company_phone' => $job->company->phone_number,
+                'title' => $job->title,
+                'location' => $job->location,
+                'salary' => $job->salary,
+                'vacancy' => $job->vacancy,
+                'company_website' => $job->company_website,
+                'category_id' => $job->category_id,
+                'job_type_id' => $job->job_type_id,
+                'description' => $job->description,
+                'qualifications' => $job->qualifications,
+                'skill_id' => $job->skill_id,
+                'experience' => $job->experience,
+            ];
+        });
+
+        // Map and modify recent jobs
+      
+
+        // Total count of published jobs
+        $totalCount = $publishedJobs->count();
+
+        Log::info('data' . json_encode($publishedJobs));
+
+        return response()->json([
+            'status' => true,
+            'data' => $modifiedPublishedJobs,
+            'totalCount' => $totalCount
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
+}
+
+
     /**
      * function to get Plans
      */
@@ -227,59 +313,7 @@ class DashboardController extends Controller
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
-        // try {
-        //     $blog = BlogPost::select('id', 'title', 'status', 'created_at', 'published_by');
-        //     $response = [];
-
-        //     if ($request->requireTotalCount) {
-        //         $response['totalCount'] = $blog->count();
-        //     }
-
-        //     if (isset($request->take)) {
-        //         $blog->skip($request->skip)->take($request->take);
-        //     }
-
-        //     if (isset($request->sort)) {
-        //         $sort = json_decode($request->sort, true);
-        //         if (count($sort)) {
-        //             $blog->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
-        //         }
-        //     } else {
-        //         $blog->orderBy('created_at', 'DESC');
-        //     }
-
-        //     if ($request->has('filter')) {
-        //         $filters = json_decode($request->filter, true);
-        //         if (count($filters)) {
-        //             $filters = is_array($filters[0]) ? $filters[0] : $filters;
-        //             $search = !blank($filters[2]) ? $filters[2] : false;
-        //             if ($search) {
-        //                 $blog->where('name', 'like', "%$search%");
-        //             }
-        //         }
-        //     }
-        //     $blogList = $blog->get();
-        //     $response['data'] = $blogList;
-        //     $totalCount = $blog->count();
-        //     if ($blogList->isNotEmpty()) {
-        //         return response()->json([
-        //             'status' => true,
-        //             'data' => $blogList,
-        //             'totalCount' => $totalCount,
-        //         ], 200);
-        //     } else {
-        //         $response = [
-        //             'status' => false,
-        //             'message' => 'No Product found',
-        //         ];
-        //         return response()->json($response, 404);
-        //     }
-        // } catch (\Exception $e) {
-        //     Log::error($e->getMessage());
-        //     return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
-        // }
-        // $blogs = BlogPost::all();
-        // return response()->json(['status' => true, 'data' => $blogs], 200);
+       
     }
     /**
      * function to handle image upload in blogs 

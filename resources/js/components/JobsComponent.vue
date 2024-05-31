@@ -1,28 +1,41 @@
+
 <template>
-  <p style="text-align: center; font-size: 30px; margin-top: 20px">All Jobs</p>
+  <p style="text-align: center; font-size: 30px; margin-top: 20px">My Jobs</p>
   <DxDataGrid
     :show-borders="true"
-    :column-auto-width="true"
-    :allow-column-resizing="true"
     :data-source="dataSource"
     ref="dataGridRef"
     @editing-start="logEvent"
+    @saving="saveEvent"
   >
     <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
-    <!-- <DxEditing :allow-adding="true" :allow-updating="true" :allow-deleting="true" :use-icons="true" mode="popup" /> -->
+    <DxEditing
+      :allow-adding="true"
+      :allow-updating="true"
+      :allow-deleting="true"
+      :use-icons="true"
+      mode="popup"
+    />
     <DxToolbar>
-      <!-- <DxGridItem template="dropDown2" :location="'before'" /> -->
+      <DxGridItem template="dropDown2" :location="'before'" />
       <DxGridItem name="searchPanel" :location="'after'"></DxGridItem>
     </DxToolbar>
     <DxLoadPanel :enabled="true" />
     <DxSearchPanel :visible="true" />
+    <DxColumn
+      width="auto"
+      caption="Action"
+      :allow-editing="false"
+      cell-template="customButtonTemplate"
+      :visible="noeditcolumn"
+    >
+    </DxColumn>
     <DxColumn data-field="title" data-type="string"> </DxColumn>
-    <DxColumn data-field="company_name" data-type="string"> </DxColumn>
-    <DxColumn data-field="company_email" data-type="string"> </DxColumn>
-    <DxColumn data-field="company_phone" data-type="number"> </DxColumn>
     <DxColumn data-field="location" data-type="string"></DxColumn>
     <DxColumn data-field="vacancy" data-type="string"> </DxColumn>
-    <DxColumn data-field="salary" data-type="string"> </DxColumn>
+    <DxColumn data-field="salary" edit-cell-template="salarytemplate">
+    </DxColumn>
+    
     <DxColumn data-field="company_website" data-type="url"> </DxColumn>
     <DxColumn
       caption="Select Category"
@@ -30,89 +43,199 @@
       :visible="showcolumn"
     >
     </DxColumn>
-    <!-- <template #categorydropdown="{ data: rowData }">
-            <DxDropDownBox :accept-custom-value="true" label="Select Category" data-type="dropdown" labelMode="floating"
-                v-model:value="selectedCategory" v-model:opened="datadropdown" @value-change="selectCategory">
-                <DxList :data-source="categories" selection-mode="single" @item-click="selectCategory" />
-            </DxDropDownBox>
-        </template>
-<DxColumn caption="Select JobType" cell-template="jobtypedropdown" edit-cell-template="jobtypedropdown"
-    :visible="showcolumn">
-</DxColumn>
-
-<template #jobtypedropdown="{ data: rowData }">
-            <DxDropDownBox :accept-custom-value="true" label="Select JobType" labelMode="floating"
-                v-model:value="selectedJobType" v-model:opened="jobtypedropdown">
-                <DxList :data-source="jobTypes" selection-mode="single" @item-click="selectJobType" />
-            </DxDropDownBox>
-        </template>
-<DxColumn caption="Select Skill" cell-template="skilldropdown" edit-cell-template="skilldropdown" :visible="showcolumn">
-</DxColumn>
-
-<template #skilldropdown="{ data: rowData }">
-            <DxDropDownBox :accept-custom-value="true" label="Select skill" labelMode="floating"
-                v-model:value="selectedSkill" v-model:opened="skilldropdown">
-                <DxList :data-source="jobSkills" selection-mode="single" @item-click="selectSkill" />
-            </DxDropDownBox>
-        </template>
-<DxColumn caption="Select Experience" cell-template="experiencedropdown" edit-cell-template="experiencedropdown"
-    :visible="showcolumn">
-</DxColumn>
-
-<template #experiencedropdown="{ data: rowData }">
-            <DxDropDownBox :accept-custom-value="true" label="Select skill" labelMode="floating"
-                v-model:value="selectedExperience" v-model:opened="experiencedropdown">
-                <DxList :data-source="experienceOptions" selection-mode="single" @item-click="selectExperience" />
-            </DxDropDownBox>
-        </template>
-<DxColumn caption="Qualification" data-field="qualifications" data-type="string" :visible="showcolumn">
-</DxColumn>
-<template #dropDown2>
-            <DxDropDownBox :accept-custom-value="true" @value-change="selectStatus" label="Select status"
-                labelMode="floating" v-model:value="selectedStatus" v-model:opened="DropDown2">
-                <DxList :data-source="items" selection-mode="single" @item-click="selectStatus">
-                </DxList>
-            </DxDropDownBox>
-        </template>
-<template #customButtonTemplate="{ data }">
-            <v-menu>
-                <template v-slot:activator="{ props }">
-                    <v-btn height="30" color="primary" v-bind="props">
-                        <v-icon>mdi-menu-down</v-icon>
-                    </v-btn>
-                </template>
-<v-card>
-    <v-list v-for="item in jobActions" :key="item.text">
-        <template v-if="selectedStatus === 'Draft'">
-                            <v-list-item class="dropdown" @click="duplicateJob(data.row.data.id, item.text)">
-                                {{ item.text }}
-                            </v-list-item>
-                        </template>
-        <template v-else>
-                            <v-list-item v-if="item.text !== 'Post Job'" class="dropdown">
-                                {{ item.text }}
-                            </v-list-item>
-                        </template>
-    </v-list>
-</v-card>
-</v-menu>
+    
+    <template #salarytemplate="{ data }">
+  <div>
+    <v-select
+      v-model="salaryType"
+      :items="['fixed', 'range']"
+      label="Salary Type"
+      density="compact"
+      variant="outlined"
+    ></v-select>
+    <template v-if="salaryType === 'range'">
+      <v-text-field
+        variant="outlined"
+        v-model="minSalary"
+        label="Minimum Salary"
+        placeholder="Minimum Salary"
+        density="compact"
+        style="margin-top: 10px"
+      ></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="maxSalary"
+        label="Maximum Salary"
+        placeholder="Maximum Salary"
+        density="compact"
+        style="margin-top: 10px"
+      ></v-text-field>
+    </template>
+    <template v-else>
+      <v-text-field
+        variant="outlined"
+        v-model="salary"
+        label="Salary"
+        placeholder="Salary"
+        density="compact"
+      ></v-text-field>
+    </template>
+  </div>
 </template>
-<DxMasterDetail :enabled="true" template="masterTemplate" />
 
-<template #masterTemplate="{ data: cellInfo }">
-            <masterTemplate :application-info="cellInfo.data" />
-        </template> -->
-    <DxPaging :page-size="pageSize" />
-    <DxPager
-      :visible="true"
-      :allowed-page-sizes="[15, 20, 30]"
-      :display-mode="'compact'"
-      :show-page-size-selector="true"
-      :show-navigation-buttons="true"
-      :show-info="true"
-    />
+
+    <template #categorydropdown>
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select Category"
+        data-type="dropdown"
+        labelMode="floating"
+        v-model:value="selectedCategory"
+        v-model:opened="datadropdown"
+        @value-change="selectCategory"
+      >
+        <DxList
+          :data-source="categories"
+          selection-mode="single"
+          @item-click="selectCategory"
+        />
+      </DxDropDownBox>
+    </template>
+    <DxColumn
+      caption="Select JobType"
+      cell-template="jobtypedropdown"
+      edit-cell-template="jobtypedropdown"
+      :visible="showcolumn"
+    >
+    </DxColumn>
+
+    <template #jobtypedropdown>
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select JobType"
+        labelMode="floating"
+        v-model:value="selectedJobType"
+        v-model:opened="jobtypedropdown"
+      >
+        <DxList
+          :data-source="jobTypes"
+          selection-mode="single"
+          @item-click="selectJobType"
+        />
+      </DxDropDownBox>
+    </template>
+    <DxColumn
+      caption="Select Skill"
+      cell-template="skilldropdown"
+      edit-cell-template="skilldropdown"
+      :visible="showcolumn"
+    >
+    </DxColumn>
+
+    <template #skilldropdown>
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select skill"
+        labelMode="floating"
+        v-model:value="selectedSkill"
+        v-model:opened="skilldropdown"
+      >
+        <DxList
+          :data-source="jobSkills"
+          selection-mode="single"
+          @item-click="selectSkill"
+        />
+      </DxDropDownBox>
+    </template>
+    <DxColumn
+      caption="Select Experience"
+      cell-template="experiencedropdown"
+      edit-cell-template="experiencedropdown"
+      :visible="showcolumn"
+    >
+    </DxColumn>
+
+    <template #experiencedropdown>
+      <DxDropDownBox
+        :accept-custom-value="true"
+        label="Select skill"
+        labelMode="floating"
+        v-model:value="selectedExperience"
+        v-model:opened="experiencedropdown"
+      >
+        <DxList
+          :data-source="experienceOptions"
+          selection-mode="single"
+          @item-click="selectExperience"
+        />
+      </DxDropDownBox>
+    </template>
+    <DxColumn
+      caption="Qualification"
+      data-field="qualifications"
+      data-type="string"
+      :visible="showcolumn"
+    ></DxColumn>
+    <template #dropDown2>
+      <DxDropDownBox
+        :accept-custom-value="true"
+        @value-change="selectStatus"
+        label="Select status"
+        labelMode="floating"
+        v-model:value="selectedStatus"
+        v-model:opened="DropDown2"
+      >
+        <DxList
+          :data-source="items"
+          selection-mode="single"
+          @item-click="selectStatus"
+        >
+        </DxList>
+      </DxDropDownBox>
+    </template>
+    <template #customButtonTemplate="{ data }">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn
+            class="action_button"
+            height="30"
+            color="primary"
+            v-bind="props"
+          >
+            <v-icon>mdi-menu-down</v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-list v-for="item in jobActions" :key="item.text">
+            <template v-if="selectedStatus === 'Draft'">
+              <v-list-item
+                class="dropdown"
+                @click="duplicateJob(data.row.data.id, item.text)"
+              >
+                {{ item.text }}
+              </v-list-item>
+            </template>
+            <template v-else>
+              <v-list-item
+                v-if="item.text !== 'Post Job'"
+                class="dropdown"
+                @click="duplicateJob(data.row.data.id, item.text)"
+              >
+                {{ item.text }}
+              </v-list-item>
+            </template>
+          </v-list>
+        </v-card>
+      </v-menu>
+    </template>
+    <DxMasterDetail :enabled="true" template="masterTemplate" />
+
+    <template #masterTemplate="{ data: cellInfo }">
+      <masterTemplate :application-info="cellInfo.data" />
+    </template>
   </DxDataGrid>
 </template>
+
 <script>
 import axios from "axios";
 import dxGridStore from "../composition/dxGridStore";
@@ -128,17 +251,21 @@ export default {
     const deleteUrl = `/post/delete`;
     const updateURL = `/post/jobs`;
     const dataGridRef = ref(null);
-    const pageSize = ref(15);
     const DropDown2 = ref(false);
     const showcolumn = ref(false);
     const noeditcolumn = ref(true);
+    const salary = ref("");
+    const salaryType = ref("fixed");
+    const minSalary = ref("");
+    const maxSalary = ref("");
     const job = ref({
-      id: "",
       title: "",
       category: "",
       jobType: "",
       vacancy: "",
-      salary: "",
+      salaryType: "fixed",
+      minSalary: "",
+      maxSalary: "",
       location: "",
       description: "",
       qualifications: "",
@@ -146,12 +273,14 @@ export default {
       companywebsite: "",
       jobSkill: "",
     });
+
     const dialog = ref(false);
     const categories = ref([]);
     const allCategories = ref([]);
     const allJobType = ref([]);
     const allSkills = ref([]);
     const params = ref({});
+    const job_Id = ref();
     const selectedStatus = ref("All");
     const selectedCategory = ref("");
     const selectedJobType = ref("");
@@ -164,29 +293,61 @@ export default {
     const selectStatus = (e) => {
       const value = e.itemData.text;
       params.value = { type: value };
+      console.log( params.value);
       selectedStatus.value = value;
       DropDown2.value = false;
       refreshTable(dataGridRef);
     };
     const selectCategory = (e) => {
-      const value = e.itemData;
+      let value = e.itemData;
       selectedCategory.value = value;
+      const foundCategory = allCategories.value.find(
+        (item) => item.name === selectedCategory.value
+      );
+      if (foundCategory) {
+        value = foundCategory.id;
+      } else {
+        null;
+      }
+      // console.log(value);
+      params.value = { ...params.value, category_id: value };
       datadropdown.value = false;
       // refreshTable(dataGridRef);
     };
     const selectJobType = (e) => {
-      const value = e.itemData;
+      let value = e.itemData;
       selectedJobType.value = value;
+      const foundJobType = allJobType.value.find(
+        (item) => item.name === selectedJobType.value
+      );
+      if (foundJobType) {
+        value = foundJobType.id;
+      } else {
+        null;
+      }
+      params.value = { ...params.value, job_type_id: value };
       jobtypedropdown.value = false;
     };
     const selectSkill = (e) => {
-      const value = e.itemData;
+      let value = e.itemData;
       selectedSkill.value = value;
+      const foundSkill = allSkills.value.find(
+        (item) => item.skill_name === selectedSkill.value
+      );
+      // console.log(foundSkill);
+      if (foundSkill) {
+        value = foundSkill.id;
+      } else {
+        null;
+      }
+      params.value = { ...params.value, skill_id: value };
       skilldropdown.value = false;
     };
     const selectExperience = (e) => {
       const value = e.itemData;
       selectedExperience.value = value;
+
+      params.value = { ...params.value, experience: value };
       experiencedropdown.value = false;
     };
     const items = ref([
@@ -211,9 +372,9 @@ export default {
       {
         text: "Duplicate",
       },
-      {
-        text: "Post Job",
-      },
+      // {
+      //   text: "Post Job",
+      // },
     ]);
     const fetchJobs = (value) => {
       console.log(value);
@@ -223,13 +384,15 @@ export default {
       DropDown2.value = false;
     };
     const logEvent = (e) => {
-      console.log(e);
+      // console.log(e);
+      job_Id.value = e.data.id;
+      // console.log(job_Id.value);
       selectedExperience.value = e.data.experience;
       const categoryId = e.data.category_id;
-      const skillId = e.data.category_id;
-      const JobTypeId = e.data.category_id;
-      console.log(categoryId);
-      console.log(allCategories.value);
+      const skillId = e.data.skill_id;
+      const JobTypeId = e.data.job_type_id;
+      // console.log(categoryId);
+      // console.log(allCategories.value);
       const foundCategory = allCategories.value.find(
         (item) => item.id === categoryId
       );
@@ -238,8 +401,17 @@ export default {
       } else {
         null;
       }
+      if (e.data.salary.includes("-")) {
+        const [min, max] = e.data.salary.split("-");
+        salaryType.value = "range";
+        minSalary.value = min.trim();
+        maxSalary.value = max.trim();
+      } else {
+        salary.value = e.data.salary;
+        salaryType.value = "fixed";
+      }
       const foundSkill = allSkills.value.find((item) => item.id === skillId);
-      console.log(foundSkill);
+      // console.log(foundSkill);
       if (foundSkill) {
         selectedSkill.value = foundSkill.skill_name;
       } else {
@@ -254,7 +426,37 @@ export default {
         null;
       }
     };
+    const saveEvent = (e) => {
+      if (salaryType.value === "range") {
+        salary.value = `${minSalary.value}-${maxSalary.value}`;
+      }
+      params.value.salary = salary.value;
+      console.log(params.value.salary);
+      if (e.changes == 0) {
+        if (
+          params.value.category_id ||
+          params.value.skill_id ||
+          params.value.job_type_id ||
+          params.value.salary
+        ) {
+          console.log(params.value);
+          axios
+            .post(`/post/jobs/${job_Id.value}`, {
+              params: params.value,
+            })
+            .then((response) => {
+              const keys = Object.keys(params.value);
+              for (let i = 1; i < keys.length; i++) {
+                delete params.value[keys[i]];
+              }
+              // console.log(params.value);
+              refreshTable(dataGridRef);
+            });
+        }
+      }
+    };
     const duplicateJob = (id, value) => {
+      // console.log('hello');
       try {
         axios
           .post("/jobs/draft/", {
@@ -273,6 +475,7 @@ export default {
                 icon: "success",
                 title: "Added",
               });
+              refreshTable(dataGridRef);
             }
           })
           .catch((error) => {
@@ -309,10 +512,10 @@ export default {
         console.log(response);
       } catch (err) {}
     };
-    const postJob = (id) => {
-      const response = axios.post(`/jobs/draft/${id}`);
-      console.log(response);
-    };
+    // const postJob = (id) => {
+    //   const response = axios.post(`/jobs/draft/${id}`);
+    //   console.log(response);
+    // };
     const { dataSource, refreshTable } = dxGridStore(
       loadUrl,
       params,
@@ -320,29 +523,7 @@ export default {
       updateURL,
       deleteUrl
     );
-    // console.log("datasource", dataSource);
-    const edit = async (data) => {
-      console.log(data);
-      const transformedData = {
-        id: data.id,
-        title: data.title,
-        category_id: data.category_id,
-        job_type_id: data.job_type_id,
-        vacancy: data.vacancy,
-        salary: data.salary,
-        location: data.location,
-        description: data.description,
-        qualifications: data.qualifications,
-        experience: data.experience,
-        company_website: data.company_website,
-        created_at: data.created_at,
-        job_skill: data.skill_id,
-      };
-      console.log(transformedData);
-      job.value = transformedData;
-      console.log(job.value);
-      dialog.value = true;
-    };
+
     const checkItem = async (id) => {
       try {
         const response = await axios.post(`/jobs/application/${id}`);
@@ -395,13 +576,6 @@ export default {
     // const selectJobType = (selectedJobType) => {
     //   job.jobType = selectedJobType.name;
     // };
-    const update = (id) => {
-      axios.post(`/post/jobs/${id}`, job.value).then((response) => {
-        console.log(response.data);
-        dialog.value = false;
-        window.location.reload();
-      });
-    };
     const deletejob = (e) => {
       console.log(e.id);
       window.Swal.fire({
@@ -428,6 +602,19 @@ export default {
         }
       });
     };
+    const updateSalaryType = (newValue) => {
+      salaryType.value = newValue;
+    };
+    const shouldDisplayRangeInput = (data) => {
+      const salaryContainsRange = data.row.data.salary.includes("-");
+      if (salaryContainsRange) {
+        salaryType.value = "range";
+      } else {
+        salaryType.value = "fixed";
+      }
+      return salaryContainsRange;
+    };
+
     onMounted(() => {
       fetchCategories();
       fetchJobTypes();
@@ -448,12 +635,10 @@ export default {
       "10+ Years",
     ]);
     return {
-      pageSize,
       dataSource,
       showcolumn,
       noeditcolumn,
       refreshTable,
-      edit,
       dialog,
       job,
       categories,
@@ -465,7 +650,6 @@ export default {
       selectJobType,
       fetchJobTypes,
       fetchJobSkill,
-      update,
       deletejob,
       selectStatus,
       selectedStatus,
@@ -474,8 +658,9 @@ export default {
       params,
       fetchJobs,
       duplicateJob,
-      postJob,
+      // postJob,
       dataGridRef,
+      updateSalaryType,
       DropDown2,
       jobActions,
       logEvent,
@@ -492,6 +677,13 @@ export default {
       allCategories,
       allSkills,
       allJobType,
+      salary,
+      maxSalary,
+      minSalary,
+      salaryType,
+      shouldDisplayRangeInput,
+      saveEvent,
+      job_Id,
     };
   },
 };
@@ -520,4 +712,9 @@ export default {
 .border {
   border: 2px dashed #0146a6;
 }
+.action_button {
+  min-width: 18px;
+  max-width: 18px;
+}
 </style>
+
