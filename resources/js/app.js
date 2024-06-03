@@ -80,12 +80,14 @@ import {
     DxRequiredRule,
     DxEmailRule,
     DxExport,
+    DxPopup,
 } from "devextreme-vue/data-grid";
 import {
     DxForm,
     DxItem as DxFormItem,
     DxLabel,
     DxGroupItem,
+    
 } from "devextreme-vue/form";
 import { DxTooltip } from "devextreme-vue/tooltip";
 import { DxTabPanel, DxItem as DxTabItem } from "devextreme-vue/tab-panel";
@@ -137,6 +139,9 @@ app.component("confirmcompany-component", ConfirmCompany);
 
 import AddressTab from "./components/AddressTab.vue";
 app.component("address-component", AddressTab);
+
+import SubadminTab from "./components/SubadminTab.vue";
+app.component("subadmin-component", SubadminTab);
 
 import BlogPost from "./components/BlogPost.vue";
 app.component("blog-posts", BlogPost);
@@ -205,6 +210,7 @@ const component = {
     DxSeries,
     DxLegend,
     DxCommonSeriesSettings,
+    DxPopup,
 };
 Object.entries(component).forEach(([name, component]) => {
     app.component(name, component);

@@ -269,26 +269,51 @@ export default {
       searchJobs();
     });
 
+    // const fetchJobs = async () => {
+    //   try {
+    //     showAlert.value = false;
+    //     const response = await axios.get("/company/post");
+    //     const fetchedJobs = response.data.data;
+    //     if (typeof fetchedJobs !== "object" || Array.isArray(fetchedJobs)) {
+    //       showAlert.value = true;
+    //       jobs.value = [];
+    //     } else {
+    //       jobs.value = Object.values(fetchedJobs);
+    //       totalJobPostings.value = response.data.total;
+    //       if (jobs.value.length === 0) {
+    //         showAlert.value = true;
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching jobs:", error);
+    //     showAlert.value = true;
+    //   }
+    // };
     const fetchJobs = async () => {
-      try {
-        showAlert.value = false;
-        const response = await axios.get("/company/post");
-        const fetchedJobs = response.data.data;
-        if (typeof fetchedJobs !== "object" || Array.isArray(fetchedJobs)) {
-          showAlert.value = true;
-          jobs.value = [];
-        } else {
-          jobs.value = Object.values(fetchedJobs);
-          totalJobPostings.value = response.data.total;
-          if (jobs.value.length === 0) {
-            showAlert.value = true;
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-        showAlert.value = true;
-      }
-    };
+  try {
+    showAlert.value = false;
+    const response = await axios.get("/company/post");
+    const fetchedJobs = response.data.data;
+    console.log(fetchedJobs); 
+    if (Array.isArray(fetchedJobs)) {
+      jobs.value = fetchedJobs;
+    } else if (typeof fetchedJobs === 'object') {
+     
+      jobs.value = Object.values(fetchedJobs);
+    } else {
+      showAlert.value = true;
+      jobs.value = [];
+    }
+    totalJobPostings.value = jobs.value.length; 
+    if (jobs.value.length === 0) {
+      showAlert.value = true;
+    }
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    showAlert.value = true;
+  }
+};
+
     
     const fetchpost = async () => {
   try {
@@ -435,7 +460,9 @@ export default {
     onMounted(() => {
       if (!usersStore.isloggedin) {
         fetchJobs();
+        
       } else {
+        fetchpost();
         fetchpost();
       }
       fetchTotalJobPostings();

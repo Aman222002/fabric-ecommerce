@@ -7,7 +7,28 @@
       :column-auto-width="true"
       :allow-column-resizing="true"
     >
-      <DxEditing :allow-updating="true" mode="row" :use-icons="true" />
+      <DxEditing :allow-updating="true" mode="popup" :use-icons="true" >
+      <DxPopup
+          :show-title="true"
+          :width="600"
+          :height="400"
+          title="Company Address Info"
+        />
+        <DxForm>
+          <DxFormItem
+            :col-count="2"
+            :col-span="2"
+            item-type="group"
+          >
+            <DxFormItem data-field="first_line_address"/>
+            <DxFormItem data-field="street"/>
+            <DxFormItem data-field="state"/>
+          
+          <DxFormItem data-field="postal_code"/>
+
+    </DxFormItem>
+        </DxForm>
+      </DxEditing>
       <DxSearchPanel :visible="true" />
       <DxColumn
         data-field="first_line_address"

@@ -30,7 +30,12 @@
       data-type="string"
       :visible="!showcolumn"
       v-if="!showcolumn"
-    ></DxColumn>
+      
+    >
+    <template #cellTemplate="{ data }">
+    {{ formatCreatedAt(data.created_at) }}
+  </template>
+  </DxColumn>
     <DxColumn
       data-field="status"
       data-type="string"
@@ -64,7 +69,7 @@
         class="edit-btn"
         @click="editBlog(data.data)"
       ></v-btn>
-      <!-- <v-spacer></v-spacer> -->
+     
       <v-btn
         prepend-icon="mdi-delete"
         class="btn_delete"
@@ -73,7 +78,7 @@
     </template>
     <template #ckeditor>
       <h2 class="mb-3">Edit Blog</h2>
-      <!-- <v-text-field v-model="title" variant="outlined" label="Title" density="compact" outlined></v-text-field> -->
+    
       <div class="editor">
         <ckeditor v-model="content" :editor="editor"></ckeditor>
       </div>
@@ -121,8 +126,7 @@
                 {{ item.text }}
               </v-list-item>
             </template>
-            <!-- <v-list-item v-for="item in blogActions" :key="item.text" class="dropdown"
-                            @click="duplicateBlog(data.row.data.id, item.text)">{{ item.text }}</v-list-item> -->
+           
           </v-list>
         </v-card>
       </v-menu>
@@ -143,7 +147,9 @@
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="savePost(updateId)" ref="form">
-            <h2 class="mb-3">Edit Blog</h2>
+            <h2 class="mb-3">Edit Blog
+              <v-icon style="float: right" @click="showDialog = false">mdi-close</v-icon>
+            </h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -178,14 +184,10 @@
             </div>
 
             <v-card-actions>
-              <v-btn class="btn_cts" type="submit">Add Blog</v-btn>
+              <v-btn class="btn_cts" type="submit">Edit Blog</v-btn>
               <v-spacer></v-spacer>
 
-              <v-btn
-                class="btn_cts"
-                text="Close Dialog"
-                @click="showDialog = false"
-              ></v-btn>
+          
             </v-card-actions>
           </v-form>
         </v-card-text>
@@ -195,7 +197,9 @@
       <v-card>
         <v-card-text>
           <v-form @submit.prevent="addPost(selectedImage)" ref="form">
-            <h2 class="mb-2">Add Blog</h2>
+            <h2 class="mb-2">Add Blog
+              <v-icon style="float: right" @click="showAddDialog = false">mdi-close</v-icon>
+            </h2>
             <v-text-field
               v-model="title"
               variant="outlined"
@@ -228,11 +232,7 @@
             <v-card-actions>
               <v-btn class="btn_cts" type="submit">Add Blog</v-btn>
               <v-spacer></v-spacer>
-              <v-btn
-                class="btn_cts"
-                text="Close Dialog"
-                @click="closeAddDialog"
-              ></v-btn>
+           
             </v-card-actions>
           </v-form>
         </v-card-text>
@@ -278,9 +278,9 @@ export default {
       DropDown2.value = false;
       refreshTable(dataGridRef);
     };
-    const loadUrl = `/admin/blog/fetch/`;
-    const insertURL = `/admin//save-blog/post`;
-    const deleteUrl = `/admin/delete/blog/`;
+    const loadUrl = `/admin/blog/fetch`;
+    const insertURL = `/admin/save-blog/post`;
+    const deleteUrl = `/admin/delete/blog`;
     const updateURL = `/admin/update/blog`;
     const items = ref([
       {
@@ -312,8 +312,12 @@ export default {
         imagePreview.value = null;
       }
     };
-
-    // Automatically clear image preview when there is no image selected
+    const formatCreatedAt = (createdAt) => {
+      const options = { day: "numeric", month: "long", year: "numeric" };
+    
+      return new Date(createdAt).toLocaleDateString(undefined, options);
+    };
+ 
     watch(selectedImage, (newValue) => {
       if (!newValue) {
         imagePreview.value = null;
@@ -383,58 +387,7 @@ export default {
           });
       }
     };
-    // try {
-    //     axios.post("/admin/blog/draft/", {
-    //         params: {
-    //             id: id,
-    //             type: value,
-    //         },
-    //     }).then((response) => {
-    //         if (response.data.status === true) {
-    //             window.Swal.fire({
-    //                 toast: true,
-    //                 position: 'top-end',
-    //                 timer: 2000,
-    //                 showConfirmButton: false,
-    //                 icon: 'success',
-    //                 title: 'Added',
-    //             });
-    //         }
-    //     }).catch((error) => {
-    //         console.log(error);
-    //         if (error.response.status == '402') {
-    //             window.Swal.fire({
-    //                 toast: true,
-    //                 position: 'top-end',
-    //                 timer: 2000,
-    //                 showConfirmButton: false,
-    //                 icon: 'error',
-    //                 title: `You don't have a active plan buy a plan or renew your plan`,
-    //             });
-    //         }
-    //         else if (error.response.status == '403') {
-    //             window.Swal.fire({
-    //                 toast: true,
-    //                 position: 'top-end',
-    //                 timer: 2000,
-    //                 showConfirmButton: false,
-    //                 icon: 'error',
-    //                 title: `You have posted number of allowed post can't post more`,
-    //             });
-    //         }
-    //         else if (error.response.status == '406') {
-    //             window.Swal.fire({
-    //                 toast: true,
-    //                 position: 'top-end',
-    //                 timer: 2000,
-    //                 showConfirmButton: false,
-    //                 icon: 'error',
-    //                 title: `You already posted this job`,
-    //             });
-    //         }
-    //     });
-    //     console.log(response);
-    // } catch (err) { }
+  
     const showcolumn = ref(false);
     const logEvent = (e) => {
       showcolumn.value = true;
@@ -448,7 +401,7 @@ export default {
         axios
           .get("/admin/blog/fetch")
           .then((response) => {
-            // console.log(response.data.data[0].content);
+          
             blogs.value = response.data.data;
           })
           .catch((error) => {
@@ -469,9 +422,9 @@ export default {
         if (result.isConfirmed) {
           try {
             axios.delete(`/admin/delete/blog/${id}`).then((response) => {
-              // console.log(response.data);
+          
               if (response.data.status == true) {
-                // fetchBlogs();
+             
                 refreshTable(dataGridRef);
               } else {
                 console.log(
@@ -486,27 +439,16 @@ export default {
         }
       });
     };
-    // const deleteBlog = (id) => {
-
-    //     axios.delete(`/admin/delete/blog/${id}`).then((response) => {
-    //         // console.log(response.data);
-    //         if (response.data.status == true) {
-    //             // fetchBlogs();
-    //             refreshTable(dataGridRef);
-    //         }
-    //     }).catch((error) => {
-    //         console.log(error);
-    //     })
-    // }
+   
     const editBlog = (blog) => {
       console.log(blog);
       showDialog.value = true;
       title.value = blog.title;
       content.value = blog.content;
       updateId.value = blog.id;
-      // selectedImage.value = blog.featured_image;
+    
       imagePreview.value = blog.featured_image;
-      // selectedImage
+     
       console.log(imagePreview.value);
     };
     const openAddDialog = () => {
@@ -523,7 +465,7 @@ export default {
     };
     const savePost = (id) => {
       form.value.validate().then((valid) => {
-        // console.log(valid.errors);
+      
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
 
@@ -543,10 +485,10 @@ export default {
           } else {
             formData.append("featured_image", selectedImage.value);
           }
-          // console.log('featured_image', selectedImage.value[0]);
+         
           formData.append("title", title.value);
           formData.append("htmlContent", content.value);
-          // console.log()
+         
           axios
             .post(`/admin/update/blog/${id}`, formData, {
               headers: {
@@ -554,10 +496,9 @@ export default {
               },
             })
             .then((response) => {
-              // console.log(response.data);
-              if (response.data.status == true) {
+           if (response.data.status == true) {
                 showDialog.value = false;
-                // fetchBlogs();
+             
                 refreshTable(dataGridRef);
                 window.Swal.fire({
                   toast: true,
@@ -577,7 +518,7 @@ export default {
     };
     const addPost = (data) => {
       form.value.validate().then((valid) => {
-        // console.log(valid.errors);
+       
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
 
@@ -593,10 +534,10 @@ export default {
           console.log(data[0]);
           const formData = new FormData();
           formData.append("featured_image", data[0]);
-          // console.log('featured_image', data[0]);
+        
           formData.append("title", title.value);
           formData.append("htmlContent", content.value);
-          // console.log('htmlContent', content.value);
+         
           axios
             .post("/admin/save-blog/post", formData, {
               headers: {
@@ -666,7 +607,7 @@ export default {
       closeAddDialog,
       form,
       titleRules,
-      imageRules,
+      imageRules,formatCreatedAt
     };
   },
 };

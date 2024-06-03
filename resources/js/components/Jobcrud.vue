@@ -42,44 +42,7 @@
       :visible="showcolumn"
     >
     </DxColumn>
-    <!-- <template #salarytemplate="{ data }">
-      <div>
-        <v-select
-          v-model="salaryType"
-          :items="['fixed', 'range']"
-          label="Salary Type"
-          density="compact"
-          variant="outlined"
-        ></v-select>
-        <template v-if="shouldDisplayRangeInput(data)">
-          <v-text-field
-            variant="outlined"
-            v-model="minSalary"
-            label="Minimum Salary"
-            placeholder="Minimum Salary"
-            density="compact"
-            style="margin-top: 10px"
-          ></v-text-field>
-          <v-text-field
-            variant="outlined"
-            v-model="maxSalary"
-            label="Maximum Salary"
-            placeholder="Maximum Salary"
-            density="compact"
-            style="margin-top: 10px"
-          ></v-text-field>
-        </template>
-        <template v-else>
-          <v-text-field
-            variant="outlined"
-            v-model="salary"
-            label="Salary"
-            placeholder="Salary"
-            density="compact"
-          ></v-text-field>
-        </template>
-      </div>
-    </template> -->
+    
     <template #salarytemplate="{ data }">
   <div>
     <v-select

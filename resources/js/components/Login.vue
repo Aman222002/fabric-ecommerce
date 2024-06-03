@@ -1,5 +1,27 @@
 <template>
   <v-container>
+    <v-alert
+      v-if="errorMessage"
+      :value="true"
+      type="error"
+      dense
+      outlined
+     
+    >
+      {{ errorMessage }}
+    </v-alert>
+
+    
+    <v-alert
+      v-if="warningMessage"
+      :value="true"
+      type="warning"
+      color="blue"
+      dense
+      outlined
+    >
+      {{ warningMessage }}
+    </v-alert>
     <v-row
       class="form_log_reg form_login_el_cd"
       align="center"
@@ -104,6 +126,7 @@
         </v-card>
       </v-col>
     </v-row>
+    
   </v-container>
 </template>
 
@@ -125,7 +148,8 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ];
-
+    const errorMessage = ref(""); 
+    const warningMessage = ref("");
     const passwordRules = [
       (v) => !!v || "Password is required",
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
@@ -138,7 +162,7 @@ export default {
         if (data.status === true) {
           console.log(data.data.roles[0].name);
           if (data.data.roles[0].name == "Admin") {
-            window.location.href = "/admin/users";
+            window.location.href = "/admin/dashboard";
             usersStore.isLogIn();
           } else if (data.data.roles[0].name == "Company Admin") {
             window.location.href = "/job";
@@ -151,23 +175,27 @@ export default {
       } catch (err) {
         if (err.response && err.response.data && err.response.data.message === "Email not verified. Please verify your email before logging in.") {
             
-            window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "warning",
-                title: "Please verify your email before logging in.",
-            });
+            // window.Swal.fire({
+            //     toast: true,
+            //     position: "top-end",
+            //     timer: 2000,
+            //     showConfirmButton: false,
+            //     icon: "warning",
+            //     title: "Please verify your email before logging in.",
+            // });
+            warningMessage.value = "Please verify your email before logging in.";
+            // alert("Please verify your email before logging in.");
         } else {
-            window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "error",
-                title: "Invalid Credentials.",
-            });
+            // window.Swal.fire({
+            //     toast: true,
+            //     position: "top-end",
+            //     timer: 2000,
+            //     showConfirmButton: false,
+            //     icon: "error",
+            //     title: "Invalid Credentials.",
+            // });
+            // alert("Invalid Credentials.");
+            errorMessage.value = "Invalid Credentials.";
         }
       }
     };
@@ -181,7 +209,7 @@ export default {
       passwordRules,
       submitForm,
       signup,
-      showPassword,
+      showPassword,warningMessage,errorMessage
     };
   },
 };

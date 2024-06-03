@@ -261,6 +261,16 @@ export default {
         console.error("Error fetching job types:", error);
       }
     };
+    // <v-select
+    //         variant="solo"
+    //         v-model="job.jobSkill"
+    //         :items="jobSkills"
+    //         item-title="skill_name"
+    //         item-value="id"
+    //         label="Select Skills"
+    //         :rules="rules.jobSkill"
+    //         density="compact"
+    //       ></v-select>
     const selectJobSkill = (selectedJobSkill) => {
       job.jobSkill = selectedJobSkill.name;
     };

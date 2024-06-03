@@ -21,20 +21,108 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Plan;
 use App\Models\UserSubscription;
 use Carbon\Carbon;
+use App\Jobs\SendVerificationEmail;
+use App\Jobs\CompanyVerify;
+use Illuminate\Support\Str;
+use App\Models\Permissionaccess;
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    // public function index(Request $request)
+    // {
+       
+
+    //     try {
+    //         $user = Auth::user();
+    //         // dd($user);
+    //         if ($user->hasRole('Admin')) {
+    //             $users = User::where('id', '!=', $user->id);
+    //         }
+            
+    //         $response = [];
+    //         if ($request->requireTotalCount) {
+    //             $response['totalCount'] = $users->count();
+    //         }
+    //         if (isset($request->take)) {
+    //             $users->skip($request->skip)->take($request->take);
+    //         }
+    //         if (isset($request->sort)) {
+    //             $sort = json_decode($request->sort, true);
+    //             if (count($sort)) {
+    //                 $users->orderBy($sort[0]['selector'], ($sort[0]['desc'] ? 'DESC' : 'ASC'));
+    //             }
+    //         } else {
+    //             $users->orderBy('created_at', 'DESC');
+    //         }
+    //         if ($request->has('filter')) {
+    //             $filters = json_decode($request->filter, true);
+    //             if (count($filters)) {
+    //                 $filters = is_array($filters[0]) ? $filters[0] : $filters;
+    //                 $search = !blank($filters[2]) ? $filters[2] : false;
+
+    //                 if ($search) {
+    //                     $users->where('name', 'like', "%$search%");
+    //                 }
+    //             }
+    //         }
+    //         $userList = $users->get();
+          
+    //         $response['data'] = $userList;
+    //         $totalCount = $users->count();
+    //         if ($userList->isNotEmpty()) {
+    //             return response()->json([
+    //                 'status' => true,
+    //                 'data' => $userList,
+    //                 'totalCount' => $totalCount,
+    //             ], 200);
+    //         } else {
+    //             $response = [
+    //                 'status' => false,
+    //                 'message' => 'No Product found',
+    //             ];
+    //             return response()->json($response, 404);
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::debug($e->getMessage());
+    //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
     public function index(Request $request)
     {
-        //
+       
         try {
             $user = Auth::user();
+            $users = User::query(); 
+            
             if ($user->hasRole('Admin')) {
-                $users = User::where('id', '!=', $user->id);
+                $users = $users->where('id', '!=', $user->id);
             }
-            $response = [];
+          
+           
+            if ($request->has('type')) {
+                $type = $request->input('type');
+            
+                switch ($type) {
+                   
+                    case 'User':
+                            $users->role('User');
+                     
+                        break;
+                    case 'Company Admin':
+                        $users->role('Company Admin');
+                        break;
+                    case 'Company Subadmin':
+                        $users->role('Company Subadmin');
+                        break;
+                    default:
+                      
+                        break;
+                }
+            }
+            
+             $response = [];
             if ($request->requireTotalCount) {
                 $response['totalCount'] = $users->count();
             }
@@ -54,13 +142,30 @@ class UserController extends Controller
                 if (count($filters)) {
                     $filters = is_array($filters[0]) ? $filters[0] : $filters;
                     $search = !blank($filters[2]) ? $filters[2] : false;
-
+    
                     if ($search) {
                         $users->where('name', 'like', "%$search%");
                     }
                 }
             }
-            $userList = $users->get();
+          
+            $userList = $users->with('roles','company')->get();
+            $userList = $userList->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'company_id' => $user->company_id,
+                    'status' => $user->status,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' =>$user->phone,
+                    'created_at' => $user->created_at,
+                    'roles' => $user->roles->pluck('name'), 
+                    // 'company'=>$user->company->pluck('company_name'),
+                    'company' => $user->roles->contains('name', 'Company Admin') ? ($user->company ? $user->company->company_name : null) : ($user->company ? $user->company->pluck('company_name') : null),
+                    'company_email' => $user->roles->contains('name', 'Company Admin') ? ($user->company ? $user->company->company_email : null) : ($user->company ? $user->company->pluck('company_email') : null),
+                    'phone_number' => $user->roles->contains('name', 'Company Admin') ? ($user->company ? $user->company->phone_number : null) : ($user->company ? $user->company->pluck('phone_number') : null),
+                ];
+            });
             $response['data'] = $userList;
             $totalCount = $users->count();
             if ($userList->isNotEmpty()) {
@@ -72,7 +177,7 @@ class UserController extends Controller
             } else {
                 $response = [
                     'status' => false,
-                    'message' => 'No Product found',
+                    'message' => 'No User found',
                 ];
                 return response()->json($response, 404);
             }
@@ -81,11 +186,14 @@ class UserController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        
         try {
             $this->validate($request, [
                 'name' => 'required',
@@ -113,6 +221,100 @@ class UserController extends Controller
             return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
+   
+    public function storing(Request $request)
+    {
+        try {
+        //   dd($request);
+        $input = $request->all();
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8',
+                'phone' => 'required|string',
+                'role' => 'required|string|in:User,Company Admin,Company Subadmin',
+              
+                // 'companyId' => 'sometimes|required_if:role,Company Subadmin|exists:companies,id',
+            ]);
+            // Generate verification token
+            $verificationToken = Str::random(60);
+    
+            // Create a new user
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'phone' => $validatedData['phone'],
+                'verification_token' => $verificationToken,
+            ]);
+    
+          
+            if ($validatedData['role'] !== "User") {
+              
+                if ($validatedData['role'] === "Company Subadmin" && isset($input['companyId'])) {
+              
+                    $company = Company::findOrFail($input['companyId']);
+                  
+                    $user->company_id = $company->id;
+                   
+                    $user->save();
+                    CompanyVerify::dispatch($user, $verificationToken);
+               // dd($request->has('permission') && !empty($request->permission)) ;
+              // dd($request->permission);
+              if ($request->has('permission') && !empty($request->permission)) {
+                foreach ($request->permission as $permissionName) {
+                    $permission = Permission::where('name', $permissionName)->first();
+                    if ($permission) {
+                        Permissionaccess::create([
+                            'user_id' => $user->id,
+                            'company_id' => $company->id,
+                            'permission_id' => $permission->id,
+                        ]);
+                    }
+                }
+            }
+            
+                } else {
+                    // Only create or update the company record if the role is not "Company Subadmin"
+                    $company = Company::firstOrCreate(
+                        ['company_email' => $input['companyEmail']],
+                        [
+                            'user_id' =>  $user->id,
+                            'company_name' => $input['companyName'],
+                            'company_email' => $input['companyEmail'],
+                            'phone_number' => $input['companyPhone'],
+                        ]
+                    );
+                }
+             
+    
+                // Assign roles based on the user's role
+                if ($validatedData['role'] === "Company Admin") {
+                    CompanyVerify::dispatch($user, $verificationToken);
+                    $user->assignRole('Company Admin');
+                } else if ($validatedData['role'] === "Company Subadmin") {
+                    CompanyVerify::dispatch($user, $verificationToken);
+                    $user->assignRole('Company Subadmin');
+                }
+            } else {
+                
+                SendVerificationEmail::dispatch($user, $verificationToken);
+                $user->assignRole('User');
+            }
+    
+            return response()->json(['status' => true, 'message' => 'User created successfully'], 200);
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+    
+public function fetchCompanies()
+{
+    $companies = Company::all(); 
+    return response()->json($companies);
+}
+    
     /**
      * Display the specified resource.
      */
@@ -258,11 +460,36 @@ class UserController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    public function updateUser(Request $request, $id = 0)
+    {
+        try {
+            $user = User::find($id);
+            if ($user) {
+                if ($request->has('roleType')) {
+                    $user->syncRoles([]);
+                  
+                    $user->assignRole($request->roleType);
+                }
+               
+                $user->update($request->all());
+                return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => 'user not found'
+                ];
+                return response()->json($response, 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
+        
         try {
             $user = User::find($id);
             if ($user) {
@@ -486,4 +713,28 @@ class UserController extends Controller
             throw new \Exception("Invalid duration format: $duration");
         }
     }
+    public function blockCompany($userId)
+{
+    try {
+        $company = Company::findOrFail($userId);
+        $company->status = 0; 
+        $company->save();
+
+        return response()->json(['success' => true, 'message' => 'Company blocked successfully']);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
+public function unblockCompany($userId)
+{
+    try {
+        $company = Company::findOrFail($userId);
+        $company->status = 1; 
+        $company->save();
+
+        return response()->json(['success' => true, 'message' => 'Company unblocked successfully']);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
+}
 }

@@ -1,5 +1,15 @@
 <template>
   <v-container>
+    <v-alert
+      v-if="warningMessage"
+      :value="true"
+      type="warning"
+      dense
+      outlined
+      color="blue"
+    >
+      {{ warningMessage }}
+    </v-alert>
     <v-card class="elevation-12 mt-3 form_log_reg" style="margin-bottom: 10px">
       <v-form ref="form" @submit.prevent="submitForm()" class="custom-form">
         <v-row class="form_page">
@@ -209,6 +219,7 @@ export default {
       phoneError: "",
       phoneErrors: "",
     });
+    const warningMessage = ref("");
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
       (v) => !!v || "Email is required",
@@ -288,6 +299,7 @@ export default {
         showCompanyDetails.value = false;
       }
     });
+   
     const submitForm = () => {
       telValidate({ valid: true, number: company.value.phone_number });
       if (company.value.phoneError) {
@@ -297,6 +309,7 @@ export default {
       if (company.value.phoneErrors) {
         return;
       }
+     
   form.value.validate().then((valid) => {
     if (!valid.valid) {
       
@@ -317,14 +330,15 @@ export default {
         })
         .then((response) => {
           if (response.data.exists) {
-            window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "error",
-          title: "Company Email And Company Name Already Exist",
-        });
+        //     window.Swal.fire({
+        //   toast: true,
+        //   position: "top-end",
+        //   timer: 2000,
+        //   showConfirmButton: false,
+        //   icon: "error",
+        //   title: "Company Email And Company Name Already Exist",
+        // });
+        warningMessage.value = "Company Email And Company Name Already Exist.";
           } else {
           
             const formData = new FormData();

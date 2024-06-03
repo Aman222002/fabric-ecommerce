@@ -53,11 +53,28 @@
                       <label for="phone" class="custom-text-field"
                         >Contact No.</label
                       >
-                      <v-text-field
+                      <!-- <v-text-field
                         v-model="formData.phone"
                         :rules="phoneRules"
                         variant="solo"
-                      ></v-text-field>
+                      ></v-text-field> -->
+
+                      <vue-tel-input
+         
+          :value="formData.phone"
+          @input="handlePhoneInput"
+       
+          @validate="telValidate"
+                        color="blue"
+                        density="compact"
+                        style="margin-bottom: 10px"
+                        variant="outlined"
+                        label="Phone"
+                        hide-details="auto"
+                        mode="international"
+                      
+                      ></vue-tel-input> 
+                      <span v-if="errorMessage" class="error">{{ errorMessage }}</span>   
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -146,6 +163,7 @@ import { useUsersStore } from "../store/user";
 export default {
   name: "ProfileComponent",
   setup() {
+    const errorMessage = ref("");
     const userStore = useUsersStore();
     const show1 = ref(false);
     const show2 = ref(false);
@@ -186,6 +204,36 @@ export default {
       (value) => !!value || "Confirm Password is required",
       (value) => value === formDetail.value.new || "Passwords do not match",
     ]);
+    const handlePhoneInput = (event) => {
+      try {
+        if (typeof event === "string") {
+          formData.value.phone = event;
+        } else if (event && event.target && event.target.value) {
+          formData.value.phone = event.target.value;
+        } else {
+          console.error("Invalid event:", event);
+        }
+      } catch (error) {
+        console.error("Error handling phone input:", error);
+      }
+    };
+   
+    const telValidate = (isValid) => {
+    console.log("Is Valid:", isValid);
+  
+    if (isValid.valid===true) {
+
+console.log( isValid.value,"Valid Phone Number");
+errorMessage.value = "";
+return true;
+    } else {
+    
+      console.log("Invalid Phone Number");
+        errorMessage.value = "Enter a valid phone number";
+      return false
+    }
+   
+};
     const openFileInput = () => {
       fileInput.value.click();
     };
@@ -222,6 +270,10 @@ export default {
       fetchProfile();
     });
     const updateProfile = (id) => {
+      if (errorMessage.value) {
+        telValidate({ isValid: false, number: formData.value.phone });
+        return;
+      }
       const formDataUpload = new FormData();
       formDataUpload.append("name", formData.value.name);
       formDataUpload.append("email", formData.value.email);
@@ -308,7 +360,7 @@ export default {
       imageUrl,
       fileInput,
       openFileInput,
-      handleImageChange,
+      handleImageChange,telValidate,handlePhoneInput,errorMessage
     };
   },
 };

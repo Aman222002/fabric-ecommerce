@@ -548,8 +548,6 @@ return true;
         formData.append("company_name", editedJob.value.company_name);
         formData.append("company_email", editedJob.value.company_email);
         formData.append("logo", editedJob.value.logo);
-        
-     
         const response = await axios.post("/company/update", formData, {
           headers: {
             "Content-Type": "multipart/form-data",

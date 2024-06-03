@@ -62,4 +62,13 @@ class Job extends Model
     {
         return static::where('post_status', 'published');
     }
+    public static function getJobsByStatus($status = null)
+{
+    $query = static::query();
+    if ($status) {
+        $query->where('post_status', $status);
+    }
+    return $query;
+}
+
 }
