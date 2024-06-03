@@ -389,7 +389,7 @@ export default {
       cityRules,
       stateRules,
       usersStore,
-      showCompanyDetails,
+      showCompanyDetails,warningMessage,
       disabledFields,showPassword,telValidate ,phoneValidationRule,teluser, 
     };
   },
