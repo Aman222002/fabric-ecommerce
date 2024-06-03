@@ -447,6 +447,7 @@ public function fetchCompanies()
             $user = User::find($id);
             if ($user) {
                 $user->update($request->all());
+               
                 return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
             } else {
                 $response = [

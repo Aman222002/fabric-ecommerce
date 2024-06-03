@@ -9,11 +9,12 @@
           <v-row>
             <v-col cols="12">
               <v-card>
-                <v-card-text>
+                <v-card-text @dragover.prevent @drop="handleImageDrop">
                   <v-row>
                     <v-col cols="2">
                       <v-avatar size="130px" class="avatar">
-                        <label for="fileInput" @click="openFileInput">
+                        <!-- <label for="fileInput" @click="openFileInput"> -->
+                        <label for="fileInput">
                           <span class="mdi mdi-pencil" id="icon"></span>
                         </label>
                         <input
@@ -60,11 +61,9 @@
                       ></v-text-field> -->
 
                       <vue-tel-input
-         
-          :value="formData.phone"
-          @input="handlePhoneInput"
-       
-          @validate="telValidate"
+                        :value="formData.phone"
+                        @input="handlePhoneInput"
+                        @validate="telValidate"
                         color="blue"
                         density="compact"
                         style="margin-bottom: 10px"
@@ -72,9 +71,10 @@
                         label="Phone"
                         hide-details="auto"
                         mode="international"
-                      
-                      ></vue-tel-input> 
-                      <span v-if="errorMessage" class="error">{{ errorMessage }}</span>   
+                      ></vue-tel-input>
+                      <span v-if="errorMessage" class="error">{{
+                        errorMessage
+                      }}</span>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -155,7 +155,6 @@
     </v-col>
   </v-row>
 </template>
-
 <script>
 import axios from "axios";
 import { ref, nextTick, onMounted } from "vue";
@@ -217,23 +216,34 @@ export default {
         console.error("Error handling phone input:", error);
       }
     };
-   
     const telValidate = (isValid) => {
-    console.log("Is Valid:", isValid);
-  
-    if (isValid.valid===true) {
-
-console.log( isValid.value,"Valid Phone Number");
-errorMessage.value = "";
-return true;
-    } else {
-    
-      console.log("Invalid Phone Number");
+      console.log("Is Valid:", isValid);
+      if (isValid.valid === true) {
+        console.log(isValid.value, "Valid Phone Number");
+        errorMessage.value = "";
+        return true;
+      } else {
+        console.log("Invalid Phone Number");
         errorMessage.value = "Enter a valid phone number";
-      return false
-    }
-   
-};
+        return false;
+      }
+    };
+    const handleImageDrop = (event) => {
+      event.preventDefault();
+      const file = event.dataTransfer.files[0];
+      if (file) {
+        if (!file.type.startsWith("image/")) {
+          alert("Please drop a valid image file.");
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          imageUrl.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        formData.value.image = file;
+      }
+    };
     const openFileInput = () => {
       fileInput.value.click();
     };
@@ -360,7 +370,11 @@ return true;
       imageUrl,
       fileInput,
       openFileInput,
-      handleImageChange,telValidate,handlePhoneInput,errorMessage
+      handleImageChange,
+      telValidate,
+      handlePhoneInput,
+      errorMessage,
+      handleImageDrop,
     };
   },
 };

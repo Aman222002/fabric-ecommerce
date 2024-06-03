@@ -64,7 +64,7 @@
     <div id="chartDiv">
       <v-row>
         <v-col sm="12" md="6" lg="6" xl="6" cols="12">
-          <div id="SupplierDiv">
+          <div id="SupplierDiv" v-if="recentPosts.length > 0">
             <v-card>
               <v-card-title style="background-color: #0146a6; color: white"
                 >Recent Job Post</v-card-title

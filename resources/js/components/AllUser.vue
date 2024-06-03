@@ -1,17 +1,45 @@
-
 <template>
   <div>
     <v-dialog v-model="modalOpen" max-width="700">
+      <v-alert
+        v-if="errorMessage"
+        :value="true"
+        type="warning"
+        dense
+        outlined
+        color="blue"
+      >
+        {{ errorMessage }}
+      </v-alert>
+      <v-alert
+        v-if="warningMessage"
+        :value="true"
+        type="warning"
+        dense
+        outlined
+        color="blue"
+      >
+        {{ warningMessage }}
+      </v-alert>
       <v-card>
         <v-card-title>
-          <span class="headline">Add User
+          <span class="headline"
+            >Add User
             <v-icon style="float: right" @click="closeModal">mdi-close</v-icon>
           </span>
         </v-card-title>
         <v-card-text>
-          <v-form @submit.prevent="addUser"  ref="form">
-            <v-text-field v-model="newUser.name" label="Name" :rules="nameRules"></v-text-field>
-            <v-text-field v-model="newUser.email" label="Email" :rules="emailRules"></v-text-field>
+          <v-form @submit.prevent="addUser" ref="form">
+            <v-text-field
+              v-model="newUser.name"
+              label="Name"
+              :rules="nameRules"
+            ></v-text-field>
+            <v-text-field
+              v-model="newUser.email"
+              label="Email"
+              :rules="emailRules"
+            ></v-text-field>
             <v-text-field
               variant="outlined"
               v-model="newUser.password"
@@ -23,6 +51,22 @@
               @click:append="showPassword = !showPassword"
               :type="showPassword ? 'text' : 'password'"
             ></v-text-field>
+            <vue-tel-input
+              variant="outlined"
+              v-model="newUser.phone"
+              @validate="teluser"
+              label="Phone"
+              type="phone"
+              :inputOptions="tel_options"
+              density="compact"
+              mask="##########"
+              hide-details="auto"
+              mode="international"
+            ></vue-tel-input>
+            <span v-if="newUser.phoneErrors" class="error-message">{{
+              newUser.phoneErrors
+            }}</span
+            ><br />
             <v-select
               v-model="newUser.role"
               :items="roles"
@@ -48,12 +92,16 @@
               @validate="telval"
               label="Company Phone"
               type="phone"
+              :inputOptions="tel_company"
               density="compact"
               mask="##########"
               hide-details="auto"
               mode="international"
             ></vue-tel-input>
-            <span v-if="newUser.phoneError" class="error-message">{{ newUser.phoneError }}</span><br>
+            <span v-if="newUser.phoneError" class="error-message">{{
+              newUser.phoneError
+            }}</span
+            ><br />
             <v-select
               v-if="newUser.role === 'Company Subadmin'"
               variant="solo"
@@ -78,21 +126,61 @@
               density="compact"
               small-chips
             ></v-select>
-            <vue-tel-input
-              variant="outlined"
-              v-model="newUser.phone"
-              @validate="teluser"
-             
-              label="Phone"
-              type="phone"
-              density="compact"
-              mask="##########"
-              hide-details="auto"
-              mode="international"
-            ></vue-tel-input>
-            <span v-if="newUser.phoneErrors" class="error-message">{{ newUser.phoneErrors }}</span><br>
+
             <v-btn type="submit" color="primary">Add User</v-btn>
           </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="editDialog" max-width="500">
+      <v-card>
+        <v-card-title>
+          <span class="headline"
+            >Edit User
+            <v-icon style="float: right" @click="editDialog = false"
+              >mdi-close</v-icon
+            >
+          </span>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="editCompanyData.name"
+            label=" Name"
+            dense
+            outlined
+            :rules="nameRules"
+            style="margin-top: 10px"
+          ></v-text-field>
+          <v-text-field
+            v-model="editCompanyData.email"
+            label="Email"
+            dense
+            outlined
+            :rules="emailRules"
+            style="margin-top: 10px"
+          ></v-text-field>
+          <vue-tel-input
+            style="margin-top: 10px"
+            variant="outlined"
+            @input="handlePhoneInput"
+            :value="editCompanyData.phone"
+            @validate="telvalidate"
+            label=" Phone"
+            type="phone"
+            density="compact"
+            mask="##########"
+            hide-details="auto"
+            mode="international"
+          ></vue-tel-input>
+          <span v-if="phoneVal" class="error-message">{{ phoneVal }}</span
+          ><br />
+
+          <v-btn
+            color="primary"
+            @click="saveChanges(updateId)"
+            style="margin-top: 10px"
+            >Save Changes</v-btn
+          >
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -102,39 +190,34 @@
       :data-source="dataSource"
       :allow-column-resizing="true"
       ref="dataGridRef"
-      @init-new-row="initNewRow" @row-inserted="rowInserted"
-        @editing-start="logEvent" @edit-canceled="cancelEdit" @saving="saveEvent"
+      @init-new-row="initNewRow"
+      @row-inserted="rowInserted"
+      @editing-start="logEvent"
+      @edit-canceled="cancelEdit"
+      @saving="saveEvent"
     >
-      <DxEditing
+      <!-- <DxEditing
         :allow-adding="true"
         :allow-updating="true"
         :allow-deleting="true"
         :use-icons="true"
         mode="popup"
       >
-      <DxPopup
+        <DxPopup
           :show-title="true"
           :width="600"
           :height="400"
           title="User Info"
         />
         <DxForm>
-          <DxFormItem
-            :col-count="2"
-            :col-span="2"
-            item-type="group"
-          >
-            <DxFormItem data-field="name"/>
-            <DxFormItem data-field="email"/>
-            <DxFormItem data-field="phone"/>
-            <!-- <DxFormItem  edit-cell-template="phone-template"/> -->
-          <!-- <DxFormItem data-field="roles"/>
-          <DxFormItem caption="company"  :visible="isCompanyAdmin" />
-          <DxFormItem caption="company Email"  :visible="isCompanyAdmin"/>
-          <DxFormItem caption="company Phone"  :visible="isCompanyAdmin"/> -->
-    </DxFormItem>
+          <DxFormItem :col-count="2" :col-span="2" item-type="group">
+            <DxFormItem data-field="name" />
+            <DxFormItem data-field="email" />
+            <DxFormItem data-field="phone" />
+          
+          </DxFormItem>
         </DxForm>
-        </DxEditing>
+      </DxEditing> -->
       <DxSearchPanel :visible="true" :placeholder="'Search'" :width="300" />
       <DxToolbar>
         <DxGridItem template="addButton" :location="'after'"></DxGridItem>
@@ -149,9 +232,7 @@
         <DxRequiredRule />
         <DxEmailRule message="Email is invalid" />
       </DxColumn>
-      <DxColumn data-field="phone" data-type="phone">
-        
-      </DxColumn>
+      <DxColumn data-field="phone" data-type="phone"> </DxColumn>
       <!-- <DxColumn data-field="company" data-type="string"></DxColumn>
         <DxColumn data-field="company_email" data-type="string"></DxColumn>
           <DxColumn data-field="phone_number" data-type="phone" >
@@ -170,10 +251,23 @@
                 </span>
             </span>
         </template> -->
-      <DxColumn type="buttons" caption="Action">
+      <!-- <DxColumn type="buttons" caption="Action">
         <DxButton name="edit"></DxButton>
         <DxButton name="delete"></DxButton>
-      </DxColumn>
+      </DxColumn> -->
+      <DxColumn cell-template="Dxbutton" width="auto"></DxColumn>
+      <template #Dxbutton="{ data }">
+        <v-btn
+          prepend-icon="mdi-pencil"
+          class="edit-btn"
+          @click="editUser(data.data)"
+        ></v-btn>
+        <v-btn
+          prepend-icon="mdi-delete"
+          class="btn_delete"
+          @click="deleteUser(data.data.id)"
+        ></v-btn>
+      </template>
       <DxPaging :page-size="pageSize" />
       <template #addButton>
         <DxButton icon="add" @click="openModal"></DxButton>
@@ -205,29 +299,13 @@
       <DxSummary>
         <DxTotalItem column="id" summary-type="count" />
       </DxSummary>
-<!--     
-      <template #phone-template="{ data, setValue }">
-    
-      <vue-tel-input
-        v-model="data.phone"
-        @input="(value) => setValue(value)"
-        label="Phone"
-        type="phone"
-        mask="##########"
-        mode="international"
-       
-      ></vue-tel-input>
-    </template> -->
-
     </DxDataGrid>
-
-    
   </div>
 </template>
 
 <script>
 import dxGridStore from "../composition/dxGridStore";
-import { ref, onMounted,watch,computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import axios from "axios";
 
 export default {
@@ -249,12 +327,27 @@ export default {
       companyId: "",
       permission: [],
     });
+    const editDialog = ref(false);
+    const editCompanyData = ref({
+      name: "",
+      email: "",
+      phone: "",
+    });
 
+    const phoneVal = ref("");
+    const updateId = ref();
+    const errorMessage = ref("");
+    const warningMessage = ref("");
     const loadURL = `/admin/user/index`;
     const updateURL = `/admin/user/updated`;
     const insertURL = `/admin/user/store`;
     const deleteUrl = `/admin/user/destroy`;
-
+    const tel_options = {
+      placeholder: "Enter User phone number...",
+    };
+    const tel_company = {
+      placeholder: "Enter Company phone number...",
+    };
     const nameRules = [
       (v) => !!v || "Full Name is required",
       (v) => (v && v.length >= 3) || "Full Name must be at least 3 characters",
@@ -267,7 +360,9 @@ export default {
       (v) => !!v || "Password is required",
       (v) => (v && v.length >= 6) || "Password must be at least 6 characters",
     ];
-    const permissionRules = [(v) => (!!v && v.length > 0) || "Permission is required"];
+    const permissionRules = [
+      (v) => (!!v && v.length > 0) || "Permission is required",
+    ];
     const userPermissions = ref([]);
 
     const fetchPermissions = async () => {
@@ -279,93 +374,146 @@ export default {
         console.error("Error fetching permissions:", error);
       }
     };
-    const isCompanyAdmin = computed(() => newUser.value.role === "Company Admin");
-   
+    const isCompanyAdmin = computed(
+      () => newUser.value.role === "Company Admin"
+    );
+
     const userId = ref();
     const pageSize = ref(15);
     const DropDown2 = ref(false);
     const params = ref({});
     const selectedStatus = ref("All");
     const dataGridRef = ref(null);
-    const { dataSource, refreshTable } = dxGridStore(loadURL,  params, insertURL, updateURL, deleteUrl);
+    const { dataSource, refreshTable } = dxGridStore(
+      loadURL,
+      params,
+      insertURL,
+      updateURL,
+      deleteUrl
+    );
+    const handlePhoneInput = (event) => {
+      try {
+        if (typeof event === "string") {
+          editCompanyData.value.phone = event;
+        } else if (event && event.target && event.target.value) {
+          editCompanyData.value.phone = event.target.value;
+        } else {
+          console.error("Invalid event:", event);
+        }
+      } catch (error) {
+        console.error("Error handling phone input:", error);
+      }
+    };
+    const telvalidate = (isValid) => {
+      console.log("Is Valid:", isValid);
+
+      if (isValid.valid === true) {
+        console.log(isValid.value, "Valid Phone Number");
+        phoneVal.value = "";
+        return true;
+      } else {
+        console.log("Invalid Phone Number");
+        phoneVal.value = "Enter a valid phone number";
+        return false;
+      }
+    };
+
+    const editUser = (data) => {
+      console.log(data);
+      editDialog.value = true;
+      editCompanyData.value.name = data.name;
+      editCompanyData.value.email = data.email;
+      editCompanyData.value.phone = data.phone;
+      updateId.value = data.id;
+    };
+    //     const saveChanges = () => {
+    //   console.log("Saving changes...");
+
+    // };
+    const saveChanges = (id) => {
+      if (phoneVal.value) {
+        telvalidate({ isValid: false, number: editCompanyData.value.phone });
+        return;
+      }
+      axios
+        .post(`/admin/user/update/${id}`, editCompanyData.value)
+        .then((response) => {
+          console.log("Update response:", response.data);
+
+          editDialog.value = false;
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Update error:", error);
+        });
+    };
     const showPassword = ref(false);
     const showColumn = ref(false);
     const selectStatus = (e) => {
       const value = e.itemData.text;
       params.value = { type: value };
-      console.log('After assignment - params:', params.value);
+      console.log("After assignment - params:", params.value);
       selectedStatus.value = value;
       DropDown2.value = false;
       refreshTable(dataGridRef);
     };
-    const roleTypes = ref([
-            'Company Admin',
-            'Company Subadmin',
-            'User',
-        ]);
-        const roletypedropdown = ref(false);
-        const selectedRoleType = ref("");
-        const selectRoleType = (e) => {
-            let value = e.itemData;
-            selectedRoleType.value = value;
-            params.value = { ...params.value, roleType: selectedRoleType.value };
-            roletypedropdown.value = false;
-        };
-        const saveEvent = (e) => {
-
-if (e.changes == 0) {
-    if (params.value.roleType) {
-       
-        axios.post(`/admin/user/updated/${userId.value}`, {
-            roleType: params.value,
-        }).then((response) => {
-            const keys = Object.keys(params.value);
-            for (let i = 1; i < keys.length; i++) {
-                delete params.value[keys[i]];
-            }
-            // console.log(params.value);
-            refreshTable(dataGridRef);
-        })
-
+    const roleTypes = ref(["Company Admin", "Company Subadmin", "User"]);
+    const roletypedropdown = ref(false);
+    const selectedRoleType = ref("");
+    const selectRoleType = (e) => {
+      let value = e.itemData;
+      selectedRoleType.value = value;
+      params.value = { ...params.value, roleType: selectedRoleType.value };
+      roletypedropdown.value = false;
     };
-}
-}
-const initNewRow = (e) => {
-            selectedRoleType.value = null
-            showColumn.value = true;
-        };
-        const rowInserted = (e) => {
-            showColumn.value = false;
-        };
-
-const logEvent = (e) => {
-  userId.value = e.data.id;
-  showColumn.value = false;
-  if (e.data.roles && e.data.roles.length > 0) {
-    selectedRoleType.value = e.data.roles[0]; 
-  } else {
-    selectedRoleType.value = ""; 
-  }
-};
-
-
-        const cancelEdit = (e) => {
-            showColumn.value = false;
+    const saveEvent = (e) => {
+      if (e.changes == 0) {
+        if (params.value.roleType) {
+          axios
+            .post(`/admin/user/updated/${userId.value}`, {
+              roleType: params.value,
+            })
+            .then((response) => {
+              const keys = Object.keys(params.value);
+              for (let i = 1; i < keys.length; i++) {
+                delete params.value[keys[i]];
+              }
+              // console.log(params.value);
+              refreshTable(dataGridRef);
+            });
         }
+      }
+    };
+    const initNewRow = (e) => {
+      selectedRoleType.value = null;
+      showColumn.value = true;
+    };
+    const rowInserted = (e) => {
+      showColumn.value = false;
+    };
 
+    const logEvent = (e) => {
+      userId.value = e.data.id;
+      showColumn.value = false;
+      if (e.data.roles && e.data.roles.length > 0) {
+        selectedRoleType.value = e.data.roles[0];
+      } else {
+        selectedRoleType.value = "";
+      }
+    };
+    const cancelEdit = (e) => {
+      showColumn.value = false;
+    };
     const items = ref([
       { text: "All", value: 1 },
       { text: "Company Admin", value: 2 },
       { text: "User", value: 3 },
       { text: "Company Subadmin", value: 4 },
     ]);
-
     const roles = ["User", "Company Admin", "Company Subadmin"];
-
     const openModal = () => {
       modalOpen.value = true;
     };
-
     const companies = ref([]);
     const fetchCompany = async () => {
       try {
@@ -375,13 +523,11 @@ const logEvent = (e) => {
         console.error("Error fetching companies:", error);
       }
     };
-
     const teluser = (telnumber) => {
       if (telnumber && telnumber.valid) {
         newUser.value.phone = telnumber.number;
         if (/[a-zA-Z]/.test(telnumber.number)) {
-          console.log("Alphabets detected in phone number");
-          newUser.value.phoneErrors = "Phone number cannot contain alphabets";
+          newUser.value.phoneErrors = "Enter a valid phone number";
         } else {
           newUser.value.phoneErrors = "";
         }
@@ -390,13 +536,11 @@ const logEvent = (e) => {
         newUser.value.phoneErrors = "Enter a valid phone number";
       }
     };
-
     const telval = (telnumber) => {
       if (telnumber && telnumber.valid) {
         newUser.value.companyPhone = telnumber.number;
         if (/[a-zA-Z]/.test(telnumber.number)) {
-          console.log("Alphabets detected in phone number");
-          newUser.value.phoneError = "Phone number cannot contain alphabets";
+          newUser.value.phoneError = "Enter a valid phone number";
         } else {
           newUser.value.phoneError = "";
         }
@@ -431,53 +575,85 @@ const logEvent = (e) => {
         permission: [],
       };
     };
-
+    const checkUsername = async () => {
+      try {
+        const response = await axios.post("/check-username", {
+          username: newUser.value.name,
+        });
+        return response.data.available;
+      } catch (error) {
+        console.error("Error checking username availability:", error);
+        return false;
+      }
+    };
     const addUser = async () => {
-  try {
-    teluser({ valid: true, number: newUser.value.phone });
-         if (newUser.value.phoneErrors) {
-           return;
-         }
-         telval({ valid: true, number: newUser.value.companyPhone });
-         if (newUser.value.phoneError) {
-           return;
+      teluser({ valid: true, number: newUser.value.phone });
+      if (newUser.value.phoneErrors) {
+        return;
+      }
+      telval({ valid: true, number: newUser.value.companyPhone });
+      if (newUser.value.phoneError) {
+        return;
+      }
+      try {
+        const usernameAvailable = await checkUsername();
+        if (!usernameAvailable) {
+          errorMessage.value = "Username already exists.";
+          return;
         }
 
-    form.value.validate().then((valid) => {
-      if (!valid.valid) {
-        const errors = JSON.parse(JSON.stringify(valid.errors));
-        let errorField = form.value[errors[0].id];
-        errorField = Array.isArray(errorField) ? errorField[0] : errorField;
-        errorField.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "center",
-        });
-      } else {
-        axios
-          .post("/admin/user/storing", newUser.value)
-          .then(() => {
-            closeModal();
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: "User Added",
+        form.value.validate().then((valid) => {
+          if (!valid.valid) {
+            const errors = JSON.parse(JSON.stringify(valid.errors));
+            let errorField = form.value[errors[0].id];
+            errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+            errorField.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "center",
             });
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+          } else {
+            axios
+              .post("/company/check", {
+                company_name: newUser.value.companyName,
+                company_email: newUser.value.companyEmail,
+              })
+              .then((response) => {
+                if (response.data.exists) {
+                  warningMessage.value =
+                    "Company Email And Company Name Already Exist.";
+                } else {
+                  axios
+                    .post("/admin/user/storing", newUser.value)
+                    .then(() => {
+                      closeModal();
+                      window.Swal.fire({
+                        toast: true,
+                        position: "top-end",
+                        timer: 2000,
+                        showConfirmButton: false,
+                        icon: "success",
+                        title: "User Added",
+                      });
+                      refreshTable(dataGridRef);
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
+        });
+      } catch (error) {
+        console.error("Error:", error);
       }
-    });
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-watch(selectedRoleType, (newVal) => {
-  console.log(selectedRoleType);
+    };
+
+    watch(selectedRoleType, (newVal) => {
+      console.log(selectedRoleType);
       if (newVal === "Company Admin") {
         newUser.value.role = "Company Admin";
       } else if (newVal === "Company Subadmin") {
@@ -486,11 +662,38 @@ watch(selectedRoleType, (newVal) => {
         newUser.value.role = "User";
       }
     });
-
     onMounted(() => {
       fetchCompany();
       fetchPermissions();
     });
+    const deleteUser = (id) => {
+      window.Swal.fire({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this User?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            axios.delete(`/admin/user/destroy/${id}`).then((response) => {
+              if (response.data.status == true) {
+                window.location.reload();
+              } else {
+                console.log(
+                  "Request was not successful:",
+                  response.data.message
+                );
+              }
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      });
+    };
     return {
       modalOpen,
       newUser,
@@ -505,7 +708,7 @@ watch(selectedRoleType, (newVal) => {
       passwordRules,
       selectedStatus,
       items,
-      selectStatus, 
+      selectStatus,
       params,
       DropDown2,
       dataGridRef,
@@ -516,16 +719,34 @@ watch(selectedRoleType, (newVal) => {
       companies,
       fetchPermissions,
       userPermissions,
-      permissionRules,form,
+      permissionRules,
+      form,
       initNewRow,
-            rowInserted,
-            roleTypes,
-            selectRoleType,
-            selectedRoleType,
-            roletypedropdown,
-            logEvent,
-            cancelEdit,
-            saveEvent,userId, showColumn,isCompanyAdmin
+      rowInserted,
+      roleTypes,
+      selectRoleType,
+      selectedRoleType,
+      roletypedropdown,
+      logEvent,
+      cancelEdit,
+      saveEvent,
+      userId,
+      showColumn,
+      isCompanyAdmin,
+      checkUsername,
+      errorMessage,
+      warningMessage,
+      updateId,
+      phoneVal,
+      editCompanyData,
+      editDialog,
+      handlePhoneInput,
+      editUser,
+      saveChanges,
+      telvalidate,
+      deleteUser,
+      tel_options,
+      tel_company,
     };
   },
 };

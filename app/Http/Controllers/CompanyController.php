@@ -401,6 +401,7 @@ class CompanyController extends Controller
                 'company_email',
                 'phone_number',
                 'description',
+                'status',
                 'id'
             );
             $response = [];
@@ -488,6 +489,7 @@ class CompanyController extends Controller
             $company = Company::find($id);
             if ($company) {
                 $company->update($request->all());
+               
                 return response()->json(['status' => true, 'message' => 'Company data updated successfully'], 200);
             } else {
                 $response = [

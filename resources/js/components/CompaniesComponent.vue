@@ -1,6 +1,15 @@
 <template>
    <v-dialog v-model="dialog" max-width="500"  >
-   
+    <v-alert
+      v-if="warningMessage"
+      :value="true"
+      type="warning"
+      dense
+      outlined
+      color="blue"
+    >
+      {{ warningMessage }}
+    </v-alert>
     
     <v-card>
       <v-card-title>
@@ -51,45 +60,50 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+  <v-dialog v-model="editDialog" max-width="500">
+    <v-card>
+      <v-card-title>
+        <span class="headline">Edit Company
+          <v-icon style="float: right" @click="editDialog = false">mdi-close</v-icon>
+        </span>
+      </v-card-title>
+      <v-card-text>
+      
+          <v-text-field v-model="editCompanyData.company_name" label="Company Name" dense outlined :rules="nameRules" style="margin-top: 10px"></v-text-field>
+          <v-text-field v-model="editCompanyData.company_email" label="Company Email" dense outlined :rules="emailRules" style="margin-top: 10px"></v-text-field>
+     
+          <vue-tel-input
+        style="margin-top: 10px"
+              variant="outlined"
+              @input="handlePhoneInput"
+              :value="editCompanyData.phone_number"
+              @validate="telvalidate"
+              label="Company Phone"
+              type="phone"
+              density="compact"
+              mask="##########"
+              hide-details="auto"
+              mode="international"
+            ></vue-tel-input>
+            <span v-if="phoneVal" class="error-message">{{ phoneVal }}</span><br>
+        
+          <v-btn color="primary" @click="saveChanges(updateId)" style="margin-top: 10px">Save Changes</v-btn>
+  
+      </v-card-text>
+    </v-card>
+  </v-dialog>
   <p style="text-align: center; font-size: 30px; margin-top: 20px">Companies</p>
   <DxDataGrid
     :remote-operations="true"
     :show-borders="true"
     :data-source="dataSource"
-    :repaint-changes-only="true"
     @content-ready="onContentReady"
     @row-expanding="onRowExpanding"
     :onEditingStart="EditStart"
     @init-new-row="initNewRow"
     @row-inserted="rowInserted"
   >
-    <DxEditing
-      :allow-adding="true"
-      :allow-updating="true"
-      :allow-deleting="true"
-      mode="popup"
-      :use-icons="true"
-    >
-    <DxPopup
-          :show-title="true"
-          :width="700"
-          :height="400"
-          title="Company Info"
-        />
-        <DxForm>
-          <DxFormItem
-            :col-count="2"
-            :col-span="2"
-            item-type="group"
-          >
-            <DxFormItem data-field="company_name"/>
-            <DxFormItem data-field="company_email"/>
-            <DxFormItem data-field="phone_number"/>
-        
-           
-    </DxFormItem>
-        </DxForm>
-      </DxEditing>
+  
     <DxSearchPanel :visible="true" />
     <DxToolbar>
         <DxGridItem template="addButton" :location="'after'"></DxGridItem>
@@ -102,32 +116,45 @@
     <DxColumn data-field="company_email" data-type="string">
       <DxRequiredRule />
     </DxColumn>
-   
     <DxColumn data-field="phone_number" data-type="string" />
     <DxColumn
       caption="Options"
       cell-template="ButtonTemplate"
+      :allow-editing="false"
+      
     ></DxColumn>
     <template #ButtonTemplate="{ data }">
-       
         <v-btn 
           color="primary" 
           @click="approve(data)" 
-          
+          :disabled="data.data.status === 0"
         >
          Block
         </v-btn>
         <v-btn 
     color="secondary" 
     @click="unblock(data)"
-   
+    :disabled="data.data.status === 1"
   >
     Unblock
   </v-btn>
     
     </template>
-    <DxColumn type="buttons" caption="Action"></DxColumn>
-  
+   
+    <DxColumn cell-template="Dxbutton" width="auto"></DxColumn>
+    <template #Dxbutton="{ data }">
+      <v-btn
+        prepend-icon="mdi-pencil"
+        class="edit-btn"
+        @click="editCompany(data.data)"
+      ></v-btn>
+
+      <v-btn
+        prepend-icon="mdi-delete"
+        class="btn_delete"
+        @click="deleteCompany(data.data.id)"
+      ></v-btn>
+    </template>
     <DxMasterDetail :enabled="true" template="masterDetailTemplate" />
     <template #masterDetailTemplate="{ data: cellInfo }">
       <masterDetailTemplate :company-info="cellInfo.data" />
@@ -164,6 +191,7 @@ export default {
   setup() {
     const form = ref(null);
     const showColumn = ref(false);
+    const warningMessage = ref("");
     const namePattern = ref(/^[a-zA-Z\s][a-zA-Z0-9_\s]{2,20}$/);
     const emailPattern = ref(/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/);
     const phonePattern = ref("^[0-9]{9,13}$");
@@ -180,6 +208,15 @@ export default {
       updateURL,
       deleteUrl
     );
+    const editDialog = ref(false);
+    const editCompanyData = ref({
+      company_name: '',
+      company_email: '',
+      phone_number: '',
+     
+    });
+    const phoneVal = ref("");
+    const updateId = ref();
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
       (v) => !!v || "Email is required",
@@ -222,6 +259,65 @@ export default {
     const rowInserted = (e) => {
       showColumn.value = false;
     };
+    const handlePhoneInput = (event) => {
+      try {
+        if (typeof event === "string") {
+          editCompanyData.value.phone_number = event;
+        } else if (event && event.target && event.target.value) {
+          editCompanyData.value.phone_number = event.target.value;
+        } else {
+          console.error("Invalid event:", event);
+        }
+      } catch (error) {
+        console.error("Error handling phone input:", error);
+      }
+    };
+    const telvalidate = (isValid) => {
+    console.log("Is Valid:", isValid);
+  
+    if (isValid.valid===true) {
+console.log( isValid.value,"Valid Phone Number");
+phoneVal.value = "";
+return true;
+    } else {
+    
+      console.log("Invalid Phone Number");
+       phoneVal.value = "Enter a valid phone number";
+      return false
+    }
+   
+};
+   
+    const editCompany = (data) => {
+     console.log(data)
+      editDialog.value = true;
+      editCompanyData.value.company_name=data.company_name;
+      editCompanyData.value.company_email=data.company_email;
+      editCompanyData.value.phone_number=data.phone_number;
+      updateId.value = data.id;
+    };
+//     const saveChanges = () => {
+//   console.log("Saving changes...");
+ 
+// };
+const saveChanges = (id) => {
+ 
+  if (phoneVal.value) {
+    telvalidate({ isValid: false, number: editCompanyData.value.phone_number });
+        return;
+      }
+  axios.post(`/admin/company/update/${id}`, editCompanyData.value)
+    .then(response => {
+      console.log('Update response:', response.data); 
+   
+      editDialog.value = false;
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Update error:', error); 
+   
+    });
+};
     const teluser = (telnumber) => {
       if (telnumber && telnumber.valid) {
         newCompany.value.phone_number = telnumber.number;
@@ -250,6 +346,8 @@ export default {
         newCompany.value.phoneError = "Enter a valid phone number";
       }
     };
+
+
 const addUser = async () => {
   try {
     teluser({ valid: true, number: newCompany.value.phone_number });
@@ -273,17 +371,31 @@ const addUser = async () => {
         });
       } else {
         axios
-          .post("/admin/company/store", newCompany.value)
-          .then(() => {
-            dialog.value = false;
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: "Company Added",
-            });
+          .post("/company/check", {
+            company_name: newCompany.value.company_name,
+            company_email: newCompany.value.company_email,
+          })
+          .then((response) => {
+            if (response.data.exists) {
+              warningMessage.value = "Company Email And Company Name Already Exist.";
+            } else {
+              axios
+                .post("/admin/company/store", newCompany.value)
+                .then(() => {
+                  dialog.value = false;
+                  window.Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    icon: "success",
+                    title: "Company Added",
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -294,6 +406,7 @@ const addUser = async () => {
     console.error("Error:", error);
   }
 };
+
 const approve = (data) => {
     console.log(data);
     const userId = data.data.id;
@@ -308,7 +421,7 @@ const approve = (data) => {
         .then(response => {
          
             console.log('API Response:', response.data);
-             window.location.reload();
+           window.location.reload();
         })
        
         .catch(error => {
@@ -336,7 +449,34 @@ const unblock = (data) => {
             console.error('API Error:', error);
         });
 };
-
+const deleteCompany = (id) => {
+      window.Swal.fire({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this Company?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            axios.delete(`/admin/company/destroy/${id}`).then((response) => {
+              if (response.data.status == true) {
+               window.location.reload();
+              } else {
+                console.log(
+                  "Request was not successful:",
+                  response.data.message
+                );
+              }
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      });
+    };
     return {
       form,
       dataSource,
@@ -349,8 +489,10 @@ const unblock = (data) => {
       phonePattern,
       onRowExpanding,
       paswordPattern,
-      onContentReady,
-      pageSize,newCompany,dialog,openDialog,addUser,teluser,telval,passwordRules,emailRules,nameRules,approve,unblock
+      onContentReady,warningMessage,editCompany,editDialog,editCompanyData,telvalidate,saveChanges, updateId,handlePhoneInput,
+      pageSize,newCompany,dialog,openDialog,addUser,teluser,telval,passwordRules,emailRules,nameRules,approve,unblock, phoneVal,
+      deleteCompany,
+
     };
   },
   components: { DxRequiredRule, masterDetailTemplate, DxPaging, DxToolbarItem },
