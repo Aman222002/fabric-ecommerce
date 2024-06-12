@@ -623,7 +623,7 @@ class CompanyController extends Controller
                     Auth::logout();
                     return response()->json([
                         'status' => false,
-                        'message' => 'Company is not active. Please contact support.'
+                        'message' => 'Your account has been suspended. Please contact support.'
                     ], 403);
                 }
                 
@@ -647,7 +647,7 @@ class CompanyController extends Controller
                             Auth::logout();
                             return response()->json([
                                 'status' => false,
-                                'message' => 'Company is not active. Please contact support.'
+                                'message' => 'Your account has been suspended. Please contact support.'
                             ], 403);
                         }
                         

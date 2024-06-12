@@ -34,5 +34,6 @@ return [
         'environment' => env('GOCARDLESS_ENVIRONMENT', 'sandbox'),
         'webhook_secret' => env('GOCARDLESS_WEBHOOK_SECRET'),
     ],
+    
 
 ];

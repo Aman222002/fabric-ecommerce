@@ -16,7 +16,6 @@ class GoCardlessServices
             'environment' => config('services.gocardless.environment')
         ]);
     }
-
     public function creatRedirectFlow($param)
     {
         $redirectFlow = $this->client->redirectFlows()->create([

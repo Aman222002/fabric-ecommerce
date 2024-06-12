@@ -29,6 +29,7 @@
               style="margin-top: 10px"
               label="Phone"
               type="phone"
+              :inputOptions="tel_company"
               density="compact"
               mask="##########"
               hide-details="auto"
@@ -49,6 +50,7 @@
               @validate="telval"
               label="Company Phone"
               type="phone"
+              :inputOptions="tel_options"
               density="compact"
               mask="##########"
               hide-details="auto"
@@ -215,6 +217,9 @@ export default {
       phone_number: '',
      
     });
+    const tel_company = {
+      placeholder: "Enter Company phone number...",
+    };
     const phoneVal = ref("");
     const updateId = ref();
     const nameRules = [(v) => !!v || "Name is required"];
@@ -477,6 +482,9 @@ const deleteCompany = (id) => {
         }
       });
     };
+    const tel_options = {
+      placeholder: "Enter User phone number...",
+    };
     return {
       form,
       dataSource,
@@ -491,7 +499,7 @@ const deleteCompany = (id) => {
       paswordPattern,
       onContentReady,warningMessage,editCompany,editDialog,editCompanyData,telvalidate,saveChanges, updateId,handlePhoneInput,
       pageSize,newCompany,dialog,openDialog,addUser,teluser,telval,passwordRules,emailRules,nameRules,approve,unblock, phoneVal,
-      deleteCompany,
+      deleteCompany,tel_company, tel_options
 
     };
   },

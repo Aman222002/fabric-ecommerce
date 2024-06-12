@@ -24,6 +24,18 @@
             <v-alert type="error" class="no_job_found"> No job Found. </v-alert>
           </v-col>
         </v-row>
+        <v-row v-if="showAlert2">
+          <v-col
+            cols="auto"
+            sm="12"
+            md="12"
+            lg="12"
+            xl="12"
+            class="find_Job_list_right"
+          >
+            <v-alert type="error" class="no_job_found"> No job Found for your skill. </v-alert>
+          </v-col>
+        </v-row>
         <v-row v-else>
           <v-col cols="12" sm="12" md="3" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
@@ -226,6 +238,7 @@ export default {
     const experience = ref("");
     const detailPanelVisible = ref(false);
     const showAlert = ref(false);
+    const showAlert2 = ref(false);
     const searchJobs = async () => {
       try {
         showAlert.value = false; 
@@ -322,7 +335,13 @@ export default {
     if (Array.isArray(fetchedJobs)) {
       jobs.value = fetchedJobs;
     } else {
+     
+      showAlert2.value = true;
       jobs.value = []; 
+    }
+    totalJobPostings.value = jobs.value.length; 
+    if (jobs.value.length === 0) {
+      showAlert2.value = true;
     }
   } catch (error) {
     console.error(error);
@@ -463,7 +482,7 @@ export default {
         
       } else {
         fetchpost();
-        fetchpost();
+       
       }
       fetchTotalJobPostings();
       fetchCategories();
@@ -515,7 +534,7 @@ export default {
       experienceOptions,
       filterdata,
       pageFilter,
-      filterpagedata,
+      filterpagedata,showAlert2
     };
   },
 };

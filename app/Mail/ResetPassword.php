@@ -40,14 +40,13 @@ class ResetPassword extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.resetPassword',
+            view: 'email.resetpassword',
             with: [
                 'url' => $this->url,
                 'user' => $this->user,
             ],
         );
     }
-
     /**
      * Get the attachments for the message.
      *

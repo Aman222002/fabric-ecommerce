@@ -50,7 +50,7 @@ class JobsController extends Controller
             }
             $jobs = $jobs->get();
             // $jobs = Job::all();
-            dd($jobs);
+           
             return response()->json(['status' => true, 'data' => $jobs], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
