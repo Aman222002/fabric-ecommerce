@@ -349,7 +349,7 @@ export default {
             errorMessage.value = "Invalid Credentials.";
         }
         else{
-          errorMessages.value = "Company Block Contact support.";
+          errorMessages.value = "Your account has been suspended. Please contact support.";
         }
     }
       };

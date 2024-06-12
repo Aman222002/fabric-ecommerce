@@ -13,11 +13,11 @@ use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
 use GoCardlessPro\Webhook;
 use Illuminate\Support\Facades\Log;
+use Stripe\Webhook as StripeWebhook;
 use PhpParser\Node\Stmt\Echo_;
 
 class WebhookController extends Controller
 {
-    //
     protected $gocardlessService;
 
     public function __construct(GoCardlessServices $gocardlessService)
@@ -90,7 +90,7 @@ class WebhookController extends Controller
                             $user->update(['upgrade_plan_payment_id' => $v->links->payment]);
                             log::info('User Is' . $user);
                             if ($user->subscription_status == 'active') {
-                                // $user->update(['subscription_status' => 'active']);
+
                                 $user_subscription = DB::table('user_subscription')->where('user_id', $user->id)->update([
                                     'plan_id' => $user->plan_id,
                                     'user_id' => $user->id,
@@ -120,7 +120,7 @@ class WebhookController extends Controller
                             }
                             if ($v->action == 'paid_out') {
                                 $user = User::where('upgrade_plan_payment_id', $v->links->payment)->first();
-                                // log::info(print_r('User:' . json_encode($user), 1));
+
                                 if ($user->upgrade_status == 'initiated') {
                                     $plan = Plan::where('id', $user->upgrade_plan_id)->first();
                                 } else {
@@ -181,7 +181,7 @@ class WebhookController extends Controller
 
             foreach ($data->events as $event) {
                 if ($event->resource_type === 'invoices') {
-                   
+
                     Log::info('Invoice received: ' . print_r($event, true));
                 }
             }
@@ -191,4 +191,40 @@ class WebhookController extends Controller
             return response()->json(['error' => 'Invalid signature'], 498);
         }
     }
+    // public function stripeWebhookHandler(Request $request)
+    // {
+    //     $webhookSecret = config('services.stripe.webhook_secret');
+    //     $payload = @file_get_contents('php://input');
+    //     $sigHeader = $request->header('Stripe-Signature');
+    //     $event = null;
+
+    //     try {
+    //         $event = StripeWebhook::constructEvent($payload, $sigHeader, $webhookSecret);
+    //     } catch (\UnexpectedValueException $e) {
+        
+    //         return response()->json(['error' => 'Invalid payload'], 400);
+    //     } catch (\Stripe\Exception\SignatureVerificationException $e) {
+    
+    //         return response()->json(['error' => 'Invalid signature'], 400);
+    //     }
+
+     
+    //     switch ($event->type) {
+    //         case 'invoice.payment_succeeded':
+    //             $invoice = $event->data->object;
+    //             Log::info('Invoice payment succeeded: ' . $invoice->id);
+             
+    //             break;
+    //         case 'invoice.payment_failed':
+    //             $invoice = $event->data->object;
+    //             Log::info('Invoice payment failed: ' . $invoice->id);
+               
+    //             break;
+          
+    //         default:
+    //             Log::info('Received unknown event type ' . $event->type);
+    //     }
+
+    //     return response()->json(['message' => 'Stripe webhook received and processed successfully'], 200);
+    // }
 }

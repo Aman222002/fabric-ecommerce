@@ -183,7 +183,7 @@
 		<!-- Hobbies And Strengths -->
 		<div style="width: 30%;float: left;background-color: #22405c;height: 100%;color: #fff;">
 			<!-- Candidates Image  -->
-			<!-- <div style="width: 100%;">
+			<div style="width: 100%;">
 				<table style="width: 100%;text-align: center;font-family: Biryani;margin-top: 20px;">
 					<tbody>
 						<tr>
@@ -193,7 +193,7 @@
 						</tr>
 					</tbody>
 				</table>
-			</div> -->
+			</div>
 			<!-- Skills(Technical) -->
 			<div style="border-top: 2px solid; margin-top: 25px;">
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">

@@ -163,7 +163,7 @@ class UserController extends Controller
             $user = auth()->user();
             $company = $user->company->id;
            if(!($user->hasRole('Company Admin'))){
-            dd($user);
+            // dd($user);
             $company = $user->company_id;
             if (!$company) {
                 return response()->json(['status' => false, 'message' => 'User does not belong to a company'], 404);

@@ -229,52 +229,6 @@ export default {
     formData.value.phoneError = "Enter a valid phone number";
   }
 };
-//     const telValidate = (telnumber) => {
-//   if (telnumber && telnumber.number) {
-//     const countryCodeMatch = telnumber.number.match(/^\+\d{1,3}/);
-//     console.log(countryCodeMatch);
-//     if (countryCodeMatch) {
-//       const countryCode = countryCodeMatch[0];
-//       const digitsAfterCountryCode = telnumber.number
-//         .replace(countryCode, "")
-//         .replace(/\D/g, "");
-//         console.log(digitsAfterCountryCode);
-//       if (digitsAfterCountryCode.length >= 10) {
-//         const formattedPhoneNumber = countryCode + digitsAfterCountryCode;
-//         formData.value.phone = formattedPhoneNumber;
-//         console.log( formData.value.phone)
-//         formData.value.phoneError = "";
-//       } else {
-//         formData.value.phone = "";
-//         formData.value.phoneError =
-//           "Enter a valid phone numbe";
-//       }
-//     }
-//   } else {
-//     formData.value.phone = "";
-//     formData.value.phoneError = "Enter a valid phone number";
-//   }
-// };
-
-// const filterNonNumeric = (value) => {
-//   if (typeof value === "string") {
-//     const numericValue = value.replace(/\D/g, "");
-//     const digitsAfterCountryCode = value.replace(/^\+\d{1,3}/, "").replace(/\D/g, "");
-    
-//     if (digitsAfterCountryCode.length < 6) {
-//       formData.value.phoneError = "Enter a valid phone numbe";
-//     } else if (digitsAfterCountryCode.length > 10 || /[^\d]/.test(numericValue.substring(10))) {
-//       formData.value.phoneError = " phone number not valid";
-//     } else if (/[a-zA-Z]/.test(value)) {
-//       formData.value.phoneError = "Alphabets are not allowed";
-//     } else if (/[^\d]/.test(value.substring(10))) {
-//       formData.value.phoneError = "Alphabets are not allowed ";
-//     } else {
-//       formData.value.phoneError = "";
-//     }
-//     formData.value.phone = numericValue;
-//   }
-// };
 
 
     const submitForm = async () => {

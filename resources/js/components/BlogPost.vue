@@ -36,7 +36,6 @@
     <template #CreatedTemplate="{ data }">
       {{ formatCreatedAt(data.data.created_at) }}
     </template>
-
     <DxColumn
       data-field="status"
       data-type="string"

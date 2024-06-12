@@ -16,42 +16,45 @@
           @click="openDetailPage(job.id)"
         >
           <v-card class="mx-auto company_info job_box_card">
-            <div class="featured_jobs_logo">
+            <div class="featured_jobs_logo" v-if="job.company && job.company.logo">
               <v-img :src="`/storage/assest/${job.company.logo}`"></v-img>
             </div>
             <v-card class="job_info">
               <v-card-title>
-                <a href="#">{{ job.title }}</a>
+                <a href="#">{{ job.title || 'No Title' }}</a>
               </v-card-title>
               <ul class="company_seat">
-                <li class="mr-2">
-                  <v-icon color="#f16666" class="mr-1">mdi-domain</v-icon
-                  >{{ job.company.company_name }}
+                <li class="mr-2" v-if="job.company">
+                  <v-icon color="#f16666" class="mr-1">mdi-domain</v-icon>
+                  {{ job.company.company_name || 'Unknown Company' }}
                 </li>
                 <li class="mr-2">
-                  <v-icon color="#34a853" class="mr-1"
-                    >mdi-map-marker-outline</v-icon
-                  >{{ HomeCountryState(job.location) }}
+                  <v-icon color="#34a853" class="mr-1">mdi-map-marker-outline</v-icon>
+                  {{ HomeCountryState(job.location || 'Unknown Location') }}
                 </li>
-                <li class="mr-2">
-                  <v-icon color="#f9ab00" class="mr-1"
-                    >mdi-clock-time-two-outline</v-icon
-                  >{{ formatCreatedAt(job.company.created_at) }}
+                <li class="mr-2" v-if="job.company && job.company.created_at">
+                  <v-icon color="#f9ab00" class="mr-1">mdi-clock-time-two-outline</v-icon>
+                  {{ formatCreatedAt(job.company.created_at) }}
                 </li>
               </ul>
               <ul class="company_time">
-                <li>{{ job.job_type.name }}</li>
-                <li>{{ job.category.name }}</li>
+                <li>{{ job.job_type?.name || 'Unknown Job Type' }}</li>
+                <li>{{ job.category?.name || 'Unknown Category' }}</li>
               </ul>
             </v-card>
           </v-card>
         </v-col>
+        <div class="w-100" v-if="showAlert">
+          <v-alert type="error" class="no_job_found w-100"> No job Found for your skill. </v-alert>
+        </div>
+
+
         <div class="load_more_div" v-if="jobs.length > 0">
           <v-btn size="x-large" class="load_more mt-5" @click="searchJob">
             Load More Listing
           </v-btn>
         </div>
-        <div class="w-100" v-else>
+        <div class="w-100" v-if="jobs.length < 0">
           <v-alert type="error" class="no_job_found w-100">
             No job Found.
           </v-alert>
@@ -64,7 +67,8 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { useUsersStore } from ".././../store/user";
+import { useUsersStore } from "../../store/user";
+
 export default {
   name: "featuredJob",
   setup() {
@@ -81,35 +85,57 @@ export default {
     });
     const usersStore = useUsersStore();
     const detailPanelVisible = ref(false);
+
     const openDetailPanel = (job) => {
       detailPanelVisible.value = true;
-      detail.value.company_name = job.company.company_name;
-      detail.value.location = job.location;
-      detail.value.experience = job.experience;
-      detail.value.description = job.description;
-      detail.value.vacancy = job.vacancy;
-      detail.value.title = job.title;
-      detail.value.created_at = job.company.created_at;
+      detail.value.company_name = job.company.company_name || 'Unknown Company';
+      detail.value.location = job.location || 'Unknown Location';
+      detail.value.experience = job.experience || 'Unknown Experience';
+      detail.value.description = job.description || 'No Description';
+      detail.value.vacancy = job.vacancy || 'No Vacancy';
+      detail.value.title = job.title || 'No Title';
+      detail.value.created_at = job.company.created_at || 'Unknown Date';
       detail.value.id = job.id;
     };
+    const showAlert = ref(false);
     const openDetailPage = (id) => {
       window.location.href = `/view/${id}`;
     };
+
     const closeDetailDialog = () => {
       detailPanelVisible.value = false;
     };
+
     const searchJob = () => {
       window.location.href = "/job-search";
     };
+
     const fetchJobs = async () => {
       try {
         const response = await axios.get("/company/post");
         jobs.value = Object.values(response.data.data);
-        //jobs.value = response.data.data;
-        // console.log(jobs.value);
         displayedJobs.value = jobs.value.slice(0, 6);
       } catch (err) {
         console.error(err);
+      }
+    };
+
+    const totalJobPostings = ref(0);
+    const fetchpost = async () => {
+      try {
+        const response = await axios.get("/company/job");
+        jobs.value = Object.values(response.data.data);
+
+        displayedJobs.value = jobs.value.slice(0, 6);
+        totalJobPostings.value = jobs.value.length;
+
+        if (jobs.value.length === 0) {
+          showAlert.value = true;
+        } else {
+          showAlert.value = false;
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -117,9 +143,17 @@ export default {
       const options = { day: "numeric", month: "long", year: "numeric" };
       return new Date(createdAt).toLocaleDateString(undefined, options);
     };
-    onMounted(() => {
-      fetchJobs();
-    });
+
+    const fetchTotalJobPostings = async () => {
+      try {
+        const response = await fetch("/total-published-jobs");
+        const data = await response.json();
+        totalJobPostings.value = data.totalPublishedJobs;
+      } catch (error) {
+        console.error("Error fetching total job postings:", error);
+      }
+    };
+
     const apply = async (id) => {
       if (!usersStore.isloggedin) {
         window.Swal.fire({
@@ -154,6 +188,7 @@ export default {
         });
       }
     };
+
     const save = async (id) => {
       try {
         await axios.post(`/save-job/${id}`).then((response) => {
@@ -178,12 +213,22 @@ export default {
         });
       }
     };
+
     const HomeCountryState = (countryStateName) => {
       if (countryStateName && countryStateName.length > 15) {
         return countryStateName.substring(0, 15) + "....";
       }
       return countryStateName;
     };
+
+    onMounted(() => {
+      if (!usersStore.isloggedin) {
+        fetchJobs();
+      } else {
+        fetchpost();
+      }
+      fetchTotalJobPostings();
+    });
 
     return {
       jobs,
@@ -198,11 +243,14 @@ export default {
       usersStore,
       searchJob,
       openDetailPage,
-      HomeCountryState,
+      HomeCountryState, 
+      totalJobPostings,
+      showAlert,
     };
   },
 };
 </script>
+
 <style>
 .featured_jobs_logo {
   width: 90px;

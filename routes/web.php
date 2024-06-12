@@ -134,7 +134,8 @@ Route::prefix('company')->group(function (){
     Route::post('/login', [CompanyController::class, 'check']);
     Route::get('/names/{email?}', [CompanyController::class, 'getCompanyNames']);
     Route::get('/buy/plans/view/{id?}', [CompanyController::class, 'buyplansview']);
-    Route::post('/buy/plan', [CompanyController::class, 'buyplan']);
+     Route::post('/buy/plan', [CompanyController::class, 'buyplan']);
+   
     Route::get('/logout', [CompanyController::class, 'logout']);
 });
 Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [CompanyController::class, 'completeRedirectFlow']);
@@ -275,6 +276,7 @@ Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
  Route::get('/verify/company/{token}', [CompanyController::class,'verifyuser']);
 
  Route::post('/webhook/invoice', [WebhookController::class, 'invoiceHandler']);
+
  Route::get('/fetch-user-data', [LoginController::class, 'fetchUserData']);
  Route::get('/work-experiences', [LoginController::class, 'index2']);
  Route::post('subscription-plan/{userId}', [UserController::class, 'getSubscription']);

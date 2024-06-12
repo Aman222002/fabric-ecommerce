@@ -382,15 +382,14 @@ export default {
       DropDown2.value = false;
     };
     const logEvent = (e) => {
-      // console.log(e);
+     
       job_Id.value = e.data.id;
-      // console.log(job_Id.value);
+     
       selectedExperience.value = e.data.experience;
       const categoryId = e.data.category_id;
       const skillId = e.data.skill_id;
       const JobTypeId = e.data.job_type_id;
-      // console.log(categoryId);
-      // console.log(allCategories.value);
+      
       const foundCategory = allCategories.value.find(
         (item) => item.id === categoryId
       );
@@ -409,7 +408,7 @@ export default {
         salaryType.value = "fixed";
       }
       const foundSkill = allSkills.value.find((item) => item.id === skillId);
-      // console.log(foundSkill);
+      
       if (foundSkill) {
         selectedSkill.value = foundSkill.skill_name;
       } else {
@@ -427,6 +426,7 @@ export default {
     const saveEvent = (e) => {
       if (salaryType.value === "range") {
         salary.value = `${minSalary.value}-${maxSalary.value}`;
+      
       }
       params.value.salary = salary.value;
       console.log(params.value.salary);

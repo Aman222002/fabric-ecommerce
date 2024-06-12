@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ResumeController extends Controller
 {
-
     public function store(Request $request)
     {
       
@@ -57,15 +56,52 @@ class ResumeController extends Controller
                 // 'achievements.*.certificate_file_path' => 'required|mimes:pdf|max:2048'
 
             ]);
-            $image = $request->userDetails['user_image'];
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/assest', $imageName);
-            $userId = $user->id;
-            $user = User::find($userId);
-            if ($user) {
-                $user->user_image = $imageName;
-                $user->save();
-            }
+           
+
+
+// if ($request->has('userDetails.user_image')) {
+    
+//     $image = $request->userDetails['user_image'];
+//     $imageName = time() . '.' . $image->getClientOriginalExtension();
+//     $image->storeAs('public/assest', $imageName);
+//     $userId = $user->id;
+//     $user = User::find($userId);
+//     if ($user) {
+//         $user->user_image = $imageName;
+//         $user->save();
+//     }  
+// }
+// else{
+   
+//     $newImage = $request->userDetails['user_image']; 
+//     $user->user_image = $newImage;
+//    $user->save();  
+// }
+if ($request->hasFile('userDetails.user_image')) { 
+    $image = $request->file('userDetails.user_image'); 
+    $imageName = time() . '.' . $image->getClientOriginalExtension();
+    $image->storeAs('public/assest', $imageName);
+    $userId = $user->id;
+    $user = User::find($userId);
+    if ($user) {
+        $user->user_image = $imageName;
+        $user->save();
+    }  
+} else {
+    if (isset($request->userDetails['user_image'])) {
+        $newImage = $request->userDetails['user_image']; 
+        $userId = $user->id;
+        $user = User::find($userId);
+        if ($user) {
+            $user->user_image = $newImage;
+            $user->save();  
+        }
+    }
+}
+
+
+
+
             UserAddress::updateOrInsert(
                 [
                     'user_id' => $user->id,
@@ -239,7 +275,9 @@ class ResumeController extends Controller
             $user->name = $request->userDetails['name'];
             $user->email = $request->userDetails['email'];
             $user->phone = $request->userDetails['phone']; // Update phone number here
-          
+   
+    // $user->user_image =$request->userDetails['user_image'];
+    //   dd($user);
             $user->save();
             $response = [
                 "status" => true,

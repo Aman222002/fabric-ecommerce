@@ -1,6 +1,16 @@
 
 <template>
   <v-container fluid>
+    <v-alert
+      v-if="errorMessage"
+      :value="true"
+      type="warning"
+      dense
+      outlined
+      color="blue"
+    >
+      {{ errorMessage }}
+    </v-alert>
     <v-form @submit.prevent="addUser" class="form_fild_com" ref="form">
       <v-row>
         <v-col cols="12">
@@ -93,7 +103,7 @@ export default {
       (v) => !!v || "Phone number is required",
       (v) => /^[0-9]{10}$/.test(v) || "Enter a valid 10-digit phone number",
     ];
-
+    const errorMessage = ref(""); 
     const permissionRules = [
       (v) => (!!v && v.length > 0) || "Permission is required",
     ];
@@ -124,6 +134,17 @@ export default {
     const selectCategory = (selectedCategory) => {
       userData.permission = selectedCategory.name;
     };
+    const checkUsername = async () => {
+      try {
+        const response = await axios.post("/check-username", {
+          username: userData.value.name,
+        });
+        return response.data.available;
+      } catch (error) {
+        console.error("Error checking username availability:", error);
+        return false;
+      }
+    };
 
     onMounted(fetchPermissions);
     const addUser = async () => {
@@ -132,6 +153,12 @@ export default {
         return;
       }
       try {
+        const usernameAvailable = await checkUsername();
+        if (!usernameAvailable) {
+         
+          errorMessage.value = "Username already exist.";
+          return;
+        }
         const valid = await form.value.validate();
     if (!valid.valid) {
       const errors = JSON.parse(JSON.stringify(valid.errors));
@@ -177,7 +204,7 @@ export default {
       nameRules,
       emailRules,
       permissionRules,
-      phoneRules,form,telValidate
+      phoneRules,form,telValidate,checkUsername,  errorMessage,
     };
   },
 };
