@@ -56,9 +56,6 @@ class ResumeController extends Controller
                 // 'achievements.*.certificate_file_path' => 'required|mimes:pdf|max:2048'
 
             ]);
-           
-
-
 // if ($request->has('userDetails.user_image')) {
     
 //     $image = $request->userDetails['user_image'];
@@ -72,7 +69,6 @@ class ResumeController extends Controller
 //     }  
 // }
 // else{
-   
 //     $newImage = $request->userDetails['user_image']; 
 //     $user->user_image = $newImage;
 //    $user->save();  

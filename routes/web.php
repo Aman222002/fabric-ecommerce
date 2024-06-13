@@ -30,7 +30,7 @@ use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
 use App\Http\Controllers\SocialMediaAccountController;
-
+use App\Http\Controllers\StripeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -284,3 +284,7 @@ Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
  Route::post('/company/check', [CompanyController::class, 'checkCompanyExists']);
  Route::post('block-company/{userId}', [UserController::class, 'blockcompany']);
  Route::post('unblock-company/{userId}', [UserController::class, 'unblockcompany']);
+ Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
+ Route::get('/success', [CompanyController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/cancel', [CompanyController::class, 'paymentCancel'])->name('payment.cancel');
+Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [StripeController::class, 'completeRedirectFlow']);

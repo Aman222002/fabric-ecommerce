@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\GoCardlessServices;
+use App\Services\StripeServices;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Job;
@@ -27,6 +28,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Jobs\SendVerificationEmail;
 use function PHPSTORM_META\map;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Checkout\Session;
 
 class CompanyController extends Controller
 {
@@ -88,7 +92,7 @@ class CompanyController extends Controller
      */
     public function buyplan(Request $request)
     {
-       
+    //    dd($request);
         try {
             $input = $request->all();
             if (!($request->input('user_name'))) {
@@ -375,15 +379,10 @@ class CompanyController extends Controller
         if (!$company) {
             return response()->json(['status' => false, 'message' => 'Company not found'], 404);
         }
-
-      
         $address = $company->address;
-
-     
         if (!$address) {
             return response()->json(['status' => false, 'message' => 'Address not found for the company','data' => []], 404);
         }
-
         return response()->json(['status' => true, 'data' => $address]);
     } catch (\Exception $e) {
         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -1257,4 +1256,131 @@ public function removeSubscription(Request $request)
             return response()->json(['exists' => false]);
         }
     }
+
+// public function createPaymentIntent(Request $request)
+// {
+//     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+//     $input = $request->all();
+//     $user = Auth::user();
+//     $selected_plan = Plan::find($input['id']);
+
+  
+//     $priceCents = $selected_plan->price;
+
+//     $checkoutSessionOptions = [
+//         'payment_method_types' => ['card'],
+//         'line_items' => [
+//             [
+//                 'price_data' => [
+//                     'currency' => 'GBP',
+//                     'product_data' => [
+//                         'name' => $selected_plan->name,
+//                     ],
+//                     'unit_amount' => $priceCents,
+//                 ],
+//                 'quantity' => 1,
+//             ],
+//         ],
+     
+//         'mode' => 'payment',
+//         'success_url' => env('APP_URL') . '/success',
+//         'cancel_url' => env('APP_URL') . '/cancel',
+//     ];
+//    // dd($checkoutSessionOptions);
+//     $checkoutSession = Session::create($checkoutSessionOptions);
+
+//     return response()->json([
+//         'sessionId' => $checkoutSession->id,
+//     ]);
+// }
+// protected $stripeService;
+
+//     public function __constructing(StripeServices $stripeService)
+//     {
+//         $this->$stripeService = $stripeService;
+//     }
+public function createPaymentIntent(Request $request)
+{
+    try {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $input = $request->all();
+        $user = Auth::user();
+        $selected_plan = Plan::find($input['id']);
+
+        $priceCents = $selected_plan->price*100; 
+
+        $checkoutSessionOptions = [
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'GBP',
+                        'product_data' => [
+                            'name' => $selected_plan->name,
+                        ],
+                        'unit_amount' => $priceCents,
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+            'success_url' => env('APP_URL') . '/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => env('APP_URL') . '/cancel',
+        ];
+// dd( $checkoutSessionOptions);
+       
+        $user->plan_id = $selected_plan->id;
+        $user->subscription_status = 'pending';
+        $user->save();
+        $email = $user->email;
+        $name = $user->name;
+        $session_token = md5(uniqid(rand(), true));
+        $redirect_url = url('complete/redirect/flow/' . $user->id . '/' . $input['id'] . '/' . $session_token);
+        $param = [
+            "session_token" => $session_token,
+            "success_redirect_url" => $redirect_url,
+            "prefilled_customer" =>  [
+                "given_name" => $name,
+                "family_name" => 'Test',
+                "email" => $email,
+            ]
+        ];
+        //dd($param);
+        // $redirectFlow = $this->stripeService->creatRedirectFlow($param);
+        $checkoutSession = Session::create($checkoutSessionOptions);
+        $data = [
+            'email' => $user->email,
+            'url' => $checkoutSession->url,
+        ];
+        dispatch(new PaymentJob($data));
+      
+        return response()->json([
+            'status' => true,
+            'sessionId' => $checkoutSession->id,
+            'url' => $checkoutSession->url,
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+public function paymentSuccess(Request $request)
+{
+ 
+    $session_id = $request->get('session_id');
+   
+
+    return view('success');
+}
+
+public function paymentCancel()
+{
+  
+    return view('cancel');
+}
+
 }
