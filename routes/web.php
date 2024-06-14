@@ -31,6 +31,7 @@ use App\Http\Controllers\JobTypesController;
 use App\Http\Controllers\SearchjobController;
 use App\Http\Controllers\SocialMediaAccountController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\StripewebhookController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -251,7 +252,8 @@ Route::get('/users', [CompanyController::class, 'users']);
 Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
 Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
 Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
-Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
+ Route::get('/cancel/upgrade', [StripeController::class, 'cancelUpgradeRequest']);
+// Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 Route::post('/remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);
 Route::get('/contact/data', [DashboardController::class, 'viewContact']);
 Route::get('partner/data', [DashboardController::class, 'viewPartners']);
@@ -287,4 +289,5 @@ Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
  Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
  Route::get('/success', [CompanyController::class, 'paymentSuccess'])->name('payment.success');
 Route::get('/cancel', [CompanyController::class, 'paymentCancel'])->name('payment.cancel');
-Route::get('complete/redirect/flow/{userId}/{planId}/{session}', [StripeController::class, 'completeRedirectFlow']);
+
+// Route::post('/stripe/webhook', [StripewebhookController::class, 'handleWebhook']);

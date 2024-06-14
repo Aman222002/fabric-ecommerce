@@ -236,6 +236,9 @@ export default {
 
           upgrade_status.value = response.data.data[0].upgrade_status;
           console.log(upgrade_status.value);
+          if(upgrade_status.value==="initiated"){
+            disabledButton.value=true;
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -244,12 +247,14 @@ export default {
     const handleUpgradeStatusChange = () => {
       console.log("Upgrade status:", upgrade_status.value);
       disabledButton.value = upgrade_status.value === "initiated";
+    
     };
     const buyPlan = (id) => {
       const formData = new FormData();
       formData.append("id", id);
       axios
-        .post("/company/buy/plan", formData)
+        // .post("/company/buy/plan", formData)
+         .post("/stripe/create-payment-intent", formData)
         .then((response) => {
           console.log(response);
           if (response.data.status == true) {

@@ -46,9 +46,21 @@ class StripeServices
             throw $e;
         }
     }
-    public function createRedirectFlow($param)
+    // public function createRedirectFlow($param)
+    // {
+       
+    //     $redirectFlow = \Stripe\Issuing\Cardholder::create($param);
+    //     dd($redirectFlow);
+    //     return $redirectFlow;
+    // }
+     public function createRedirectFlow($param)
     {
-        $redirectFlow = \Stripe\Issuing\Cardholder::create($param);
+        // dd($param);
+        $redirectFlow = $this->stripe->redirectFlows()->create([
+            "params" => $param
+        ]);
+       
+
         return $redirectFlow;
     }
 
@@ -59,7 +71,7 @@ class StripeServices
     // }
       public function completeRedirectFlow($redirecFlowId, $params)
     {
-      
+      //dd($redirecFlowId);
         $redirectFlow = $this->stripe->redirectFlows()->complete(
             $redirecFlowId,
             ["params" => $params],
@@ -73,17 +85,46 @@ class StripeServices
         ]);
         return $subscription;
     }
+    // public function cancelSubscription($subscriptionId)
+    // {
+    //     try {
+    //         $subscription = Subscription::retrieve($subscriptionId);
+    //         $subscription->cancel();
+    //     } catch (ApiErrorException $e) {
+    //         Log::error('Stripe Error: ' . $e->getMessage());
+    //         throw $e;
+    //     }
+    // }
+   
     public function cancelSubscription($subscriptionId)
+    {
+       
+        try {
+            $subscription = $this->stripe->subscriptions->cancel(
+                $subscriptionId,
+                
+            );
+            return $subscription;
+            
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            throw new \Exception('Stripe API Error: ' . $e->getMessage());
+        }
+    }
+    // public function removeSubscription($data)
+    // {
+      
+    //     $this->stripe->subscriptions()->cancel($data);
+    // }
+    public function removeSubscription($subscriptionId)
     {
         try {
             $subscription = Subscription::retrieve($subscriptionId);
             $subscription->cancel();
-        } catch (ApiErrorException $e) {
-            Log::error('Stripe Error: ' . $e->getMessage());
-            throw $e;
+            return ['status' => true, 'message' => 'Subscription cancelled successfully.'];
+        } catch (\Exception $e) {
+            return ['status' => false, 'message' => $e->getMessage()];
         }
     }
-   
     // public function createRedirectFlow($param)
     // {
     //     $redirectFlow = $this->stripe->redirectFlows()->create([

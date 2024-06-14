@@ -202,7 +202,9 @@ public function getAllJobs(Request $request)
     {
         try {
             $plans = Plan::with('features')->get()->map(function ($plan) {
+              
                 $features = $plan->features;
+                // dd($plan);
                 if ($features) {
                     return [
                         'id' => $plan->id,

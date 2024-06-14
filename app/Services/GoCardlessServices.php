@@ -18,15 +18,17 @@ class GoCardlessServices
     }
     public function creatRedirectFlow($param)
     {
+
         $redirectFlow = $this->client->redirectFlows()->create([
             "params" => $param
         ]);
+        //dd($redirectFlow);
 
         return $redirectFlow;
     }
     public function completeRedirectFlow($redirecFlowId, $params)
     {
-        // dd($data);
+         //dd($redirecFlowId);
         $redirectFlow = $this->client->redirectFlows()->complete(
             $redirecFlowId,
             ["params" => $params],
@@ -42,7 +44,7 @@ class GoCardlessServices
     }
     public function removeSubscription($data)
     {
-        // dd($data);
+        //  dd($data);
         $this->client->subscriptions()->cancel($data);
     }
 }
