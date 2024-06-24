@@ -10,13 +10,13 @@
         </DxColumn>
         <DxColumn data-field="phone" data-type="string">
         </DxColumn>
-        <DxColumn
+        <!-- <DxColumn
       caption="Action"
       cell-template="ButtonTemplate"
-    ></DxColumn>
-    <template #ButtonTemplate="{ data }">
+    ></DxColumn> -->
+    <!-- <template #ButtonTemplate="{ data }">
         <div>
-        <!-- <v-btn   color="primary" @click="approve(data)" :disabled="data.data.subscription_status === 'active'">Approve</v-btn> -->
+      
         <v-btn 
           color="primary" 
           @click="approve(data)" 
@@ -25,7 +25,7 @@
         </v-btn>
         
     </div>
-    </template>
+    </template> -->
 
     </DxDataGrid>
 </template>

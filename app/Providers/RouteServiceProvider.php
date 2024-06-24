@@ -43,7 +43,6 @@ class RouteServiceProvider extends ServiceProvider
 
 
                 Route::middleware('api')
-                ->prefix('webhook')
                 ->group(base_path('routes/stripe.php'));
         });
     }

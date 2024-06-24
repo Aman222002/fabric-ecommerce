@@ -468,7 +468,7 @@ export default {
               window.Swal.fire({
                 toast: true,
                 position: "top-end",
-                timer: 2000,
+                timer: 4000,
                 showConfirmButton: false,
                 icon: "success",
                 title: "Added",
@@ -482,7 +482,7 @@ export default {
               window.Swal.fire({
                 toast: true,
                 position: "top-end",
-                timer: 2000,
+                timer: 4000,
                 showConfirmButton: false,
                 icon: "error",
                 title: `You don't have a active plan buy a plan or renew your plan`,
@@ -491,7 +491,7 @@ export default {
               window.Swal.fire({
                 toast: true,
                 position: "top-end",
-                timer: 2000,
+                timer: 4000,
                 showConfirmButton: false,
                 icon: "error",
                 title: `You have posted number of allowed post can't post more`,
@@ -500,7 +500,7 @@ export default {
               window.Swal.fire({
                 toast: true,
                 position: "top-end",
-                timer: 2000,
+                timer: 4000,
                 showConfirmButton: false,
                 icon: "error",
                 title: `You already posted this job`,

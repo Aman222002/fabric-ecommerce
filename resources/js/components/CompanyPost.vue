@@ -24,7 +24,7 @@
             <v-alert type="error" class="no_job_found"> No job Found. </v-alert>
           </v-col>
         </v-row>
-        <v-row v-if="showAlert2">
+        <!-- <v-row v-if="showAlert2">
           <v-col
             cols="auto"
             sm="12"
@@ -35,7 +35,7 @@
           >
             <v-alert type="error" class="no_job_found"> No job Found for your skill. </v-alert>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row v-else>
           <v-col cols="12" sm="12" md="3" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
@@ -239,6 +239,23 @@ export default {
     const detailPanelVisible = ref(false);
     const showAlert = ref(false);
     const showAlert2 = ref(false);
+    const fetchpost = async () => {
+      try {
+        const response = await axios.get("/company/job");
+        const fetchedJobs = response.data.data;
+        console.log("Fetched jobs:", fetchedJobs);
+        if (Array.isArray(fetchedJobs)) {
+          jobs.value = fetchedJobs;
+        } else {
+          showAlert.value = true; // Show alert if no jobs found
+          jobs.value = [];
+        }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+        showAlert.value = true; // Show alert if error occurs
+        jobs.value = [];
+      }
+    };
     const searchJobs = async () => {
       try {
         showAlert.value = false; 
@@ -282,26 +299,7 @@ export default {
       searchJobs();
     });
 
-    // const fetchJobs = async () => {
-    //   try {
-    //     showAlert.value = false;
-    //     const response = await axios.get("/company/post");
-    //     const fetchedJobs = response.data.data;
-    //     if (typeof fetchedJobs !== "object" || Array.isArray(fetchedJobs)) {
-    //       showAlert.value = true;
-    //       jobs.value = [];
-    //     } else {
-    //       jobs.value = Object.values(fetchedJobs);
-    //       totalJobPostings.value = response.data.total;
-    //       if (jobs.value.length === 0) {
-    //         showAlert.value = true;
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching jobs:", error);
-    //     showAlert.value = true;
-    //   }
-    // };
+    
     const fetchJobs = async () => {
   try {
     showAlert.value = false;
@@ -328,25 +326,26 @@ export default {
 };
 
     
-    const fetchpost = async () => {
-  try {
-    const response = await axios.get("/company/job");
-    const fetchedJobs = response.data.data;
-    if (Array.isArray(fetchedJobs)) {
-      jobs.value = fetchedJobs;
-    } else {
+//     const fetchpost = async () => {
+//   try {
+//     const response = await axios.get("/company/job");
+//     const fetchedJobs = response.data.data;
+//     console.log(fetchedJobs);
+//     if (Array.isArray(fetchedJobs)) {
+//       jobs.value = fetchedJobs;
+//     } else {
      
-      showAlert2.value = true;
-      jobs.value = []; 
-    }
-    totalJobPostings.value = jobs.value.length; 
-    if (jobs.value.length === 0) {
-      showAlert2.value = true;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
+//       showAlert2.value = true;
+//       jobs.value = []; 
+//     }
+//     totalJobPostings.value = jobs.value.length; 
+//     if (jobs.value.length === 0) {
+//       showAlert2.value = true;
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
     const fetchTotalJobPostings = async () => {
       try {
@@ -477,7 +476,7 @@ export default {
     };
 
     onMounted(() => {
-      if (!usersStore.isloggedin) {
+      if (usersStore.isloggedin) {
         fetchJobs();
         
       } else {

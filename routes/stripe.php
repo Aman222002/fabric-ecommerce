@@ -7,5 +7,5 @@ use App\Http\Controllers\WebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::match(['get', 'post'], '/gc-callback', [StripewebhookController::class, 'handleWebhook']);
+Route::match(['get', 'post'], '/stripe-webhook', [StripewebhookController::class, 'handleWebhook']);
 // till now you have not even created route

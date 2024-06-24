@@ -291,3 +291,13 @@ Route::get('/users/{userId}/skills', [LoginController::class, 'getSkills']);
 Route::get('/cancel', [CompanyController::class, 'paymentCancel'])->name('payment.cancel');
 
 // Route::post('/stripe/webhook', [StripewebhookController::class, 'handleWebhook']);
+Route::post('/stripe/create-customer', [StripeController::class, 'createCustomer']);
+Route::post('/stripe/create-subscription', [StripeController::class, 'createSubscription']);
+Route::post('/stripe/attach-payment-method', [StripeController::class, 'attachPaymentMethod']);
+Route::post('/stripe/create-subscription', [StripeController::class,'createSubscription']);
+
+Route::post('/stripe-webhook', [StripewebhookController::class,'handleWebhook']);
+
+Route::post('/restore/subscription/{userID}', [CompanyController::class, 'restoreSubscription']);
+Route::get('/download/invoice/{userId}', [StripeController::class, 'downloadInvoice']);
+

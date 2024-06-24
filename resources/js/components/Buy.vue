@@ -347,7 +347,10 @@ export default {
             outlined
           ></v-text-field>
         </v-col>
-       
+        <v-col cols="12" class="text-center">
+          <div id="card-element"></div>
+          <div id="card-errors" role="alert"></div>
+        </v-col>
         <v-col cols="12" class="text-center">
           <v-btn v-if="currentPlanId === plan.id" disabled class="form_fild_btn">
             Bought
@@ -357,6 +360,7 @@ export default {
         <v-col cols="12" class="text-center">
           <div id="express-checkout-button"></div>
         </v-col>
+        
       </v-row>
     </v-form>
   </v-container>
@@ -377,14 +381,16 @@ export default {
     },
   },
   setup(props) {
-    const stripePromise = loadStripe("your_stripe_public_key");
-    const cardElement = ref(null);
+    console.log(props)
+    const stripePromise = loadStripe("pk_test_51PQilzP2XjMWHwbIIwELHxqWEdO6HUYoZoRTmkppI4HKkPjL1l7CdWPOVCnnLSMOFspxmBl9zteORsD9Kj2ZsodU00T8uoKDti");
+    
     const form = ref(null);
     const isDisabled = true;
     const plan = ref(props.data);
     const currentPlanId = ref(null);
     const usersStore = useUsersStore();
     const employerStore = useEmployerStore();
+  
     const user = ref({
       user_name: "",
       email: "",
@@ -396,7 +402,6 @@ export default {
       company_email: "",
       status: "1",
     });
-
     const nameRules = [(v) => !!v || "Name is required"];
     const companyNameRules = [
       (value) => {
@@ -432,24 +437,16 @@ export default {
           console.log(error);
         });
     };
+let stripe;
+let cardElement; 
 
-    const setupStripeElements = async () => {
-  const stripe = await stripePromise;
-
-  const expressCheckoutOptions = {
-    buttonType: {
-      applePay: 'buy',
-      googlePay: 'buy',
-      paypal: 'buynow'
-    }
-  };
+const setupStripeElements = async () => {
+  stripe = await stripePromise;
 
   const elements = stripe.elements();
+  cardElement = elements.create("card");
 
-  const card = elements.create("card");
-
-
-  card.on("change", (event) => {
+  cardElement.on("change", (event) => {
     const displayError = document.getElementById("card-errors");
     if (event.error) {
       displayError.textContent = event.error.message;
@@ -458,25 +455,7 @@ export default {
     }
   });
 
-  const expressCheckout = elements.create("expressCheckout", expressCheckoutOptions);
-  expressCheckout.mount("#express-checkout-button");
-
-  document.getElementById("express-checkout-button").addEventListener("click", async () => {
-    try {
-      const { error } = await stripe.redirectToCheckout({
-        lineItems: [{ price: plan.value.price, quantity: 1 }],
-        mode: "payment",
-        successUrl: `${window.location.origin}/success`,
-        cancelUrl: `${window.location.origin}/cancel`,
-      });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-    } catch (err) {
-      console.error("Error redirecting to checkout:", err);
-    }
-  });
+  cardElement.mount("#card-element");
 };
 
 const submitForm = async () => {
@@ -485,75 +464,59 @@ const submitForm = async () => {
     return;
   }
 
-  const stripe = await stripePromise;
-  const formData = new FormData();
-  formData.append("user_name", user.value.user_name);
-  formData.append("email", user.value.email);
-  formData.append("password", user.value.password);
-  formData.append("phone", user.value.phone);
-  formData.append("company_name", company.value.company_name);
-  formData.append("company_email", company.value.company_email);
-  formData.append("status", company.value.status);
-  formData.append("plan_name", plan.value.name);
-  formData.append("price", plan.value.price);
-  formData.append("id", plan.value.id);
-
   try {
-    const { data: clientSecretData } = await axios.post(
-      "/stripe/create-payment-intent",
-      formData
-    );
-    window.Swal.fire({
-          icon: "success",
-          title: "Email Sent",
-          text: "We sent a mail to add subscription",
-          confirmButtonText: "OK",
-          cancelButtonColor: "#6e7d88",
-        });
-   
-    const clientSecret = clientSecretData.client_secret; 
-
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement.value,
-        billing_details: {
-          name: user.value.user_name,
-          email: user.value.email,
-          phone: user.value.phone,
-        },
-      },
+    const { paymentMethod, error } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement, // Use cardElement directly
     });
 
-    if (result.error) {
-      document.getElementById("card-errors").textContent = result.error.message;
-    } else {
-      if (result.paymentIntent.status === "succeeded") {
-        const formData = new FormData();
-        for (let key in company.value) {
-          formData.append(key, company.value[key]);
-        }
-        for (let key in user.value) {
-          formData.append(key, user.value[key]);
-        }
-        for (let key in plan.value) {
-          formData.append(key, plan.value[key]);
-        }
-        await axios.post("/company/buy/plan", formData);
-        window.Swal.fire({
-          icon: "success",
-          title: "Email Sent",
-          text: "We sent a mail to add subscription",
-          confirmButtonText: "OK",
-          cancelButtonColor: "#6e7d88",
-        });
-     
-      }
+    if (error) {
+      console.error("Payment method error:", error);
+      return;
     }
-    
+
+    const { data } = await axios.post("/stripe/create-subscription", {
+      plan_id: plan.value.id,
+      payment_method_id: paymentMethod.id,
+      plan_price:plan.value.price,
+      interval:plan.value.interval_unit,
+      plan_name:plan.value.name
+    });
+
+    if (data.success) {
+      // Handle success
+      window.Swal.fire({
+        icon: "success",
+        title: "Subscription Created",
+        text: "Your subscription has been successfully created.",
+        confirmButtonText: "OK",
+        cancelButtonColor: "#6e7d88",
+      });
+    } else {
+      // Handle failure
+      console.error("Subscription creation failed:", data.error);
+      window.Swal.fire({
+        icon: "error",
+        title: "Subscription Creation Failed",
+        text: "Failed to create subscription. Please try again later.",
+        confirmButtonText: "OK",
+        cancelButtonColor: "#6e7d88",
+      });
+    }
   } catch (error) {
     console.error("Error:", error);
+    window.Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "An error occurred while processing your request. Please try again later.",
+      confirmButtonText: "OK",
+      cancelButtonColor: "#6e7d88",
+    });
   }
 };
+
+
+
 
 
 
@@ -582,6 +545,11 @@ const submitForm = async () => {
   },
 };
 </script>
+<style scoped>
+#card-errors{
+  color: rgb(226, 56, 56);
+}
+</style>
 
 
 
