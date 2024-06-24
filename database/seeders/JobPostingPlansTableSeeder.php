@@ -43,9 +43,9 @@ class JobPostingPlansTableSeeder extends Seeder
                 'Validity' => '3 Week',
                 'Post Job' => 'Yes',
                 'Duration of Job-Post' => '7 Days',
-                'Number of Job-Post' => 10,
+                'Number of Job-Post' => 20,
                 'plan_id' => NULL,
-                'price' => 20.00,
+                'price' => 30.00,
             ]
         ];
         DB::table('features')->upsert(

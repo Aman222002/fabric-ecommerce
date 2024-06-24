@@ -131,7 +131,7 @@ class WebhookController extends Controller
                                 $days = null;
                                 if ($interval_unit == 'yearly') {
                                     $days = $interval * 365;
-                                } else if ($interval_unit == 'monthly') {
+                                } else if ($interval_unit == 'month') {
                                     $carbonInterval = CarbonInterval::months($interval);
                                     $days = Carbon::now()->add($carbonInterval)->daysInMonth;
                                 } else {
@@ -201,26 +201,26 @@ class WebhookController extends Controller
     //     try {
     //         $event = StripeWebhook::constructEvent($payload, $sigHeader, $webhookSecret);
     //     } catch (\UnexpectedValueException $e) {
-        
+
     //         return response()->json(['error' => 'Invalid payload'], 400);
     //     } catch (\Stripe\Exception\SignatureVerificationException $e) {
-    
+
     //         return response()->json(['error' => 'Invalid signature'], 400);
     //     }
 
-     
+
     //     switch ($event->type) {
     //         case 'invoice.payment_succeeded':
     //             $invoice = $event->data->object;
     //             Log::info('Invoice payment succeeded: ' . $invoice->id);
-             
+
     //             break;
     //         case 'invoice.payment_failed':
     //             $invoice = $event->data->object;
     //             Log::info('Invoice payment failed: ' . $invoice->id);
-               
+
     //             break;
-          
+
     //         default:
     //             Log::info('Received unknown event type ' . $event->type);
     //     }

@@ -202,7 +202,9 @@ public function getAllJobs(Request $request)
     {
         try {
             $plans = Plan::with('features')->get()->map(function ($plan) {
+              
                 $features = $plan->features;
+                // dd($plan);
                 if ($features) {
                     return [
                         'id' => $plan->id,
@@ -213,7 +215,8 @@ public function getAllJobs(Request $request)
                         'Post Job' => $features->{'Post Job'},
                         'Duration of Job-Post' => $features->{'Duration of Job-Post'},
                         'Number of Job-Post' => $features->{'Number of Job-Post'},
-                        'Price' => '$' . $plan->price,
+                        'Price' =>  $plan->price,
+                        'interval' =>$plan->interval_unit,
                     ];
                 } else {
                     return null;

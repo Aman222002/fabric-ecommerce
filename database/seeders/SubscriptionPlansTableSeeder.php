@@ -20,7 +20,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'duration' => '2Month',
                 'posts_allowed' => 50,
                 'price' => 70.00,
-                'interval_unit' => 'monthly',
+                'interval_unit' => 'month',
                 'interval' => 1.0,
                 'feature_id' => 1
             ],
@@ -30,7 +30,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'duration' => '1Month',
                 'posts_allowed' => 30,
                 'price' => 50.00,
-                'interval_unit' => 'monthly',
+                'interval_unit' => 'month',
                 'interval' => 1.0,
                 'feature_id' => 2
             ],
@@ -40,7 +40,7 @@ class SubscriptionPlansTableSeeder extends Seeder
                 'duration' => '3Week',
                 'posts_allowed' => 20,
                 'price' => 30.00,
-                'interval_unit' => 'weekly',
+                'interval_unit' => 'week',
                 'interval' => 1.0,
                 'feature_id' => 3
             ]

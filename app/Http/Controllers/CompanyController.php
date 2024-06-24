@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\GoCardlessServices;
+use App\Services\StripeServices;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Job;
@@ -27,7 +28,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Jobs\SendVerificationEmail;
 use function PHPSTORM_META\map;
-
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
 class CompanyController extends Controller
 {
     /**
@@ -80,7 +84,7 @@ class CompanyController extends Controller
     public function buyplansview($planId)
     {
         //
-        $plan = Plan::select('id', 'name', 'price', 'duration')->find($planId);
+        $plan = Plan::select('id', 'name', 'price', 'duration','interval_unit')->find($planId);
         return view('buyplan')->with('plan', $plan);
     }
     /**
@@ -88,7 +92,7 @@ class CompanyController extends Controller
      */
     public function buyplan(Request $request)
     {
-       
+        
         try {
             $input = $request->all();
             if (!($request->input('user_name'))) {
@@ -111,6 +115,7 @@ class CompanyController extends Controller
                         "metadata" => ['user_id' => strval($user->id)],
                         "links" => ["mandate" => $user->mandate_id]
                     ];
+                    // dd($data);
                     
                     if ($selected_plan->price > $user_plan->price) {
                         $user_subscription = UserSubscription::where('user_id', $user->id)->first();
@@ -375,15 +380,10 @@ class CompanyController extends Controller
         if (!$company) {
             return response()->json(['status' => false, 'message' => 'Company not found'], 404);
         }
-
-      
         $address = $company->address;
-
-     
         if (!$address) {
             return response()->json(['status' => false, 'message' => 'Address not found for the company','data' => []], 404);
         }
-
         return response()->json(['status' => true, 'data' => $address]);
     } catch (\Exception $e) {
         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
@@ -948,24 +948,196 @@ class CompanyController extends Controller
         return response()->json(['permissions' => $permissions, 'roles' => $roles]);
     }
 
-    public function fetchPlan()
-    {
-        $company_id = session('company_id');
-        // dd($company_id);
-        try {
-            $user_Id = Company::where('id', $company_id)->value('user_id');
-            $user_subscription = UserSubscription::where('user_id', $user_Id)->first();
-            // dd($user_subscription);
-            $user_plan = User::where('id', $user_Id)->get()->filter(function ($user) {
-                return $user->hasrole('Company Admin');
-                // return $user;
-            })->value('plan_id');
-            $plan = Plan::where('id', $user_plan)->first();
-            return response()->json(['status' => true, 'data' => $plan, 'subscription' => $user_subscription], 200);
-        } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e], 500);
+    // public function fetchPlan()
+    // {
+    //     $company_id = session('company_id');
+    //     // dd($company_id);
+    //     try {
+    //         $user_Id = Company::where('id', $company_id)->value('user_id');
+    //         $user_subscription = UserSubscription::where('user_id', $user_Id)->first();
+    //         // dd($user_subscription);
+    //         $user_plan = User::where('id', $user_Id)->get()->filter(function ($user) {
+    //             return $user->hasrole('Company Admin');
+    //             // return $user;
+    //         })->value('plan_id');
+    //         $plan = Plan::where('id', $user_plan)->first();
+    //         return response()->json(['status' => true, 'data' => $plan, 'subscription' => $user_subscription], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['status' => false, 'message' => $e], 500);
+    //     }
+    // }
+    // public function fetchPlan()
+    // {
+    //     $company_id = session('company_id');
+    //     try {
+    //         $user_id = Company::where('id', $company_id)->value('user_id');
+            
+    //         $user_subscription = UserSubscription::where('user_id', $user_id)->first();
+         
+    //         $user_plan = User::where('id', $user_id)
+    //         ->get()->filter(function ($user) {
+    //             return $user->hasrole('Company Admin');
+    //                         })
+    //                         ->first();
+    
+      
+    //         $plan_id = $user_plan->upgrade_plan_id ?? $user_plan->plan_id;
+            
+          
+    //         $plan = Plan::where('id', $plan_id)->first();
+    
+    //         return response()->json([
+    //             'status' => true, 
+    //             'data' => $plan, 
+    //             'subscription' => $user_subscription
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false, 
+    //             'message' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+//     public function fetchPlan()
+// {
+//     $company_id = session('company_id');
+//     try {
+//         $user_id = Company::where('id', $company_id)->value('user_id');
+        
+//         $user_subscription = UserSubscription::where('user_id', $user_id)->first();
+     
+//         $user_plan = User::where('id', $user_id)
+//             ->get()
+//             ->filter(function ($user) {
+//                 return $user->hasRole('Company Admin');
+//             })
+//             ->first();
+
+//         if (!$user_plan) {
+//             throw new \Exception('User plan not found for company admin.');
+//         }
+        
+//         $plan_id = $user_plan->upgrade_plan_id ?? $user_plan->plan_id;
+        
+      
+//         $plan = Plan::where('id', $plan_id)->first();
+
+   
+//         if ($user_plan->upgrade_plan_id > $user_plan->plan_id) {
+         
+//             $original_plan = Plan::where('id', $user_plan->plan_id)->first();
+
+//             return response()->json([
+//                 'status' => true, 
+//                 'data' => $original_plan,  
+                
+//                 'subscription' => $user_subscription
+//             ], 200);
+//         } 
+//         else if ($user_plan->upgrade_plan_id < $user_plan->plan_id) {
+         
+//             $original_plan = Plan::where('id', $user_plan->plan_id)->first();
+
+//             return response()->json([
+//                 'status' => true, 
+//                 'data' => $original_plan,  
+                
+//                 'subscription' => $user_subscription
+//             ], 200);
+//         }
+//         else {
+//             return response()->json([
+//                 'status' => true, 
+//                 'data' => $plan, 
+//                 'subscription' => $user_subscription
+//             ], 200);
+//         }
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'status' => false, 
+//             'message' => $e->getMessage()
+//         ], 500);
+//     }
+// }
+public function fetchPlan()
+{
+    $company_id = session('company_id');
+    try {
+        $user_id = Company::where('id', $company_id)->value('user_id');
+        
+        $user_subscription = UserSubscription::where('user_id', $user_id)->first();
+     
+        $user_plan = User::where('id', $user_id)
+            ->get()
+            ->filter(function ($user) {
+                return $user->hasRole('Company Admin');
+            })
+            ->first();
+
+        if (!$user_plan) {
+            throw new \Exception('User plan not found for company admin.');
         }
+        
+        $plan_id = $user_plan->plan_id;
+        $upgrade_plan_id = $user_plan->upgrade_plan_id;
+
+        $plan = Plan::where('id', $plan_id)
+        ->with(['features' => function ($query) {
+            $query->select('id', 'Search','Duration of Job-Post','Number of Job-Post','price'); 
+        }])
+        ->first();
+        // $plan = Plan::where('id', $plan_id)->with('features')->first();
+        $upgrade_plan = Plan::where('id', $upgrade_plan_id)->with(['features' => function ($query) {
+            $query->select('id', 'Search','Duration of Job-Post','Number of Job-Post','price'); 
+        }])->first();
+if($upgrade_plan_id===null){
+    return response()->json([
+        'status' => true, 
+        'data' => $plan,  
+       
+        'subscription' => $user_subscription
+    ], 200);
+}
+        if ($upgrade_plan_id > $plan_id) {
+            $plan_id = $user_plan->plan_id;
+            $plan = Plan::where('id', $plan_id)->with(['features' => function ($query) {
+                $query->select('id', 'Search','Duration of Job-Post','Number of Job-Post','price'); 
+            }])->first();
+            return response()->json([
+                'status' => true, 
+                'data' => $plan,  
+                'upgrade_plan' => $upgrade_plan, 
+                'subscription' => $user_subscription
+            ], 200);
+        } elseif ($upgrade_plan_id < $plan_id) {
+       
+         $plan_id = $user_plan->upgrade_plan_id;
+         $plan = Plan::where('id', $plan_id)->with(['features' => function ($query) {
+            $query->select('id', 'Search','Duration of Job-Post','Number of Job-Post','price'); 
+        }])->first();
+            return response()->json([
+                'status' => true, 
+                'data' => $plan, 
+                'original_plan' => $plan, 
+                'subscription' => $user_subscription
+            ], 200);
+        } else {
+         
+            return response()->json([
+                'status' => true, 
+                'data' => $plan,  
+                'subscription' => $user_subscription
+            ], 200);
+        }
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false, 
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
+
     //return current plan view with all plan details
     public function showCompanyPlan()
     {
@@ -1040,6 +1212,32 @@ class CompanyController extends Controller
 //         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
 //     }
 // }
+// public function removeSubscription(Request $request)
+// {
+//     try {
+//         $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
+        
+//         if ($user_subscription) {
+//             if ($user_subscription->subscription_id) {
+             
+//                 $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
+                
+//                 User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
+//             } else {
+               
+//                 User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null,'upgrade_status'=>null]);
+               
+//             }
+//         } else {
+//             throw new \Exception('User subscription not found.');
+//         }
+
+//         return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
+//     } catch (\Exception $e) {
+       
+//         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+//     }
+// }
 public function removeSubscription(Request $request)
 {
     try {
@@ -1047,14 +1245,42 @@ public function removeSubscription(Request $request)
         
         if ($user_subscription) {
             if ($user_subscription->subscription_id) {
-             
-                $this->gocardlessService->removeSubscription($user_subscription->subscription_id);
                 
-                User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
+                Stripe::setApiKey(config('services.stripe.secret'));
+                $subscription_id = $user_subscription->subscription_id; 
+
+                if ($subscription_id) {
+                    $stripe_subscription = \Stripe\Subscription::retrieve($subscription_id);
+                    $stripe_subscription->cancel();
+                }
+                User::where('id', $request->userID)->update([
+                    'subscription_status' => 'cancelled',
+                    'plan_id' => null,
+                    'upgrade_status' => null,
+                    'upgrade_plan_id'=>null,
+
+                ]);
+                UserSubscription::where('user_id', $request->userID)->update([
+                    'subscription_status' => 'cancelled',
+                    'plan_id' => null,
+                  
+                    'upgrade_subscription_id'=>null,
+                    'next_plan_id'=>null,
+
+
+                ]);
             } else {
-               
-                User::where('id', $request->userID)->update(['subscription_status' => 'cancelled', 'plan_id' => null]);
-               
+                User::where('id', $request->userID)->update([
+                    'subscription_status' => 'cancelled',
+                    'plan_id' => null,
+                    'upgrade_status' => null
+                ]);
+                UserSubscription::where('user_id', $request->userID)->update([
+                    'subscription_status' => 'cancelled',
+                    'plan_id' => null,
+                    'upgrade_subscription_id'=>null,
+                    'next_plan_id'=>null,
+                ]);
             }
         } else {
             throw new \Exception('User subscription not found.');
@@ -1062,22 +1288,73 @@ public function removeSubscription(Request $request)
 
         return response()->json(['status' => true, 'message' => 'Canceled Successfully'], 200);
     } catch (\Exception $e) {
-       
         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
     }
 }
 
+public function restoreSubscription(Request $request)
+{
+    try {
+        $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
 
-    public function getTotalPublishedJobs()
+        if ($user_subscription) {
+            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+            $stripe_subscription_id = $user_subscription->subscription_id;
+            if ($stripe_subscription_id) {
+                $stripe_subscription = \Stripe\Subscription::retrieve($stripe_subscription_id);
+                if ($stripe_subscription->status === 'canceled') {
+                    $new_subscription = \Stripe\Subscription::create([
+                        'customer' => $stripe_subscription->customer,
+                        'items' => [['plan' => $stripe_subscription->items->data[0]->plan->id]],
+                        'metadata' => [
+                            'restored_at' => time(),
+                        ],
+                    ]);
+                    UserSubscription::where('user_id', $request->userID)->update([
+                        'subscription_id' => $new_subscription->id,
+                        'subscription_status' => 'active',
+                        'plan_id' => $stripe_subscription->items->data[0]->plan->metadata->plan_id,
+                    ]);
+                    User::where('id', $request->userID)->update([
+                        'subscription_status' => 'active',
+                        'plan_id' => $stripe_subscription->items->data[0]->plan->metadata->plan_id,
+                    ]);
+                    Log::info('Subscription restored for user ID: ' . $request->userID);
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Subscription restored successfully',
+                    ], 200);
+                } else {
+                    throw new \Exception('Subscription is not canceled. Cannot restore.');
+                }
+            } else {
+                throw new \Exception('Stripe subscription ID not found for this user');
+            }
+        } else {
+            throw new \Exception('User subscription not found.');
+        }
+    } catch (\Stripe\Exception\ApiErrorException $e) {
+     
+        Log::error('Stripe API Error: ' . $e->getMessage());
+        return response()->json([
+            'status' => false,
+            'message' => 'Failed to restore subscription: ' . $e->getMessage(),
+        ], 500);
+    } catch (\Exception $e) {
+       
+        Log::error('Exception: ' . $e->getMessage());
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+}
+public function getTotalPublishedJobs()
     {
         $jobs = Job::getTotalPublishedJobs();
         $totalPublishedJobs = $jobs->count();
         return response()->json(['totalPublishedJobs' => $totalPublishedJobs]);
     }
-
-
-
-
     public function recentPosts(Request $request)
     {
         try {
@@ -1091,10 +1368,7 @@ public function removeSubscription(Request $request)
             ->latest()
             ->take(5)
             ->get();
-        
-        
         $totalPosts = $company->jobs()->count(); 
-    
             return response()->json(['status' => true, 'data' => $recentPosts, 'total_posts' => $totalPosts], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -1257,4 +1531,95 @@ public function removeSubscription(Request $request)
             return response()->json(['exists' => false]);
         }
     }
+
+// public function createPaymentIntent(Request $request)
+// {
+//     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+//     $input = $request->all();
+//     $user = Auth::user();
+//     $selected_plan = Plan::find($input['id']);
+
+  
+//     $priceCents = $selected_plan->price;
+
+//     $checkoutSessionOptions = [
+//         'payment_method_types' => ['card'],
+//         'line_items' => [
+//             [
+//                 'price_data' => [
+//                     'currency' => 'GBP',
+//                     'product_data' => [
+//                         'name' => $selected_plan->name,
+//                     ],
+//                     'unit_amount' => $priceCents,
+//                 ],
+//                 'quantity' => 1,
+//             ],
+//         ],
+     
+//         'mode' => 'payment',
+//         'success_url' => env('APP_URL') . '/success',
+//         'cancel_url' => env('APP_URL') . '/cancel',
+//     ];
+//    // dd($checkoutSessionOptions);
+//     $checkoutSession = Session::create($checkoutSessionOptions);
+
+//     return response()->json([
+//         'sessionId' => $checkoutSession->id,
+//     ]);
+// }
+// protected $stripeService;
+
+//     public function __constructing(StripeServices $stripeService)
+//     {
+//         $this->$stripeService = $stripeService;
+//     }
+
+public function paymentSuccess(Request $request)
+{
+ 
+    $session_id = $request->get('session_id');
+   
+
+    return view('success');
 }
+
+public function paymentCancel()
+{
+    return view('cancel');
+}
+// public function restoreSubscription(Request $request)
+// {
+//     try {
+//         $user_subscription = UserSubscription::where('user_id', $request->userID)->first();
+        
+//         if ($user_subscription) {
+          
+//             if ($user_subscription->subscription_status === 'cancelled') {
+               
+//                 $subscription_id = $user_subscription->subscription_id;
+
+//                 // Reactivate the subscription in Stripe
+//                 Stripe::setApiKey(config('services.stripe.secret'));
+//                 $stripe_subscription = \Stripe\Subscription::retrieve($subscription_id);
+//                 $stripe_subscription->reactivate();
+
+//                 User::where('id', $request->userID)->update([
+//                     'subscription_status' => 'active',
+//                     'upgrade_status' => null
+//                     // You might want to update 'plan_id' and 'upgrade_status' here if applicable
+//                 ]);
+
+//                 return response()->json(['status' => true, 'message' => 'Subscription restored successfully'], 200);
+//             } else {
+//                 throw new \Exception('Subscription is not cancelled or cannot be restored.');
+//             }
+//         } else {
+//             throw new \Exception('User subscription not found.');
+//         }
+//     } catch (\Exception $e) {
+//         return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+//     }
+// }
+}       

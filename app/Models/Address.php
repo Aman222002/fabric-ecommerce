@@ -20,5 +20,8 @@ class Address extends Model
     {
         return $this->belongsTo(Company::class);
     }
-   
+    public function fullAddress()
+    {
+        return $this->first_line_address . ', ' . $this->street . ', ' . $this->city . ', ' . $this->state . ' ' . $this->postal_code;
+    }
 }

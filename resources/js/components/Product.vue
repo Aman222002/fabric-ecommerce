@@ -17,18 +17,7 @@
         <p class="centered_heading">Choose Your Plan</p>
       </div>
       <v-row class="packages_price">
-        <!-- <v-col cols="3">
-          <v-card>
-            <v-card-title style="font-size: 20px">Features</v-card-title>
-            <v-card-text class="border-right border-left">
-              <v-list dense>
-                <v-list-item v-for="feature in features" :key="feature">
-                  <v-list-item-title>{{ feature }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-col> -->
+       
         <v-col
           cols="3"
           sm="12"
