@@ -45,7 +45,7 @@
                   <v-form @submit.prevent="goToNext(id)" ref="myForm">
                     <template v-if="currentStep === 1">
                       <v-row>
-                        <v-col cols="6"> <user-details></user-details></v-col>
+                        <v-col cols="6"> <UserDetails></UserDetails></v-col>
                         <v-col cols="6"> <user-address></user-address></v-col>
                       </v-row>
                     </template>
@@ -55,6 +55,7 @@
                         <user-skills></user-skills>
                       </div>
                     </template>
+                    
                     <template v-if="currentStep === 3">
                       <div style="display: flex">
                         <v-switch
@@ -77,6 +78,7 @@
                         <user-achievments></user-achievments>
                       </div>
                     </template>
+                    
                     <template v-if="currentStep === 4">
                       <div>
                         <user-profile></user-profile>
@@ -89,6 +91,7 @@
                       @click:next="goToNext()"
                       color="#006400"
                     ></v-stepper-actions>
+                   
                     <v-select
                       v-if="currentStep === 4"
                       v-model="selectedTemplate"
@@ -104,12 +107,12 @@
                       height="300"
                       frameborder="0"
                     ></iframe>
-                    <v-btn
+                    <!-- <v-btn
                       class="btn_cts"
                       v-if="currentStep === 4"
                       @click="downloadcv()"
                       >Generate CV</v-btn
-                    >
+                    > -->
                   </v-form>
                 </v-card>
               </v-stepper-window-item>
@@ -178,6 +181,7 @@ export default {
         Zip_code: yup.number().required(),
         state: yup.string().required(),
       }),
+    
       yup.object({
         education_type: yup.string().required(),
         school_university: yup.string().required(),
@@ -185,8 +189,16 @@ export default {
         passing_year: yup.string().required(),
       }),
 
+
       yup.object({
         terms: yup.bool().required().equals([true]),
+      }),
+      yup.object({
+        image: yup.mixed().required("Image is required").test(
+          "fileType",
+          "Unsupported File Format",
+          value => value && ["image/jpeg", "image/png"].includes(value.type)
+        ),
       }),
     ];
 
@@ -270,8 +282,8 @@ export default {
   methods: {
     async goToNext() {
       const formRefs = this.$refs.myForm;
-
       for (let i = 0; i < formRefs.length; i++) {
+        const formRef = formRefs[i];
         const { valid } = await formRefs[i].validate();
         if (!valid) {
           return;

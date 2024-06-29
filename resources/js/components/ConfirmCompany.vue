@@ -26,7 +26,7 @@
   const success = ref(true);
   
   const login = () => {
-    window.location.href="/job";
+    window.location.href="/company/login";
   };
   </script>
   

@@ -141,7 +141,7 @@ export default {
     const logout = () => {
       usersStore.isLogOut();
       axios.get("/admin/logout");
-      window.location.href = "/job";
+      window.location.href = "/login";
     };
     const fetchProfile = () => {
       axios

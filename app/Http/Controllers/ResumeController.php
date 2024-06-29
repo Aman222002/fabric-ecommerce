@@ -21,7 +21,7 @@ class ResumeController extends Controller
 {
     public function store(Request $request)
     {
-      
+      //dd($request);
         try {
             $user = auth()->user();
 
@@ -97,7 +97,7 @@ if ($request->hasFile('userDetails.user_image')) {
 
 
 
-
+//dd($request);
             UserAddress::updateOrInsert(
                 [
                     'user_id' => $user->id,
@@ -128,33 +128,82 @@ if ($request->hasFile('userDetails.user_image')) {
             //         ['skill_id']
             //     );
             // }
-            $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
+           // dd($request);
+            // $skills = $request->selectedSkills ? json_decode($request->selectedSkills, 1) : [];
 
-            $alteredSkills = [];
-            foreach ($skills as $skill) {
+            // $alteredSkills = [];
+            // foreach ($skills as $skill) {
 
-                $existingSkill = Skill::find($skill);
-                if ($existingSkill) {
-                    $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
-                }
-            }
-            if (count($alteredSkills)) {
-                UserSkill::upsert(
-                    $alteredSkills,
-                    ['user_id', 'skill_id'],
-                    ['skill_id']
-                );
-            }
+            //     $existingSkill = Skill::find($skill);
+            //     if ($existingSkill) {
+            //         $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
+            //     }
+            // }
+          
+            // if (count($alteredSkills)) {
+            //     UserSkill::upsert(
+            //         $alteredSkills,
+            //         ['user_id', 'skill_id'],
+            //         ['skill_id']
+            //     );
+            // }
 
 
-            $existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
-            $skillsToDelete = array_diff($existingSkills, $skills);
+            // $existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
+            // $skillsToDelete = array_diff($existingSkills, $skills);
+   
+
 
             // if (!empty($skillsToDelete)) {
             //     UserSkill::where('user_id', $user->id)
             //         ->whereIn('skill_id', $skillsToDelete)
             //         ->delete();
             // }
+            $skills = $request->selectedSkills ? json_decode($request->selectedSkills, true) : [];
+
+            // If no skills are selected, create new entries for all
+            if (empty($skills)) {
+                // Upsert all selected skills
+                foreach ($skills as $skill) {
+                    UserSkill::updateOrCreate(
+                        ['user_id' => $user->id, 'skill_id' => $skill],
+                        ['user_id' => $user->id, 'skill_id' => $skill]
+                    );
+                }
+            } else {
+                $existingSkills = UserSkill::where('user_id', $user->id)->pluck('skill_id')->toArray();
+            
+                $alteredSkills = [];
+                foreach ($skills as $skill) {
+                    $existingSkill = Skill::find($skill);
+                    if ($existingSkill) {
+                        $alteredSkills[] = ['user_id' => $user->id, 'skill_id' => $skill];
+                    }
+                }
+            
+                // Upsert new or updated skills
+                if (count($alteredSkills) > 0) {
+                    UserSkill::upsert(
+                        $alteredSkills,
+                        ['user_id', 'skill_id'],
+                        ['skill_id']
+                    );
+                }
+            
+                // Determine skills to delete
+                $skillsToDelete = array_diff($existingSkills, $skills);
+            
+                // Delete skills that are no longer selected
+                if (!empty($skillsToDelete)) {
+                    UserSkill::where('user_id', $user->id)
+                        ->whereIn('skill_id', $skillsToDelete)
+                        ->delete();
+                }
+            }
+            
+
+            
+
             UserProfile::updateOrInsert(
                 ['user_id' => $user->id],
                 [
@@ -206,6 +255,7 @@ if ($request->hasFile('userDetails.user_image')) {
                     if ($experiences['end_date'] == 'null' || is_null($experiences['end_date'])) {
                         $experiences['end_date'] = NULL;
                     }
+                    
                     $experienceData[] = $experiences;
                 }
                 foreach ($experienceData as $experience) {

@@ -490,10 +490,10 @@ public function fetchCompanies()
      */
     public function destroy(string $id)
     {
-        
         try {
             $user = User::find($id);
             if ($user) {
+                UserSubscription::where('user_id', $user->id)->delete();
                 $user->delete();
                 $response = [
                     'status' => true,
@@ -583,7 +583,7 @@ public function fetchCompanies()
                 $url =  url('/company/register/' . $request->id . '/' . urlencode($request->name) . '/' . $request->email . '/' . $request->phone . '/' . $request->company . '/' . $request->permission);
                 return redirect($url);
             } else {
-                return redirect('/job');
+                return redirect('/company/login');
             }
             return response()->json(['status' => true, 'message' => 'Invitation accepted successfully'], 200);
         } catch (\Exception $e) {

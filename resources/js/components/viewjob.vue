@@ -325,6 +325,7 @@
 import { ref, onMounted } from "vue";
 import { useUsersStore } from "../store/user";
 import axios from "axios";
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   name: "viewjob",
   props: {
@@ -332,10 +333,14 @@ export default {
       type: Number,
       default: () => 0,
     },
+    
   },
   setup(props) {
     console.log(props.data);
     const jobid = props.data;
+    // const appliedJobs = ref(props.job);
+    // const firstJobId = props.job[0].job_id;
+    //  console.log(firstJobId);
     const usersStore = useUsersStore();
     const featuredJob = ref({});
 
@@ -352,7 +357,7 @@ export default {
     //     },
     //   ]);
     const fetchJobs = async (jobid) => {
-      console.log(jobid);
+   
       try {
         const response = await axios.get(`/fetchjob/${jobid}`);
 
@@ -383,46 +388,28 @@ export default {
       try {
         await axios.post(`/apply-job/${jobid}`).then((response) => {
           if (response.data.status == true) {
-            window.Swal.fire({
-              icon: "success",
-              title: "Applied Successfully",
-              text: "Applied successfully ",
-              confirmButtonText: "OK",
-            });
+         
+            Sweetalert.success('Applied Successfully')
             window.location.href = response.data.company_url;
           }
         });
       } catch (err) {
         console.error(err);
-
-        window.Swal.fire({
-          title: "Application Failed",
-          text: "You Already apply on this Job",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        Sweetalert.error('You Already apply on this Job')
       }
     };
     const save = async () => {
       try {
         await axios.post(`/save-job/${jobid}`).then((response) => {
           if (response.data.status == true) {
-            window.Swal.fire({
-              icon: "success",
-              title: "Saved Successfully",
-
-              confirmButtonText: "OK",
-            });
+          
+            Sweetalert.success('Saved Successfully')
           }
         });
       } catch (err) {
         console.error(err);
-        window.Swal.fire({
-          title: "Application Failed",
-          text: "You Already saved this Job",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+      
+        Sweetalert.error('You Already saved this Job')
       }
     };
 

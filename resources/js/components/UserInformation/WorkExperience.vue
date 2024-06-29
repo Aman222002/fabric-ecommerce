@@ -14,11 +14,13 @@
           dense
           color="#0146a6"
           @change="handleCurrentlyWorkingChange(index)"
+        
         ></v-checkbox>
       </v-col>
       <v-col cols="12" md="3">
         <v-text-field
-          v-model="experience[index].company_name"
+      
+        v-model="experience[index].company_name"
           :name="'company_' + index"
           label="Company Name"
           required
@@ -99,6 +101,7 @@ export default {
   setup() {
     const store = useMyStore();
     const experience = ref(store.experience ?? []);
+    
     const removeWorkExperience = async (index) => {
       const workExperience = experience.value[index];
       const experienceId = workExperience.id;
@@ -151,11 +154,11 @@ export default {
     };
     const addWorkExperience = () => {
       experience.value.push({
-        company_name: "",
-        position: "",
-        start_date: "",
-        end_date: "",
-        description: "",
+        company_name: null,
+        position: null,
+        start_date: null,
+        end_date: null,
+        description: null,
       });
     };
     onMounted(() => {

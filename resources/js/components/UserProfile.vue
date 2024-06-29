@@ -98,8 +98,39 @@
                     }}
                   </li>
                 </ul>
+               
               </div>
             </v-card>
+            <div class="sec-title">
+              <h2>Education Details</h2>
+              <div class="text">
+                Know your worth and find the job that qualifies your life
+              </div>
+            </div>
+          <v-card>
+                <v-card-title>Education</v-card-title>
+        <v-table class="education-table">
+          
+            <thead>
+              <tr>
+                <th>School/University</th>
+                <th>Education Type</th>
+                <th>Starting Year</th>
+                <th>Passing Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(education, index) in educationDetails" :key="index">
+                <td>{{ education.school_university }}</td>
+                <td>{{ education.education_type }}</td>
+                <td>{{ education.starting_year }}</td>
+                <td>{{ education.passing_year }}</td>
+              </tr>
+            </tbody>
+          
+        </v-table>
+      </v-card>
+        
           </div>
         </v-col>
         <v-col
@@ -123,15 +154,46 @@
                 <v-card-text>Fresher</v-card-text>
               </div>
             </v-card>
+
+            <div class="sec-title">
+              <h2 style="margin-top: 20px">Education Details</h2>
+              <div class="text">
+                Know your worth and find the job that qualifies your life
+              </div>
+            </div>
+            <v-card>
+                <v-card-title>Education</v-card-title>
+        <v-table class="education-table">
+         
+            <thead>
+              <tr>
+                <th class="text-left" >School/University</th>
+                <th class="text-left">Education Type</th>
+                <th class="text-left">Starting Year</th>
+                <th class="text-left">Passing Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(education, index) in educationDetails" :key="index">
+                <td>{{ education.school_university }}</td>
+                <td>{{ education.education_type }}</td>
+                <td>{{ education.starting_year }}</td>
+                <td>{{ education.passing_year }}</td>
+              </tr>
+            </tbody>
+        
+        </v-table>
+      </v-card>
           </div>
         </v-col>
+       
 
         <v-col sm="12" md="6" lg="4" xl="4" class="user_profile_infor_right">
           <v-card>
             <v-card-title
               ><v-icon color="#f16666" style="margin-top: -5px"
                 >mdi-domain</v-icon
-              ><span class="pt-1"> Candidates Information:</span></v-card-title
+              ><span class="pt-1"> User Information:</span></v-card-title
             >
             <v-card-text>
               <div>
@@ -151,7 +213,7 @@
 
           <v-card>
             <v-card-title
-              ><v-icon color="#34a853">mdi-map-marker</v-icon> Candidates
+              ><v-icon color="#34a853">mdi-map-marker</v-icon> User
               Address:</v-card-title
             >
             <v-card-text>
@@ -172,7 +234,7 @@
 
           <v-card>
             <v-card-title
-              ><v-icon color="#f9ab00">mdi-briefcase</v-icon> Candidates
+              ><v-icon color="#f9ab00">mdi-briefcase</v-icon> User
               Skills:</v-card-title
             >
             <v-card-text>
@@ -181,8 +243,8 @@
               </div>
             </v-card-text>
           </v-card>
-          <!-- Qualifications  -->
-          <v-card
+       
+          <!-- <v-card
             v-for="(educationDetails, index) in educationDetails"
             :key="index"
           >
@@ -211,9 +273,11 @@
                 </div>
               </v-card-text>
             </div>
-          </v-card>
+          </v-card> -->
+         
         </v-col>
       </v-row>
+    
     </v-container>
   </v-card>
 </template>
@@ -256,7 +320,7 @@ export default {
       fetchuserProfile();
     });
     const goToEditPage = async () => {
-      window.location.href = "/resume";
+      window.location.href = "/personal-detail";
     };
     const handleImageChange = (event) => {
       const file = event.target.files[0];
@@ -273,15 +337,28 @@ export default {
         return "blue";
       }
     });
+    // const hasNullCompany = computed(() => {
+    //   return experience.value.some(
+    //     (exp) =>
+    //       exp.company_name === null ||
+    //       exp.position === null ||
+    //       exp.description === null ||
+    //       exp.start_date === null
+    //   );
+     
+    // });
     const hasNullCompany = computed(() => {
-      return experience.value.some(
-        (exp) =>
-          exp.company_name === null ||
-          exp.position === null ||
-          exp.description === null ||
-          exp.start_date === null
-      );
-    });
+    const hasNull = experience.value.some(
+      (exp) =>
+        exp.company_name === null ||
+        exp.position === null ||
+        exp.description === null
+        
+    );
+    console.log('Has Null Company:', hasNull);
+    return hasNull;
+  });
+  
     return {
       address,
       user,
@@ -339,5 +416,39 @@ export default {
 .user_profile_infor_right .v-card-text label {
   font-weight: 600;
 }
+.education-table {
+  margin-top: 15px;
+  border-collapse: collapse; 
+}
+
+.education-table th
+ {
+  padding: 12px; 
+  text-align: left; 
+  font-weight: 600;
+}
+.education-table td{
+  padding: 12px; 
+  text-align: left; 
+}
+.education-table th {
+  background-color: #f0f0f0; 
+  
+}
+
+
+.header-cell {
+  font-weight: 600; 
+}
+.v-table > .v-table__wrapper > table > tbody > tr > th, .v-table > .v-table__wrapper > table > thead > tr > th {
+  
+    font-weight: 600;
+    user-select: none;
+    text-align: start;
+}
+/* .w_90 .education-table table thead th.text-left {
+  font-weight: 500;
+} */
+
 </style>
   

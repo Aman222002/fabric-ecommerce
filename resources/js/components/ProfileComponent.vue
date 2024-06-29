@@ -72,7 +72,7 @@
                         hide-details="auto"
                         mode="international"
                       ></vue-tel-input>
-                      <span v-if="errorMessage" class="error">{{
+                      <span v-if="formSubmitted && errorMessage" class="error">{{
                         errorMessage
                       }}</span>
                     </v-col>
@@ -159,6 +159,7 @@
 import axios from "axios";
 import { ref, nextTick, onMounted } from "vue";
 import { useUsersStore } from "../store/user";
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   name: "ProfileComponent",
   setup() {
@@ -203,6 +204,7 @@ export default {
       (value) => !!value || "Confirm Password is required",
       (value) => value === formDetail.value.new || "Passwords do not match",
     ]);
+    const formSubmitted = ref(false);
     const handlePhoneInput = (event) => {
       try {
         if (typeof event === "string") {
@@ -280,6 +282,7 @@ export default {
       fetchProfile();
     });
     const updateProfile = (id) => {
+      formSubmitted.value = true;
       if (errorMessage.value) {
         telValidate({ isValid: false, number: formData.value.phone });
         return;
@@ -301,26 +304,14 @@ export default {
         .then((response) => {
           console.log(response.data);
           if (response.data.status === true) {
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: "User Profile updated successfully!",
-            });
+           
+            Sweetalert.success('User Profile updated successfully!')
           }
         })
         .catch((error) => {
           console.log("here");
-          window.Swal.fire({
-            toast: true,
-            position: "top-end",
-            timer: 2000,
-            showConfirmButton: false,
-            icon: "error",
-            title: "Something Went Wrong!",
-          });
+        
+          Sweetalert.error('Something Went Wrong!')
         });
     };
     const updatePassword = () => {
@@ -330,26 +321,14 @@ export default {
         .then((response) => {
           console.log(response);
           if (response.data.status === true) {
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: "Password updated successfully!",
-            });
+          
+            Sweetalert.success('Password updated successfully!')
           }
         })
         .catch((error) => {
           console.log("here");
-          window.Swal.fire({
-            toast: true,
-            position: "top-end",
-            timer: 2000,
-            showConfirmButton: false,
-            icon: "error",
-            title: "Incoreect Password!",
-          });
+        
+          Sweetalert.error('Incoreect Password!')
         });
     };
     return {
@@ -374,7 +353,7 @@ export default {
       telValidate,
       handlePhoneInput,
       errorMessage,
-      handleImageDrop,
+      handleImageDrop,formSubmitted,
     };
   },
 };

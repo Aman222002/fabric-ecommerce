@@ -32,6 +32,7 @@ use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
+use Illuminate\Support\Facades\Cookie;
 class CompanyController extends Controller
 {
     /**
@@ -62,6 +63,27 @@ class CompanyController extends Controller
         } else {
             return view('companyregister');
         }
+    }
+    public function companylogin(Request $request)
+    {
+       
+        if ($request->hasCookie('company_data')) {
+       
+            $encryptedUserData = $request->cookie('company_data');
+            $userData = json_decode(decrypt($encryptedUserData), true);
+   
+            //dd( $userData);
+            if (isset($userData['email']) && isset($userData['password'])) {
+                $email = $userData['email'];
+                $password = $userData['password'];
+    
+        
+                return view('job', compact('email', 'password'));
+            }
+        }
+    
+      
+        return view('job');
     }
     /**
      * Show the form for creating a new resource.
@@ -150,7 +172,9 @@ class CompanyController extends Controller
                         'email' => $user->email,
                         'url' => $redirectFlow->redirect_url,
                     ];
+                    Log::info('Mail sent '); 
                     dispatch(new PaymentJob($data));
+                     
                     return response()->json([
                         'status' => true,
                         'message' => "Registation Successfully"
@@ -353,10 +377,6 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
-    
-    
-
     /**
      * to get address details
      */
@@ -601,11 +621,8 @@ class CompanyController extends Controller
             'password' => 'required',
             'company_name' => 'required',
         ]);
-        
-        if (Auth::attempt([
-            'email' => $credentials['email'],
-            'password' => $credentials['password'],
-        ])) {
+        $remember = $request->boolean('rememberMe');
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $remember)) {
             $user = Auth::user();
             
             if ($user->email_verified_at === null) {
@@ -628,7 +645,7 @@ class CompanyController extends Controller
                 }
                 
                 session(['company_id' => $user->company_id]);
-                
+                return $this->respondWithUserData($user, $companyData, $remember,$request);
                 return response()->json([
                     'status' => true,
                     'message' => 'Logged in Successfully!',
@@ -650,7 +667,7 @@ class CompanyController extends Controller
                                 'message' => 'Your account has been suspended. Please contact support.'
                             ], 403);
                         }
-                        
+                        return $this->respondWithUserData($user, $companyData, $remember,$request);
                         session(['company_id' => $company->id]);
                         
                         return response()->json([
@@ -662,7 +679,7 @@ class CompanyController extends Controller
                     }
                 }
             }
-            
+          
             return response()->json([
                 'status' => true,
                 'message' => 'Logged in Successfully!',
@@ -679,6 +696,36 @@ class CompanyController extends Controller
             'status' => false,
             'message' => 'An error occurred: ' . $e->getMessage(),
         ], 500);
+    }
+}
+private function respondWithUserData($user, $companyData, $remember,Request $request)
+{
+    $userData = [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'password' => $request->password, 
+    ];
+    
+    if ($remember) {
+        $user->update(['remember_token' => Str::random(60)]);
+        $encryptedUserData = encrypt(json_encode($userData));
+        $cookie = Cookie::make('company_data', $encryptedUserData,7 * 24 * 60); 
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged in Successfully!',
+            'user_data' => $user,
+            'company_data' => $companyData,
+        ])->withCookie($cookie);
+    } else {
+        $user->update(['remember_token' => null]);
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged in Successfully!',
+            'user_data' => $user,
+            'company_data' => $companyData,
+        ], 200);
     }
 }
 

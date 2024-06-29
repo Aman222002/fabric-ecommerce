@@ -187,9 +187,11 @@
 				<table style="width: 100%;text-align: center;font-family: Biryani;margin-top: 20px;">
 					<tbody>
 						<tr>
+							
 							<td colspan="2">
-							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}"  style="width: 120px;height: 120px;border-radius:50%;">	
-							</td>
+								
+                                <img src="{{'storage/assest/' . $userdata['user_image'] }}" style="width: 120px; height: 120px; border-radius: 50%;">
+                            </td>
 						</tr>
 					</tbody>
 				</table>

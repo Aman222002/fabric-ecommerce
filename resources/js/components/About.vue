@@ -150,7 +150,7 @@ export default {
       },
     ]);
     const searchJob = () => {
-      window.location.href = "/job-search";
+      window.location.href = "/find-job";
     };
     const brandLogo = ref([]);
 

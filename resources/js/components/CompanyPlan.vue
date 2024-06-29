@@ -2,107 +2,147 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12">
-        <v-card width="mx auto" v-if="currentplan.name !== 'No Plan' && plan_id !== ''">
-  <v-card-subtitle class="current_plan">
-    <h2 style="background-color: #0146a6; padding: 8px !important; color: #fff; display: flex;">
-      Current Plan : {{ currentplan.name }}
-    </h2>
-  </v-card-subtitle>
-  <v-container>
-    <v-row class="choose_your_popup_wor_on">
-      <v-col cols="3">
-        <v-card>
-          <v-card-title class="features_on" style="font-size: 20px;">Features</v-card-title>
-          <v-card-text>
-            <v-list dense>
-              <v-list-item v-for="feature in features" :key="feature">
-                <v-list-item-title>{{ feature }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="9">
-        <v-row class="choose_your_popup_wor_tw">
-          <v-col cols="4" v-for="(plan, key) in plans" :key="key">
-            <v-card :class="{'plan-card': plan.Name === currentplan.name}">
-             
-              <v-card-title class="btn_cts" style="font-size: 20px;">{{ plan.Name }}</v-card-title>
-              <v-card-text>
-                <v-list>
-  <v-list-item v-for="(item, key) in plan.details" :key="key" :style="{ backgroundColor: plan.Name === currentplan.name ? '#f0f0f0' : 'transparent' }">
-    <v-list-item-title >{{ item }}</v-list-item-title>
-  </v-list-item>
-</v-list>
-              </v-card-text>
-              <v-btn v-if="plan.Name && plan.Name !== currentplan.name" class="btn_cts" @click="buyPlan(plan)">Buy Now</v-btn>
-              <v-btn class="btn_cts" v-else disabled>Current Plan</v-btn>
-              <v-icon v-if="plan.Name === currentplan.name" style="position: absolute; top: 5px; right: 8px; color: green; font-size: 34px">mdi-check-circle</v-icon>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+        <v-card
+          width="mx auto"
+          v-if="currentplan.name !== 'No Plan' && plan_id !== ''"
+        >
+          <v-card-subtitle class="current_plan">
+            <h2
+              style="
+                background-color: #0146a6;
+                padding: 8px !important;
+                color: #fff;
+                display: flex;
+              "
+            >
+              Current Plan : {{ currentplan.name }}
+            </h2>
+          </v-card-subtitle>
+          <v-container>
+            <v-row class="choose_your_popup_wor_on">
+              <v-col cols="3">
+                <v-card>
+                  <v-card-title class="features_on" style="font-size: 20px"
+                    >Features</v-card-title
+                  >
+                  <v-card-text>
+                    <v-list dense>
+                      <v-list-item v-for="feature in features" :key="feature">
+                        <v-list-item-title>{{ feature }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="9">
+                <v-row class="choose_your_popup_wor_tw">
+                  <v-col cols="4" v-for="(plan, key) in plans" :key="key">
+                    <v-card
+                      :class="{ 'plan-card': plan.Name === currentplan.name }"
+                    >
+                      <v-card-title class="btn_cts" style="font-size: 20px">{{
+                        plan.Name
+                      }}</v-card-title>
+                      <v-card-text>
+                        <v-list>
+                          <v-list-item
+                            v-for="(item, key) in plan.details"
+                            :key="key"
+                            :style="{
+                              backgroundColor:
+                                plan.Name === currentplan.name
+                                  ? '#f0f0f0'
+                                  : 'transparent',
+                            }"
+                          >
+                            <v-list-item-title>{{ item }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-card-text>
+                      <v-btn
+                        v-if="plan.Name && plan.Name !== currentplan.name"
+                        class="btn_cts"
+                        @click="buyPlan(plan)"
+                        >Buy Now</v-btn
+                      >
+                      <v-btn class="btn_cts" v-else disabled
+                        >Current Plan</v-btn
+                      >
+                      <v-icon
+                        v-if="plan.Name === currentplan.name"
+                        style="
+                          position: absolute;
+                          top: 5px;
+                          right: 8px;
+                          color: green;
+                          font-size: 34px;
+                        "
+                        >mdi-check-circle</v-icon
+                      >
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row no-gutters style="margin-top: 20px">
+              <v-col cols="12" class="text-center mb-5">
+                <template v-if="upgrade_plan > currentplan.id">
+                  <span
+                    :class="{
+                      'subtitle-1': true,
+                      'font-weight-bold': true,
+                      'text-red': true,
+                    }"
+                  >
+                    Your next plan will be added when this plan ends.
+                  </span>
+                </template>
+                <template v-else>
+                  <span
+                    v-if="subscription_status === 'active'"
+                    :class="{
+                      'subtitle-1': true,
+                      'font-weight-bold': true,
+                      'text-red': subscriptionDetail.remainig_days < 5,
+                      'text-green': subscriptionDetail.remainig_days >= 5,
+                    }"
+                  >
+                    {{
+                      subscriptionDetail.remainig_days >= 0
+                        ? "Your plan will expire in " +
+                          subscriptionDetail.remainig_days +
+                          " days"
+                        : "You don't have an Active Plan"
+                    }}
+                  </span>
+                  <span
+                    v-else
+                    :class="{
+                      'subtitle-1': true,
+                      'font-weight-bold': true,
+                      'text-red': true,
+                    }"
+                  >
+                    Your Plan will be Activated in 3 to 4 days
+                  </span>
+                </template>
+              </v-col>
 
-    <v-row no-gutters style="margin-top: 20px;" >
-            <v-col cols="12" class="text-center mb-5">
-              <template v-if="upgrade_plan > currentplan.id">
-                <span
-                  :class="{
-                    'subtitle-1': true,
-                    'font-weight-bold': true,
-                    'text-red': true,
-                  }"
+              <v-col cols="12" class="d-flex justify-center align-center mb-5">
+                <v-btn class="bg-error" @click="removeplan()"
+                  >Remove Subscription</v-btn
                 >
-                  Your next plan will be added when this plan ends.
-                </span>
-              </template>
-              <template v-else>
-                <span
+                <v-btn
+                  @click="downloadInvoice()"
                   v-if="subscription_status === 'active'"
-                  :class="{
-                    'subtitle-1': true,
-                    'font-weight-bold': true,
-                    'text-red': subscriptionDetail.remainig_days < 5,
-                    'text-green': subscriptionDetail.remainig_days >= 5,
-                  }"
+                  class="bg-primary"
+                  style="margin-left: 20px"
+                  >Download Invoice</v-btn
                 >
-                  {{
-                    subscriptionDetail.remainig_days >= 0
-                      ? "Your plan will expire in " +
-                        subscriptionDetail.remainig_days +
-                        " days"
-                      : "You don't have an Active Plan"
-                  }}
-                </span>
-                <span
-                  v-else
-                  :class="{
-                    'subtitle-1': true,
-                    'font-weight-bold': true,
-                    'text-red': true,
-                  }"
-                >
-                  Your Plan will be Activated in 3 to 4 days
-                </span>
-              </template>
-            </v-col>
-           
-            <v-col cols="12" class="d-flex justify-center align-center mb-5">
-              <v-btn class="bg-error" @click="removeplan()"
-                >Remove Subscription</v-btn
-              >
-              <v-btn
-                @click="downloadInvoice()"
-                v-if="subscription_status === 'active'"
-                class="bg-primary"
-                style="margin-left: 20px"
-                >Download Invoice</v-btn
-              >
-            </v-col>
-          </v-row>
-  </v-container>
-</v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
 
         <!-- <v-card
           outlined
@@ -210,7 +250,7 @@
           </v-row>
           
         </v-card> -->
-       
+
         <v-card class="no-plan-card" outlined v-else>
           <v-card-title class="text-center">No Plan Selected</v-card-title>
           <v-card-text class="text-center">
@@ -290,11 +330,12 @@
         </v-row>
       </v-container>
     </v-card>
- </v-dialog> 
+  </v-dialog>
 </template>
 <script>
 import axios from "axios";
 import { ref, onMounted, computed } from "vue";
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   setup() {
     const currentplan = ref({
@@ -320,15 +361,7 @@ export default {
     const plans = ref({});
     const gc_customer_id = ref(null);
     const removeplan = () => {
-      window.Swal.fire({
-        title: "Are you sure?",
-        text: "Are you sure?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
+      Sweetalert.confirm('Are you sure?').then((result) => {
         if (result.isConfirmed) {
           try {
             axios
@@ -439,6 +472,7 @@ export default {
               text: "Your Subscription will be added Soon ",
               confirmButtonText: "OK",
             });
+          
           }
           changePlanModal.value = false;
           changingPlan.value = true;
@@ -461,7 +495,7 @@ export default {
       }
     };
     const redirectToPlansPage = () => {
-      window.location.href = "/product";
+      window.location.href = "/plans";
     };
     const getPlan = () => {
       try {

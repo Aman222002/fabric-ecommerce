@@ -59,6 +59,7 @@
                         autocomplete="false"
                         class="mt-8"
                         style="font-size: 10px"
+                      
                       />
                       <v-text-field
                         label="Password"
@@ -73,6 +74,7 @@
                         color="blue"
                         autocomplete="false"
                         style="margin-top: 10px; font-size: 10px"
+                        
                       />
                       <v-row>
                         <v-col cols="12" sm="7">
@@ -80,6 +82,7 @@
                             label="Remember Me"
                             class="mt-n1"
                             color="blue"
+                            v-model="formData.rememberMe"
                           >
                           </v-checkbox>
                         </v-col>
@@ -131,19 +134,28 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import { useUsersStore } from "../store/user";
 import axios from "axios";
-
 export default {
   name: "Login",
-  setup() {
+  props: {
+    email: {
+      type: String,
+      default: "",
+    },
+    password: {
+      type: String,
+      default: "",
+    },
+  },
+  setup(props) {
     const usersStore = useUsersStore();
     const formData = ref({
-      email: "",
-      password: "",
+      email: props.email,
+      password: props.password,
+       rememberMe: false,
     });
-
     const emailRules = [
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
@@ -157,44 +169,39 @@ export default {
     const showPassword = ref(false);
     const submitForm = async () => {
       try {
-        const response = await axios.post("/login", formData.value);
+        // const response = await axios.post("/login", formData.value);
+      
+        const response = await axios.post("/login", {
+      ...formData.value,
+    
+    });
+  
         const data = response.data;
+        console.log(data.data.status);
         if (data.status === true) {
           console.log(data.data.roles[0].name);
           if (data.data.roles[0].name == "Admin") {
             window.location.href = "/admin/dashboard";
-            usersStore.isLogIn();
+            // usersStore.isLogIn();
           } else if (data.data.roles[0].name == "Company Admin") {
-            window.location.href = "/job";
-          } else {
-            window.location.href = "/resume";
+            window.location.href = "/company/login";
+          }
+          else if(data.data.status===100){
             usersStore.isLogIn();
+            window.location.href = "/userprofile";
+          } else {
+            usersStore.isLogIn();
+            window.location.href = "/personal-detail";
           }
         }
-       
       } catch (err) {
         if (err.response && err.response.data && err.response.data.message === "Email not verified. Please verify your email before logging in.") {
             
-            // window.Swal.fire({
-            //     toast: true,
-            //     position: "top-end",
-            //     timer: 2000,
-            //     showConfirmButton: false,
-            //     icon: "warning",
-            //     title: "Please verify your email before logging in.",
-            // });
+           
             warningMessage.value = "Please verify your email before logging in.";
-            // alert("Please verify your email before logging in.");
-        } else {
-            // window.Swal.fire({
-            //     toast: true,
-            //     position: "top-end",
-            //     timer: 2000,
-            //     showConfirmButton: false,
-            //     icon: "error",
-            //     title: "Invalid Credentials.",
-            // });
-            // alert("Invalid Credentials.");
+         
+        } else if(err.response && err.response.data && err.response.data.message === "Invalid Credentials") {
+           
             errorMessage.value = "Invalid Credentials.";
         }
       }
@@ -202,6 +209,17 @@ export default {
     const signup = async () => {
       window.location.href = "/registration";
     };
+    onMounted(() => {
+      const userCookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("user_data="));
+
+      if (userCookie) {
+        const decodedUserData = JSON.parse(atob(userCookie.split("=")[1]));
+        formData.value.email = decodedUserData.email;
+        formData.value.password = decodedUserData.password;
+      }
+    });
 
     return {
       formData,
@@ -223,14 +241,12 @@ export default {
 .form_page {
   margin: 25px;
 }
-
 .form_page_right {
   border-bottom-left-radius: 250px;
   display: flex;
   align-items: center;
   text-align: center;
 }
-
 .form_page_left button.v-btn,
 .form_page_right button.v-btn {
   min-width: 150px;

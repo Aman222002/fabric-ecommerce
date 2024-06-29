@@ -106,35 +106,21 @@
                         :type="showPassword ? 'text' : 'password'"
                       >
                       </v-text-field>
-                      <!-- <v-text-field
-                        v-model="formData.phone"
-                        :rules="phoneRules"
-                        color="blue"
-                        density="compact"
-                        style="margin-bottom: 10px"
-                        variant="outlined"
-                        label="Phone"
-                        mask="##########"
-                        hide-details="auto"
-                        @input="filterNonNumeric"
-                      ></v-text-field> -->
-
                       <vue-tel-input
                         v-model="formData.phone"
-                      
-                       
                         @validate="telValidate"
-
                         color="blue"
                         density="compact"
-                        style="margin-bottom: 10px"
+                        style="margin-bottom: 10px;"
                         variant="outlined"
                         label="Phone"
                         hide-details="auto"
-                     
                         mode="international"
+                        :autoDefaultCountry='false'
+                        :class="{'error-border': formSubmitted && formData.phoneError}"
+                      
                       ></vue-tel-input>
-                      <span v-if="formData.phoneError" class="error-message">{{
+                      <span v-if="formSubmitted && formData.phoneError" class="error-message">{{
                         formData.phoneError
                       }}</span>
 
@@ -155,7 +141,6 @@
 <script>
 import { ref, computed } from "vue";
 import axios from "axios";
-
 export default {
   name: "Registration",
   setup() {
@@ -194,14 +179,8 @@ export default {
     const phoneValidationRule = computed(() => {
       return validatePhone() || "Enter a valid phone number";
     });
-    // const filterNonNumeric = (value) => {
-    //   formData.value.phone = value.replace(/\D/g, "");
-    // };
-    // const filterNonNumeric = (value) => {
-    //   if (typeof value === 'string') {
-    //     formData.value.phone = value.replace(/\D/g, "");
-    //   }
-    // };
+    
+    const formSubmitted = ref(false);
     const showPassword = ref(false);
     const checkUsername = async () => {
       try {
@@ -214,24 +193,28 @@ export default {
         return false;
       }
     };
-    
     const telValidate = (telnumber) => {
+      console.log(telnumber)
   if (telnumber && telnumber.valid) {
+    if (!telnumber.number || telnumber.number.trim() === "") {
+      formData.value.phone = null;
+      formData.value.phoneError = "Phone number is required";
+    } else{
     formData.value.phone = telnumber.number;
     if (/[a-zA-Z]/.test(telnumber.number)) {
     
-      formData.value.phoneError = "Phone number cannot contain alphabets";
+      formData.value.phoneError = "Enter a valid phone number";
     } else {
       formData.value.phoneError = "";
     }
+  }
   } else {
     formData.value.phone = null;
     formData.value.phoneError = "Enter a valid phone number";
   }
 };
-
-
-    const submitForm = async () => {
+ const submitForm = async () => {
+      formSubmitted.value = true;
       telValidate({ valid: true, number: formData.value.phone });
       if (formData.value.phoneError) {
         return;
@@ -239,14 +222,6 @@ export default {
       try {
         const usernameAvailable = await checkUsername();
         if (!usernameAvailable) {
-          // window.Swal.fire({
-          //   toast: true,
-          //   position: "top-end",
-          //   timer: 2000,
-          //   showConfirmButton: false,
-          //   icon: "error",
-          //   title: "Username already exist",
-          // });
           errorMessage.value = "Username already exist.";
           return;
         }
@@ -276,6 +251,7 @@ export default {
     const login = async () => {
       window.location.href = "/login";
     };
+    
     return {
       valid,
       response,
@@ -293,7 +269,7 @@ export default {
       errorMessage,
       telValidate,
       phoneValidationRule,
-      phoneError,
+      phoneError, formSubmitted,
     };
   },
 };
@@ -326,8 +302,14 @@ export default {
   text-transform: capitalize;
 }
 .error-message {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
+
+}
+.error-border {
+  border-color: #B00020 !important; 
 }
 </style>
  

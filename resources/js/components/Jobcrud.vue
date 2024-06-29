@@ -1,5 +1,5 @@
 <template>
-  <p style="text-align: center; font-size: 30px; margin-top: 20px">My Jobs</p>
+  <p style="text-align: center; font-size: 30px; margin-top: 20px">Posted Jobs</p>
   <DxDataGrid
     :show-borders="true"
     :data-source="dataSource"
@@ -240,6 +240,7 @@ import axios from "axios";
 import dxGridStore from "../composition/dxGridStore";
 import masterTemplate from "./MasterdetailApplicant.vue";
 import { ref, onMounted } from "vue";
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   name: "JobCrud",
   components: {
@@ -465,46 +466,22 @@ export default {
           })
           .then((response) => {
             if (response.data.status === true) {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 4000,
-                showConfirmButton: false,
-                icon: "success",
-                title: "Added",
-              });
+             
+              Sweetalert.success('Added')
               refreshTable(dataGridRef);
             }
           })
           .catch((error) => {
             console.log(error);
             if (error.response.status == "402") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 4000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You don't have a active plan buy a plan or renew your plan`,
-              });
+            
+              Sweetalert.error('You dont have a active plan buy a plan or renew your plan')
             } else if (error.response.status == "403") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 4000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You have posted number of allowed post can't post more`,
-              });
+             
+              Sweetalert.error('You have posted number of allowed post cant post more')
             } else if (error.response.status == "406") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 4000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You already posted this job`,
-              });
+            
+              Sweetalert.error('You already posted this job')
             }
           });
         console.log(response);

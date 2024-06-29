@@ -62,8 +62,10 @@
               mask="##########"
               hide-details="auto"
               mode="international"
+              :autoDefaultCountry='false'
+              :class="{'error-border': formSubmitted && newUser.phoneErrors}"
             ></vue-tel-input>
-            <span v-if="newUser.phoneErrors" class="error-message">{{
+            <span v-if="formSubmitted &&newUser.phoneErrors" class="error-message">{{
               newUser.phoneErrors
             }}</span
             ><br />
@@ -97,8 +99,10 @@
               mask="##########"
               hide-details="auto"
               mode="international"
+              :autoDefaultCountry='false'
+              :class="{'error-border': formSubmitted && newUser.phoneError}"
             ></vue-tel-input>
-            <span v-if="newUser.phoneError" class="error-message">{{
+            <span v-if="formSubmitted &&newUser.phoneError" class="error-message">{{
               newUser.phoneError
             }}</span
             ><br />
@@ -172,7 +176,7 @@
             hide-details="auto"
             mode="international"
           ></vue-tel-input>
-          <span v-if="phoneVal" class="error-message">{{ phoneVal }}</span
+          <span v-if="formSubmitted &&phoneVal" class="error-message">{{ phoneVal }}</span
           ><br />
 
           <v-btn
@@ -307,7 +311,7 @@
 import dxGridStore from "../composition/dxGridStore";
 import { ref, onMounted, watch, computed } from "vue";
 import axios from "axios";
-
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   name: "CompaniesComponent",
   setup() {
@@ -333,7 +337,7 @@ export default {
       email: "",
       phone: "",
     });
-
+    const formSubmitted = ref(false);
     const phoneVal = ref("");
     const updateId = ref();
     const errorMessage = ref("");
@@ -587,10 +591,12 @@ export default {
       }
     };
     const addUser = async () => {
+      formSubmitted.value = true;
       teluser({ valid: true, number: newUser.value.phone });
       if (newUser.value.phoneErrors) {
         return;
       }
+     
       telval({ valid: true, number: newUser.value.companyPhone });
       if (newUser.value.phoneError) {
         return;
@@ -627,14 +633,8 @@ export default {
                     .post("/admin/user/storing", newUser.value)
                     .then(() => {
                       closeModal();
-                      window.Swal.fire({
-                        toast: true,
-                        position: "top-end",
-                        timer: 2000,
-                        showConfirmButton: false,
-                        icon: "success",
-                        title: "User Added",
-                      });
+                     
+                      Sweetalert.success('User Added')
                       refreshTable(dataGridRef);
                     })
                     .catch((error) => {
@@ -667,15 +667,7 @@ export default {
       fetchPermissions();
     });
     const deleteUser = (id) => {
-      window.Swal.fire({
-        title: "Are you sure?",
-        text: "Are you sure you want to delete this User?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
+    Sweetalert.confirm('Are you sure?').then((result) => {
         if (result.isConfirmed) {
           try {
             axios.delete(`/admin/user/destroy/${id}`).then((response) => {
@@ -746,7 +738,7 @@ export default {
       telvalidate,
       deleteUser,
       tel_options,
-      tel_company,
+      tel_company,formSubmitted,
     };
   },
 };
@@ -754,8 +746,13 @@ export default {
 
 <style scoped>
 .error-message {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
+}
+.error-border {
+  border-color: #B00020 !important; 
 }
 </style>
 

@@ -24,7 +24,7 @@
               hide-details="auto"
               mode="international"
             ></vue-tel-input>
-            <span v-if="phoneVal" class="error-message">{{ phoneVal }}</span><br>
+            <span v-if="formSubmitted && phoneVal" class="error-message">{{ phoneVal }}</span><br>
         
           <v-btn color="primary" @click="saveChanges(updateId)" style="margin-top: 10px">Save Changes</v-btn>
   
@@ -101,6 +101,7 @@ export default {
       phone: '',
      
     });
+    const formSubmitted = ref(false);
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
       (v) => !!v || "Email is required",
@@ -152,7 +153,7 @@ return true;
  
 // };
 const saveChanges = (id) => {
- 
+  formSubmitted.value = true;
   if (phoneVal.value) {
     telvalidate({ isValid: false, number: editCompanyData.value.phone });
         return;
@@ -170,7 +171,7 @@ const saveChanges = (id) => {
     });
 };
     return {
-      dataSource,
+      dataSource,formSubmitted,
       updateURL,editCompanyData,editDialog,updateId,phoneVal,saveChanges,editUser,handlePhoneInput,telvalidate,emailRules ,nameRules
     };
   },
@@ -248,7 +249,9 @@ const saveChanges = (id) => {
   border-bottom: none;
 }
 .error-message {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
 }
 </style>

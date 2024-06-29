@@ -25,6 +25,7 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios';
+import {Sweetalert} from '../utils/sweetalert';
 export default {
     name: 'ResetPassword',
     props: {
@@ -57,14 +58,8 @@ export default {
                 const response = await axios.post("/reset/new/password/", formData.value);
                 // console.log(response.data);
                 if (response.data.status) {
-                    window.Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        timer: 2000,
-                        showConfirmButton: false,
-                        icon: 'success',
-                        title: 'User Password updated successfully!',
-                    });
+                  
+                    Sweetalert.success('User Password updated successfully!')
                     window.location.href = "/login";
                 }
             } catch (error) {

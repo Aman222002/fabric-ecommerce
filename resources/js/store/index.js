@@ -253,19 +253,19 @@ export const useMyStore = defineStore("myStore", {
 
                 formData.append(
                     `experience[${index}][company_name]`,
-                    experience.company_name
+                    experience.company_name || ""
                 );
                 formData.append(
                     `experience[${index}][position]`,
-                    experience.position
+                    experience.position || ""
                 );
                 formData.append(
                     `experience[${index}][description]`,
-                    experience.description
+                    experience.description || ""
                 );
                 formData.append(
                     `experience[${index}][start_date]`,
-                    experience.start_date
+                    experience.start_date 
                 );
                 formData.append(
                     `experience[${index}][end_date]`,
@@ -277,15 +277,15 @@ export const useMyStore = defineStore("myStore", {
 
                 formData.append(
                     `achievements[${index}][certification_name]`,
-                    achievement.certification_name
+                    achievement.certification_name || ""
                 );
                 formData.append(
                     `achievements[${index}][company_name]`,
-                    achievement.company_name
+                    achievement.company_name || ""
                 );
                 formData.append(
                     `achievements[${index}][certificate_number]`,
-                    achievement.certificate_number
+                    achievement.certificate_number || ""
                 );
                 formData.append(
                     `achievements[${index}][expiry_date]`,
@@ -322,6 +322,12 @@ export const useMyStore = defineStore("myStore", {
                     });
                 })
                 .catch((error) => {
+                    window.Swal.fire({
+                        title: "Error",
+                        text: "Form  not submitted successfully.",
+                        icon: "Error",
+                        confirmButtonText: "OK",
+                    });
                     console.log("Error", error);
                     if (error.response && error.response.status === 422) {
                         console.log(
@@ -402,7 +408,7 @@ export const useMyStore = defineStore("myStore", {
                 });
         },
     },
-    persist: true,
+    // persist: true,
 });
 export const useUserDetailsStore = defineStore({
     id: "userDetails",
@@ -425,7 +431,7 @@ export const useUserDetailsStore = defineStore({
             this.user_image=[];
         },
     },
-    persist: true,
+     persist: true,
 });
 export const useResumeStore = defineStore("resume", {
     state: () => ({

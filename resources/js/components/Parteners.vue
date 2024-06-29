@@ -216,6 +216,7 @@ import axios from "axios";
 import dxGridStore from "../composition/dxGridStore";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   name: "Parteners",
   components: {
@@ -401,14 +402,8 @@ export default {
                 showDialog.value = false;
                 
                 refreshTable(dataGridRef);
-                window.Swal.fire({
-                  toast: true,
-                  position: "top-end",
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: "success",
-                  title: `Partner Updated Successfully`,
-                });
+              
+                Sweetalert.success('Partner Updated Successfully')
               }
             })
             .catch((error) => {
@@ -448,14 +443,8 @@ export default {
             .then((response) => {
               if (response.data.status == true) {
                 showAddDialog.value = false;
-                window.Swal.fire({
-                  toast: true,
-                  position: "top-end",
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: "success",
-                  title: `Partner Added Successfully`,
-                });
+              
+                Sweetalert.success('Partner Added Successfully')
                 refreshTable(dataGridRef);
               }
             });

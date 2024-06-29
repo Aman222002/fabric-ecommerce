@@ -337,6 +337,7 @@ export default {
             v-model="plan.name"
             label="Plan Name"
             outlined
+            
           ></v-text-field>
         </v-col>
         <v-col sm="12" md="6">
@@ -345,6 +346,7 @@ export default {
             v-model="plan.price"
             label="Price"
             outlined
+           
           ></v-text-field>
         </v-col>
         <v-col cols="12" class="text-center">
@@ -352,7 +354,11 @@ export default {
           <div id="card-errors" role="alert"></div>
         </v-col>
         <v-col cols="12" class="text-center">
-          <v-btn v-if="currentPlanId === plan.id" disabled class="form_fild_btn">
+          <v-btn
+            v-if="currentPlanId === plan.id"
+            disabled
+            class="form_fild_btn"
+          >
             Bought
           </v-btn>
           <v-btn v-else type="submit" class="form_fild_btn">Buy Now</v-btn>
@@ -360,7 +366,6 @@ export default {
         <v-col cols="12" class="text-center">
           <div id="express-checkout-button"></div>
         </v-col>
-        
       </v-row>
     </v-form>
   </v-container>
@@ -381,16 +386,18 @@ export default {
     },
   },
   setup(props) {
-    console.log(props)
-    const stripePromise = loadStripe("pk_test_51PQilzP2XjMWHwbIIwELHxqWEdO6HUYoZoRTmkppI4HKkPjL1l7CdWPOVCnnLSMOFspxmBl9zteORsD9Kj2ZsodU00T8uoKDti");
-    
+    console.log(props);
+    const stripePromise = loadStripe(
+      "pk_test_51PQilzP2XjMWHwbIIwELHxqWEdO6HUYoZoRTmkppI4HKkPjL1l7CdWPOVCnnLSMOFspxmBl9zteORsD9Kj2ZsodU00T8uoKDti"
+    );
+
     const form = ref(null);
     const isDisabled = true;
     const plan = ref(props.data);
     const currentPlanId = ref(null);
     const usersStore = useUsersStore();
     const employerStore = useEmployerStore();
-  
+
     const user = ref({
       user_name: "",
       email: "",
@@ -437,89 +444,83 @@ export default {
           console.log(error);
         });
     };
-let stripe;
-let cardElement; 
+    let stripe;
+    let cardElement;
 
-const setupStripeElements = async () => {
-  stripe = await stripePromise;
+    const setupStripeElements = async () => {
+      stripe = await stripePromise;
 
-  const elements = stripe.elements();
-  cardElement = elements.create("card");
-
-  cardElement.on("change", (event) => {
-    const displayError = document.getElementById("card-errors");
-    if (event.error) {
-      displayError.textContent = event.error.message;
-    } else {
-      displayError.textContent = "";
-    }
-  });
-
-  cardElement.mount("#card-element");
-};
-
-const submitForm = async () => {
-  const valid = await form.value.validate();
-  if (!valid) {
-    return;
-  }
-
-  try {
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement, // Use cardElement directly
-    });
-
-    if (error) {
-      console.error("Payment method error:", error);
-      return;
-    }
-
-    const { data } = await axios.post("/stripe/create-subscription", {
-      plan_id: plan.value.id,
-      payment_method_id: paymentMethod.id,
-      plan_price:plan.value.price,
-      interval:plan.value.interval_unit,
-      plan_name:plan.value.name
-    });
-
-    if (data.success) {
-      // Handle success
-      window.Swal.fire({
-        icon: "success",
-        title: "Subscription Created",
-        text: "Your subscription has been successfully created.",
-        confirmButtonText: "OK",
-        cancelButtonColor: "#6e7d88",
+      const elements = stripe.elements();
+       cardElement = elements.create("card");
+      cardElement.on("change", (event) => {
+        const displayError = document.getElementById("card-errors");
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = "";
+        }
       });
-    } else {
-      // Handle failure
-      console.error("Subscription creation failed:", data.error);
-      window.Swal.fire({
-        icon: "error",
-        title: "Subscription Creation Failed",
-        text: "Failed to create subscription. Please try again later.",
-        confirmButtonText: "OK",
-        cancelButtonColor: "#6e7d88",
-      });
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    window.Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "An error occurred while processing your request. Please try again later.",
-      confirmButtonText: "OK",
-      cancelButtonColor: "#6e7d88",
-    });
-  }
-};
 
+      cardElement.mount("#card-element");
+    };
 
+    const submitForm = async () => {
+      const valid = await form.value.validate();
+      if (!valid) {
+        return;
+      }
 
+      try {
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+        
+        });
 
+        if (error) {
+          console.error("Payment method error:", error);
+          return;
+        }
 
+        const { data } = await axios.post("/stripe/create-subscription", {
+          plan_id: plan.value.id,
+          payment_method_id: paymentMethod.id,
+          plan_price: plan.value.price,
+          interval: plan.value.interval_unit,
+          plan_name: plan.value.name,
+        });
 
+        if (data.success) {
+          // Handle success
+          window.Swal.fire({
+            icon: "success",
+            title: "Subscription Created",
+            text: "Your subscription has been successfully created.",
+            confirmButtonText: "OK",
+            cancelButtonColor: "#6e7d88",
+          });
+        } else {
+          // Handle failure
+          console.error("Subscription creation failed:", data.error);
+          window.Swal.fire({
+            icon: "error",
+            title: "Subscription Creation Failed",
+            text: "Failed to create subscription. Please try again later.",
+            confirmButtonText: "OK",
+            cancelButtonColor: "#6e7d88",
+          });
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        window.Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "An error occurred while processing your request. Please try again later.",
+          confirmButtonText: "OK",
+          cancelButtonColor: "#6e7d88",
+        });
+      }
+    };
     onMounted(() => {
       getUser();
       setupStripeElements();
@@ -546,7 +547,7 @@ const submitForm = async () => {
 };
 </script>
 <style scoped>
-#card-errors{
+#card-errors {
   color: rgb(226, 56, 56);
 }
 </style>

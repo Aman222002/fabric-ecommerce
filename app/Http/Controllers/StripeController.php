@@ -37,9 +37,9 @@ class StripeController extends Controller
     // }
     public function cancelSubscription(Request $request)
     {
-     $subscriptionId = 'stripe_subscription_id';
+        $subscriptionId = 'stripe_subscription_id';
         try {
-          $this->stripeServices->cancelSubscription($subscriptionId);
+            $this->stripeServices->cancelSubscription($subscriptionId);
         } catch (\Exception $e) {
             Log::error('Subscription cancellation failed: ' . $e->getMessage());
         }
@@ -524,7 +524,7 @@ class StripeController extends Controller
                     $product = \Stripe\Product::create([
                         'name' => $planName,
                         'metadata' => [
-                         'plan_id' => $planId,
+                            'plan_id' => $planId,
                         ],
                     ]);
                     $plan = \Stripe\Plan::create([
@@ -565,8 +565,8 @@ class StripeController extends Controller
                         'next_plan_id' => $planId, 'upgrade_subscription_id' => $subscription->items->data[0]->id, 'start_date' => date('Y-m-d H:i:s', $currentPeriodStart),
                         'end_date' => date('Y-m-d H:i:s', $currentPeriodEnd)
                     ]);
-                  
-            
+
+
                     $user->update([
                         'upgrade_plan_id' => $planId,
                         'upgrade_status' => 'initiated',
@@ -601,7 +601,6 @@ class StripeController extends Controller
                             'plan_id' => $planId,
                         ],
                     ]);
-
                     $plan = \Stripe\Plan::create([
                         'amount' => $priceCents,
                         'currency' => 'gbp',
@@ -647,7 +646,7 @@ class StripeController extends Controller
                     ], 200);
                 }
             }
-
+           
             $customer = \Stripe\Customer::create([
                 'payment_method' => $paymentMethod,
                 'email' => auth()->user()->email,
@@ -676,6 +675,7 @@ class StripeController extends Controller
                 'items' => [['plan' => $plan->id]],
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
+
           
             $currentPeriodStart = $subscription->current_period_start;
             $currentPeriodEnd = $subscription->current_period_end;
@@ -694,10 +694,30 @@ class StripeController extends Controller
                     'end_date' => date('Y-m-d H:i:s', $currentPeriodEnd)
                 ]
             );
+            // $checkoutSessionOptions = [
+            //     'payment_method_types' => ['card'],
+            //     'line_items' => [
+            //         [
+            //             'price_data' => [
+            //                 'currency' => 'gbp',
+            //                 'product_data' => [
+            //                     'name' => $planName,
+            //                 ],
+            //                 'unit_amount' => $priceCents,
+            //             ],
+            //             'quantity' => 1,
+            //         ],
+            //     ],
+            //     'mode' => 'payment',
+            //     'success_url' => env('APP_URL') . '/success?session_id={CHECKOUT_SESSION_ID}',
+            //     'cancel_url' => env('APP_URL') . '/cancel',
+            // ];
+            
+            // $checkoutSession = \Stripe\Checkout\Session::create($checkoutSessionOptions);
             return response()->json([
                 'success' => true,
                 'subscription' => $subscription,
-              
+
             ]);
         } catch (ApiErrorException $e) {
             return response()->json([
@@ -713,7 +733,7 @@ class StripeController extends Controller
             $customer_id = $user->gc_customer_id;
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
             $invoices = \Stripe\Invoice::all(['customer' => $customer_id, 'limit' => 1, 'status' => 'paid']);
-            $latestInvoice = $invoices->data[0]; 
+            $latestInvoice = $invoices->data[0];
             if (!$latestInvoice) {
                 return response()->json(['error' => 'No paid invoices found for this user.'], 404);
             }
@@ -721,10 +741,8 @@ class StripeController extends Controller
                 'download_url' => $latestInvoice->invoice_pdf,
                 'paid' => $latestInvoice->paid,
             ]);
-    
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 }

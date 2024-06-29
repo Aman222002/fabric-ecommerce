@@ -29,6 +29,7 @@ import { ref } from "vue";
 import axios from "axios";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Sweetalert } from "../utils/sweetalert";
 // import { ImageUpload, PictureEditing } from '@ckeditor/ckeditor5-image';
 // import { CKBox, CKBoxImageEdit } from "@ckeditor/ckeditor5-ckbox";
 // import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
@@ -58,14 +59,7 @@ export default {
         .then((response) => {
           console.log("Response:", response.data);
           if (response.data.status == true) {
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: `Blog Posted Successfully`,
-            });
+            Sweetalert.success("Blog Posted Successfully");
             content.value = "";
             title.value = "";
           }

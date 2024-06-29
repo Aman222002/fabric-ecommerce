@@ -85,12 +85,14 @@
                     density="compact"
                     :disabled="disabledFields"
                     mask="##########"
+                    :autoDefaultCountry='false'
                     v-if="showCompanyDetails"
                         hide-details="auto"
                     
                         mode="international"
+                        :class="{'error-border': formSubmitted && company.phoneErrors}"
                       ></vue-tel-input>
-                      <span v-if="company.phoneErrors" class="error-message">{{
+                      <span v-if="formSubmitted && company.phoneErrors" class="error-message">{{
                         company.phoneErrors
                       }}</span>
                 </v-col>
@@ -144,8 +146,10 @@
                     
                       outlined
                         mode="international"
+                        :autoDefaultCountry='false'
+                        :class="{'error-border': formSubmitted && company.phoneError}"
                       ></vue-tel-input>
-                      <span v-if="company.phoneError" class="error-message">{{
+                      <span v-if="formSubmitted && company.phoneError" class="error-message">{{
                         company.phoneError
                       }}</span>
                   </v-col>
@@ -182,7 +186,7 @@
                 <br />
                 editing your onboarding flows
               </p>
-              <a href="/job" class="company_loging">Login</a>
+              <a href="/company/login" class="company_loging">Login</a>
             </v-card-text>
           </v-col>
         </v-row>
@@ -234,7 +238,7 @@ export default {
 ];
     const stateRules = [(v) => !!v || "State is required"];
     const cityRules = [(v) => !!v || "city is required"];
-
+    const formSubmitted = ref(false);
     const postalCodeRules = [
       (v) => !!v || "Postal code is required",
       (v) => /^[0-9]{6}$/.test(v) || "Enter a valid 6-digit postal code",
@@ -245,16 +249,38 @@ export default {
     });
    
 
-    const telValidate = (telnumber) => {
+//     const telValidate = (telnumber) => {
+//   if (telnumber && telnumber.valid) {
+//     company.value.phone_number = telnumber.number;
+//     if (/[a-zA-Z]/.test(telnumber.number)) {
+//       console.log("Alphabets detected in phone number");
+//       company.value.phoneError = "Enter a valid phone number";
+//     } else {
+//       company.value.phoneError = "";
+//     }
+//   } else {
+//     company.value.phone_number = null;
+//     company.value.phoneError = "Enter a valid phone number";
+//   }
+// };
+const telValidate = (telnumber) => {
+  
   if (telnumber && telnumber.valid) {
-    company.value.phone_number = telnumber.number;
-    if (/[a-zA-Z]/.test(telnumber.number)) {
-      console.log("Alphabets detected in phone number");
-      company.value.phoneError = "Phone number cannot contain alphabets";
+    if (!telnumber.number || telnumber.number.trim() === "") {
+      company.value.phone_number = null;
+      company.value.phoneError = "Phone number is required";
     } else {
-      company.value.phoneError = "";
+      company.value.phone_number = telnumber.number;
+
+      if (/[a-zA-Z]/.test(telnumber.number)) {
+        console.log("Alphabets detected in phone number");
+        company.value.phoneError = "Enter a valid phone number";
+      } else {
+        company.value.phoneError = "";
+      }
     }
   } else {
+    
     company.value.phone_number = null;
     company.value.phoneError = "Enter a valid phone number";
   }
@@ -263,14 +289,20 @@ export default {
     
     const teluser = (telnumber) => {
   if (telnumber && telnumber.valid) {
+    if (!telnumber.number || telnumber.number.trim() === "") {
+      company.value.phone = null;
+      company.value.phoneErrors = "Phone number is required";
+    } else{
     company.value.phone = telnumber.number;
     if (/[a-zA-Z]/.test(telnumber.number)) {
       console.log("Alphabets detected in phone number");
-      company.value.phoneErrors = "Phone number cannot contain alphabets";
+      company.value.phoneErrors = "Enter a valid phone number";
     } else {
       company.value.phoneErrors = "";
     }
-  } else {
+    }
+   } 
+ else {
     company.value.phone = null;
     company.value.phoneErrors = "Enter a valid phone number";
   }
@@ -301,16 +333,46 @@ export default {
     });
    
     const submitForm = () => {
-      telValidate({ valid: true, number: company.value.phone_number });
-      if (company.value.phoneError) {
-        return;
-      }
-      teluser({ valid: true, number: company.value.phone });
-      if (company.value.phoneErrors) {
-        return;
-      }
-     
+   console.log(props.data);
+   if (props.data.permission) {
+   const formData = new FormData();
+            for (let key in company.value) {
+              if (key !== "logo") {
+                formData.append(key, company.value[key]);
+              } else {
+                formData.append("logo", company.value[key][0]);
+              }
+            }
+  
+              formData.append("company_Id", props.data.company);
+              formData.append("permission", props.data.permission);
+            
+            console.log(props.data.permission);
+            axios
+              .post("/company/post", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then((response) => {
+                if (response.data.status == true) {
+                  window.location.href = "/company/login";
+                }
+              })
+            }
+      formSubmitted.value = true;
+      
+     telValidate({ valid: true, number: company.value.phone_number });
+     if (company.value.phoneError) {
+       return;
+     }
+     teluser({ valid: true, number: company.value.phone });
+     if (company.value.phoneErrors) {
+       return;
+     }
+    console.log('here');
   form.value.validate().then((valid) => {
+   
     if (!valid.valid) {
       
       const errors = JSON.parse(JSON.stringify(valid.errors));
@@ -353,6 +415,7 @@ export default {
               formData.append("company_Id", props.data.company);
               formData.append("permission", props.data.permission);
             }
+            console.log(props.data.permission);
             axios
               .post("/company/post", formData, {
                 headers: {
@@ -361,7 +424,7 @@ export default {
               })
               .then((response) => {
                 if (response.data.status == true) {
-                  window.location.href = "/job";
+                  window.location.href = "/company/login";
                 }
               })
               .catch((error) => {
@@ -390,7 +453,7 @@ export default {
       stateRules,
       usersStore,
       showCompanyDetails,warningMessage,
-      disabledFields,showPassword,telValidate ,phoneValidationRule,teluser, 
+      disabledFields,showPassword,telValidate ,phoneValidationRule,teluser, formSubmitted,
     };
   },
 };
@@ -448,7 +511,12 @@ a.company_loging {
   border-radius: 15px;
 }
 .error-message {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
+}
+.error-border {
+  border-color: #B00020 !important; 
 }
 </style>
