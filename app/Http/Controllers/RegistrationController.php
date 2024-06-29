@@ -17,7 +17,7 @@ class RegistrationController extends Controller
 
     public function  store(Request $request)
     {
-        dd($request);
+        //dd($request);
         try {
             
             $input = $request->all();
