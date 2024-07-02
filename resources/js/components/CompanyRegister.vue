@@ -215,9 +215,11 @@ export default {
       email: "",
       password: "",
       phone: "",
+      countryCode:"",
       company_name: "",
       company_email: "",
       phone_number: "",
+      country_code:"",
       status: "1",
       logo: [],
       phoneError: "",
@@ -266,13 +268,13 @@ export default {
 const telValidate = (telnumber) => {
   
   if (telnumber && telnumber.valid) {
-    if (!telnumber.number || telnumber.number.trim() === "") {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
       company.value.phone_number = null;
       company.value.phoneError = "Phone number is required";
     } else {
-      company.value.phone_number = telnumber.number;
-
-      if (/[a-zA-Z]/.test(telnumber.number)) {
+      company.value.phone_number = telnumber.nationalNumber;
+      company.value.country_code = telnumber.countryCallingCode;
+      if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
         console.log("Alphabets detected in phone number");
         company.value.phoneError = "Enter a valid phone number";
       } else {
@@ -289,12 +291,13 @@ const telValidate = (telnumber) => {
     
     const teluser = (telnumber) => {
   if (telnumber && telnumber.valid) {
-    if (!telnumber.number || telnumber.number.trim() === "") {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
       company.value.phone = null;
       company.value.phoneErrors = "Phone number is required";
     } else{
-    company.value.phone = telnumber.number;
-    if (/[a-zA-Z]/.test(telnumber.number)) {
+    company.value.phone = telnumber.nationalNumber;
+    company.value.countryCode = telnumber.countryCallingCode;
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
       console.log("Alphabets detected in phone number");
       company.value.phoneErrors = "Enter a valid phone number";
     } else {
@@ -362,11 +365,11 @@ const telValidate = (telnumber) => {
             }
       formSubmitted.value = true;
       
-     telValidate({ valid: true, number: company.value.phone_number });
+     telValidate({ valid: true, nationalNumber: company.value.phone_number,countryCallingCode:company.value.country_code });
      if (company.value.phoneError) {
        return;
      }
-     teluser({ valid: true, number: company.value.phone });
+     teluser({ valid: true, nationalNumber: company.value.phone,countryCallingCode:company.value.countryCode });
      if (company.value.phoneErrors) {
        return;
      }

@@ -46,6 +46,14 @@
     </style>
 </head>
 <body>
+<div class="content email_temp" style="
+                      margin: 0px auto;
+                      font-family: Roboto, Helvetica, Arial, sans-serif;
+                      background:#f5f5f5;
+                      max-width: 900px;
+                      margin: 0 auto;
+                      border:1px solid #dedede;
+                    ">
     <div class="container">
         <h2>Hello {{ $name }},</h2>
         <p>You have been invited to join our platform.</p>
@@ -67,14 +75,23 @@
             </li>
         </ul>
         <p>To accept this invitation, click the button below:</p>
-        <p>
-            <a href="{{ url($url . '/' .  urlencode($name) . '/' . $company . '/' .$email. '/' . $phone. '/' .urlencode(json_encode($permission))) }}" class="button">Accept Invitation</a>
-        </p>
+ 
+        <div style="width:200px; text-align:center;margin:auto; padding:1px;
+                              text-decoration:underline;
+                              color:#FFF;
+                              text-decoration: none;
+                              background-color:#5892FF;
+                              padding:9px 0;
+
+                              border-radius: 20px;">
+            <a href="{{ url($url . '/' .  urlencode($name) . '/' . $company . '/' .$email. '/' . $phone. '/' .urlencode(json_encode($permission))) }}" style="text-decoration:none;color:#FFF;">Accept Invitation</a>
+    </div>
         <p>If you wish to decline this invitation, click the following link:</p>
         <p>
             <a href="{{$url2}}" class="button">Decline Invitation</a>
         </p>
         <p>Thank you!</p>
     </div>
+</div>
 </body>
 </html>

@@ -149,7 +149,7 @@
           style="margin-top: 10px"
           variant="outlined"
           @input="handlePhoneInput"
-          :value="editCompanyData.phone_number"
+          :value="formattedPhone"
           @validate="telvalidate"
           label="Company Phone"
           type="phone"
@@ -159,7 +159,7 @@
           mode="international"
          
         ></vue-tel-input>
-        <span v-if="formSubmitted && phoneVal" class="error-message">{{
+        <span v-if="phoneVal" class="error-message">{{
           phoneVal
         }}</span
         ><br />
@@ -261,7 +261,7 @@ import {
   DxToolbarItem,
 } from "devextreme-vue/data-grid";
 import dxGridStore from "../composition/dxGridStore";
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import masterDetailTemplate from "./MasterdetailView.vue";
 import axios from "axios";
 import { Sweetalert } from "../utils/sweetalert";
@@ -293,6 +293,7 @@ export default {
       company_name: "",
       company_email: "",
       phone_number: "",
+      country_code:"",
     });
     const tel_company = {
       placeholder: "Enter Company phone number...",
@@ -310,10 +311,12 @@ export default {
       company_name: "",
       company_email: "",
       phone_number: "",
+      countryCode:"",
       name: "",
       email: "",
       password: "",
       phone: "",
+      country_code:"",
       phoneErrors: "",
       phoneError: "",
     });
@@ -340,24 +343,45 @@ export default {
       showColumn.value = false;
     };
     const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          editCompanyData.value.phone_number = event;
-        } else if (event && event.target && event.target.value) {
-          editCompanyData.value.phone_number = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
-      }
+      // try {
+      //   if (typeof event === "string") {
+      //     editCompanyData.value.phone_number = event;
+      //   } else if (event && event.target && event.target.value) {
+      //     editCompanyData.value.phone_number = event.target.value;
+      //   } else {
+      //     console.error("Invalid event:", event);
+      //   }
+      // } catch (error) {
+      //   console.error("Error handling phone input:", error);
+      // }
     };
+    const formattedPhone = computed(() => {
+  try {
+    if (editCompanyData .value && editCompanyData .value.country_code && editCompanyData .value.phone_number) {
+      console.log("Country Code:", editCompanyData .value.country_code);
+      console.log("Phone:",editCompanyData .value.phone_number);
+
+      const countryCode = String(editCompanyData .value.country_code);
+      const phoneNumber = String(editCompanyData .value.phone_number);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return editCompanyData.value.phone_number || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
     const telvalidate = (isValid) => {
       console.log("Is Valid:", isValid);
 
       if (isValid.valid === true) {
         console.log(isValid.value, "Valid Phone Number");
         phoneVal.value = "";
+        editCompanyData.value.phone_number=isValid.nationalNumber;
+        editCompanyData.value.country_code=isValid.countryCallingCode;
         return true;
       } else {
         console.log("Invalid Phone Number");
@@ -371,6 +395,7 @@ export default {
       editCompanyData.value.company_name = data.company_name;
       editCompanyData.value.company_email = data.company_email;
       editCompanyData.value.phone_number = data.phone_number;
+      editCompanyData.value.country_code = data.country_code;
       updateId.value = data.id;
     };
     //     const saveChanges = () => {
@@ -381,7 +406,8 @@ export default {
       if (phoneVal.value) {
         telvalidate({
           isValid: false,
-          number: editCompanyData.value.phone_number,
+          nationalNumber: editCompanyData.value.phone_number,
+          countryCallingCode:editCompanyData.value.country_code
         });
         return;
       }
@@ -397,45 +423,97 @@ export default {
           console.error("Update error:", error);
         });
     };
-    const teluser = (telnumber) => {
-      if (telnumber && telnumber.valid) {
-        newCompany.value.phone_number = telnumber.number;
-        if (/[a-zA-Z]/.test(telnumber.number)) {
-          console.log("Alphabets detected in phone number");
-          newCompany.value.phoneErrors =
-            "Phone number cannot contain alphabets";
-        } else {
-          newCompany.value.phoneErrors = "";
-        }
-      } else {
-        newCompany.value.phone_number = null;
-        newCompany.value.phoneErrors = "Enter a valid phone number";
-      }
-    };
-    const telval = (telnumber) => {
-      if (telnumber && telnumber.valid) {
-        newCompany.value.phone = telnumber.number;
-        if (/[a-zA-Z]/.test(telnumber.number)) {
-          console.log("Alphabets detected in phone number");
-          newCompany.value.phoneError = "Phone number cannot contain alphabets";
-        } else {
-          newCompany.value.phoneError = "";
-        }
-      } else {
-        newCompany.value.phone = null;
-        newCompany.value.phoneError = "Enter a valid phone number";
-      }
-    };
+    // const teluser = (telnumber) => {
+    //   if (telnumber && telnumber.valid) {
+    //     newCompany.value.phone_number = telnumber.number;
+    //     if (/[a-zA-Z]/.test(telnumber.number)) {
+    //       console.log("Alphabets detected in phone number");
+    //       newCompany.value.phoneErrors =
+    //         "Phone number cannot contain alphabets";
+    //     } else {
+    //       newCompany.value.phoneErrors = "";
+    //     }
+    //   } else {
+    //     newCompany.value.phone_number = null;
+    //     newCompany.value.phoneErrors = "Enter a valid phone number";
+    //   }
+    // };
+    const teluser  = (telnumber) => {
+      console.log(telnumber)
+  if (telnumber && telnumber.valid) {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
+      newCompany.value.phone_number = null;
+      newCompany.value.countryCode = "";
+      newCompany.value.phoneErrors  = "Enter a valid phone number";
+    } else{
+      newCompany.value.phone_number= telnumber.nationalNumber;
+   
+      newCompany.value.countryCode = telnumber.countryCallingCode;
+    
+    
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
+    
+      newCompany.value.phoneErrors = "Enter a valid phone number";
+    } else {
+      newCompany.value.phoneErrors  = "";
+    }
+  }
+  } else {
+    newCompany.value.phone_number = null;
+      newCompany.value.countryCode = "";
+    newCompany.value.phoneErrors = "Enter a valid phone number";
+  }
+};
+    // const telval = (telnumber) => {
+    //   if (telnumber && telnumber.valid) {
+    //     newCompany.value.phone = telnumber.number;
+    //     if (/[a-zA-Z]/.test(telnumber.number)) {
+    //       console.log("Alphabets detected in phone number");
+    //       newCompany.value.phoneError = "Phone number cannot contain alphabets";
+    //     } else {
+    //       newCompany.value.phoneError = "";
+    //     }
+    //   } else {
+    //     newCompany.value.phone = null;
+    //     newCompany.value.phoneError = "Enter a valid phone number";
+    //   }
+    // };
+    const telval  = (telnumber) => {
+      console.log(telnumber)
+  if (telnumber && telnumber.valid) {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
+      newCompany.value.phone = null;
+      newCompany.value.country_code = "";
+      newCompany.value.phoneError  = "Enter a valid phone number";
+    } else{
+      newCompany.value.phone= telnumber.nationalNumber;
+   
+      newCompany.value.country_code = telnumber.countryCallingCode;
+    
+    
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
+    
+      newCompany.value.phoneError = "Enter a valid phone number";
+    } else {
+      newCompany.value.phoneError  = "";
+    }
+  }
+  } else {
+    newCompany.value.phone = null;
+    newCompany.value.country_code = "";
+    newCompany.value.phoneErrors = "Enter a valid phone number";
+  }
+};
 
     const addUser = async () => {
       try {
         formSubmitted.value = true;
-        teluser({ valid: true, number: newCompany.value.phone_number });
+        teluser({ valid: true,nationalNumber: newCompany.value.phone_number,countryCallingCode:newCompany.value.countryCode });
         if (newCompany.value.phoneErrors) {
           return;
         }
 
-        telval({ valid: true, number: newCompany.value.phone });
+        telval({ valid: true, nationalNumber: newCompany.value.phone,countryCallingCode:newCompany.value.country_code });
         if (newCompany.value.phoneError) {
           return;
         }
@@ -549,7 +627,7 @@ export default {
       placeholder: "Enter User phone number...",
     };
     return {
-      form,
+      form,formattedPhone,
       dataSource,
       showColumn,
       EditStart,

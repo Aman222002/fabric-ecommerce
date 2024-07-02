@@ -61,7 +61,7 @@
                       ></v-text-field> -->
 
                       <vue-tel-input
-                        :value="formData.phone"
+                      :value="formattedPhone"
                         @input="handlePhoneInput"
                         @validate="telValidate"
                         color="blue"
@@ -157,7 +157,7 @@
 </template>
 <script>
 import axios from "axios";
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, onMounted,computed } from "vue";
 import { useUsersStore } from "../store/user";
 import {Sweetalert} from '../utils/sweetalert';
 export default {
@@ -175,6 +175,7 @@ export default {
       name: "",
       email: "",
       phone: "",
+      country_code:"",
     });
     const formDetail = ref({
       current: "",
@@ -204,25 +205,59 @@ export default {
       (value) => !!value || "Confirm Password is required",
       (value) => value === formDetail.value.new || "Passwords do not match",
     ]);
+    const formattedPhone = computed(() => {
+  try {
+    if (formData .value && formData.value.country_code && formData.value.phone) {
+      console.log("Country Code:", formData.value.country_code);
+      console.log("Phone:",formData.value.phone);
+
+      const countryCode = String(formData.value.country_code);
+      const phoneNumber = String(formData.value.phone);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return formData.value.phone || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
     const formSubmitted = ref(false);
     const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          formData.value.phone = event;
-        } else if (event && event.target && event.target.value) {
-          formData.value.phone = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
-      }
+      // try {
+      //   if (typeof event === "string") {
+      //     formData.value.phone = event;
+      //   } else if (event && event.target && event.target.value) {
+      //     formData.value.phone = event.target.value;
+      //   } else {
+      //     console.error("Invalid event:", event);
+      //   }
+      // } catch (error) {
+      //   console.error("Error handling phone input:", error);
+      // }
     };
+    // const telValidate = (isValid) => {
+    //   console.log("Is Valid:", isValid);
+    //   if (isValid.valid === true) {
+    //     console.log(isValid.value, "Valid Phone Number");
+    //     errorMessage.value = "";
+    //     return true;
+    //   } else {
+    //     console.log("Invalid Phone Number");
+    //     errorMessage.value = "Enter a valid phone number";
+    //     return false;
+    //   }
+    // };
     const telValidate = (isValid) => {
       console.log("Is Valid:", isValid);
+
       if (isValid.valid === true) {
         console.log(isValid.value, "Valid Phone Number");
         errorMessage.value = "";
+        formData.value.phone=isValid.nationalNumber;
+        formData.value.country_code=isValid.countryCallingCode;
         return true;
       } else {
         console.log("Invalid Phone Number");
@@ -284,13 +319,14 @@ export default {
     const updateProfile = (id) => {
       formSubmitted.value = true;
       if (errorMessage.value) {
-        telValidate({ isValid: false, number: formData.value.phone });
+        telValidate({ isValid: false,  nationalNumber: formData.value.phone, countryCallingCode:formData.value.country_code });
         return;
       }
       const formDataUpload = new FormData();
       formDataUpload.append("name", formData.value.name);
       formDataUpload.append("email", formData.value.email);
       formDataUpload.append("phone", formData.value.phone);
+      formDataUpload.append("country_code", formData.value.country_code);
       if (formData.value.image) {
         formDataUpload.append("user_image", formData.value.image);
       }
@@ -332,6 +368,7 @@ export default {
         });
     };
     return {
+      formattedPhone,
       userStore,
       show1,
       show2,

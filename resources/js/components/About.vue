@@ -1,13 +1,13 @@
 <template>
   <div class="about_us_page">
-    <div class="popular_job_categories pb-0">
+    <!-- <div class="popular_job_categories pb-0">
       <div class="sec-title text-center">
-        <h2>About Us</h2>
+        <h2>About</h2>
         <v-breadcrumbs :items="items">
           <template v-slot:prepend> </template>
         </v-breadcrumbs>
       </div>
-    </div>
+    </div> -->
     <div class="about_superio">
       <v-container class="w_90">
         <v-card class="mx-auto my-8" elevation="16">
@@ -118,17 +118,17 @@ import { ref, onMounted } from "vue";
 export default {
   name: "About",
   setup() {
-    const items = [
-      {
-        title: "Home",
-        disabled: false,
-        href: "/",
-      },
-      {
-        title: "About",
-        disabled: true,
-      },
-    ];
+    // const items = [
+    //   {
+    //     title: "Home",
+    //     disabled: false,
+    //     href: "/",
+    //   },
+    //   {
+    //     title: "About",
+    //     disabled: true,
+    //   },
+    // ];
     const recentNews = ref([
       {
         id: "1",
@@ -167,24 +167,24 @@ export default {
       partnerData();
     });
     return {
-      items: [
-        {
-          title: "Dashboard",
-          disabled: false,
-          href: "breadcrumbs_dashboard",
-        },
-        {
-          title: "Link 1",
-          disabled: false,
-          href: "breadcrumbs_link_1",
-        },
-        {
-          title: "Link 2",
-          disabled: true,
-          href: "breadcrumbs_link_2",
-        },
-      ],
-      items,
+      // items: [
+      //   {
+      //     title: "Dashboard",
+      //     disabled: false,
+      //     href: "breadcrumbs_dashboard",
+      //   },
+      //   {
+      //     title: "Link 1",
+      //     disabled: false,
+      //     href: "breadcrumbs_link_1",
+      //   },
+      //   {
+      //     title: "Link 2",
+      //     disabled: true,
+      //     href: "breadcrumbs_link_2",
+      //   },
+      // ],
+      // items,
       value: 1151.71,
       brandLogo,
       partnerData,

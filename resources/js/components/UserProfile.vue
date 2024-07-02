@@ -101,6 +101,31 @@
                
               </div>
             </v-card>
+            <!-- <v-card   >
+                <v-card-title>Experience</v-card-title>
+        <v-table class="education-table">
+          
+            <thead>
+              <tr>
+                <th>Company Name</th>
+                <th>Position</th>
+                <th>Description</th>
+                <th>End Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(experience, index) in experience" :key="index">
+                <td>{{  experience.company_name  }}</td>
+                <td>{{experience.position  }}</td>
+                <td>{{ experience.description }}</td>
+                <td>{{ experience.start_date}}-{{  experience.end_date
+                        ? experience.end_date
+                        : "Currently Working" }}</td>
+              </tr>
+            </tbody>
+          
+        </v-table>
+      </v-card> -->
             <div class="sec-title">
               <h2>Education Details</h2>
               <div class="text">

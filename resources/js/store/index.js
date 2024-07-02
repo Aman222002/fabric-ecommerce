@@ -56,8 +56,9 @@ const defaultState = () => {
             name: "",
             email: "",
             phone: "",
+            country_code: "",
             status: [],
-            user_image:[],
+            user_image:"",
         },
         educationDetails: [educationItem],
 
@@ -210,6 +211,7 @@ export const useMyStore = defineStore("myStore", {
             formData.append("userDetails[name]", this.userDetails.name);
             formData.append("userDetails[email]", this.userDetails.email);
             formData.append("userDetails[phone]", this.userDetails.phone);
+            formData.append("userDetails[country_code]", this.userDetails.country_code);
             formData.append("userDetails[user_image]", this.userDetails.user_image);
             formData.append("userDetails[status]", this.userDetails.status);
             formData.append("address[address1]", this.address.address1);
@@ -416,8 +418,9 @@ export const useUserDetailsStore = defineStore({
         name: "",
         email: "",
         phone: "",
+        country_code: "",
         status:[],
-        user_image:[],
+        user_image:"",
     }),
     actions: {
         setUserData(userData) {
@@ -427,8 +430,9 @@ export const useUserDetailsStore = defineStore({
             this.name = "";
             this.email = "";
             this.phone = "";
+            this.country_code = "";
             this.status=[];
-            this.user_image=[];
+            this.user_image="";
         },
     },
      persist: true,

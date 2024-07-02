@@ -304,6 +304,7 @@ export default {
       name: "",
       email: "",
       phone: "",
+      country_code:"",
       permission: [],
       phoneError: "",
     });
@@ -326,20 +327,45 @@ export default {
     ];
     const errorMessage = ref(""); 
   
-    const telValidate = (telnumber) => {
-  if (telnumber && telnumber.valid) {
-    userData.value.phone = telnumber.number;
-    if (/[a-zA-Z]/.test(telnumber.number)) {
+//     const telValidate = (telnumber) => {
+//   if (telnumber && telnumber.valid) {
+//     userData.value.phone = telnumber.nationalNumber;
+//     userData.value.country_code = telnumber.countryCallingCode;
+//     if (/[a-zA-Z]/.test(telnumber.number)) {
     
-      userData.value.phoneError = "Phone number cannot contain alphabets";
+//       userData.value.phoneError = "Phone number cannot contain alphabets";
+//     } else {
+//       userData.value.phoneError = "";
+//     }
+//   } else {
+//     userData.value.phone = null;
+//     userData.value.phoneError = "Enter a valid phone number";
+//   }
+// };
+const telValidate = (telnumber) => {
+      console.log(telnumber)
+  if (telnumber && telnumber.valid) {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
+      userData.value.phone = null;
+      userData.value.country_code = "";
+      userData.value.phoneError = "Enter a valid phone number";
+    } else{
+      userData.value.phone = telnumber.nationalNumber;
+    userData.value.country_code = telnumber.countryCallingCode;
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
+    
+      userData.value.phoneError = "Enter a valid phone number";
     } else {
       userData.value.phoneError = "";
     }
+  }
   } else {
     userData.value.phone = null;
+    userData.value.country_code = "";
     userData.value.phoneError = "Enter a valid phone number";
   }
 };
+
     const userPermissions = ref([]);
     const fetchPermissions = async () => {
       try {
@@ -370,7 +396,7 @@ export default {
  
     const addUser = async () => {
       formSubmitted.value = true;
-      telValidate({ valid: true, number: userData.value.phone });
+      telValidate({ valid: true,  nationalNumber: userData.value.phone,countryCallingCode:userData.value.country_code });
       if (userData.value.phoneError) {
         return;
       }

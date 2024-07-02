@@ -138,19 +138,22 @@
 			</div>
 			<!-- Experience -->
 			@if (isset($userdata['experience']) && !empty($userdata['experience']))
-    @php
-        $hasExperience = false;
-    @endphp
-    @foreach ($userdata['experience'] as $exp)
-        @if ($exp['company_name'] !== null && $exp['company_name'] !== "null")
-            @php
-                $hasExperience = true;
-                break;
-            @endphp
-        @endif
-    @endforeach
+                @php
+                    $currentExperiences = [];
+                    $pastExperiences = [];
 
-    @if ($hasExperience)
+                    foreach ($userdata['experience'] as $exp) {
+                        if ($exp['company_name'] !== null && $exp['company_name'] !== "null") {
+                            if ($exp['end_date'] === null) {
+                                $currentExperiences[] = $exp;
+                            } else {
+                                $pastExperiences[] = $exp;
+                            }
+                        }
+                    }
+                @endphp
+
+                @if (!empty($currentExperiences) || !empty($pastExperiences))
     <div style="border-top: 2px solid;margin-top: 25px;">
         <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
             <thead>
@@ -162,8 +165,8 @@
                     </th>
                 </tr>
             </thead>
-            @foreach ($userdata['experience'] as $exp)
-                @if ($exp['company_name'] !== null && $exp['company_name'] !== "null")
+            @foreach ($currentExperiences as $exp)
+             
                     <tbody>
                         <tr>
                             <td style="width: 60%;">
@@ -171,11 +174,9 @@
                             </td>
                             <td style="width: 40%; text-align: right;">
                                 <strong>
-                                    @if ($exp['end_date'] !== null)
-                                        {{ $exp['start_date'] }} - {{ $exp['end_date'] }}
-                                    @else
+                               
 									<strong>{{$exp['start_date']}} - Currently Working</strong>
-                                    @endif
+                                  
                                 </strong>
                             </td>
                         </tr>
@@ -186,7 +187,24 @@
                             <td colspan="3">{{ $exp['description'] }}</td>
                         </tr>
                     </tbody>
-                @endif
+					@foreach ($pastExperiences as $exp)
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 60%;">
+                                            <h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
+                                        </td>
+                                        <td style="width: 40%; text-align: right;">
+                                            <strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $exp['position'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">{{ $exp['description'] }}</td>
+                                    </tr>
+                                </tbody>
+                            @endforeach
             @endforeach
         </table>
     </div>
@@ -197,6 +215,12 @@
 
 			
 			<!-- Education(Qualifications) -->
+			@php
+                $educationOrder = ['High School', 'College', 'University'];
+                $qualifications = collect($userdata['qualifications'])->sortBy(function ($qualification) use ($educationOrder) {
+                    return array_search($qualification['education_type'], $educationOrder);
+                });
+            @endphp
 			<div style="border-top: 2px solid;margin-top: 25px;">
 
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
@@ -209,7 +233,7 @@
 							</th>
 						</tr>
 					</thead>
-					@foreach ($userdata['qualifications'] as $qualification)
+					@foreach ($qualifications as $qualification)
 					<tbody>
 						<tr>
 							<td style="width: 70%;">

@@ -189,7 +189,8 @@ onMounted(() => {
       <v-col cols="12">
         <vue-tel-input
           @input="handlePhoneInput"
-          :value="users.phone"
+          
+          :value="formattedPhone"
           name="phone"
           variant="outlined"
           label="Phone"
@@ -225,7 +226,7 @@ onMounted(() => {
 
 <script>
 import axios from "axios";
-import { ref, onMounted} from "vue";
+import { ref, onMounted,computed,reactive,toRefs} from "vue";
 import { useMyStore } from "../../store";
 
 export default {
@@ -245,25 +246,53 @@ export default {
       
       return ["image/png", "image/jpeg"].includes(selectedImage.value[0].type) || 'Please upload a valid PNG, JPG, Or JPEG image';
     };
+    const formattedPhone = computed(() => {
+  try {
+    if (users.value && users .value.country_code && users .value.phone) {
+      console.log("Country Code:", users.value.country_code);
+      console.log("Phone:",users.value.phone);
+
+      const countryCode =users.value.country_code;
+      const phoneNumber = String(users.value.phone);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return users.value.phone || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
     const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          users.value.phone = event;
-        } else if (event && event.target && event.target.value) {
-          users.value.phone = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
-      }
+      // try {
+      //   if (typeof event === "string") {
+      //     users.value.phone = event;
+      //   } else if (event && event.target && event.target.value) {
+      //     users.value.phone = event.target.value;
+      //   } else {
+      //     console.error("Invalid event:", event);
+      //   }
+      // } catch (error) {
+      //   console.error("Error handling phone input:", error);
+      // }
     };
 
-    const telValidate = (isValid, phoneNumber, country) => {
-      if (isValid.valid === false) {
-        phoneErrorMessage.value = "Enter a valid phone number";
-      } else {
+   
+    const telValidate = (isValid) => {
+      console.log("Is Valid:", isValid);
+
+      if (isValid.valid === true) {
+       
         phoneErrorMessage.value = "";
+        users.value.phone=isValid.nationalNumber;
+        users.value.country_code=isValid.countryCallingCode;
+        return true;
+      } else {
+        console.log("Invalid Phone Number");
+        phoneErrorMessage.value = "Enter a valid phone number";
+        return false;
       }
     };
 
@@ -298,36 +327,81 @@ export default {
       };
       reader.readAsDataURL(file);
     };
-
+    const reactiveObject = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  country_code: '',
+  status: [],
+  user_image: ''
+  
+});
+const user = ref([]);
+const fetchuserProfile = async () => {
+      try {
+        const response = await axios.get(`/my-profile`);
+        const { data } = response.data;
+        user.value = data.userDetails;
+        
+        // Check if user_image is a filename (string)
+        if (typeof user.value.user_image === 'string') {
+         
+          imagePreview.value = `/storage/assest/${user.value.user_image}`;
+        } else {
+          console.error("user_image is not a string (filename):", user.value.user_image);
+         
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    const storedImage = ref(null);
     onMounted(() => {
+      fetchuserProfile().then(() => {
+        console.log(user.value.user_image);
+        storedImage.value = user.value.user_image; 
+      });
+    // console.log(  user.user_image);
      
-      const storedImage = store.userDetails.user_image;
+    //   console.log(storedImage)
+    //   reactiveObject.user_image = storedImage;
+    //  console.log(storedImage);
+      // if (storedImage) {
+      //   reactiveObject.user_image = storedImage;
+      //   console.log('hete' ,storedImage)
+      // }
+     
       const formData = new FormData();
 
       if (storedImage) {
        
         if (storedImage instanceof Blob) {
-         
+     console.log('here');
           const reader = new FileReader();
           reader.onload = (e) => {
+            console.log(e);
             imagePreview.value = e.target.result;
             console.log(imagePreview.value);
             selectedImage.value = [storedImage];
           };
           reader.readAsDataURL(storedImage);
-          formData.append('user_image', storedImage);
+         // formData.append('user_image', storedImage);
         } else if (typeof storedImage === "string") {
+         
           console.log('here');
           axios
             .get(`/storage/assest/${storedImage}`, { responseType: "blob" })
             .then((response) => {
               const file = new File([response.data], storedImage);
+             
               // imagePreview.value = `/storage/assest/${storedImage}`;
               imagePreview.value = URL.createObjectURL(response.data);
               selectedImage.value = [file];
               console.log(selectedImage.value);
               selectedImage.value[0].type = file.name.substring(file.name.indexOf('.'),file.name.length);
               formData.append('user_image', file);
+              //console.log('user_image',selectedImage.value);
+             
             })
             .catch((error) => {
               console.error("Error fetching image:", error);
@@ -345,7 +419,7 @@ export default {
       telValidate,
       handlePhoneInput,
       handleImageDrop,
-      customeValidation
+      customeValidation,formattedPhone,  reactiveObject,user ,storedImage
     };
   }
 };

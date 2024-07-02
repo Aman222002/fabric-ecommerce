@@ -1,16 +1,16 @@
 <template>
   <div class="job-applied">
-    <div class="sec-title text-center">
+    <!-- <div class="sec-title text-center">
       <h2>My Jobs</h2>
-      <!-- <v-breadcrumbs class="breadcrumbs_li" divider="/">
+      <v-breadcrumbs class="breadcrumbs_li" divider="/">
         <v-breadcrumbs-item> Home </v-breadcrumbs-item>
         <v-breadcrumbs-item> / </v-breadcrumbs-item>
         <v-breadcrumbs-item disabled> My Jobs </v-breadcrumbs-item>
-      </v-breadcrumbs> -->
+      </v-breadcrumbs>
       <div class="text">
         Know your worth and find the job that qualify your life
       </div>
-    </div>
+    </div> -->
     <div class="job_applied_body_page_section">
       <v-select
         v-model="filterSelection"

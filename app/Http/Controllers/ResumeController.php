@@ -320,7 +320,8 @@ if ($request->hasFile('userDetails.user_image')) {
             //dd( $userExperience);
             $user->name = $request->userDetails['name'];
             $user->email = $request->userDetails['email'];
-            $user->phone = $request->userDetails['phone']; // Update phone number here
+            $user->phone = $request->userDetails['phone']; 
+            $user->country_code ='+' .$request->userDetails['country_code']; // Update phone number here
    
     // $user->user_image =$request->userDetails['user_image'];
     //   dd($user);
@@ -361,7 +362,7 @@ if ($request->hasFile('userDetails.user_image')) {
             $response = [
                 "status" => true,
                 "data" => [
-                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone, "user_image" => $user->user_image, "status" => $user->status],
+                    "userDetails" => ["name" => $user->name, "email" => $user->email, "phone" => $user->phone, "user_image" => $user->user_image, "status" => $user->status,"country_code"=>$user->country_code],
                     "address" => $userAddress,
                     "educationDetails" => $userQualification,
                     "experience" => $userExperience,

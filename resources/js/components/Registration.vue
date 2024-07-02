@@ -116,6 +116,7 @@
                         label="Phone"
                         hide-details="auto"
                         mode="international"
+                        :required="true"
                         :autoDefaultCountry='false'
                         :class="{'error-border': formSubmitted && formData.phoneError}"
                       
@@ -152,6 +153,7 @@ export default {
       password: "",
       phone: "",
       phoneError: "",
+      countryCode: "",
     });
     const phoneError = ref("");
     const confirmPassword = ref("");
@@ -195,13 +197,23 @@ export default {
     };
     const telValidate = (telnumber) => {
       console.log(telnumber)
-  if (telnumber && telnumber.valid) {
-    if (!telnumber.number || telnumber.number.trim() === "") {
+      
+     
+  if (telnumber && telnumber.valid ) {
+
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
       formData.value.phone = null;
-      formData.value.phoneError = "Phone number is required";
+      formData.value.countryCode = "";
+      formData.value.phoneError = "Enter a valid phone number";
+    
     } else{
-    formData.value.phone = telnumber.number;
-    if (/[a-zA-Z]/.test(telnumber.number)) {
+    formData.value.phone = telnumber.nationalNumber;
+     
+      formData.value.countryCode = telnumber.countryCallingCode;
+      console.log( formData.value.countryCode);
+  
+      console.log(formData.value.countryCode)
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
     
       formData.value.phoneError = "Enter a valid phone number";
     } else {
@@ -210,15 +222,28 @@ export default {
   }
   } else {
     formData.value.phone = null;
-    formData.value.phoneError = "Enter a valid phone number";
+    formData.value.countryCode = "";
+    formData.value.phoneError = "Phone number is required";
   }
 };
+
+
+// const telValidate = (telnumber) => {
+//       if (telnumber && telnumber.valid) {
+//         formData.value.phone = telnumber.nationalNumber;
+//         formData.value.phoneError = "";
+//       } else {
+//         formData.value.phoneError = "Enter a valid phone number";
+//       }
+//     };
  const submitForm = async () => {
+  console.log("Form Data before submit:", formData.value); 
       formSubmitted.value = true;
-      telValidate({ valid: true, number: formData.value.phone });
+      telValidate({ valid: true, nationalNumber: formData.value.phone,countryCallingCode:formData.value.countryCode});
       if (formData.value.phoneError) {
         return;
       }
+      console.log("formData before submit:", formData.value);
       try {
         const usernameAvailable = await checkUsername();
         if (!usernameAvailable) {
@@ -228,6 +253,7 @@ export default {
         const valid = await form.value.validate();
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
+          
           let errorField = form.value[errors[0].id];
           errorField = Array.isArray(errorField) ? errorField[0] : errorField;
           errorField.scrollIntoView({
@@ -236,7 +262,7 @@ export default {
             inline: "center",
           });
         } else {
-          console.log(formData.value);
+          console.log("Submitting Form Data:", formData.value);
           const response = await axios.post("/registration", formData.value);
           if (response.data.status === true) {
             window.location.href = "/login";

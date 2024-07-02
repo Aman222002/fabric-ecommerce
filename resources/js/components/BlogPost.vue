@@ -452,8 +452,7 @@ export default {
           } else {
             formData.append("featured_image", selectedImage.value);
           }
-
-          formData.append("title", title.value);
+            formData.append("title", title.value);
           formData.append("htmlContent", content.value);
 
           axios

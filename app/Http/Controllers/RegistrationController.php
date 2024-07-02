@@ -18,17 +18,18 @@ class RegistrationController extends Controller
     public function  store(Request $request)
     {
         try {
-            
+           // dd($request);
             $input = $request->all();
             $verificationToken = Str::random(60);
            
-            $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
-          
+           // $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
+          //dd($request);
             $user = User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-                'phone' => $phone,
+                'phone' => $input['phone'],
+                'country_code'=>'+'.$input['countryCode'],
                 'verification_token' => $verificationToken,
             ]);
             $user->assignRole('User');

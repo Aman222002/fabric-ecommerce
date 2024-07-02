@@ -100,7 +100,7 @@
               hide-details="auto"
               mode="international"
               :autoDefaultCountry='false'
-              :class="{'error-border': formSubmitted && newUser.phoneError}"
+              :class="{'error-border': companySubmitted && newUser.phoneError}"
             ></vue-tel-input>
             <span v-if="formSubmitted &&newUser.phoneError" class="error-message">{{
               newUser.phoneError
@@ -167,7 +167,7 @@
             style="margin-top: 10px"
             variant="outlined"
             @input="handlePhoneInput"
-            :value="editCompanyData.phone"
+            :value="formattedPhone"
             @validate="telvalidate"
             label=" Phone"
             type="phone"
@@ -176,7 +176,7 @@
             hide-details="auto"
             mode="international"
           ></vue-tel-input>
-          <span v-if="formSubmitted &&phoneVal" class="error-message">{{ phoneVal }}</span
+          <span v-if="phoneVal" class="error-message">{{ phoneVal }}</span
           ><br />
 
           <v-btn
@@ -321,12 +321,14 @@ export default {
       name: "",
       email: "",
       phone: "",
+      country_code:"",
       phoneErrors: "",
       password: "",
       role: "User",
       companyEmail: "",
       companyName: "",
       companyPhone: "",
+      countryCode:"",
       phoneError: "",
       companyId: "",
       permission: [],
@@ -336,8 +338,10 @@ export default {
       name: "",
       email: "",
       phone: "",
+      country_code:"",
     });
     const formSubmitted = ref(false);
+    const companySubmitted = ref(false);
     const phoneVal = ref("");
     const updateId = ref();
     const errorMessage = ref("");
@@ -352,6 +356,25 @@ export default {
     const tel_company = {
       placeholder: "Enter Company phone number...",
     };
+    const formattedPhone = computed(() => {
+  try {
+    if (editCompanyData.value && editCompanyData.value.country_code && editCompanyData.value.phone) {
+      console.log("Country Code:",editCompanyData.value.country_code);
+      console.log("Phone:",editCompanyData.value.phone);
+
+      const countryCode = String(editCompanyData.value.country_code);
+      const phoneNumber = String(editCompanyData.value.phone);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return editCompanyData.value.phone || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
     const nameRules = [
       (v) => !!v || "Full Name is required",
       (v) => (v && v.length >= 3) || "Full Name must be at least 3 characters",
@@ -396,31 +419,49 @@ export default {
       deleteUrl
     );
     const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          editCompanyData.value.phone = event;
-        } else if (event && event.target && event.target.value) {
-          editCompanyData.value.phone = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
-      }
+      // try {
+      //   if (typeof event === "string") {
+      //     editCompanyData.value.phone = event;
+      //   } else if (event && event.target && event.target.value) {
+      //     editCompanyData.value.phone = event.target.value;
+      //   } else {
+      //     console.error("Invalid event:", event);
+      //   }
+      // } catch (error) {
+      //   console.error("Error handling phone input:", error);
+      // }
     };
-    const telvalidate = (isValid) => {
-      console.log("Is Valid:", isValid);
+    // const telvalidate = (isValid) => {
+    //   console.log("Is Valid:", isValid);
 
-      if (isValid.valid === true) {
-        console.log(isValid.value, "Valid Phone Number");
-        phoneVal.value = "";
-        return true;
-      } else {
-        console.log("Invalid Phone Number");
-        phoneVal.value = "Enter a valid phone number";
-        return false;
-      }
-    };
+    //   if (isValid.valid === true) {
+    //     console.log(isValid.value, "Valid Phone Number");
+    //     phoneVal.value = "";
+    //     return true;
+    //   } else {
+    //     console.log("Invalid Phone Number");
+    //     phoneVal.value = "Enter a valid phone number";
+    //     return false;
+    //   }
+    // };
+    
+    const telvalidate = (isValid) => {
+    console.log("Is Valid:", isValid);
+  
+    if (isValid.valid===true) {
+
+console.log( isValid.valid,"Valid Phone Number");
+phoneVal.value = "";
+editCompanyData.value.phone = isValid.nationalNumber;
+editCompanyData.value.country_code = isValid.countryCallingCode;
+return true;
+    } else {
+    
+      console.log("Invalid Phone Number");
+      phoneVal.value = "Enter a valid phone number";
+      return false
+    }
+};
 
     const editUser = (data) => {
       console.log(data);
@@ -428,6 +469,7 @@ export default {
       editCompanyData.value.name = data.name;
       editCompanyData.value.email = data.email;
       editCompanyData.value.phone = data.phone;
+      editCompanyData.value.country_code = data.country_code;
       updateId.value = data.id;
     };
     //     const saveChanges = () => {
@@ -436,7 +478,7 @@ export default {
     // };
     const saveChanges = (id) => {
       if (phoneVal.value) {
-        telvalidate({ isValid: false, number: editCompanyData.value.phone });
+        telvalidate({ isValid: false, nationalNumber: editCompanyData.value.phone,countryCallingCode:editCompanyData.value.country_code  });
         return;
       }
       axios
@@ -527,32 +569,85 @@ export default {
         console.error("Error fetching companies:", error);
       }
     };
+    // const teluser = (telnumber) => {
+    //   if (telnumber && telnumber.valid) {
+    //     newUser.value.phone = telnumber.nationalNumber;
+    //     newUser.value.country_code = telnumber.countryCallingCode;
+    //     if (/[a-zA-Z]/.test(telnumber.number)) {
+    //       newUser.value.phoneErrors = "Enter a valid phone number";
+    //     } else {
+    //       newUser.value.phoneErrors = "";
+    //     }
+    //   } else {
+    //     newUser.value.phone = null;
+    //     newUser.value.phoneErrors = "Enter a valid phone number";
+    //   }
+    // };
     const teluser = (telnumber) => {
-      if (telnumber && telnumber.valid) {
-        newUser.value.phone = telnumber.number;
-        if (/[a-zA-Z]/.test(telnumber.number)) {
-          newUser.value.phoneErrors = "Enter a valid phone number";
-        } else {
-          newUser.value.phoneErrors = "";
-        }
-      } else {
-        newUser.value.phone = null;
-        newUser.value.phoneErrors = "Enter a valid phone number";
-      }
-    };
+      console.log(telnumber)
+  if (telnumber && telnumber.valid) {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
+      newUser.value.phone = null;
+      newUser.value.country_code = "";
+      newUser.value.phoneErrors = "Enter a valid phone number";
+    } else{
+      newUser.value.phone= telnumber.nationalNumber;
+   
+      newUser.value.country_code = telnumber.countryCallingCode;
+    
+    
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
+    
+      newUser.value.phoneErrors = "Enter a valid phone number";
+    } else {
+      newUser.value.phoneErrors = "";
+    }
+  }
+  } else {
+    newUser.value.phone = null;
+    newUser.value.country_code = "";
+    newUser.value.phoneErrors = "Enter a valid phone number";
+  }
+};
+    // const telval = (telnumber) => {
+    //   if (telnumber && telnumber.valid) {
+    //     newUser.value.companyPhone = telnumber.number;
+    //     if (/[a-zA-Z]/.test(telnumber.number)) {
+    //       newUser.value.phoneError = "Enter a valid phone number";
+    //     } else {
+    //       newUser.value.phoneError = "";
+    //     }
+    //   } else {
+    //     newUser.value.companyPhone = null;
+    //     newUser.value.phoneError = "Enter a valid phone number";
+    //   }
+    // };
     const telval = (telnumber) => {
-      if (telnumber && telnumber.valid) {
-        newUser.value.companyPhone = telnumber.number;
-        if (/[a-zA-Z]/.test(telnumber.number)) {
-          newUser.value.phoneError = "Enter a valid phone number";
-        } else {
-          newUser.value.phoneError = "";
-        }
-      } else {
-        newUser.value.companyPhone = null;
-        newUser.value.phoneError = "Enter a valid phone number";
-      }
-    };
+      console.log(telnumber)
+  if (telnumber && telnumber.valid) {
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
+      newUser.value.companyPhone = null;
+      newUser.value.countryCode = "";
+      newUser.value.phoneError  = "Enter a valid phone number";
+    } else{
+      newUser.value.companyPhone= telnumber.nationalNumber;
+   
+      newUser.value.countryCode = telnumber.countryCallingCode;
+    
+    
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
+    
+      newUser.value.phoneError = "Enter a valid phone number";
+    } else {
+      newUser.value.phoneError  = "";
+    }
+  }
+  } else {
+    newUser.value.companyPhone = null;
+    newUser.value.countryCode= "";
+    newUser.value.phoneError  = "Enter a valid phone number";
+  }
+};
 
     const fetchJobs = (value) => {
       console.log(value);
@@ -592,15 +687,20 @@ export default {
     };
     const addUser = async () => {
       formSubmitted.value = true;
-      teluser({ valid: true, number: newUser.value.phone });
+      companySubmitted.value=true;
+      teluser({ valid: true, nationalNumber: newUser.value.phone,countryCallingCode:newUser.value.country_code });
       if (newUser.value.phoneErrors) {
+       // formSubmitted.value = true;
         return;
       }
      
-      telval({ valid: true, number: newUser.value.companyPhone });
-      if (newUser.value.phoneError) {
-        return;
-      }
+    
+  if (newUser.role === 'Company Admin') {
+    telval({ valid: true, nationalNumber: newUser.value.companyPhone, countryCallingCode: newUser.value.countryCode });
+    if (newUser.value.phoneError) {
+      return;
+    }
+  }
       try {
         const usernameAvailable = await checkUsername();
         if (!usernameAvailable) {
@@ -687,6 +787,7 @@ export default {
       });
     };
     return {
+      formattedPhone,
       modalOpen,
       newUser,
       dataSource,
@@ -738,7 +839,7 @@ export default {
       telvalidate,
       deleteUser,
       tel_options,
-      tel_company,formSubmitted,
+      tel_company,formSubmitted,companySubmitted
     };
   },
 };

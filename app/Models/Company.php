@@ -16,6 +16,7 @@ class Company extends Model
         'description',
         'status',
         'logo',
+        'country_code'
     ];
     public function user()
     {

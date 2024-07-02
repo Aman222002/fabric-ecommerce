@@ -264,7 +264,7 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
-        
+       // dd($request);
         try {
             $input = $request->all();
             $verificationToken = Str::random(60);
@@ -277,7 +277,8 @@ class CompanyController extends Controller
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
-                    'phone' => $phone,
+                    'phone' =>  $phone,
+                    // 'country_code'=>$input['countryCode'],
                     'company_id' => $request->company_Id,
                     'verification_token' => $verificationToken,
                 ]);
@@ -285,12 +286,13 @@ class CompanyController extends Controller
                 $user->assignRole('Company Subadmin');
               
             } else {
-                $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
+               // $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
-                    'phone' => $phone,
+                    'phone' =>$input['phone'],
+                    'country_code'=> '+'. $input['countryCode'],
                     'verification_token' => $verificationToken,
                 ]);
                 $user->assignRole('Company Admin');
@@ -314,12 +316,13 @@ class CompanyController extends Controller
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assest', $imageName);
                 }
-                $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone_number']);
+               // $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone_number']);
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
                     'company_email' => $input['company_email'],
-                    'phone_number' => $phone ,
+                    'phone_number' => $input['phone_number'] ,
+                    'country_code'=>'+'. $input['country_code'],
                     'logo' => $imageName,
                 ]);
                 // dispatch(new VerificationMail($user->email));
@@ -420,6 +423,7 @@ class CompanyController extends Controller
                 'company_name',
                 'company_email',
                 'phone_number',
+                'country_code',
                 'description',
                 'status',
                 'id'
@@ -504,10 +508,14 @@ class CompanyController extends Controller
      */
     public function update(Request $request, string $id)
     {
+       // dd($request);
         //
         try {
             $company = Company::find($id);
             if ($company) {
+                $request->merge([
+                    'country_code' => '+' . $request->input('country_code')
+                ]);
                 $company->update($request->all());
                
                 return response()->json(['status' => true, 'message' => 'Company data updated successfully'], 200);

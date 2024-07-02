@@ -394,7 +394,7 @@
           ></v-text-field> -->
           <vue-tel-input
           @input="handlePhoneInput"
-          :value="editedJob.phone"
+          :value="formattedPhone"
           @validate="telValidate"
                         color="blue"
                         density="compact"
@@ -417,7 +417,7 @@
   </v-card>
 </template>
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,computed } from "vue";
 import axios from "axios";
 import { useUsersStore } from "../store/user";
 import { countries } from "../utils/countries";
@@ -454,6 +454,7 @@ export default {
       name: "",
       email: "",
       phone: "",
+      country_code:"",
       company_name: "",
       company_email: "",
       logo: null,
@@ -472,6 +473,29 @@ export default {
       email: "",
       logo: null,
     });
+
+    const formattedPhone = computed(() => {
+  try {
+    if (editedJob.value && editedJob.value.country_code && editedJob.value.phone) {
+      console.log("Country Code:", editedJob.value.country_code);
+      console.log("Phone:", editedJob.value.phone);
+
+      const countryCode = String(editedJob.value.country_code);
+      const phoneNumber = String(editedJob.value.phone);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return editedJob.value.phone || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
+
+
+   
     const showOverview = ref(true);
     const showJob = ref(false);
     const showAddress = ref(false);
@@ -509,27 +533,53 @@ export default {
       }
     };
 
-const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          editedJob.value.phone = event;
-        } else if (event && event.target && event.target.value) {
-          editedJob.value.phone = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
-      }
+// const handlePhoneInput = (event) => {
+//   console.log(event);
+//       try {
+//         if (typeof event === "string") {
+//           editedJob.value.phone = event;
+//         } else if (event && event.target && event.target.value) {
+//           editedJob.value.phone = event.target.value;
+//         } else {
+//           console.error("Invalid event:", event);
+//         }
+//       } catch (error) {
+//         console.error("Error handling phone input:", error);
+//       }
+//     };
+
+const handlePhoneInput = (phone) => {
+  // console.log(phone)
+  // console.log("Phone Number:", phone.number);
+  // console.log("Country Code:", phone.country_code);
+  //     editedJob.value.phone = phone.number;
+  //     editedJob.value.country_code = phone.country_code;
+  //     console.log(phone.number,phone.country_code)
     };
+
+
+//     const telValidate = (isValid) => {
+//       console.log(telnumber)
+//   if (telnumber && telnumber.valid) {
+//     console.log(telnumber.valid);
+//       editedJob.value.phone = telnumber.nationalNumber;
+//       editedJob.value.country_code = telnumber.countryCallingCode;
+//   } else {
+//     editedJob.value.phone = null;
+//     editedJob.value.country_code = "";
+//     errorMessage.value = "Enter a valid phone number";
+//   }
+// };
    
     const telValidate = (isValid) => {
     console.log("Is Valid:", isValid);
   
     if (isValid.valid===true) {
 
-console.log( isValid.value,"Valid Phone Number");
+console.log( isValid.valid,"Valid Phone Number");
 errorMessage.value = "";
+editedJob.value.phone = isValid.nationalNumber;
+       editedJob.value.country_code = isValid.countryCallingCode;
 return true;
     } else {
     
@@ -537,13 +587,13 @@ return true;
         errorMessage.value = "Enter a valid phone number";
       return false
     }
-   
 };
 
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
       editedJob.value.phone = user.value.phone;
+      editedJob.value.country_code = user.value.country_code;
       editedJob.value.company_name = company.value.company_name;
       editedJob.value.company_email = company.value.company_email;
       editedJob.value.logo = null;
@@ -554,16 +604,21 @@ return true;
     };
 
     const saveEditedJob = async () => {
+      console.log(editedJob.value);
       formSubmitted.value = true;
       if (errorMessage.value) {
-        telValidate({ isValid: false, number: editedJob.value.phone });
+        telValidate({ isValid: false, nationalNumber: editedJob.value.phone,countryCallingCode:editedJob.value.country_code });
         return;
       }
+  //     if (!telValidate(true)) {
+  //   return;
+  // }
       try {
           const formData = new FormData();
         formData.append("name", editedJob.value.name);
         formData.append("email", editedJob.value.email);
         formData.append("phone", editedJob.value.phone);
+        formData.append("country_code", editedJob.value.country_code);
         formData.append("company_name", editedJob.value.company_name);
         formData.append("company_email", editedJob.value.company_email);
         formData.append("logo", editedJob.value.logo);
@@ -862,7 +917,7 @@ return true;
     }; 
 
     return {
-      form,
+      form, formattedPhone,
       company,
       user,
       fetchCompanyProfile,
