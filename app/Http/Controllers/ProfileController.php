@@ -133,6 +133,7 @@ class ProfileController extends Controller
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'phone' => $request->input('phone'),
+                'country_code'=>'+'.$request->input('country_code'),
             ]);
 
             $company = Company::find($companyId);

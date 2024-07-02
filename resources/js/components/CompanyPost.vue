@@ -2,7 +2,7 @@
   <div class="find_Job_list">
     <v-card class="mx-auto py-12 top_page_section">
       <div class="job_info" align="center" justify="center">
-        <v-card-title>Jobs </v-card-title>
+        <v-card-title>Find Job </v-card-title>
         <v-breadcrumbs :items="items">
           <template v-slot:title="{ item }">
             {{ item.title.toUpperCase() }}
@@ -21,21 +21,10 @@
             xl="12"
             class="find_Job_list_right"
           >
-            <v-alert type="error" class="no_job_found"> No job Found. </v-alert>
+            <v-alert type="error" class="no_job_found"  @click="redirectToPreviousPage"> No job found according to your skill. </v-alert>
           </v-col>
         </v-row>
-        <!-- <v-row v-if="showAlert2">
-          <v-col
-            cols="auto"
-            sm="12"
-            md="12"
-            lg="12"
-            xl="12"
-            class="find_Job_list_right"
-          >
-            <v-alert type="error" class="no_job_found"> No job Found for your skill. </v-alert>
-          </v-col>
-        </v-row> -->
+       
         <v-row v-else>
           <v-col cols="12" sm="12" md="3" lg="3" xl="3">
             <v-card class="mx-auto find_Job_list_left">
@@ -163,7 +152,7 @@
 
       <div style="text-align: center;margin-top: 20px">
         <v-pagination
-          v-if="jobs.length > 0"
+          v-if="job.length > 0"
           v-model="currentPage"
           :length="totalPages"
           @input="paginate"
@@ -239,23 +228,7 @@ export default {
     const detailPanelVisible = ref(false);
     const showAlert = ref(false);
     const showAlert2 = ref(false);
-    const fetchpost = async () => {
-      try {
-        const response = await axios.get("/company/job");
-        const fetchedJobs = response.data.data;
-        console.log("Fetched jobs:", fetchedJobs);
-        if (Array.isArray(fetchedJobs)) {
-          jobs.value = fetchedJobs;
-        } else {
-          showAlert.value = true; // Show alert if no jobs found
-          jobs.value = [];
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-        showAlert.value = true; // Show alert if error occurs
-        jobs.value = [];
-      }
-    };
+   
     const searchJobs = async () => {
       try {
         showAlert.value = false; 
@@ -265,6 +238,7 @@ export default {
             location: location.value,
             category: category.value,
             experience: experience.value,
+            userSkills: userSkills.value,
           },
         });
         const fetchedJobs = response.data.data;
@@ -288,22 +262,20 @@ export default {
           if (jobs.value.length === 0) {
             showAlert.value = true;
           }
-        }
+        } 
       } catch (err) {
         console.error(err);
         showAlert.value = true;
       }
     };
-
     watch(statusFilter, () => {
       searchJobs();
     });
-
-    
     const fetchJobs = async () => {
   try {
     showAlert.value = false;
     const response = await axios.get("/company/post");
+    
     const fetchedJobs = response.data.data;
     console.log(fetchedJobs); 
     if (Array.isArray(fetchedJobs)) {
@@ -326,28 +298,31 @@ export default {
 };
 
     
-//     const fetchpost = async () => {
-//   try {
-//     const response = await axios.get("/company/job");
-//     const fetchedJobs = response.data.data;
-//     console.log(fetchedJobs);
-//     if (Array.isArray(fetchedJobs)) {
-//       jobs.value = fetchedJobs;
-//     } else {
+    const fetchpost = async () => {
+  try {
+    const response = await axios.get("/company/job");
+    const fetchedJobs = response.data.data;
+    console.log(fetchedJobs);
+    if (Array.isArray(fetchedJobs)) {
+       jobs.value = fetchedJobs;
+    
+    }
+    else if (typeof fetchedJobs === 'object') {
      
-//       showAlert2.value = true;
-//       jobs.value = []; 
-//     }
-//     totalJobPostings.value = jobs.value.length; 
-//     if (jobs.value.length === 0) {
-//       showAlert2.value = true;
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-    const fetchTotalJobPostings = async () => {
+     jobs.value = Object.values(fetchedJobs);
+   } else {
+      showAlert2.value = true;
+      jobs.value = []; 
+    }
+    totalJobPostings.value = jobs.value.length; 
+    if (jobs.value.length === 0) {
+      showAlert2.value = true;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+ const fetchTotalJobPostings = async () => {
       try {
         const response = await fetch("/total-published-jobs");
         const data = await response.json();
@@ -358,7 +333,7 @@ export default {
     };
     const openDetailPanel = (job) => {
       console.log(job);
-      window.location.href = `/view/${job.id}`;
+      window.location.href = `/jobs/${job.id}`;
       detailPanelVisible.value = true;
       detail.value.company_name = job.company.company_name;
       detail.value.location = job.location;
@@ -433,14 +408,14 @@ export default {
     };
 
     const truncateDescription = (description) => {
-      if (description && description.length > 65) {
-        return description.substring(0, 65) + "...";
+      if (description && description.length > 50) {
+        return description.substring(0, 50) + "...";
       }
       return description;
     };
 
     const isDescriptionLong = (description) => {
-      return description && description.length > 65;
+      return description && description.length > 50;
     };
     const formatCreatedAt = (createdAt) => {
       const options = { day: "numeric", month: "long", year: "numeric" };
@@ -477,21 +452,10 @@ export default {
 
     onMounted(() => {
       if (usersStore.isloggedin) {
-        fetchJobs();
-        
-      } else {
-        fetchpost();
        
-      }
-      fetchTotalJobPostings();
-      fetchCategories();
-      // if (usersStore.isloggedin) {
-      //   fetchpost();
-      // } else if(!usersStore.isloggedin) {
-      //   fetchJobs();
-      // }
-
-      if (props.data.title || props.data.location) {
+        fetchpost();
+        fetchUserSkills();
+        if (props.data.title || props.data.location) {
         console.log(props.data.title || props.data.location);
         jobTitle.value = props.data.title;
         location.value = props.data.location;
@@ -501,10 +465,41 @@ export default {
         category.value = props.data.category;
         searchJobs();
       }
-    });
+      } else {
+       
+        fetchJobs();
+        if (props.data.title || props.data.location) {
+        console.log(props.data.title || props.data.location);
+        jobTitle.value = props.data.title;
+        location.value = props.data.location;
+        searchJobs();
+      } else if (props.data.category) {
+        console.log(props.data.category);
+        category.value = props.data.category;
+        searchJobs();
+      }
+      }
+      fetchTotalJobPostings();
+      fetchCategories();
+     
 
+     
+    });
+    const userSkills = ref([]);
+    const fetchUserSkills = async () => {
+  try {
+    const response = await axios.get('/userskills');
+    userSkills.value = response.data.data;
+    searchJobs();
+  } catch (error) {
+    console.error('Error fetching user skills:', error);
+  }
+};
+const redirectToPreviousPage = () => {
+      window.location.reload();
+    };
     return {
-      jobs,
+      jobs,fetchUserSkills,
       jobTitle,
       location,
       searchJobs,
@@ -519,7 +514,6 @@ export default {
       currentPage,
       openDetailPanel,
       detailPanelVisible,
-
       detail,
       paginatedTickets,
       totalPages,
@@ -533,7 +527,7 @@ export default {
       experienceOptions,
       filterdata,
       pageFilter,
-      filterpagedata,showAlert2
+      filterpagedata,showAlert2,userSkills,redirectToPreviousPage
     };
   },
 };

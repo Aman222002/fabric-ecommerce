@@ -106,35 +106,22 @@
                         :type="showPassword ? 'text' : 'password'"
                       >
                       </v-text-field>
-                      <!-- <v-text-field
-                        v-model="formData.phone"
-                        :rules="phoneRules"
-                        color="blue"
-                        density="compact"
-                        style="margin-bottom: 10px"
-                        variant="outlined"
-                        label="Phone"
-                        mask="##########"
-                        hide-details="auto"
-                        @input="filterNonNumeric"
-                      ></v-text-field> -->
-
                       <vue-tel-input
                         v-model="formData.phone"
-                      
-                       
                         @validate="telValidate"
-
                         color="blue"
                         density="compact"
-                        style="margin-bottom: 10px"
+                        style="margin-bottom: 10px;"
                         variant="outlined"
                         label="Phone"
                         hide-details="auto"
-                     
                         mode="international"
+                        :required="true"
+                        :autoDefaultCountry='false'
+                        :class="{'error-border': formSubmitted && formData.phoneError}"
+                      
                       ></vue-tel-input>
-                      <span v-if="formData.phoneError" class="error-message">{{
+                      <span v-if="formSubmitted && formData.phoneError" class="error-message">{{
                         formData.phoneError
                       }}</span>
 
@@ -155,7 +142,6 @@
 <script>
 import { ref, computed } from "vue";
 import axios from "axios";
-
 export default {
   name: "Registration",
   setup() {
@@ -167,6 +153,7 @@ export default {
       password: "",
       phone: "",
       phoneError: "",
+      countryCode: "",
     });
     const phoneError = ref("");
     const confirmPassword = ref("");
@@ -194,14 +181,8 @@ export default {
     const phoneValidationRule = computed(() => {
       return validatePhone() || "Enter a valid phone number";
     });
-    // const filterNonNumeric = (value) => {
-    //   formData.value.phone = value.replace(/\D/g, "");
-    // };
-    // const filterNonNumeric = (value) => {
-    //   if (typeof value === 'string') {
-    //     formData.value.phone = value.replace(/\D/g, "");
-    //   }
-    // };
+    
+    const formSubmitted = ref(false);
     const showPassword = ref(false);
     const checkUsername = async () => {
       try {
@@ -214,45 +195,65 @@ export default {
         return false;
       }
     };
-    
     const telValidate = (telnumber) => {
-  if (telnumber && telnumber.valid) {
-    formData.value.phone = telnumber.number;
-    if (/[a-zA-Z]/.test(telnumber.number)) {
+      console.log(telnumber)
+      
+     
+  if (telnumber && telnumber.valid ) {
+
+    if (!telnumber.nationalNumber || telnumber.nationalNumber.trim() === "") {
+      formData.value.phone = null;
+      formData.value.countryCode = "";
+      formData.value.phoneError = "Enter a valid phone number";
     
-      formData.value.phoneError = "Phone number cannot contain alphabets";
+    } else{
+    formData.value.phone = telnumber.nationalNumber;
+     
+      formData.value.countryCode = telnumber.countryCallingCode;
+      console.log( formData.value.countryCode);
+  
+      console.log(formData.value.countryCode)
+    if (/[a-zA-Z]/.test(telnumber.nationalNumber)) {
+    
+      formData.value.phoneError = "Enter a valid phone number";
     } else {
       formData.value.phoneError = "";
     }
+  }
   } else {
     formData.value.phone = null;
-    formData.value.phoneError = "Enter a valid phone number";
+    formData.value.countryCode = "";
+    formData.value.phoneError = "Phone number is required";
   }
 };
 
 
-    const submitForm = async () => {
-      telValidate({ valid: true, number: formData.value.phone });
+// const telValidate = (telnumber) => {
+//       if (telnumber && telnumber.valid) {
+//         formData.value.phone = telnumber.nationalNumber;
+//         formData.value.phoneError = "";
+//       } else {
+//         formData.value.phoneError = "Enter a valid phone number";
+//       }
+//     };
+ const submitForm = async () => {
+  console.log("Form Data before submit:", formData.value); 
+      formSubmitted.value = true;
+      telValidate({ valid: true, nationalNumber: formData.value.phone,countryCallingCode:formData.value.countryCode});
       if (formData.value.phoneError) {
         return;
       }
+      console.log("formData before submit:", formData.value);
       try {
         const usernameAvailable = await checkUsername();
         if (!usernameAvailable) {
-          // window.Swal.fire({
-          //   toast: true,
-          //   position: "top-end",
-          //   timer: 2000,
-          //   showConfirmButton: false,
-          //   icon: "error",
-          //   title: "Username already exist",
-          // });
           errorMessage.value = "Username already exist.";
           return;
         }
         const valid = await form.value.validate();
         if (!valid.valid) {
           const errors = JSON.parse(JSON.stringify(valid.errors));
+          
           let errorField = form.value[errors[0].id];
           errorField = Array.isArray(errorField) ? errorField[0] : errorField;
           errorField.scrollIntoView({
@@ -261,7 +262,7 @@ export default {
             inline: "center",
           });
         } else {
-          console.log(formData.value);
+          console.log("Submitting Form Data:", formData.value);
           const response = await axios.post("/registration", formData.value);
           if (response.data.status === true) {
             window.location.href = "/login";
@@ -276,6 +277,7 @@ export default {
     const login = async () => {
       window.location.href = "/login";
     };
+    
     return {
       valid,
       response,
@@ -293,7 +295,7 @@ export default {
       errorMessage,
       telValidate,
       phoneValidationRule,
-      phoneError,
+      phoneError, formSubmitted,
     };
   },
 };
@@ -326,8 +328,14 @@ export default {
   text-transform: capitalize;
 }
 .error-message {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
+
+}
+.error-border {
+  border-color: #B00020 !important; 
 }
 </style>
  

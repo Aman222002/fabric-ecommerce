@@ -38,6 +38,7 @@ pinia.use(piniaPluginPersistedstate);
 
 const VueTelInputOptions = {
     mode: "international",
+   
 };
 
 /**

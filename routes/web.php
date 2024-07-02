@@ -51,7 +51,7 @@ Auth::routes();
 Route::get('/header', function () {
     return view('header');
 });
-Route::get('/resume', function () {
+Route::get('/personal-detail', function () {
     return view('resume');
 });
 Route::get('/userprofile', function () {
@@ -75,10 +75,10 @@ Route::post('/address', [UserAddressController::class, 'index']);
 Route::post('/users-qualifications', [QualificationsController::class, 'store']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/getuser', [LoginController::class, 'getUser']);
-Route::get('/job', function () {
-    return view('job');
-});
-Route::get('/product', function () {
+// Route::get('/company/login', function () {
+//     return view('job');
+// });
+Route::get('/plans', function () {
     return view('product');
 });
 Route::get('/cart', function () {
@@ -111,9 +111,11 @@ Route::get('/confirm/user', function () {
 Route::get('/confirm/company', function () {
     return view('confirmcompany');
 });
-Route::get('/view/{jobid}', [SearchjobController::class, 'viewjob']);
+Route::get('/jobs/{jobid}', [SearchjobController::class, 'viewjob']);
+
+Route::get('/userskills', [SearchjobController::class, 'getUserSkills']);
 Route::get('/fetchjob/{jobid}', [SearchjobController::class, 'fetchJobDetails']);
-Route::get('/job-search/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
+Route::get('/find-job/{category?}/{title?}/{location?}', [SearchjobController::class, 'index']);
 Route::get('/company/post', [SearchjobController::class, 'fetchData']);
 Route::get('/company/job', [SearchjobController::class, 'fetchJob']);
 Route::get('/search-jobs', [SearchjobController::class, 'searchJobs']);
@@ -123,13 +125,18 @@ Route::get('/forget/password', [ForgotPasswordController::class, 'forgetPassword
 Route::post('/get/forget/password/link', [ForgotPasswordController::class, 'getLink']);
 Route::get('reset/password/{user_id}/{token}', [ForgotPasswordController::class, 'showResetPasswordForm']);
 Route::post('/reset/new/password/', [ForgotPasswordController::class, 'updatePassword']);
-Route::post('/login', [LoginController::class, 'check'])->name('login');
+// Route::post('/login', [LoginController::class, 'check'])->name('login');
+Route::middleware(['rememberMe'])->group(function () {
+    Route::post('/login', [LoginController::class, 'check'])->name('login');
+    Route::post('/company/login', [CompanyController::class, 'check']);
+});
 Route::get('/logout', [LoginController::class, 'logout']);
-Route::get('/resume', [CvController::class, 'index']);
-Route::post('/resume', [CvController::class, 'submitForm'])->name('resume');
+Route::get('/personal-detail', [CvController::class, 'index']);
+Route::post('/personal-detail', [CvController::class, 'submitForm'])->name('resume');
 Route::get('/registration', [RegistrationController::class, 'index']);
 Route::post('/registration', [RegistrationController::class, 'store'])->name('registration');
 Route::prefix('company')->group(function (){
+    Route::get('/login', [CompanyController::class, 'companylogin']);
     Route::get('/register/{id?}/{name?}/{email?}/{phone?}/{company?}/{permission?}', [CompanyController::class, 'index']);
     Route::post('/post/{permission?}', [CompanyController::class, 'store'])->name('companyregister');
     Route::post('/login', [CompanyController::class, 'check']);
@@ -150,10 +157,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/post/jobs/{id}/{category?}/{jobtype?}/{skill?}/{experience?}/{salary?}', [JobsController::class, 'update']);
     Route::delete('/post/delete/{id}', [JobsController::class, 'destroy']);
     Route::post('/apply-job/{id}', [JobsController::class, 'applyJob']);
-    Route::get('/job-apply', [JobsController::class, 'myJobApplications']);
+    Route::get('/my-jobs', [JobsController::class, 'myJobApplications']);
     // Route::get('/get/job-apply', [JobsController::class, 'myJobApplications']);
     Route::post('/save-job/{id}', [JobsController::class, 'saveJob']);
-    Route::get('/savedjobs', [JobsController::class, 'savedJobsdetail']);
+    Route::get('/save-jobs', [JobsController::class, 'savedJobsdetail']);
     Route::post('/removesavedjobs/{id}', [JobsController::class, 'removeSavedJob']);
     Route::post('/remove-applied-jobs/{id}', [JobsController::class, 'removeAppliedJob']);
 });
@@ -248,10 +255,10 @@ Route::get('/add-user', [CompanyController::class, 'adduser']);
 Route::get('/fetch-user/{type?}', [CompanyController::class, 'fetchuser']);
 Route::get('/accepted/{id}/{name}/{company}/{email}/{phone}/{permission}', [UserController::class, 'accept']);
 Route::get('/reject/{id}', [UserController::class, 'reject']);
-Route::get('/users', [CompanyController::class, 'users']);
+Route::get('/company-users', [CompanyController::class, 'users']);
 Route::get('/find/plan', [CompanyController::class, 'fetchPlan']);
 Route::get('/get/all/plans', [CompanyController::class, 'getAllPlans']);
-Route::get('/company/plan', [CompanyController::class, 'showCompanyPlan']);
+Route::get('/company/subscription', [CompanyController::class, 'showCompanyPlan']);
  Route::get('/cancel/upgrade', [StripeController::class, 'cancelUpgradeRequest']);
 // Route::get('/cancel/upgrade', [CompanyController::class, 'cancelUpgradeRequest']);
 Route::post('/remove/subscription/{userID}', [CompanyController::class, 'removeSubscription']);

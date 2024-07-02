@@ -2,5 +2,5 @@
 @section('title', 'Job-Apply')
 @section('content')
 
-<jobapply-component :data="{{$jobApplications}}"></jobapply-component>
+<jobapply-component :data="{{$jobApplications}}" :save="{{$savedJobs}}"></jobapply-component>
 @endsection

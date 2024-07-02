@@ -88,6 +88,7 @@
                             label="Remember Me"
                             class="mt-n1"
                             color="blue"
+                            v-model="formData.rememberMe"
                           >
                           </v-checkbox>
                         </v-col>
@@ -171,7 +172,17 @@ import axios from "axios";
 
 export default {
   name: "Job",
-  setup() {
+  props: {
+    email: {
+      type: String,
+      default: "",
+    },
+    password: {
+      type: String,
+      default: "",
+    },
+  },
+  setup(props) {
     const employerStore = useEmployerStore();
     const jobDialog = ref(false);
     const users = ref([]);
@@ -180,9 +191,10 @@ export default {
     const email = ref("");
     const password = ref("");
     const formData = ref({
-      password: "",
-      email: "",
+      email: props.email,
+      password: props.password,
       company_name: "",
+      rememberMe: false,
     });
     const companyNameRules = [(v) => !!v || "Company Name is required"];
     const passRules = [(v) => !!v || "Password is required"];
@@ -251,7 +263,7 @@ export default {
                 alert(`You don't have permissions for this action`);
               }
             }
-            if (selectedRoute == "/company/plan") {
+            if (selectedRoute == "/company/subscription") {
               if (hasPermission("Change Plan") || hasrole("Company Admin")) {
                 window.location.href = "/company-dashboard";
                 employerStore.removePreviousRoute();
@@ -353,22 +365,44 @@ export default {
         }
     }
       };
+    // const showCompanyListDialog = async () => {
+    //   try {
+    //     const response = await axios.get("/company/names", {
+    //       params: {
+    //         email: formData.value.email,
+    //       },
+    //     });
+    //     console.log(formData.value.email);
+    //     if (response.data.status == true) {
+    //       companyNames.value = response.data.companyNames;
+    //       companyListDialog.value = true;
+    //     }
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // };
     const showCompanyListDialog = async () => {
-      try {
-        const response = await axios.get("/company/names", {
-          params: {
-            email: formData.value.email,
-          },
-        });
-        console.log(formData.value.email);
-        if (response.data.status == true) {
-          companyNames.value = response.data.companyNames;
-          companyListDialog.value = true;
-        }
-      } catch (err) {
-        console.error(err);
+  try {
+    const response = await axios.get("/company/names", {
+      params: {
+        email: formData.value.email,
+      },
+    });
+    console.log(formData.value.email);
+    if (response.data.status == true) {
+      companyNames.value = response.data.companyNames;
+      if (companyNames.value.length === 1) {
+        selectedCompany.value = companyNames.value[0];
+        submitForm(); 
+      } else {
+        companyListDialog.value = true; 
       }
-    };
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
     const closeCompanyListDialog = () => {
       companyListDialog.value = false;
     };
@@ -399,6 +433,17 @@ export default {
       if (selectedCompany.value) {
         formData.value.company_name = selectedCompany.value.company_name;
         submitForm();
+      }
+    });
+    onMounted(() => {
+      const userCookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("company_data="));
+
+      if (userCookie) {
+        const decodedUserData = JSON.parse(atob(userCookie.split("=")[1]));
+        formData.value.email = decodedUserData.email;
+        formData.value.password = decodedUserData.password;
       }
     });
     return {

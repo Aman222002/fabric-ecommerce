@@ -60,6 +60,7 @@
               Social Media Accounts:
             </v-card-title>
             <v-card-text>
+            
               <div>
                 <v-icon style="color: #1877f2">mdi-facebook</v-icon>
                 <v-text-field
@@ -103,19 +104,26 @@
           <v-dialog v-model="modalOpen" max-width="500">
             <v-card>
               <v-card-title class="title_edit">
-                <span class="headline">Edit Description</span>
+                <span class="headline"
+            >Edit Description
+            <v-icon style="float: right" @click="closeModal">mdi-close</v-icon>
+          </span>
               </v-card-title>
               <v-card-text>
+                <v-form @submit.prevent="saveDescription" ref="description">
                 <v-textarea
                   v-model="editedDescription.description"
                   label="Description"
                   outlined
                   variant="solo"
+                  :rules="[(value) => !!value || 'Description is required']"
                 ></v-textarea>
+                <v-btn class="btn_cts" type="submit">Save</v-btn>
+                </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn class="btn_cts" @click="saveDescription">Save</v-btn>
-                <v-btn class="btn_cancel" @click="closeModal">Close</v-btn>
+               
+              
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -161,7 +169,12 @@
           <v-dialog v-model="isEditCompanyModalOpen" max-width="600px">
             <v-card>
               <v-card-title class="title_edit"
-                >Edit Company Details</v-card-title
+                >
+                <span class="headline"
+            >Edit Company Details
+            <v-icon style="float: right" @click="closeEditCompanyModal">mdi-close</v-icon>
+          </span>
+                </v-card-title
               >
               <v-card-text>
                 <v-text-field
@@ -191,9 +204,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn class="btn_cts" @click="saveEditedCompany">Save</v-btn>
-                <v-btn class="btn_cancel" @click="closeEditCompanyModal"
-                  >Cancel</v-btn
-                >
+                
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -300,8 +311,12 @@
 
     <v-dialog v-model="isEditAddressModalOpen" max-width="600px">
       <v-card>
-        <v-card-title class="title_edit">Edit Address</v-card-title>
+        <v-card-title class="title_edit"> <span class="headline"
+            >Edit Address
+            <v-icon style="float: right"  @click="closeEditAddressModal">mdi-close</v-icon>
+          </span></v-card-title>
         <v-card-text>
+          <v-form @submit.prevent="saveEditedAddress" ref="form">
           <v-text-field
             v-model="editedAddress.first_line_address"
             label="First line address"
@@ -337,21 +352,24 @@
             variant="solo"
             :rules="[(value) => !!value || 'Postal code is required']"
           ></v-text-field>
-          <!-- <v-select  :items="countries" :rules="[v => !!v || 'Country is required']"
-                        item-title="country_name" item-value="id" label="country" clearable searchable
-                        placeholder="Select Country"></v-select> -->
+    
+                        <v-btn class="btn_cts" type="submit">Save</v-btn>
+         
+                      </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-btn class="btn_cts" @click="saveEditedAddress">Save</v-btn>
-          <v-btn class="btn_cancel" @click="closeEditAddressModal"
-            >Cancel</v-btn
-          >
-        </v-card-actions>
+      
+         
+        
       </v-card>
     </v-dialog>
     <v-dialog v-model="isEditModalOpen" max-width="600px">
       <v-card>
-        <v-card-title class="title_edit">Edit Profile</v-card-title>
+        <v-card-title class="title_edit">
+          <span class="headline"
+            >Edit Profile
+            <v-icon style="float: right"  @click="closeEditModal">mdi-close</v-icon>
+          </span>
+        </v-card-title>
         <v-card-text>
           <v-text-field
             v-model="editedJob.name"
@@ -376,7 +394,7 @@
           ></v-text-field> -->
           <vue-tel-input
           @input="handlePhoneInput"
-          :value="editedJob.phone"
+          :value="formattedPhone"
           @validate="telValidate"
                         color="blue"
                         density="compact"
@@ -387,22 +405,23 @@
                         mode="international"
                       
                       ></vue-tel-input>
-                      <span v-if="errorMessage" class="error">{{ errorMessage }}</span>    
+                      <span v-if="formSubmitted &&errorMessage" class="error">{{ errorMessage }}</span>    
         </v-card-text>
         <v-card-actions>
          
           <v-btn class="btn_cts" @click="saveEditedJob" >Save</v-btn>
-          <v-btn class="btn_cancel" @click="closeEditModal">Close</v-btn>
+          <!-- <v-btn class="btn_cancel" @click="closeEditModal">Close</v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-card>
 </template>
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,computed } from "vue";
 import axios from "axios";
 import { useUsersStore } from "../store/user";
 import { countries } from "../utils/countries";
+import {Sweetalert} from '../utils/sweetalert';
 export default {
   name: "CompanyProfile",
   setup() {
@@ -414,7 +433,7 @@ export default {
       state: "",
       postal_code: "",
     });
-     
+    const formSubmitted = ref(false);
     const errorMessage = ref("");
     const countriesList = ref(countries);
     const facebook = ref("");
@@ -435,6 +454,7 @@ export default {
       name: "",
       email: "",
       phone: "",
+      country_code:"",
       company_name: "",
       company_email: "",
       logo: null,
@@ -453,6 +473,29 @@ export default {
       email: "",
       logo: null,
     });
+
+    const formattedPhone = computed(() => {
+  try {
+    if (editedJob.value && editedJob.value.country_code && editedJob.value.phone) {
+      console.log("Country Code:", editedJob.value.country_code);
+      console.log("Phone:", editedJob.value.phone);
+
+      const countryCode = String(editedJob.value.country_code);
+      const phoneNumber = String(editedJob.value.phone);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return editedJob.value.phone || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
+
+
+   
     const showOverview = ref(true);
     const showJob = ref(false);
     const showAddress = ref(false);
@@ -490,27 +533,53 @@ export default {
       }
     };
 
-const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          editedJob.value.phone = event;
-        } else if (event && event.target && event.target.value) {
-          editedJob.value.phone = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
-      }
+// const handlePhoneInput = (event) => {
+//   console.log(event);
+//       try {
+//         if (typeof event === "string") {
+//           editedJob.value.phone = event;
+//         } else if (event && event.target && event.target.value) {
+//           editedJob.value.phone = event.target.value;
+//         } else {
+//           console.error("Invalid event:", event);
+//         }
+//       } catch (error) {
+//         console.error("Error handling phone input:", error);
+//       }
+//     };
+
+const handlePhoneInput = (phone) => {
+  // console.log(phone)
+  // console.log("Phone Number:", phone.number);
+  // console.log("Country Code:", phone.country_code);
+  //     editedJob.value.phone = phone.number;
+  //     editedJob.value.country_code = phone.country_code;
+  //     console.log(phone.number,phone.country_code)
     };
+
+
+//     const telValidate = (isValid) => {
+//       console.log(telnumber)
+//   if (telnumber && telnumber.valid) {
+//     console.log(telnumber.valid);
+//       editedJob.value.phone = telnumber.nationalNumber;
+//       editedJob.value.country_code = telnumber.countryCallingCode;
+//   } else {
+//     editedJob.value.phone = null;
+//     editedJob.value.country_code = "";
+//     errorMessage.value = "Enter a valid phone number";
+//   }
+// };
    
     const telValidate = (isValid) => {
     console.log("Is Valid:", isValid);
   
     if (isValid.valid===true) {
 
-console.log( isValid.value,"Valid Phone Number");
+console.log( isValid.valid,"Valid Phone Number");
 errorMessage.value = "";
+editedJob.value.phone = isValid.nationalNumber;
+       editedJob.value.country_code = isValid.countryCallingCode;
 return true;
     } else {
     
@@ -518,13 +587,13 @@ return true;
         errorMessage.value = "Enter a valid phone number";
       return false
     }
-   
 };
 
     const goToEditPage = () => {
       editedJob.value.name = user.value.name;
       editedJob.value.email = user.value.email;
       editedJob.value.phone = user.value.phone;
+      editedJob.value.country_code = user.value.country_code;
       editedJob.value.company_name = company.value.company_name;
       editedJob.value.company_email = company.value.company_email;
       editedJob.value.logo = null;
@@ -535,16 +604,21 @@ return true;
     };
 
     const saveEditedJob = async () => {
-     
+      console.log(editedJob.value);
+      formSubmitted.value = true;
       if (errorMessage.value) {
-        telValidate({ isValid: false, number: editedJob.value.phone });
+        telValidate({ isValid: false, nationalNumber: editedJob.value.phone,countryCallingCode:editedJob.value.country_code });
         return;
       }
+  //     if (!telValidate(true)) {
+  //   return;
+  // }
       try {
           const formData = new FormData();
         formData.append("name", editedJob.value.name);
         formData.append("email", editedJob.value.email);
         formData.append("phone", editedJob.value.phone);
+        formData.append("country_code", editedJob.value.country_code);
         formData.append("company_name", editedJob.value.company_name);
         formData.append("company_email", editedJob.value.company_email);
         formData.append("logo", editedJob.value.logo);
@@ -554,14 +628,8 @@ return true;
           },
         });
         closeEditAddressModal();
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "success",
-          title: "User  Updated",
-        });
+       
+        Sweetalert.success('User  Updated')
          window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
@@ -574,14 +642,8 @@ return true;
       );
 
       if (!isAdmin) {
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "error",
-          title: "You are not authorize",
-        });
+       
+        Sweetalert.error('You are not authorized')
         return;
       }
 
@@ -608,15 +670,8 @@ return true;
         });
 
         closeEditCompanyModal();
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "success",
-          title: "Company Updated",
-        });
-
+       
+        Sweetalert.success('Company Updated')
         window.location.reload();
       } catch (error) {
         console.error("Error updating company details:", error);
@@ -670,14 +725,8 @@ return true;
       );
 
       if (!isAdmin) {
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "error",
-          title: "You are not authorize",
-        });
+       
+        Sweetalert.error('You are not authorized')
         return;
       }
       isEditAddressModalOpen.value = true;
@@ -703,7 +752,43 @@ return true;
       isEditAddressModalOpen.value = false;
     };
 
+    // const saveEditedAddress = async () => {
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append(
+    //       "first_line_address",
+    //       editedAddress.value.first_line_address
+    //     );
+    //     formData.append("street", editedAddress.value.street);
+    //     formData.append("city", editedAddress.value.city);
+    //     formData.append("state", editedAddress.value.state);
+    //     formData.append("postal_code", editedAddress.value.postal_code);
+    //     const response = await axios.post("/company/updateaddress", formData, {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     });
+    //     closeEditAddressModal();
+       
+    //     Sweetalert.success('Address Updated')
+    //     window.location.reload();
+    //   } catch (error) {
+    //     console.error("Error updating company profile:", error);
+    //   }
+    // };
+    const form = ref(null);
     const saveEditedAddress = async () => {
+  form.value.validate().then(async (valid) => {
+    if (!valid.valid) {
+      const errors = JSON.parse(JSON.stringify(valid.errors));
+      let errorField = form.value[errors[0].id];
+      errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+      errorField.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    } else {
       try {
         const formData = new FormData();
         formData.append(
@@ -714,39 +799,31 @@ return true;
         formData.append("city", editedAddress.value.city);
         formData.append("state", editedAddress.value.state);
         formData.append("postal_code", editedAddress.value.postal_code);
+
         const response = await axios.post("/company/updateaddress", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+
         closeEditAddressModal();
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "success",
-          title: "Address Updated",
-        });
+        Sweetalert.success('Address Updated');
         window.location.reload();
       } catch (error) {
         console.error("Error updating company profile:", error);
       }
-    };
+    }
+  });
+};
+
     const openModal = () => {
       const isAdmin = user.value.roles.some(
         (role) => role.name === "Company Admin"
       );
 
       if (!isAdmin) {
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "error",
-          title: "You are not authorize",
-        });
+       
+        Sweetalert.error('You are not authorized')
         return;
       }
       modalOpen.value = true;
@@ -755,34 +832,64 @@ return true;
     const closeModal = () => {
       modalOpen.value = false;
     };
-
+    const description = ref(null);
+    // const saveDescription = async () => {
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append("description", editedDescription.value.description);
+    //     const response = await axios.post(
+    //       "/company/updatedescription",
+    //       formData,
+    //       {
+    //         headers: {
+    //           "Content-Type": "multipart/form-data",
+    //         },
+    //       }
+    //     );
+    //     closeModal();
+       
+    //     Sweetalert.success('Description Updated')
+    //     window.location.reload();
+    //   } catch (error) {
+    //     console.error("Error updating company profile:", error);
+    //   }
+    // };
     const saveDescription = async () => {
-      try {
+  try {
+    description.value.validate().then((valid) => {
+      if (!valid.valid) {
+        const errors = JSON.parse(JSON.stringify(valid.errors));
+        let errorField = form.value[errors[0].id];
+        errorField = Array.isArray(errorField) ? errorField[0] : errorField;
+        errorField.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
+      } else {
         const formData = new FormData();
         formData.append("description", editedDescription.value.description);
-        const response = await axios.post(
-          "/company/updatedescription",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        closeModal();
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "success",
-          title: "Description Updated",
+
+        axios.post("/company/updatedescription", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          closeModal();
+          Sweetalert.success('Description Updated');
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error updating company profile:", error);
         });
-        window.location.reload();
-      } catch (error) {
-        console.error("Error updating company profile:", error);
       }
-    };
+    });
+  } catch (error) {
+    console.error("Error updating company profile:", error);
+  }
+};
+
     const saveSocialMedia = async () => {
       try {
         const isAdmin = user.value.roles.some(
@@ -790,14 +897,8 @@ return true;
         );
 
         if (!isAdmin) {
-          window.Swal.fire({
-            toast: true,
-            position: "top-end",
-            timer: 2000,
-            showConfirmButton: false,
-            icon: "error",
-            title: "You are not authorized",
-          });
+          
+          Sweetalert.error('You are not authorized')
           return;
         }
 
@@ -807,21 +908,16 @@ return true;
           linkedin: linkedin.value,
           instagram: instagram.value,
         });
-        window.Swal.fire({
-          toast: true,
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          icon: "success",
-          title: "Social Media Links Updated",
-        });
+       
+        Sweetalert.success('Social Media Links Updated')
         window.location.reload();
       } catch (error) {
         console.error("Error updating social media accounts:", error);
       }
-    };
+    }; 
 
     return {
+      form, formattedPhone,
       company,
       user,
       fetchCompanyProfile,
@@ -862,7 +958,7 @@ return true;
       closeEditCompanyModal,
       saveEditedCompany,
       handleCompanyLogoChange,
-      countries: countriesList,handlePhoneInput,telValidate,errorMessage,
+      countries: countriesList,handlePhoneInput,telValidate,errorMessage,formSubmitted,description
     };
   },
 };
@@ -929,7 +1025,9 @@ return true;
   text-align: center;
 }
 .error {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
 }
 </style>

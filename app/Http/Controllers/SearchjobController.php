@@ -12,7 +12,8 @@ use App\Models\User;
 use App\Models\Skill;
 use App\Models\UserSkill;
 use Carbon\Carbon;
-
+use App\Models\JobApply;
+use App\Models\SavedJob;
 class SearchjobController extends Controller
 {
     /**
@@ -79,8 +80,8 @@ class SearchjobController extends Controller
                 $companyId =  $user->company ? $user->company->id : 0;
             }
             
-            $jobs = Job::whereIn('skill_id', $skills)->with("company");
-            
+            $jobs = Job::whereIn('skill_id', $skills)->with("company",'jobType', 'category');
+            // $jobs = Job::with('company', 'jobType', 'category')->get();
             if ($companyId != 0) {
                 $jobs->where('company_id', $companyId);
             }
@@ -89,8 +90,8 @@ class SearchjobController extends Controller
                 $user_id = $job->user_id;
                 $subscription_status = User::where('id', $user_id)->value('subscription_status');
                 $company_status = Company::where('id', $job->company_id)->value('status');
-                
-                if ($subscription_status == 'active' && $job->post_status == 'Published' && $company_status == 1) {
+                //dd($company_status);
+                if ($subscription_status == 'active' && $job->post_status == 'Published' && $company_status === 1) {
                     return $job;
                 } else {
                     return false;
@@ -103,7 +104,9 @@ class SearchjobController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+   
     
+
 
     // public function fetchData()
     // {
@@ -148,7 +151,7 @@ class SearchjobController extends Controller
                 $company_id = $job->company_id;
                 $subscription_status = User::where('id', $user_id)->value('subscription_status');
                 $company_status = Company::where('id', $company_id)->value('status');
-                if ($subscription_status == 'active' && $job->post_status == 'Published'&& $company_status == 1) {
+                if ($subscription_status == 'active' && $job->post_status == 'Published'&& $company_status === 1) {
                     return $job;
                 } else {
                     return false;
@@ -183,10 +186,14 @@ class SearchjobController extends Controller
 
     public function searchJobs(Request $request)
     {
+       
         try {
-            $jobs = Job::with("company");
+             $jobs = Job::with("company");
             if ($request->has('jobTitle')) {
                 $jobs->where('title', 'like', '%' . $request->input('jobTitle') . '%')->where(function ($query) {
+                   $query ->whereHas('company', function ($query) {
+                        $query->where('status', 1);
+                    });
                     $query->whereHas('user', function ($query) {
                         $query->where('subscription_status', 'active');
                     })->where('post_status', 'Published');
@@ -195,6 +202,9 @@ class SearchjobController extends Controller
             }
             if ($request->has('location')) {
                 $jobs->where('location', 'like', '%' . $request->input('location') . '%')->where(function ($query) {
+                    $query ->whereHas('company', function ($query) {
+                        $query->where('status', 1);
+                    });
                     $query->whereHas('user', function ($query) {
                         $query->where('subscription_status', 'active');
                     })->where('post_status', 'Published');
@@ -203,6 +213,9 @@ class SearchjobController extends Controller
             }
             if ($request->has('experience')) {
                 $jobs->where('experience', 'like', '%' . $request->input('experience') . '%')->where(function ($query) {
+                    $query ->whereHas('company', function ($query) {
+                        $query->where('status', 1);
+                    });
                     $query->whereHas('user', function ($query) {
                         $query->where('subscription_status', 'active');
                     })->where('post_status', 'Published');
@@ -215,12 +228,56 @@ class SearchjobController extends Controller
               
                 $jobs = $jobs->where('category_id', 'like', '%' . $category_id . '%')
                     ->where(function ($query) {
+                        $query ->whereHas('company', function ($query) {
+                            $query->where('status', 1);
+                        });
                         $query->whereHas('user', function ($query) {
                             $query->where('subscription_status', 'active');
                         })->where('post_status', 'Published');
                     })
                     ->get();
             }
+           
+            if ($request->has('userSkills')) {
+                $userSkills = $request->userSkills;
+            
+                $jobs = Job::where(function ($query) use ($userSkills) {
+                    foreach ($userSkills as $skill_id) {
+                        $query->orWhere('skill_id', 'like', '%' . $skill_id . '%');
+                    }
+                })
+                ->whereHas('user', function ($query) {
+                    $query->where('subscription_status', 'active');
+                })
+                ->whereHas('company', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->where('post_status', 'Published');
+            
+                if ($request->has('jobTitle')) {
+                    $jobs->where('title', 'like', '%' . $request->input('jobTitle') . '%');
+                }
+               
+            
+                if ($request->has('location')) {
+                    $jobs->where('location', 'like', '%' . $request->input('location') . '%');
+                }
+            
+                if ($request->has('experience')) {
+                    $jobs->where('experience', 'like', '%' . $request->input('experience') . '%');
+                }
+            
+                if ($request->has('category')) {
+                    $category_id = Category::where('name', $request->category)->value('id');
+                    $jobs->where('category_id', 'like', '%' . $category_id . '%');
+                }
+            
+                $jobs = $jobs->get();
+                $jobs->load('company');
+            }
+            
+            
+            
             if ($jobs->isEmpty()) {
                 return response()->json(['status' => false, 'message' => 'No jobs found.'], 404);
             }
@@ -229,16 +286,31 @@ class SearchjobController extends Controller
             Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
-        
     }
     /**
      * Show the form for creating a new resource.
      */
     public function viewjob($jobid)
     {
-
-        return view('viewjob')->with('jobid', $jobid);
+        try {
+            $jobApplications = JobApply::where('user_id', auth()->id())->with('job', 'company')->get();
+            $savedJobs = SavedJob::where([
+                'user_id' => auth()->id()
+            ])->with('job', 'company')->get();
+          
+            return view('viewjob', [
+                'jobApplications' => $jobApplications,
+                'savedJobs' => $savedJobs,
+                'jobid'=> $jobid,
+            ]);
+          // 
+           
+        } catch (\Exception $e) {
+            return response()->view('error.view', ['error' => $e->getMessage()], 500);
+        }
+        // return view('viewjob')->with('jobid', $jobid);
     }
+    
     public function fetchJobDetails($jobid)
     {
 
@@ -304,4 +376,16 @@ class SearchjobController extends Controller
     {
         //
     }
+    public function getUserSkills()
+{
+    $user = auth()->user();
+  
+    if ($user) {
+        $skills = UserSkill::where('user_id', $user->id)->pluck('skill_id');
+       
+        return response()->json(['data' => $skills],200);
+    } else {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+}
 }

@@ -177,6 +177,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import {Sweetalert} from '../utils/sweetalert';
 
 export default {
   name: "Postjob",
@@ -315,48 +316,24 @@ export default {
               .post("/post", job.value)
               .then((response) => {
                 if (response.data.status === true) {
-                  window.Swal.fire({
-                    toast: true,
-                    position: "top-end",
-                    timer: 2000,
-                    showConfirmButton: false,
-                    icon: "success",
-                    title: "Job posted successfully!",
-                  });
+                
+                  Sweetalert.success('Job posted successfully!')
                 }
                 form.value.reset();
               })
               .catch((error) => {
                 console.log(error);
                 if (error.response.status == "402") {
-                  window.Swal.fire({
-                    toast: true,
-                    position: "top-end",
-                    timer: 2000,
-                    showConfirmButton: false,
-                    icon: "error",
-                    title: `You don't have a active plan buy a plan or renew your plan`,
-                  });
+                
+                  Sweetalert.error('You dont have a active plan buy a plan or renew your plan')
                 } else if ((error.response.status = "403")) {
-                  window.Swal.fire({
-                    toast: true,
-                    position: "top-end",
-                    timer: 2000,
-                    showConfirmButton: false,
-                    icon: "error",
-                    title: `You have posted number of allowed post can't post more`,
-                  });
+                
+                  Sweetalert.error('You have posted number of allowed post cant post more')
                 }
               });
           } catch (err) {
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "error",
-              title: `Something went Wrong`,
-            });
+          
+            Sweetalert.error('Something went Wrong')
           }
         }
       });

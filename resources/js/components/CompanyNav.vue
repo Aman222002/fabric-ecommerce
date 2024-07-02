@@ -17,6 +17,14 @@
         title="Dashboard"
       >
       </v-list-item>
+      <v-list-item
+        v-if="hasPermission('View Users') || hasrole('Company Admin')"
+        :class="{ group: true, active: currentRoute === '/company-users' }"
+        href="/company-users"
+        prepend-icon="mdi-account"
+        title="Users"
+      >
+      </v-list-item>
       <v-list-group value="Jobs" class="group">
         <template v-slot:activator="{ props }">
           <v-list-item
@@ -53,16 +61,16 @@
 
       <v-list-item
         v-if="hasPermission('Buy Subscription') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/product' }"
-        href="/product"
+        :class="{ group: true, active: currentRoute === '/plans' }"
+        href="/plans"
         prepend-icon="mdi-format-list-bulleted"
         title="Plans"
       >
       </v-list-item>
       <v-list-item
         v-if="hasPermission('Change Plan') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/company/plan' }"
-        href="/company/plan"
+        :class="{ group: true, active: currentRoute === '/company/subscription' }"
+        href="/company/subscription"
         prepend-icon="mdi-cash-sync"
         title="Subscription details"
       >
@@ -74,22 +82,14 @@
         title="Profile"
       >
       </v-list-item>
-      <v-list-item
+      <!-- <v-list-item
         v-if="hasPermission('Create Users') || hasrole('Company Admin')"
         :class="{ group: true, active: currentRoute === '/add-user' }"
         href="/add-user"
         prepend-icon="mdi-account-plus-outline"
         title="Add User"
       >
-      </v-list-item>
-      <v-list-item
-        v-if="hasPermission('View Users') || hasrole('Company Admin')"
-        :class="{ group: true, active: currentRoute === '/users' }"
-        href="/users"
-        prepend-icon="mdi-account"
-        title="Users"
-      >
-      </v-list-item>
+      </v-list-item> -->
     </v-list>
   </v-navigation-drawer>
 
@@ -165,7 +165,7 @@ export default {
         employerStore.removePreviousRoute();
       }
       axios.get("/company/logout");
-      window.location.href = "/";
+      window.location.href = "/company/login";
     };
     const fetchUserData = async () => {
       try {

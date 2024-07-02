@@ -56,7 +56,7 @@
 		
 		<!-- Experience -->
 <!-- Experience -->
-@if (isset($userdata['experience']) && !empty($userdata['experience']))
+<!-- @if (isset($userdata['experience']) && !empty($userdata['experience']))
     @php
         $hasExperience = false;
     @endphp
@@ -108,8 +108,84 @@
             </table>
         </div>
     @endif
-@endif
+@endif -->
+@if (isset($userdata['experience']) && !empty($userdata['experience']))
+                @php
+                    $currentExperiences = [];
+                    $pastExperiences = [];
+
+                    foreach ($userdata['experience'] as $exp) {
+                        if ($exp['company_name'] !== null && $exp['company_name'] !== "null") {
+                            if ($exp['end_date'] === null) {
+                                $currentExperiences[] = $exp;
+                            } else {
+                                $pastExperiences[] = $exp;
+                            }
+                        }
+                    }
+                @endphp
+
+                @if (!empty($currentExperiences) || !empty($pastExperiences))
+                    <div style="border-top: 2px solid;margin-top: 25px;">
+                        <table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h2 style="margin: 0;margin-top: 10px; font-family: Biryani; text-align: left;">
+                                            Experience
+                                        </h2>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <!-- Currently Working Experiences -->
+                            @foreach ($currentExperiences as $exp)
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 60%;">
+                                            <h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
+                                        </td>
+                                        <td style="width: 40%; text-align: right;">
+                                            <strong>{{ $exp['start_date'] }} - Currently Working</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $exp['position'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">{{ $exp['description'] }}</td>
+                                    </tr>
+                                </tbody>
+                            @endforeach
+                            <!-- Past Experiences -->
+                            @foreach ($pastExperiences as $exp)
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 60%;">
+                                            <h3 style="margin: 0;">{{ $exp['company_name'] }}</h3>
+                                        </td>
+                                        <td style="width: 40%; text-align: right;">
+                                            <strong>{{ $exp['start_date'] }} - {{ $exp['end_date'] }}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $exp['position'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">{{ $exp['description'] }}</td>
+                                    </tr>
+                                </tbody>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
+            @endif
 			<!-- Education(Qualifications) -->
+			@php
+                $educationOrder = ['High School', 'College', 'University'];
+                $qualifications = collect($userdata['qualifications'])->sortBy(function ($qualification) use ($educationOrder) {
+                    return array_search($qualification['education_type'], $educationOrder);
+                });
+            @endphp
 			<div style="border-top: 2px solid;margin-top: 25px;">
 
 				<table style="width: 90%;text-align: left;margin: 0 auto;font-family: Biryani;">
@@ -122,7 +198,7 @@
 							</th>
 						</tr>
 					</thead>
-					@foreach ($userdata['qualifications'] as $qualification)
+					@foreach ($qualifications as $qualification)
 					<tbody>
 						<tr>
 							<td style="width: 70%;">
@@ -187,9 +263,11 @@
 				<table style="width: 100%;text-align: center;font-family: Biryani;margin-top: 20px;">
 					<tbody>
 						<tr>
+							
 							<td colspan="2">
-							<img src="data:assest/png;base64,{{ base64_encode(file_get_contents(public_path('/storage/assest/' . $userdata['user_image']))) }}"  style="width: 120px;height: 120px;border-radius:50%;">	
-							</td>
+								
+                                <img src="{{'storage/assest/' . $userdata['user_image'] }}" style="width: 120px; height: 120px; border-radius: 50%;">
+                            </td>
 						</tr>
 					</tbody>
 				</table>
@@ -228,7 +306,7 @@
 					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
 							<td  style="padding-left:10px;color:#e1e1e1; text-transform: capitalize;">
-								<strong>{{ $hobbies['hobbies']}}</strong>
+								<strong>{{ $hobbies['hobbies']}},</strong>
 							</td>
 						</tr>
 						@endforeach
@@ -248,7 +326,7 @@
 					@foreach ($userdata['profile'] as $hobbies)
 						<tr>
 							<td style="padding-left:10px;color:#e1e1e1; text-transform: capitalize;">
-								<strong>{{ $hobbies['strengths']}}</strong>
+								<strong>{{ $hobbies['strengths']}},</strong>
 							</td>
 						</tr>
 						@endforeach

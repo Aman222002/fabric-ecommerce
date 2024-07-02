@@ -280,6 +280,7 @@ class JobsController extends Controller
     public function applyJob(Request $request)
     {
         try {
+        //    dd($request->id);
             $id = $request->id;
             $job = Job::where('id', $id)->first();
             $company_website = $job->company_website;
@@ -288,6 +289,7 @@ class JobsController extends Controller
                 'user_id' => Auth::user()->id,
                 'job_id' => $id
             ])->count();
+          
             if ($jobApplicationCount > 0) {
                 $message = 'You already applied on this job.';
                 return response()->json([
@@ -308,7 +310,7 @@ class JobsController extends Controller
                 'user' => Auth::user(),
                 'job' => $job,
             ];
-            Mail::to($company->company_email)->send(new JobNotificationEmail($mailData));
+           // Mail::to($company->company_email)->send(new JobNotificationEmail($mailData));
             $message = 'You have successfully applied.';
             return response()->json([
                 'status' => true,
@@ -344,9 +346,16 @@ class JobsController extends Controller
     {
         try {
             $jobApplications = JobApply::where('user_id', auth()->id())->with('job', 'company')->get();
+            $savedJobs = SavedJob::where([
+                'user_id' => auth()->id()
+            ])->with('job', 'company')->get();
+          
             return view('jobapply', [
-                'jobApplications' => $jobApplications
+                'jobApplications' => $jobApplications,
+                'savedJobs' => $savedJobs,
             ]);
+          // 
+           
         } catch (\Exception $e) {
             return response()->view('error.view', ['error' => $e->getMessage()], 500);
         }

@@ -15,7 +15,7 @@
         style="margin-top: 10px"
               variant="outlined"
               @input="handlePhoneInput"
-              :value="editCompanyData.phone"
+              :value="formattedPhone"
               @validate="telvalidate"
               label=" Phone"
               type="phone"
@@ -81,7 +81,7 @@
 <script>
 import dxGridStore from "../composition/dxGridStore";
 import axios from "axios";
-import { ref } from 'vue';
+import { ref,computed } from 'vue';
 export default {
   name: "RepresentativeTab",
   props: {
@@ -99,8 +99,10 @@ export default {
       name: '',
     email: '',
       phone: '',
+      country_code:'',
      
     });
+    const formSubmitted = ref(false);
     const nameRules = [(v) => !!v || "Name is required"];
     const emailRules = [
       (v) => !!v || "Email is required",
@@ -111,33 +113,67 @@ export default {
     console.log(updateURL);
     const { dataSource } = dxGridStore(loadURL,null,null,updateURL,null);
     const handlePhoneInput = (event) => {
-      try {
-        if (typeof event === "string") {
-          editCompanyData.value.phone = event;
-        } else if (event && event.target && event.target.value) {
-          editCompanyData.value.phone = event.target.value;
-        } else {
-          console.error("Invalid event:", event);
-        }
-      } catch (error) {
-        console.error("Error handling phone input:", error);
+      // try {
+      //   if (typeof event === "string") {
+      //     editCompanyData.value.phone = event;
+      //   } else if (event && event.target && event.target.value) {
+      //     editCompanyData.value.phone = event.target.value;
+      //   } else {
+      //     console.error("Invalid event:", event);
+      //   }
+      // } catch (error) {
+      //   console.error("Error handling phone input:", error);
+      // }
+    };
+//     const telvalidate = (isValid) => {
+//     console.log("Is Valid:", isValid);
+  
+//     if (isValid.valid===true) {
+// console.log( isValid.value,"Valid Phone Number");
+// phoneVal.value = "";
+// return true;
+//     } else {
+    
+//       console.log("Invalid Phone Number");
+//        phoneVal.value = "Enter a valid phone number";
+//       return false
+//     }
+   
+// };
+const formattedPhone = computed(() => {
+  try {
+    if (editCompanyData .value && editCompanyData .value.country_code &&  editCompanyData.value.phone) {
+      console.log("Country Code:", editCompanyData .value.country_code);
+      console.log("Phone:", editCompanyData.value.phone);
+
+      const countryCode = String(editCompanyData .value.country_code);
+      const phoneNumber = String( editCompanyData.value.phone);
+
+      return `${countryCode}${phoneNumber}`;
+    } else {
+      console.warn("Country code or phone number is missing.");
+      return editCompanyData.value.phone || '';
+    }
+  } catch (error) {
+    console.error("Error in formattedPhone computed property:", error);
+    return '';
+  }
+});
+const telvalidate = (isValid) => {
+      console.log("Is Valid:", isValid);
+
+      if (isValid.valid === true) {
+        console.log(isValid.value, "Valid Phone Number");
+        phoneVal.value = "";
+        editCompanyData.value.phone=isValid.nationalNumber;
+        editCompanyData.value.country_code=isValid.countryCallingCode;
+        return true;
+      } else {
+        console.log("Invalid Phone Number");
+        phoneVal.value = "Enter a valid phone number";
+        return false;
       }
     };
-    const telvalidate = (isValid) => {
-    console.log("Is Valid:", isValid);
-  
-    if (isValid.valid===true) {
-console.log( isValid.value,"Valid Phone Number");
-phoneVal.value = "";
-return true;
-    } else {
-    
-      console.log("Invalid Phone Number");
-       phoneVal.value = "Enter a valid phone number";
-      return false
-    }
-   
-};
    
     const editUser = (data) => {
      console.log(data)
@@ -145,6 +181,7 @@ return true;
       editCompanyData.value.name=data.name;
       editCompanyData.value.email=data.email;
       editCompanyData.value.phone=data.phone;
+      editCompanyData.value.country_code=data.country_code;
       updateId.value = data.id;
     };
 //     const saveChanges = () => {
@@ -152,9 +189,9 @@ return true;
  
 // };
 const saveChanges = (id) => {
- 
+  formSubmitted.value = true;
   if (phoneVal.value) {
-    telvalidate({ isValid: false, number: editCompanyData.value.phone });
+    telvalidate({ isValid: false, nationalNumber: editCompanyData.value.phone,countryCallingCode:editCompanyData.value.country_code });
         return;
       }
   axios.post(`/admin/user/update/${id}`, editCompanyData.value)
@@ -170,7 +207,8 @@ const saveChanges = (id) => {
     });
 };
     return {
-      dataSource,
+      formattedPhone,
+      dataSource,formSubmitted,
       updateURL,editCompanyData,editDialog,updateId,phoneVal,saveChanges,editUser,handlePhoneInput,telvalidate,emailRules ,nameRules
     };
   },
@@ -248,7 +286,9 @@ const saveChanges = (id) => {
   border-bottom: none;
 }
 .error-message {
-  color: rgb(204, 65, 65);
-  font-size: 13px;
+  color:#B00020;
+  font-size: 12px ;
+  font-family: Roboto,sans-serif;
+  margin-left: 13px;
 }
 </style>

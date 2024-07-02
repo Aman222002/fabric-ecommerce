@@ -27,7 +27,7 @@
           <h4 class="widget-title">For Candidates</h4>
           <div class="widget-content">
             <ul class="list">
-              <li><a href="/job-search">Browse Jobs</a></li>
+              <li><a href="/find-job">Browse Jobs</a></li>
               <!-- <li><a href="#" @click="scrollToSection()">Browse Categories</a></li> -->
               <!-- <li>
                 <a href="#">Candidate Dashboard</a>
@@ -51,7 +51,7 @@
                 <a @click="handleLinks('/postjob')">Available Job</a>
               </li>
               <li>
-                <a @click="handleLinks('/product')">Purchase</a>
+                <a @click="handleLinks('/plans')">Purchase</a>
               </li>
             </ul>
           </div>
@@ -108,15 +108,15 @@ export default {
             alert(`You don't have permissions for this action`);
           }
         }
-        if (selectedRoute == "/company/plan") {
+        if (selectedRoute == "/company/subscription") {
           if (hasPermission("Change Plan") || hasrole("Company Admin")) {
-            window.location.href = "/company/plan";
+            window.location.href = "/company/subscription";
           } else {
             alert(`You don't have permissions for this action`);
           }
         }
       } else {
-        window.location.href = "/job";
+        window.location.href = "/company/login";
       }
     };
     const fetchData = () => {

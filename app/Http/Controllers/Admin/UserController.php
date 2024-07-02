@@ -158,6 +158,7 @@ class UserController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'phone' =>$user->phone,
+                    'country_code'=>$user->country_code,
                     'created_at' => $user->created_at,
                     'roles' => $user->roles->pluck('name'), 
                     // 'company'=>$user->company->pluck('company_name'),
@@ -225,13 +226,14 @@ class UserController extends Controller
     public function storing(Request $request)
     {
         try {
-        //   dd($request);
+        //  dd($request);
         $input = $request->all();
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:8',
                 'phone' => 'required|string',
+                'country_code'=>'required|string',
                 'role' => 'required|string|in:User,Company Admin,Company Subadmin',
               
                 // 'companyId' => 'sometimes|required_if:role,Company Subadmin|exists:companies,id',
@@ -245,6 +247,7 @@ class UserController extends Controller
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
                 'phone' => $validatedData['phone'],
+                'country_code'=>'+'. $validatedData['country_code'],
                 'verification_token' => $verificationToken,
             ]);
     
@@ -283,6 +286,7 @@ class UserController extends Controller
                             'company_name' => $input['companyName'],
                             'company_email' => $input['companyEmail'],
                             'phone_number' => $input['companyPhone'],
+                            'country_code'=>'+'. $input['countryCode']
                         ]
                     );
                 }
@@ -376,6 +380,7 @@ public function fetchCompanies()
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'phone' => $request->input('phone'),
+                    'country_code'=>'+'. $request->input('country_code')
                 ]);
                 return response()->json(['message' => 'User updated successfully', 'status' => true], 200);
             }
@@ -442,25 +447,30 @@ public function fetchCompanies()
      */
     public function update(Request $request, $id = 0)
     {
-        //
         try {
             $user = User::find($id);
             if ($user) {
+                // Add a "+" prefix to the country_code
+                $request->merge([
+                    'country_code' => '+' . $request->input('country_code')
+                ]);
+    
                 $user->update($request->all());
-               
+    
                 return response()->json(['status' => true, 'message' => 'User updated successfully'], 200);
             } else {
                 $response = [
                     'status' => false,
-                    'message' => 'user not found'
+                    'message' => 'User not found'
                 ];
                 return response()->json($response, 404);
             }
         } catch (\Exception $e) {
-            Log::debug($e->getMessage());
+            Log::error($e->getMessage());
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
+    
     public function updateUser(Request $request, $id = 0)
     {
         try {
@@ -490,10 +500,10 @@ public function fetchCompanies()
      */
     public function destroy(string $id)
     {
-        
         try {
             $user = User::find($id);
             if ($user) {
+                UserSubscription::where('user_id', $user->id)->delete();
                 $user->delete();
                 $response = [
                     'status' => true,
@@ -583,7 +593,7 @@ public function fetchCompanies()
                 $url =  url('/company/register/' . $request->id . '/' . urlencode($request->name) . '/' . $request->email . '/' . $request->phone . '/' . $request->company . '/' . $request->permission);
                 return redirect($url);
             } else {
-                return redirect('/job');
+                return redirect('/company/login');
             }
             return response()->json(['status' => true, 'message' => 'Invitation accepted successfully'], 200);
         } catch (\Exception $e) {

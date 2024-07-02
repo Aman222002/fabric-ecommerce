@@ -39,6 +39,7 @@ class User extends Authenticatable
         'reset_token',
         'company_id',
         'verification_token',
+        'country_code',
     ];
 
     /**

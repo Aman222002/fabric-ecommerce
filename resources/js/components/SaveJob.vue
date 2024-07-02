@@ -48,20 +48,7 @@
                       >mdi-currency-gbp</v-icon
                     >{{ savedJob.job.salary }}
                   </li>
-                  <!-- <li>
-                  <v-icon>mdi-desktop-classic</v-icon
-                  >{{ jobApplication.job.experience }}
-                </li> -->
-                  <!-- <li>
-                  <v-icon>mdi-clock-time-two-outline</v-icon
-                  >{{ featuredJob.time }}
-                </li> -->
                 </ul>
-                <!-- <ul class="company_time">
-                <li>{{ featuredJob.companyTime }}</li>
-                <li>{{ featuredJob.companyStates }}</li>
-                <li>{{ featuredJob.projectDuration }}</li>
-              </ul> -->
               </div>
 
               <v-card-actions>
@@ -77,7 +64,7 @@
             </v-card>
           </v-col>
           <v-alert type="error" class="no_job_found w-100" v-if="noJobsApplied">
-            Not Save Any Job.
+            No saved jobs.
           </v-alert>
         </v-row>
       </v-container>
@@ -87,6 +74,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import {Sweetalert} from '../utils/sweetalert';
 const HomeCountryState = (countryStateName) => {
   if (countryStateName && countryStateName.length > 15) {
     return countryStateName.substring(0, 15) + "....";
@@ -115,11 +103,8 @@ export default {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
-          });
+       
+          Sweetalert.success('Deleted!')
           try {
             axios.post(`/removesavedjobs/${id}`).then((response) => {
               if (response.data.status == true) {
@@ -142,22 +127,14 @@ export default {
       try {
         await axios.post(`/apply-job/${id}`).then((response) => {
           if (response.data.status == true) {
-            window.Swal.fire({
-              icon: "success",
-              title: "Applied Successfully",
-              text: "Applied successfully ",
-              confirmButtonText: "OK",
-            });
+           
+            Sweetalert.success('Applied Successfully')
           }
         });
       } catch (err) {
         console.error(err);
-        window.Swal.fire({
-          title: "Application Failed",
-          text: "You Already apply on this Job",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+      
+        Sweetalert.error('Application Failed')
       }
     };
     const noJobsApplied = ref(false);

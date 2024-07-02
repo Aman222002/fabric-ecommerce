@@ -248,6 +248,7 @@ import axios from "axios";
 import dxGridStore from "../composition/dxGridStore";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Sweetalert } from "../utils/sweetalert";
 export default {
   components: {
     ckeditor: CKEditor.component,
@@ -333,14 +334,8 @@ export default {
             })
             .then((response) => {
               console.log(response.data);
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "success",
-                title: `Blog Drafted Successfully`,
-              });
+
+              Sweetalert.success("Blog Drafted Successfully");
               refreshTable(dataGridRef);
             })
             .catch((err) => {
@@ -359,27 +354,14 @@ export default {
           })
           .then((response) => {
             console.log(response.data);
-            window.Swal.fire({
-              toast: true,
-              position: "top-end",
-              timer: 2000,
-              showConfirmButton: false,
-              icon: "success",
-              title: `Blog Posted Successfully`,
-            });
+
+            Sweetalert.success("Blog Posted Successfully");
             refreshTable(dataGridRef);
           })
           .catch((err) => {
             console.log(err);
             if (err.response.status == "406") {
-              window.Swal.fire({
-                toast: true,
-                position: "top-end",
-                timer: 2000,
-                showConfirmButton: false,
-                icon: "error",
-                title: `You already posted this blog`,
-              });
+              Sweetalert.error("You already posted this blog");
             }
           });
       }
@@ -406,15 +388,7 @@ export default {
       } catch (error) {}
     };
     const deleteBlog = (id) => {
-      window.Swal.fire({
-        title: "Are you sure?",
-        text: "Are you sure you want to delete this blog?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
+      Sweetalert.confirm("Are you sure?").then((result) => {
         if (result.isConfirmed) {
           try {
             axios.delete(`/admin/delete/blog/${id}`).then((response) => {
@@ -478,8 +452,7 @@ export default {
           } else {
             formData.append("featured_image", selectedImage.value);
           }
-
-          formData.append("title", title.value);
+            formData.append("title", title.value);
           formData.append("htmlContent", content.value);
 
           axios
@@ -493,14 +466,8 @@ export default {
                 showDialog.value = false;
 
                 refreshTable(dataGridRef);
-                window.Swal.fire({
-                  toast: true,
-                  position: "top-end",
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: "success",
-                  title: `Blog Updated Successfully`,
-                });
+
+                Sweetalert.success("Blog Updated Successfully");
               }
             })
             .catch((error) => {
@@ -539,14 +506,7 @@ export default {
             .then((response) => {
               if (response.data.status == true) {
                 showAddDialog.value = false;
-                window.Swal.fire({
-                  toast: true,
-                  position: "top-end",
-                  timer: 2000,
-                  showConfirmButton: false,
-                  icon: "success",
-                  title: `Blog Posted Successfully`,
-                });
+                Sweetalert.success("Blog Posted Successfully");
                 refreshTable(dataGridRef);
               }
             });

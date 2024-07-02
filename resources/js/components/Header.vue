@@ -19,12 +19,35 @@
                 <a href="/" class="nav-link" :class="{ active: isActive('/') }"
                   >Home</a
                 >
-                <a
+                <v-menu
+          class="log_and_reg"
+        
+        >
+          <template v-slot:activator="{ props }">
+            <a
+              href="#"
+              v-bind="props"
+              :class="{ active: isActive('#') }"
+              class="nav-link"
+            
+              >Jobs</a
+            >
+          </template>
+
+          <ul>
+            <li v-for="(item, i) in jobsItems" :key="i">
+              <a :href="item.href" style="text-decoration: none">
+                <v-icon>{{ item.icon }}</v-icon>  {{ item.title }}
+              </a>
+            </li>
+          </ul>
+        </v-menu>
+                <!-- <a
                   href="/job-search"
                   class="nav-link"
                   :class="{ active: isActive('/job-search') }"
                   >Jobs</a
-                >
+                > -->
                 <a
                   href="/about"
                   class="nav-link"
@@ -37,20 +60,14 @@
                   :class="{ active: isActive('/contact') }"
                   >Contact</a
                 >
-                <a
+                <!-- <a
                   href="/job-apply"
                   v-if="usersStore.isloggedin"
                   class="nav-link"
                   :class="{ active: isActive('/job-apply') }"
-                  >Jobs Applied</a
-                >
-                <a
-                  href="/savedjobs"
-                  v-if="usersStore.isloggedin"
-                  class="nav-link"
-                  :class="{ active: isActive('/savedjobs') }"
-                  >Jobs Saved</a
-                >
+                  >My Jobs</a
+                > -->
+              
                 <a
                   href="/userprofile"
                   v-if="usersStore.isloggedin"
@@ -138,7 +155,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import { reactive, onMounted } from "vue";
 import { useUsersStore } from "../store/user";
 
@@ -164,9 +181,29 @@ export default {
       {
         title: "Login as Company",
         icon: "mdi-office-building",
-        href: "/job",
+        href: "/company/login",
       },
     ]);
+ 
+    const jobsItems = computed(() => {
+      const items = [
+        {
+          title: "Find Job",
+          icon: "mdi-magnify",
+          href: "/find-job",
+        }
+      ];
+
+      if (usersStore.isloggedin) {
+        items.push({
+          title: "My Jobs",
+          icon: "mdi-purse",
+          href: "/my-jobs",
+        });
+      }
+
+      return items;
+    });
     const registerItems = ref([
       {
         title: "Register as User",
@@ -204,7 +241,7 @@ export default {
               employerStore.isLogOut();
               employerStore.removePreviousRoute();
             }
-            window.location.href = "/";
+            window.location.href = "/login";
           }
         });
       } else {
@@ -221,7 +258,7 @@ export default {
       loginItems,
       employerStore,
       showMenu: false,
-      registerItems,
+      registerItems,jobsItems
     };
   },
 

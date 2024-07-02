@@ -32,6 +32,7 @@ use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
+use Illuminate\Support\Facades\Cookie;
 class CompanyController extends Controller
 {
     /**
@@ -62,6 +63,27 @@ class CompanyController extends Controller
         } else {
             return view('companyregister');
         }
+    }
+    public function companylogin(Request $request)
+    {
+       
+        if ($request->hasCookie('company_data')) {
+       
+            $encryptedUserData = $request->cookie('company_data');
+            $userData = json_decode(decrypt($encryptedUserData), true);
+   
+            //dd( $userData);
+            if (isset($userData['email']) && isset($userData['password'])) {
+                $email = $userData['email'];
+                $password = $userData['password'];
+    
+        
+                return view('job', compact('email', 'password'));
+            }
+        }
+    
+      
+        return view('job');
     }
     /**
      * Show the form for creating a new resource.
@@ -150,7 +172,9 @@ class CompanyController extends Controller
                         'email' => $user->email,
                         'url' => $redirectFlow->redirect_url,
                     ];
+                    Log::info('Mail sent '); 
                     dispatch(new PaymentJob($data));
+                     
                     return response()->json([
                         'status' => true,
                         'message' => "Registation Successfully"
@@ -240,7 +264,7 @@ class CompanyController extends Controller
      */
     public function store(CompanyRagistrationRequest $request)
     {
-        
+       // dd($request);
         try {
             $input = $request->all();
             $verificationToken = Str::random(60);
@@ -253,7 +277,8 @@ class CompanyController extends Controller
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
-                    'phone' => $phone,
+                    'phone' =>  $phone,
+                    // 'country_code'=>$input['countryCode'],
                     'company_id' => $request->company_Id,
                     'verification_token' => $verificationToken,
                 ]);
@@ -261,12 +286,13 @@ class CompanyController extends Controller
                 $user->assignRole('Company Subadmin');
               
             } else {
-                $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
+               // $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone']);
                 $user = User::create([
                     'name' => $input['name'],
                     'email' => $input['email'],
                     'password' => $input['password'],
-                    'phone' => $phone,
+                    'phone' =>$input['phone'],
+                    'country_code'=> '+'. $input['countryCode'],
                     'verification_token' => $verificationToken,
                 ]);
                 $user->assignRole('Company Admin');
@@ -290,12 +316,13 @@ class CompanyController extends Controller
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('public/assest', $imageName);
                 }
-                $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone_number']);
+               // $phone = '+' . preg_replace('/[^0-9]/', '', $input['phone_number']);
                 $company =  Company::create([
                     'user_id' =>  $user->id,
                     'company_name' => $input['company_name'],
                     'company_email' => $input['company_email'],
-                    'phone_number' => $phone ,
+                    'phone_number' => $input['phone_number'] ,
+                    'country_code'=>'+'. $input['country_code'],
                     'logo' => $imageName,
                 ]);
                 // dispatch(new VerificationMail($user->email));
@@ -353,10 +380,6 @@ class CompanyController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    
-    
-    
-
     /**
      * to get address details
      */
@@ -400,6 +423,7 @@ class CompanyController extends Controller
                 'company_name',
                 'company_email',
                 'phone_number',
+                'country_code',
                 'description',
                 'status',
                 'id'
@@ -484,10 +508,14 @@ class CompanyController extends Controller
      */
     public function update(Request $request, string $id)
     {
+       // dd($request);
         //
         try {
             $company = Company::find($id);
             if ($company) {
+                $request->merge([
+                    'country_code' => '+' . $request->input('country_code')
+                ]);
                 $company->update($request->all());
                
                 return response()->json(['status' => true, 'message' => 'Company data updated successfully'], 200);
@@ -601,11 +629,8 @@ class CompanyController extends Controller
             'password' => 'required',
             'company_name' => 'required',
         ]);
-        
-        if (Auth::attempt([
-            'email' => $credentials['email'],
-            'password' => $credentials['password'],
-        ])) {
+        $remember = $request->boolean('rememberMe');
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $remember)) {
             $user = Auth::user();
             
             if ($user->email_verified_at === null) {
@@ -628,7 +653,7 @@ class CompanyController extends Controller
                 }
                 
                 session(['company_id' => $user->company_id]);
-                
+                return $this->respondWithUserData($user, $companyData, $remember,$request);
                 return response()->json([
                     'status' => true,
                     'message' => 'Logged in Successfully!',
@@ -650,7 +675,7 @@ class CompanyController extends Controller
                                 'message' => 'Your account has been suspended. Please contact support.'
                             ], 403);
                         }
-                        
+                        return $this->respondWithUserData($user, $companyData, $remember,$request);
                         session(['company_id' => $company->id]);
                         
                         return response()->json([
@@ -662,7 +687,7 @@ class CompanyController extends Controller
                     }
                 }
             }
-            
+          
             return response()->json([
                 'status' => true,
                 'message' => 'Logged in Successfully!',
@@ -679,6 +704,36 @@ class CompanyController extends Controller
             'status' => false,
             'message' => 'An error occurred: ' . $e->getMessage(),
         ], 500);
+    }
+}
+private function respondWithUserData($user, $companyData, $remember,Request $request)
+{
+    $userData = [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'password' => $request->password, 
+    ];
+    
+    if ($remember) {
+        $user->update(['remember_token' => Str::random(60)]);
+        $encryptedUserData = encrypt(json_encode($userData));
+        $cookie = Cookie::make('company_data', $encryptedUserData,7 * 24 * 60); 
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged in Successfully!',
+            'user_data' => $user,
+            'company_data' => $companyData,
+        ])->withCookie($cookie);
+    } else {
+        $user->update(['remember_token' => null]);
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged in Successfully!',
+            'user_data' => $user,
+            'company_data' => $companyData,
+        ], 200);
     }
 }
 
